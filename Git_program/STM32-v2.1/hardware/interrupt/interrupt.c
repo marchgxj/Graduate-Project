@@ -71,7 +71,9 @@ void TIM3_IRQHandler(void)   //500ms
 		{
 				TIM3_Count = 10;
 				PostBeacon();
+#if (UPLOAD_DATA_EN == 1)
 				PostTask(EVENT_UPLOAD_DATA);
+#endif
 		}
 		
 		Frame_Time = 0;

@@ -25,7 +25,7 @@ int main(void)
 // 				test[i]=i;
 // 		}
 // /********************send test***********************/ 	 
-// 		
+// 			A7139_SetPackLen(MAX_PACK_LENGTH);
 // 		while(1)
 // 		{
 // 				A7139_StrobeCmd(CMD_PLL);

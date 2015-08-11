@@ -7,7 +7,7 @@ import os
 import tkFont
 import carstop
 import time
-import win32ui
+#import win32ui
 
 __author__ = 'xiaoxiami'
 
@@ -30,6 +30,7 @@ class MainRoot(tk.Tk):
         scnHeight = (curHeight - 660) / 2  # get screen width and height
         # now generate configuration information
         tmpcnf = '%dx%d+%d+%d' % (1330, 660, scnWidth, scnHeight)
+
         self.geometry(tmpcnf)
         self.appcanvas = tk.Canvas(self)
         self.appFrame = Application(root=self)
@@ -765,6 +766,7 @@ class Application(ttk.Notebook):
         Autor:xiaoxiami 2015.5.29
         Others：默认打开目录为 F:\\Graduate\\Test\\data\\
         '''
+        '''
         dlg = win32ui.CreateFileDialog(1)  # 1表示打开文件对话框
         dlg.SetOFNInitialDir('F:\\Graduate\\Test\\data\\')  # 设置打开文件对话框中的初始显示目录
         dlg.DoModal()
@@ -772,6 +774,8 @@ class Application(ttk.Notebook):
         self.datapathentry.delete(0, tk.END)
         self.datapathentry.insert(1, self.datapath)
         self.zoomenable = 1
+        '''
+        
 
     def Opendata(self):
         '''

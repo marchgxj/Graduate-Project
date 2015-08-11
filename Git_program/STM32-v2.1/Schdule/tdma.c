@@ -43,8 +43,9 @@ void DataHandler(void)
 				RootDevice.endpoint_device[inner_num].data = DataRecvBuffer[8];
 				bufnode.address = RootDevice.endpoint_device[inner_num].pyh_address;
 				bufnode.data = RootDevice.endpoint_device[inner_num].data;
-				PostUploadNode(&bufnode);
-				
+#if (UPLOAD_DATA_EN == 1)
+			  PostUploadNode(&bufnode);
+#endif
 				CreateDataACK(src_cluster_id,src_cluster_innernum);
 				
 				SendPack();
