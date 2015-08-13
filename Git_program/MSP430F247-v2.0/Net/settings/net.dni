@@ -46,7 +46,7 @@ Counter0=AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 [EEM Cycle Counter 1]
 Counter1=AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 [DebugChecksum]
-Checksum=-129136537
+Checksum=-99920605
 [CallStack]
 ShowArgs=0
 [Disassembly]
@@ -67,13 +67,13 @@ Fmt11=EndPointDeviceStruct-power	3	0
 Fmt12=EndPointDeviceStruct-pyh_address	4	0
 Fmt13=EndPointDeviceStruct-state	4	0
 Fmt14=EndPointDeviceStruct-time_stamp	3	0
-[array_types]
-Fmt0=uint8 [12]	3	0
 [watch_formats]
-Fmt0={W}1:Car_Flag	3	0
-Fmt1={W}1:Car_Status	3	0
-Fmt2={W}1:Data_Change_Flag	3	0
-Fmt3={W}1:Receive_Timeout	3	0
+Fmt0={W}1:CSMA_BackOff_Count	3	0
+Fmt1={W}1:Car_Flag	3	0
+Fmt2={W}1:Car_Status	3	0
+Fmt3={W}1:Data_Change_Flag	3	0
+Fmt4={W}1:Receive_Timeout	3	0
+Fmt5={W}1:cca_value	3	0
 [Log file]
 LoggingEnabled=_ 0
 LogFile=_ ""
@@ -82,14 +82,17 @@ Category=_ 0
 LoggingEnabled=_ 0
 LogFile=_ ""
 [Breakpoints]
-Bp0=_ "STD_CODE" "{$PROJ_DIR$\..\Scource\schdule\mac.c}.101.2" 0 0 0 0 "" 0 ""
-Bp1=_ "STD_CODE" "{$PROJ_DIR$\..\Scource\hardware\A7139.c}.714.1" 0 0 0 0 "" 0 ""
-Bp2=_ "STD_CODE" "{$PROJ_DIR$\..\Scource\hardware\A7139.c}.714.1" 0 0 0 0 "" 0 ""
-Bp3=_ "STD_CODE" "{$PROJ_DIR$\..\Scource\hardware\A7139.c}.714.1" 0 0 0 0 "" 0 ""
-Bp4=_ "STD_CODE" "{$PROJ_DIR$\..\Scource\hardware\A7139.c}.714.1" 0 0 0 0 "" 0 ""
-Bp5=_ "STD_CODE" "{$PROJ_DIR$\..\Scource\hardware\A7139.c}.714.1" 0 0 0 0 "" 0 ""
-Bp6=_ "STD_CODE" "{$PROJ_DIR$\main.c}.23.5" 1 0 0 0 "" 0 ""
-Count=7
+Bp0=_ "STD_CODE" "{E:\Program Files (x86)\IAR Systems\Embedded Workbench MSP430 7.2}.101.2" 0 0 0 0 "" 0 ""
+Bp1=_ "STD_CODE" "{E:\Program Files (x86)\IAR Systems\Embedded Workbench MSP430 7.2}.714.1" 0 0 0 0 "" 0 ""
+Bp2=_ "STD_CODE" "{E:\Program Files (x86)\IAR Systems\Embedded Workbench MSP430 7.2}.714.1" 0 0 0 0 "" 0 ""
+Bp3=_ "STD_CODE" "{E:\Program Files (x86)\IAR Systems\Embedded Workbench MSP430 7.2}.714.1" 0 0 0 0 "" 0 ""
+Bp4=_ "STD_CODE" "{E:\Program Files (x86)\IAR Systems\Embedded Workbench MSP430 7.2}.714.1" 0 0 0 0 "" 0 ""
+Bp5=_ "STD_CODE" "{E:\Program Files (x86)\IAR Systems\Embedded Workbench MSP430 7.2}.714.1" 0 0 0 0 "" 0 ""
+Bp6=_ "STD_CODE" "{E:\Program Files (x86)\IAR Systems\Embedded Workbench MSP430 7.2}.23.5" 0 0 0 0 "" 0 ""
+Bp7=_ "STD_CODE" "{E:\Program Files (x86)\IAR Systems\Embedded Workbench MSP430 7.2}.46.17" 0 0 0 0 "" 0 ""
+Bp8=_ "STD_CODE" "{$PROJ_DIR$\..\Scource\schdule\join.c}.216.5" 1 0 0 0 "" 0 ""
+Bp9=_ "STD_CODE" "{$PROJ_DIR$\..\Scource\schdule\ProcessEvent.c}.1.1" 0 0 0 0 "" 0 ""
+Count=10
 [FET]
 Clock mode=46
 Extended Clock mode=1
@@ -116,5 +119,6 @@ A1=_ "E:\Graduate-Project-master\Graduate-Project-master\Git_program\MSP430\Scou
 A2=_ "E:\Graduate-Project-master\Graduate-Project-master\Git_program\MSP430\Scource\hardware\spi.c" ""
 A3=_ "E:\Graduate-Project-master\Graduate-Project-master\Git_program\MSP430\Scource\schdule\interrupt.c" ""
 A4=_ "E:\Graduate-Project-master\Graduate-Project-master\Git_program\MSP430\Scource\schdule\mac.c" ""
-Count=5
+A5=_ "F:\Graduate\wan\Graduate-Project-master-new\Git_program\MSP430\Net\main.c" "F:\Graduate\Git_program\MSP430F247-v2.0\Net\main.c"
+Count=6
 SuppressDialog=0

@@ -10,7 +10,7 @@
 #include "led.h"
 #include "mcu.h"
 
-static uint16 mode;
+
 
 //中断初始化，现在用了一个
 void time_init(void)

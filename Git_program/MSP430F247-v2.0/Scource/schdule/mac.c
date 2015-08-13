@@ -31,12 +31,12 @@ void CSMABackOff()
     back_off_time = BACKOFF_PERIOD*CSMA_BackOff_Random;
     delayus(back_off_time);
 }
-
-uint8 SendByCSMA(u8 *buff,uint8 length)
-{
     uint8 cca_value = 0;
     uint32 wait_time = 0;
     uint32 q,w;
+uint8 SendByCSMA(u8 *buff,uint8 length)
+{
+
     //wait_time = ((MAX_DEVICE_NUM - EndPointDevice.free_node)*SLOT_LENGTH)/10;
     q=MAX_DEVICE_NUM - EndPointDevice.free_node;
     w=q*SLOT_LENGTH;
@@ -57,20 +57,31 @@ uint8 SendByCSMA(u8 *buff,uint8 length)
     {
         CSMABackOff();
         CSMA_BackOff_Count++;
+        halLedToggle(CSMA_BackOff_Count%5);
+        
     }
 
     if(CSMA_BackOff_Count>CSMA_BACKOFF_TIME)
+    {
+        CSMA_BackOff_Count = 0;
         return CSMA_FAIL;
+    } 
     else
+    {
         return CSMA_SUCCESS;
-
+    }
+        
 }
 
 void BeaconHandler(uint8 beacon[])
 {
+    if(Unpack(beacon)!=BEACON_TYPE)
+    {
+        return;
+    }
     EndPointDevice.free_node = beacon[6];
     EndPointDevice.csma_length = (MAX_DEVICE_NUM - EndPointDevice.free_node)/3+1;
-    EndPointDevice.power = 0;// beacon[1]&0x01;   //test by wyd, no sleep here
+    EndPointDevice.power =  beacon[1]&0x01;   
     if(EndPointDevice.connected == 0)                   //未连接，发送加入请求
     {
         PostTask(EVENT_JOINREQUEST_SEND);
@@ -78,7 +89,7 @@ void BeaconHandler(uint8 beacon[])
     else                                                //已连接，执行TDMA过程
     {
         //TIME1_HIGH;
-        if(EndPointDevice.power == 0)
+        if(EndPointDevice.power == 0)//不是自己发送时隙，先睡眠
         {
             A7139_Sleep();
         }

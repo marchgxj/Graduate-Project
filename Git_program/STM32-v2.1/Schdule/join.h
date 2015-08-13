@@ -1,6 +1,8 @@
 #ifndef _SCAN_h_
 #define _SCAN_h_
 #include "common.h"
+#define SEND_REJOIN_EN 0		//在中继重新上电后是否让节点重新发送加入请求
+
 
 typedef struct{
 		uint8  length;											//包长度

@@ -65,7 +65,9 @@ void TIM3_IRQHandler(void)   //500ms
     TIM3_Count++;
 		if(TIM3_Count<5)
 		{	
-				PostTask(EVENT_REJOIN_SEND);
+#if (SEND_REJOIN_EN == 1)
+					PostTask(EVENT_REJOIN_SEND);
+#endif
 		}
 		else
 		{

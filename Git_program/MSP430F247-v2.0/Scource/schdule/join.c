@@ -8,13 +8,12 @@ ChannelTable ScanChannel[CHANNEL_NUM];
 JoinRequestPacketStruct JoinRequestPacket;
 JoinRequestACKOKPacketStruct JoinRequestACKOKPacket;
 uint8 ReJoinFlag = 0;
-
+uint8 scandata[MAX_PACK_LENGTH];    
 uint8 Scan_Channel(uint8 startch,uint8 endch)
 {
     uint8 i;
-    uint8 datalength = 0;  
     int16 timeout = SCAN_TIME_OUT;
-    uint8 data[MAX_PACK_LENGTH];
+
        
     if(endch > CHANNEL_NUM)
     {
@@ -36,12 +35,19 @@ uint8 Scan_Channel(uint8 startch,uint8 endch)
         }
         if(timeout>0)
         {
-            A7139_ReadFIFO(&datalength,1);
-            A7139_ReadFIFO(data,MAX_PACK_LENGTH);
-            ScanChannel[i-1].channel_num = i;
-            ScanChannel[i-1].channel_rssi = A7139_GetRSSI();
-            ScanChannel[i-1].channel_free = data[6];
-            ScanChannel[i-1].cluster_id = data[4];
+            A7139_ReadFIFO(scandata,MAX_PACK_LENGTH);
+            if(Unpack(scandata)==BEACON_TYPE)//有可能在扫描信道是收到的不是beacon包
+            {
+                ScanChannel[i-1].channel_num = i;
+                ScanChannel[i-1].channel_rssi = A7139_GetRSSI();
+                ScanChannel[i-1].channel_free = scandata[6];
+                ScanChannel[i-1].cluster_id = scandata[4];
+            }
+            else
+            {
+                i--;
+            }
+            
         }
         else
         {
@@ -52,6 +58,7 @@ uint8 Scan_Channel(uint8 startch,uint8 endch)
         }
         timeout = SCAN_TIME_OUT; 
     }
+    
         
     return i;
 }
@@ -86,10 +93,19 @@ void SortChannel()
     EndPointDevice.cluster_id = ScanChannel[0].cluster_id;
     EndPointDevice.des_cluster_id = ScanChannel[0].cluster_id;
     EndPointDevice.des_cluster_innernum = 0;
-    A7139_SetFreq(ChannelList[EndPointDevice.channel]);
-    delay_us(1);
-    A7139_Cal();                    
-    delay_us(1);
+    EndPointDevice.free_node = ScanChannel[0].channel_free;
+    if(EndPointDevice.channel == 0)
+    {
+        A7139_DeepSleep();
+        delay_ms(SCAN_PERIOD);
+        halLedToggleAll();
+        A7139_StrobeCmd(CMD_STBY);
+        A7139_Init(470.001f);
+        RXMode();
+        Scan_Channel(StartChannel,EndChannel);
+        SortChannel();
+    }
+
 }
 
 void CreatJoinRequest()
@@ -211,4 +227,14 @@ void ReJoinHandler()
     }
     ReJoinFlag = 1;
     
+}
+void ChannelSelection(uint8 start,uint8 end)
+{
+    Scan_Channel(start,end);
+    SortChannel();
+    A7139_SetFreq(ChannelList[EndPointDevice.channel]);
+    delay_us(1);
+    A7139_Cal();                    
+    delay_us(1);
+    RXMode();
 }

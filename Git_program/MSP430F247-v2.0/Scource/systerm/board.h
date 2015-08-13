@@ -11,6 +11,8 @@
 #include "digio.h"
 #include "msp430.h"
 
+#define RESET {WDTCTL = WDTPW|0xff00;}
+
 
 //----------------------------------------------------------------------------------
 //  Easy access, zero overhead LED macros

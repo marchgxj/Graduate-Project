@@ -8,19 +8,17 @@ int main(void)
     __disable_interrupt();
     
     halBoardInit(); 
-  ReJoin:
     EndPointDevice.pyh_address = GetPhyAddress();
     EndPointDevice.device_type = DEVICE;
     for(i=0;i<MAX_PACK_LENGTH;i++)
     {
        normal_test[i]=i;
     }
+    ChannelSelection(StartChannel,EndChannel);
     halLedClearAll();
-
-    Scan_Channel(StartChannel,EndChannel);
-    SortChannel();
-
+    
     __enable_interrupt();
+
     for(;;)
     {
         Process_Event();
@@ -28,7 +26,7 @@ int main(void)
         if(ReJoinFlag == 1)
         {
             ReJoinFlag = 0;
-            goto ReJoin;
+            RESET;
         }
     }
 }

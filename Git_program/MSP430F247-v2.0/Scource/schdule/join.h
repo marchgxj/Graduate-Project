@@ -24,6 +24,7 @@ extern const float ChannelList[];
 
 
 #define    SCAN_TIME_OUT     700  //扫描超时时间  单位ms
+#define    SCAN_PERIOD   3000  //扫描信道周期，在第一次扫描失败时使用 单位：ms
 
 typedef struct {
     uint8 channel_num;     // 信道编号
@@ -59,6 +60,7 @@ extern uint8 EndChannel;
 
 extern ChannelTable SortedChannel[CHANNEL_NUM];
 extern ChannelTable ScanChannel[CHANNEL_NUM];
+extern uint8 ReJoinFlag;
 
 extern uint8 Scan_Channel(uint8 startch,uint8 endch);
 extern void SortChannel();
@@ -66,5 +68,6 @@ extern void CreatJoinRequest();
 extern void JoinRequestACKHandler();
 extern void SendJoinRequest();
 extern void ReJoinHandler();
-extern uint8 ReJoinFlag;
+extern void ChannelSelection(uint8 start,uint8 end);
+
 #endif

@@ -13,9 +13,9 @@
 
 #define    DATAACK_TIMEOUT 300      //ack接收超时，决定是否进入csma重发阶段
 
-#define    SLEEP_EN        0 //modified by wyd for test
+#define    SLEEP_EN        1 //modified by wyd for test
 
-#define    CCA   90     //载波监测阈值
+#define    CCA   100     //载波监测阈值
 #define    CSMA_BACKOFF_TIME 8
 #define    CSMA_FAIL    1
 #define    CSMA_SUCCESS 0

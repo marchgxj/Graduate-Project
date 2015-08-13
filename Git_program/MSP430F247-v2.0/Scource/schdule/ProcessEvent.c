@@ -71,7 +71,6 @@ uint8 Process_Event()
         break;
       case EVENT_DATA_SEND:
         DataSend();
-        
         break;
       case EVENT_DATAACK_HANDLER:
         DataACKHandler();
@@ -84,7 +83,6 @@ uint8 Process_Event()
         break;
       case EVENT_COLLECT_DATA:
         CollectData();
-        
         break;
       case EVENT_IDENTIFY_CAR:
         IdentifyCar();

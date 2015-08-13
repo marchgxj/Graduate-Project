@@ -84,7 +84,7 @@ void bubbledata(DataStruct *a,uint16 n)
 }
 void IdentifyCar()
 {
-    int i=0;
+
     //当前长度为5，长度变化需要修改此处。
 
     Ave_Slop = (int)((Magnet_Value[1]-Magnet_Value[0]))+

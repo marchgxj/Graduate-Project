@@ -78,7 +78,7 @@ void Err_State(void)
     while(1){
         halLedToggleAll();
         
-        delay_ms(1000);
+        delay_ms(500);
     }
 }
 uint8 A7139_Cal(void)
@@ -736,7 +736,6 @@ void A7139_Sleep(void)
 }
 void A7139_DeepSleep(void)
 {
-
     A7139_StrobeCmd(CMD_DEEP_SLEEP);
 }
 void A7139_Wake(void)
@@ -759,7 +758,6 @@ void A7139_Deep_Wake(void)
     A7139_StrobeCmd(CMD_STBY);
     A7139_Init(ChannelList[EndPointDevice.channel]);
     RXMode();
-
 }
 
 

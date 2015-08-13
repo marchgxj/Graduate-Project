@@ -70,6 +70,10 @@ __interrupt void Timer_A (void)
    // TA1CCTL0 &= ~CCIFG;
 
     Frame_Time++;
+    if(Frame_Time>10000)
+    {
+        RESET;
+    }
 #if (SLEEP_EN)
     if(Frame_Time==BEFOR_BEACON_WAKE)
     {
@@ -99,11 +103,21 @@ __interrupt void Timer_A0(void)
     TA0CCTL0 &= ~CCIFG;
 
     
-    if(EndPointDevice.power == 0)                       //超时没有接收到重启
+    if(EndPointDevice.power == 0)
+    //每个超帧都要发送时，Beacon接收超时则复位A7139
     {
 
         Receive_Timeout++;
-        if(Receive_Timeout>5)
+        if(Receive_Timeout>30)
+        {
+            RESET;//很长时间没有收到数据，单片机全部复位.
+        }
+        /*else if(Receive_Timeout>15)
+        {
+            PostTask(EVENT_REJOIN_HANDLER);
+            Receive_Timeout = 0;
+        }*/
+        else if(Receive_Timeout>5)
         {
             EndPointDevice.state = CMD_STBY;
             A7139_StrobeCmd(CMD_STBY);
@@ -112,6 +126,7 @@ __interrupt void Timer_A0(void)
             delay_us(1);
             A7139_StrobeCmd(CMD_RX);
             delay_us(1);
+            
             
         }
     }

@@ -1,7 +1,5 @@
 #include "common.h"
 
-uint8 rssise = 0;
-uint8 bud = 0;
 int main(void)
 {	 
 	  uint8 test[64],i;
@@ -12,7 +10,10 @@ int main(void)
 		RootDevice.cluster_innernum = 0;
 		RootDevice.free_node = MAX_NODE_NUM;
 		EnableInterrupt();
+#if (SEND_REJOIN_EN == 1)
 		PostTask(EVENT_REJOIN_SEND);
+#endif
+		
 	  for(;;)
 		{
 				Process_Event();
