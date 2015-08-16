@@ -759,13 +759,11 @@ void RXMode()
 }
 void SendPack()
 {
-    TIME1_HIGH;
 	  A7139_StrobeCmd(CMD_PLL);
     delay_us(5);
     A7139_WriteFIFO(DataSendBuffer,MAX_PACK_LENGTH);
     delay_us(5);
     A7139_StrobeCmd(CMD_TX);
     while(GIO1);
-	  TIME1_LOW;
 }
 

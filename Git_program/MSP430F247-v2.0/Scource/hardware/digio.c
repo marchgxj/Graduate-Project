@@ -255,7 +255,8 @@ const digioConfig pinLed4   = {5, 4, BIT4, HAL_DIGIO_OUTPUT, 0};
 const digioConfig pinGIO2   = {1, 4, BIT4, HAL_DIGIO_INPUT,  0};
 const digioConfig pinGIO1   = {1, 3, BIT3, HAL_DIGIO_INPUT,  0};
 const digioConfig pinKZ   = {6, 5, BIT5, HAL_DIGIO_OUTPUT, 0};
-const digioConfig TIME1   = {2, 1, BIT1, HAL_DIGIO_OUTPUT, 0};
+const digioConfig TIME1   = {3, 6, BIT6, HAL_DIGIO_OUTPUT, 0};
+const digioConfig TIME2   = {3, 7, BIT7, HAL_DIGIO_OUTPUT, 0};
 
 void GPIO_Init()
 {
@@ -267,5 +268,6 @@ void GPIO_Init()
     halDigioConfig(&pinGIO2);//ÖÐ¶Ï
     halDigioConfig(&pinKZ);
     halDigioConfig(&TIME1);
+    halDigioConfig(&TIME2);
     
 }

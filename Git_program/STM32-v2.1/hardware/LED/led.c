@@ -64,10 +64,10 @@ void LED_Init(void)
 	GPIO_Init(GPIOC, &GPIO_InitStructure);	  				     		//根据设定参数初始化PD.12
 
 	//TIME1
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_8 ;								//端口配置, 推挽输出
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0;								//端口配置, 推挽输出
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP; 		 			//推挽输出
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;		 			//IO口速度为50MHz
-	GPIO_Init(GPIOD, &GPIO_InitStructure);	  				     		//根据设定参数初始化PD.12
+	GPIO_Init(GPIOC, &GPIO_InitStructure);	  				     		//根据设定参数初始化PD.12
 	TIME1_LOW;
 	
 	//TIM2

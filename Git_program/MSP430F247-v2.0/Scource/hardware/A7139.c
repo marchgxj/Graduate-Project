@@ -1,5 +1,5 @@
 #include "common.h"
-
+int A7139_init_err_count = 0;
 static void A7139_WriteReg(uint8 regAddr, uint16 regVal)
 {
     SCS_CLEAR;
@@ -77,8 +77,12 @@ void Err_State(void)
     
     while(1){
         halLedToggleAll();
-        
         delay_ms(500);
+        A7139_init_err_count++;
+        if(A7139_init_err_count == 10)
+        {
+            REBOOT;
+        }
     }
 }
 uint8 A7139_Cal(void)
@@ -722,15 +726,13 @@ void SendPack()
     delay_us(1);
     A7139_StrobeCmd(CMD_TX);
     while(GIO1);
-    halLedSet(1);
-    //TIME1_LOW;
+    halLedClear(1);
 
 }
 
 void A7139_Sleep(void)
 {
 #if (SLEEP_EN)
-    //TIME1_HIGH;
     A7139_StrobeCmd(CMD_SLEEP);
 #endif
 }
@@ -744,7 +746,6 @@ void A7139_Wake(void)
     A7139_StrobeCmd(CMD_STBY);
     delay_us(1);
     A7139_StrobeCmd(CMD_PLL);
-    //TIME1_LOW;
     delay_ms(4);
     
 }
@@ -752,6 +753,7 @@ void A7139_WakeToRecv(void)
 {
     A7139_Wake();
     RXMode();
+    TIME1_LOW;
 }
 void A7139_Deep_Wake(void)
 {

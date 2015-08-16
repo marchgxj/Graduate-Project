@@ -11,7 +11,7 @@
 #include "digio.h"
 #include "msp430.h"
 
-#define RESET {WDTCTL = WDTPW|0xff00;}
+#define REBOOT {WDTCTL = WDTPW|0xff00;}
 
 
 //----------------------------------------------------------------------------------

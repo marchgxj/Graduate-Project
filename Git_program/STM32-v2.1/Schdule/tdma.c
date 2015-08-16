@@ -46,10 +46,12 @@ void DataHandler(void)
 #if (UPLOAD_DATA_EN == 1)
 			  PostUploadNode(&bufnode);
 #endif
+				TIME2_HIGH;
 				CreateDataACK(src_cluster_id,src_cluster_innernum);
 				
 				SendPack();
 				RXMode();
+				TIME2_LOW;
 
 		}
 }

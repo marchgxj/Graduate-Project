@@ -3,6 +3,7 @@
 uint8 normal_test[MAX_PACK_LENGTH];
 uint8 test_rssi = 0;
 uint16 address = 0;
+uint8 receive_count = 0;
 
 int main(void)
 {	    
@@ -37,6 +38,7 @@ int main(void)
         while((GIO1)); 	
         A7139_ReadFIFO(DataRecvBuffer,12);
         halLedToggle(1);
+        //A7139_StrobeCmd(CMD_SLEEP);
     }
     /***************************************************/
 }

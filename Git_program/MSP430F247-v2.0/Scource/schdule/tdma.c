@@ -10,11 +10,9 @@ uint8 RecvDataACK()
     {
         if(Frame_Time>send_time+DATAACK_TIMEOUT)             //60为DataACK接收超时，在收到ACK时不会进入if内
         {
-            //TIME1_LOW;
             resend_count++;
             EndPointDevice.data_ack = 0;
             RXMode();
-            //TIME1_HIGH;
            //test by wyd PostTask(EVENT_CSMA_RESEND);
             return EndPointDevice.data_ack;
         }
@@ -81,16 +79,19 @@ void DataSend(void)
     before_slot_wake = (c-WAKE_TIME)/100;
     
     DIS_INT;
+    TIME1_HIGH;
+    
     while(Frame_Time<=before_slot_wake);
+    TIME2_HIGH;
     EndPointDevice.data_ack = 0;
     
 
     A7139_Wake();
-
+    
     CreatSendData();
-    //TIME1_LOW;
     SendPack();
     RXMode();
+
     ack_flag = RecvDataACK();
     if(ack_flag == 1)
     {
@@ -102,21 +103,18 @@ void DataSend(void)
         else
         {
             A7139_Sleep();
-            EN_INT;
         }
+        TIME2_LOW;
         
     }
     else
     {
+        TIME2_LOW;
         PostTask(EVENT_CSMA_RESEND);
         EndPointDevice.data_ack = 0;
         EN_INT;
         
-        //TIME1_HIGH;
-        //delay_ms(5);
-        //TIME1_LOW;
-        //delay_ms(5);
-        //TIME1_HIGH;
+        
         
     }
 
@@ -125,10 +123,10 @@ void DataACKHandler()
 {
     EndPointDevice.time_stamp = DataSendBuffer[6]<<8|DataSendBuffer[7];
     EndPointDevice.data_ack = 1;
-    //TIME1_LOW;
 }
 void CSMADataResend()
 {
     SendByCSMA(DataSendBuffer,MAX_PACK_LENGTH);
     A7139_Sleep();
+    TIME2_HIGH;
 }

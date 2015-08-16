@@ -1,5 +1,5 @@
 #include "common.h"
-uint8   Receive_Timeout = 0;            //接收超时重启
+int   Receive_Timeout = 0;            //接收超时重启
 uint32  Frame_Time = 0;                 //超帧内计时
 uint16  Collect_Time = 0;               //采集计时
 uint16 Keep_Alive_Count = 0;
@@ -21,6 +21,7 @@ void Interrupt_Init(void)
 int error_test = 0;
 uint16 packet_count = 0;
 uint8 rssi_what = 0;
+uint8 elsewhat = 0;
 #pragma vector=PORT1_VECTOR
 __interrupt void port1_ISR(void)
 { 
@@ -47,15 +48,15 @@ __interrupt void port1_ISR(void)
               case JOINREQUESTACK_TYPE:
                 PostTask(EVENT_JOINREQUESTACK_HANDLER);
                 break;
-              case DATAACK_TYPE:
-                PostTask(EVENT_DATAACK_HANDLER);
-                break;
               case REJOIN_TYPE:
                 PostTask(EVENT_REJOIN_HANDLER);
                 break;
             }
-            halLedClear(1);
-            //TIME1_HIGH;
+            halLedSet(1);
+        }
+        else
+        {
+        elsewhat = 1;
         }
         
 
@@ -70,16 +71,28 @@ __interrupt void Timer_A (void)
    // TA1CCTL0 &= ~CCIFG;
 
     Frame_Time++;
-    if(Frame_Time>10000)
+    if(Frame_Time == BEACON_PERIOD*4)//4个周期内收不到Beacon，复位通讯
     {
-        RESET;
-    }
-#if (SLEEP_EN)
-    if(Frame_Time==BEFOR_BEACON_WAKE)
-    {
+        EndPointDevice.state = CMD_STBY;
+        A7139_StrobeCmd(CMD_STBY);
+        delay_us(1);
+        A7139_StrobeCmd(CMD_PLL);
+        delay_us(1);
+        A7139_StrobeCmd(CMD_RX);
+        delay_us(1);
+        EN_INT;
         PostTask(EVENT_WAKE_A7139);
     }
-#endif
+    if(Frame_Time>(uint32)BEACON_PERIOD*8)//8个周期内收不到Beacon，重启单片机
+    {
+        REBOOT;
+    }
+    if(Frame_Time==BEFOR_BEACON_WAKE)//在接收beacon前使能中断
+    {
+        PostTask(EVENT_WAKE_A7139);
+        EN_INT;
+        TIME1_LOW;
+    }
 #if (COLLECT_EN)                                //开启数据采集
     if(Start_Collect)
     {
@@ -101,7 +114,7 @@ __interrupt void Timer_A (void)
 __interrupt void Timer_A0(void)
 {
     TA0CCTL0 &= ~CCIFG;
-
+    halLedToggle(2);
     
     if(EndPointDevice.power == 0)
     //每个超帧都要发送时，Beacon接收超时则复位A7139
@@ -110,7 +123,7 @@ __interrupt void Timer_A0(void)
         Receive_Timeout++;
         if(Receive_Timeout>30)
         {
-            RESET;//很长时间没有收到数据，单片机全部复位.
+            REBOOT;//很长时间没有收到数据，单片机全部复位.
         }
         /*else if(Receive_Timeout>15)
         {
@@ -126,6 +139,7 @@ __interrupt void Timer_A0(void)
             delay_us(1);
             A7139_StrobeCmd(CMD_RX);
             delay_us(1);
+            EN_INT;
             
             
         }

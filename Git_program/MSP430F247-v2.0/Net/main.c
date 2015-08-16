@@ -26,7 +26,7 @@ int main(void)
         if(ReJoinFlag == 1)
         {
             ReJoinFlag = 0;
-            RESET;
+            REBOOT;
         }
     }
 }

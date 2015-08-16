@@ -2,7 +2,7 @@
 #define _DEVICE_h_
 /****************更改beacon周期需要重新调的参数*************/
 #define    BEACON_PERIOD     5000
-#define    BEFOR_BEACON_WAKE BEACON_PERIOD-150   //在beacon前1.5ms时唤醒芯片
+#define    BEFOR_BEACON_WAKE BEACON_PERIOD-300   //在beacon前1.5ms时唤醒芯片
 #define    KEEP_ALIVE_PERIOD   20  //单位s
 
 /**********************************************************/

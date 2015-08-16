@@ -59,10 +59,10 @@ uint8 halDigioIntSetEdge(const digioConfig *p, uint8 edge);
 }
 #endif
 
-#define TIME1_HIGH     
-//(P2OUT |= BIT1)
-#define TIME1_LOW      
-//(P2OUT &= ~ BIT1)
+#define TIME1_HIGH    (P3OUT |= BIT6)
+#define TIME1_LOW     (P3OUT &= ~ BIT6)
+#define TIME2_HIGH    (P3OUT |= BIT7)
+#define TIME2_LOW     (P3OUT &= ~ BIT7)
 extern void GPIO_Init();
 
 /**********************************************************************************/

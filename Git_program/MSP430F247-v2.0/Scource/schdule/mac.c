@@ -43,9 +43,7 @@ uint8 SendByCSMA(u8 *buff,uint8 length)
     wait_time=w/100;
     
     while(Frame_Time<=wait_time);      //等待到达CSMA时隙 超帧内时间<=负载数*时隙长度
-    //TIME1_LOW;
     CSMABackOff();
-    //TIME1_HIGH;
     cca_value = (A7139_GetRSSI()+A7139_GetRSSI())/2;
             
     if(cca_value<CCA)
@@ -79,6 +77,7 @@ void BeaconHandler(uint8 beacon[])
     {
         return;
     }
+    TIME2_HIGH;
     EndPointDevice.free_node = beacon[6];
     EndPointDevice.csma_length = (MAX_DEVICE_NUM - EndPointDevice.free_node)/3+1;
     EndPointDevice.power =  beacon[1]&0x01;   
@@ -88,7 +87,6 @@ void BeaconHandler(uint8 beacon[])
     }
     else                                                //已连接，执行TDMA过程
     {
-        //TIME1_HIGH;
         if(EndPointDevice.power == 0)//不是自己发送时隙，先睡眠
         {
             A7139_Sleep();
@@ -96,6 +94,7 @@ void BeaconHandler(uint8 beacon[])
         
         PostTask(EVENT_DATA_SEND);
     }
+    TIME2_LOW;
 }
 
 uint8 PackValid(void)
