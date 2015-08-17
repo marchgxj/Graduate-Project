@@ -1,5 +1,8 @@
 #include "common.h"
 DataACKPacketStruct DataACKPacket;
+uint16 Draw_DataX = 0;
+uint16 Draw_DataY = 0;
+
 
 void CreateDataACK(uint8 src_cluster_id,uint8 src_cluster_innernum)
 {
@@ -44,7 +47,17 @@ void DataHandler(void)
 				bufnode.address = RootDevice.endpoint_device[inner_num].pyh_address;
 				bufnode.data = RootDevice.endpoint_device[inner_num].data;
 #if (UPLOAD_DATA_EN == 1)
-			  PostUploadNode(&bufnode);
+				if(Power_Mode == 0)
+				{
+						Draw_DataX = DataRecvBuffer[8]<<8|DataRecvBuffer[9];
+					  Draw_DataY = DataRecvBuffer[10]<<8|DataRecvBuffer[11];
+					  PostTask(EVENT_UPLOAD_DRAWDATA);
+				}
+				else
+				{
+						PostUploadNode(&bufnode);
+				}
+			  
 #endif
 				TIME2_HIGH;
 				CreateDataACK(src_cluster_id,src_cluster_innernum);

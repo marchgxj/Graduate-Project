@@ -138,3 +138,12 @@ void Upload_Data()
 		last_upload_tsk = 0;
 		Node_Inwaiting = 0;
 }
+
+void UploadDrawData()
+{
+		Usart1_PutChar(0x7D);
+		Usart1_PutChar(Draw_DataX>>8);
+		Usart1_PutChar(Draw_DataX);
+		Usart1_PutChar(Draw_DataY>>8);
+		Usart1_PutChar(Draw_DataY);
+}

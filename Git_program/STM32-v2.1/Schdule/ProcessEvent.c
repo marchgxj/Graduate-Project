@@ -78,6 +78,9 @@ uint8 Process_Event()
 			case EVENT_REJOIN_SEND:
 				SendReJoin();
 				break;
+		  case EVENT_UPLOAD_DRAWDATA:
+			  UploadDrawData();
+			  break;
 			
     }
     return current_event;
