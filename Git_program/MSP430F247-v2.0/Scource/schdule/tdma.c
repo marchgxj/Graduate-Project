@@ -57,10 +57,24 @@ void CreatSendData()
     DataSendBuffer[5] = DataPacket.src_cluster_innernum;
     DataSendBuffer[6] = DataPacket.ab_slot_num>>8;
     DataSendBuffer[7] = DataPacket.ab_slot_num;
-    DataSendBuffer[8] = DataPacket.data;
-    DataSendBuffer[9] = 0;
-    DataSendBuffer[10] = 0;
-    DataSendBuffer[11] = 0;
+    //不在低功耗模式时发送传感器数据，用于绘制变化曲线
+    if(EndPointDevice.power == 0)
+    {
+        DataSendBuffer[8] = Draw_DataX>>8;
+        DataSendBuffer[9] = Draw_DataX;
+        DataSendBuffer[10] = Draw_DataY>>8;
+        DataSendBuffer[11] = Draw_DataY;
+        PostTask(EVENT_COLLECT_DATA_F);
+    }
+    //低功耗时只发送识别结果
+    else
+    {
+        DataSendBuffer[8] = DataPacket.data;
+        DataSendBuffer[9] = 0;
+        DataSendBuffer[10] = 0;
+        DataSendBuffer[11] = 0;
+    }
+
 }
  
     
@@ -94,16 +108,15 @@ void DataSend(void)
 
     ack_flag = RecvDataACK();
     if(ack_flag == 1)
-    {
+    {      
         if(EndPointDevice.power == 1)
         {
             A7139_DeepSleep();
-            DIS_INT;
         }
         else
         {
             A7139_Sleep();
-        }
+        }       
         TIME2_LOW;
         
     }
@@ -112,10 +125,7 @@ void DataSend(void)
         TIME2_LOW;
         PostTask(EVENT_CSMA_RESEND);
         EndPointDevice.data_ack = 0;
-        EN_INT;
-        
-        
-        
+        EN_INT; 
     }
 
 }

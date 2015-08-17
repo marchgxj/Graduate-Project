@@ -26,6 +26,9 @@
 #define    EVENT_UPLOAD_DATA		  17
 #define    EVENT_REJOIN_SEND		  18
 #define    EVENT_REJOIN_HANDLER           19
+#define    EVENT_A7139_RESET              20
+#define    EVENT_COLLECT_DATA_F           21
+#define    EVENT_UPLOAD_DRAWDATA          22
 
 extern void Init_TQ(void);
 extern uint8 PostTask(uint8 event);

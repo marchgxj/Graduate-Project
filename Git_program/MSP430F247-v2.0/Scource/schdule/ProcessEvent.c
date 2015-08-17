@@ -88,8 +88,15 @@ uint8 Process_Event()
         IdentifyCar();
         break;
       case EVENT_REJOIN_HANDLER:
-        ReJoinHandler();
+        REBOOT;
         break;
+      case EVENT_A7139_RESET:
+        A7139_Reset();
+        break;
+      case EVENT_COLLECT_DATA_F:
+        SampleChannel(&Draw_DataX,&Draw_DataY);
+        break;
+        
     }
     return current_event;
 }

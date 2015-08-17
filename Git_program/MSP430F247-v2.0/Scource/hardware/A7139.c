@@ -738,28 +738,44 @@ void A7139_Sleep(void)
 }
 void A7139_DeepSleep(void)
 {
+#if (SLEEP_EN)    
     A7139_StrobeCmd(CMD_DEEP_SLEEP);
+#endif
 }
 void A7139_Wake(void)
 {
-   
+#if (SLEEP_EN)   
     A7139_StrobeCmd(CMD_STBY);
     delay_us(1);
     A7139_StrobeCmd(CMD_PLL);
     delay_ms(4);
-    
+#endif    
 }
 void A7139_WakeToRecv(void)
 {
+#if (SLEEP_EN)    
     A7139_Wake();
     RXMode();
     TIME1_LOW;
+#endif    
 }
 void A7139_Deep_Wake(void)
 {
+#if (SLEEP_EN)    
     A7139_StrobeCmd(CMD_STBY);
     A7139_Init(ChannelList[EndPointDevice.channel]);
     RXMode();
+#endif   
+}
+void A7139_Reset()
+{
+    EndPointDevice.state = CMD_STBY;
+    A7139_StrobeCmd(CMD_STBY);
+    delay_us(1);
+    A7139_StrobeCmd(CMD_PLL);
+    delay_us(1);
+    A7139_StrobeCmd(CMD_RX);
+    delay_us(1);
 }
 
 

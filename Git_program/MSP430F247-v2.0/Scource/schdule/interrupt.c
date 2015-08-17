@@ -21,7 +21,6 @@ void Interrupt_Init(void)
 int error_test = 0;
 uint16 packet_count = 0;
 uint8 rssi_what = 0;
-uint8 elsewhat = 0;
 #pragma vector=PORT1_VECTOR
 __interrupt void port1_ISR(void)
 { 
@@ -54,10 +53,7 @@ __interrupt void port1_ISR(void)
             }
             halLedSet(1);
         }
-        else
-        {
-        elsewhat = 1;
-        }
+
         
 
         Receive_Timeout = 0;   
@@ -71,42 +67,41 @@ __interrupt void Timer_A (void)
    // TA1CCTL0 &= ~CCIFG;
 
     Frame_Time++;
-    if(Frame_Time == BEACON_PERIOD*4)//4个周期内收不到Beacon，复位通讯
+    if(EndPointDevice.power == 0)
     {
-        EndPointDevice.state = CMD_STBY;
-        A7139_StrobeCmd(CMD_STBY);
-        delay_us(1);
-        A7139_StrobeCmd(CMD_PLL);
-        delay_us(1);
-        A7139_StrobeCmd(CMD_RX);
-        delay_us(1);
-        EN_INT;
-        PostTask(EVENT_WAKE_A7139);
-    }
-    if(Frame_Time>(uint32)BEACON_PERIOD*8)//8个周期内收不到Beacon，重启单片机
-    {
-        REBOOT;
-    }
-    if(Frame_Time==BEFOR_BEACON_WAKE)//在接收beacon前使能中断
-    {
-        PostTask(EVENT_WAKE_A7139);
-        EN_INT;
-        TIME1_LOW;
-    }
-#if (COLLECT_EN)                                //开启数据采集
-    if(Start_Collect)
-    {
-        Collect_Time++;
-        if(Collect_Time == COLLECT_PERIOD)              //0.5s采集一次
+        if(Frame_Time == BEACON_PERIOD*4)//4个周期内收不到Beacon，复位通讯
         {
-            Collect_Time = 0;
-            PostTask(EVENT_COLLECT_DATA);
-          //  halLedToggle(2);
-        } 
-    }
+            PostTask(EVENT_A7139_RESET);
+            EN_INT;
+            PostTask(EVENT_WAKE_A7139);
+        }
+        if(Frame_Time>(uint32)BEACON_PERIOD*8)//8个周期内收不到Beacon，重启单片机
+        {
+            REBOOT;
+        }
+        if(Frame_Time==BEFOR_BEACON_WAKE)//在接收beacon前使能中断
+        {
+            PostTask(EVENT_WAKE_A7139);
+            EN_INT;
+            TIME1_LOW;
+        }
+#if (COLLECT_EN)                                //开启数据采集
+        if(Start_Collect)
+        {
+            Collect_Time++;
+            if(Collect_Time == COLLECT_PERIOD)              //0.5s采集一次
+            {
+                Collect_Time = 0;
+                PostTask(EVENT_COLLECT_DATA);
+                //  halLedToggle(2);
+            } 
+        }
 #endif
+    }
+    else
+    {
         
-
+    }
 }
 
 //1s
@@ -119,7 +114,7 @@ __interrupt void Timer_A0(void)
     if(EndPointDevice.power == 0)
     //每个超帧都要发送时，Beacon接收超时则复位A7139
     {
-
+        
         Receive_Timeout++;
         if(Receive_Timeout>30)
         {
@@ -132,37 +127,46 @@ __interrupt void Timer_A0(void)
         }*/
         else if(Receive_Timeout>5)
         {
-            EndPointDevice.state = CMD_STBY;
-            A7139_StrobeCmd(CMD_STBY);
-            delay_us(1);
-            A7139_StrobeCmd(CMD_PLL);
-            delay_us(1);
-            A7139_StrobeCmd(CMD_RX);
-            delay_us(1);
+            A7139_Reset();
             EN_INT;
-            
-            
         }
     }
-    else
-    {
-        Keep_Alive_Count++;
-        if(Keep_Alive_Count == KEEP_ALIVE_PERIOD)
-        {
-            Keep_Alive_Detect = 1;
-            Data_Change_Flag = 1;
-            Keep_Alive_Count = 0;
-        }
-    }
+//    else
+//    {
+//        Keep_Alive_Count++;
+//        if(Keep_Alive_Count == KEEP_ALIVE_PERIOD)
+//        {
+//            Keep_Alive_Detect = 1;
+//            Data_Change_Flag = 1;
+//            Keep_Alive_Count = 0;
+//        }
+//#if (COLLECT_EN)                                //开启数据采集
+//        if(Start_Collect)
+//        {
+//            Collect_Time++;
+//            if(Collect_Time == COLLECT_PERIOD_L)              //1S采集一次
+//            {
+//                Collect_Time = 0;
+//                PostTask(EVENT_COLLECT_DATA);
+//                //  halLedToggle(2);
+//            } 
+//        }
+//#endif
+//    
+//    }
     //测试低功耗时候使用
-    /*else if(EndPointDevice.power == 1)                  
+    else if(EndPointDevice.power == 1)                  
     {
-        
         Receive_Timeout++;
         if(Receive_Timeout>=(EndPointDevice.cluster_innernum))//若节点时间等于节点编号时发送数据
         {
             Receive_Timeout = 0;
             Data_Change_Flag = 1;
+            Keep_Alive_Detect = 1;
+            Frame_Time = 0;
+            A7139_Deep_Wake();
+            EN_INT;
+            EN_TIMER1;
         }
-    }*/
+    }
 }

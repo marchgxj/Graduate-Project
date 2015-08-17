@@ -67,7 +67,6 @@ extern void SortChannel();
 extern void CreatJoinRequest();
 extern void JoinRequestACKHandler();
 extern void SendJoinRequest();
-extern void ReJoinHandler();
 extern void ChannelSelection(uint8 start,uint8 end);
 
 #endif

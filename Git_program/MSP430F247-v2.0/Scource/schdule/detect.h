@@ -4,6 +4,7 @@
 
 #define COLLECT_EN   0          //是否开启数据采集
 #define COLLECT_PERIOD  1000   //采集周期  单位：100us
+#define COLLECT_PERIOD_L  1    //低功耗模式，采集周期  单位：1s
 #define COLLECT_WIDTH   5       //采集个数
 #define SLOP_THRESHLOD  10      //斜率阈值
 
