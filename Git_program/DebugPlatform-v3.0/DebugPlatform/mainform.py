@@ -7,7 +7,7 @@ import os
 import tkFont
 import carstop
 import time
-#import win32ui
+import tkFileDialog
 
 __author__ = 'xiaoxiami'
 
@@ -216,7 +216,7 @@ class Application(ttk.Notebook):
         self.admiddleflag = 0
 
         # self.bind("<<NotebookTabChanged>>", self.updatetab)
-        self.ADValue = []
+
         self.rooterimage = tk.PhotoImage(file="image//rooter.gif")
         self.sensorimage = tk.PhotoImage(file="image//sensor.gif")
         self.canvasline = []  # 绘图曲线
@@ -224,7 +224,8 @@ class Application(ttk.Notebook):
         self.canvasidentifyline = []  # 识别出竖线
         self.canvasoval = []  # 识别画出的圆点
         self.identifyuartopen = 0
-        self.drawonceym = 0
+        self.globalxym = 0
+        self.globalyym = 0
         self.zoomenable = 0
         self.admiddleline = []  # 中值曲线
         self.datacanvaswidth = 0  # canvas宽度 最后一个x坐标值
@@ -766,16 +767,11 @@ class Application(ttk.Notebook):
         Autor:xiaoxiami 2015.5.29
         Others：默认打开目录为 F:\\Graduate\\Test\\data\\
         '''
-        '''
-        dlg = win32ui.CreateFileDialog(1)  # 1表示打开文件对话框
-        dlg.SetOFNInitialDir('F:\\Graduate\\Test\\data\\')  # 设置打开文件对话框中的初始显示目录
-        dlg.DoModal()
-        self.datapath = dlg.GetPathName()  # 获取选择的文件名称
+
+        self.datapath = tkFileDialog.askopenfilename(initialdir = 'F:\Graduate\Git_program\DebugPlatform-v3.0\Data')
         self.datapathentry.delete(0, tk.END)
         self.datapathentry.insert(1, self.datapath)
         self.zoomenable = 1
-        '''
-        
 
     def Opendata(self):
         '''
@@ -826,42 +822,42 @@ class Application(ttk.Notebook):
         elif "identify" in self.datapath:
             self.dataidentifybutton.configure(state=tk.DISABLED)
 
-            self.ADValue = []
-            databuf = []
+            self.ADValueX = []
+            self.ADValueY = []
+            databufx = []
+            databufy = []
             count = 0
             for value in range(len(data)):
                 if data[value] == 0x7D:
                     # 不是采集5位需要改的
-                    self.ADValue.append(data[value + 1] << 8 | data[value + 2])
-                    self.ADValue.append(data[value + 3] << 8 | data[value + 4])
-                    self.ADValue.append(data[value + 5] << 8 | data[value + 6])
-                    self.ADValue.append(data[value + 7] << 8 | data[value + 8])
-                    self.ADValue.append(data[value + 9] << 8 | data[value + 10])
-                    databuf.append(data[value + 1] << 8 | data[value + 2])
-                    databuf.append(data[value + 3] << 8 | data[value + 4])
-                    databuf.append(data[value + 5] << 8 | data[value + 6])
-                    databuf.append(data[value + 7] << 8 | data[value + 8])
-                    databuf.append(data[value + 9] << 8 | data[value + 10])
-                    self.Drawonce(count=count, value=databuf)
-                    count += 5
-                    databuf = []
+                    self.ADValueX.append(data[value + 1] << 8 | data[value + 2])
+                    self.ADValueY.append(data[value + 3] << 8 | data[value + 4])
+
+                    databufx.append(data[value + 1] << 8 | data[value + 2])
+                    databufy.append(data[value + 3] << 8 | data[value + 4])
+
+                    self.Drawonce(count=count, valuex=databufx,valuey=databufy)
+                    count += 1
+                    databufx = []
+                    databufy = []
         self.datatext.delete(0.0, tk.END)
         i = 0
-        for v in self.ADValue:
-            self.datatext.insert(tk.END, str(i) + ":" + str(v) + "\n")
+
+        for v in range(len(self.ADValueX)):
+            self.datatext.insert(tk.END, str(i) + ":" + "X:"+str(self.ADValueX[v]) + "  Y:" + str(self.ADValueY[v]) + "\n")
             i += 1
 
         offset = int(self.datascale.get())
         # 画布宽度为data长度  高度为512
-        self.datacavas.config(scrollregion=(0, 0, len(self.ADValue * offset), 512))
+        self.datacavas.config(scrollregion=(0, 0, len(self.ADValueX * offset), 512))
         xm = 0
         ym = 0
         j = 0
         if "sensor" in self.datapath:
-            for v in self.ADValue:
+            for v in self.ADValueX:
                 j += 1
                 if (v > 1024):
-                    v = self.ADValue[j - 2]
+                    v = self.ADValueX[j - 2]
                 y = 512 - v / 2
                 self.canvasline.append(self.datacavas.create_line(xm, ym, xm + offset, y, fill="red"))
                 xm += offset
@@ -917,7 +913,7 @@ class Application(ttk.Notebook):
             return
         self.Opendata()
 
-    def Drawonce(self, count, value):
+    def Drawonce(self, count, valuex,valuey):
         '''
         Parameter：
             count：当前数据个数
@@ -927,19 +923,42 @@ class Application(ttk.Notebook):
         Autor:xiaoxiami 2015.5.29
         Others：
         '''
+        countx = count
+        county = count
         offset = int(self.datascale.get())
-        if self.admiddleflag == 0:
-            self.admiddle = 512 - value[0] / 2
-            self.admiddleflag = 1
-            self.dataspinbox.insert(1, value[0])
-            # self.dataspinbox.configure(value=value[0])
+        # 显示中线
+        # if self.admiddleflag == 0:
+        #     self.admiddle = 512 - value[0] / 8
+        #     self.admiddleflag = 1
+        #     self.dataspinbox.insert(1, value[0])
+        #     # self.dataspinbox.configure(value=value[0])
+        #     print self.admiddle
 
-        for v in value:
-            if (v > 1024):
-                v = 1024
-            y = 512 - v / 2
-            xm = count * offset
-            ym = self.drawonceym
+        for v in valuex:
+            if (v > 4096):
+                v = 4096
+            y = 512 - v / 8
+            xm = countx * offset
+            ym = self.globalxym
+
+            self.canvasline.append(self.datacavas.create_line(xm, ym, xm + offset, y, fill="darkgreen"))
+            if self.dataspinbox.get() != "":
+                try:
+                    self.admiddle = 512 - int(self.dataspinbox.get()) / 2
+                except ValueError, error:
+                    print error
+
+            # self.admiddleline.append(
+            #     self.datacavas.create_line(xm, self.admiddle, xm + offset, self.admiddle, fill="darkblue"))
+            self.globalxym = y
+            countx += 1
+
+        for v in valuey:
+            if (v > 4096):
+                v = 4096
+            y = 512 - v / 8
+            xm = county * offset
+            ym = self.globalyym
 
             self.canvasline.append(self.datacavas.create_line(xm, ym, xm + offset, y, fill="red"))
             if self.dataspinbox.get() != "":
@@ -948,14 +967,14 @@ class Application(ttk.Notebook):
                 except ValueError, error:
                     print error
 
-            self.admiddleline.append(
-                self.datacavas.create_line(xm, self.admiddle, xm + offset, self.admiddle, fill="darkblue"))
-            self.drawonceym = y
-            count += 1
-        self.datacavas.config(scrollregion=(0, 0, count * offset, 512))
-        self.datacanvaswidth = count * offset
+            # self.admiddleline.append(
+            #     self.datacavas.create_line(xm, self.admiddle, xm + offset, self.admiddle, fill="darkblue"))
+            self.globalyym = y
+            county += 1
+        self.datacavas.config(scrollregion=(0, 0, county * offset, 512))
+        self.datacanvaswidth = county * offset
         self.datacavas.xview(tk.MOVETO, 1.0)
-        self.Identifyonce(Magnet_Value=value, x=xm, y=ym)
+        #self.Identifyonce(Magnet_Value=value, x=xm, y=ym)
 
     def Slop(self, Magnet_Value):
         '''
@@ -1073,13 +1092,13 @@ class Application(ttk.Notebook):
         Others：
         '''
         offset = int(self.datascale.get())
-        x1 = event.x + int(self.cancassbx.get()[0] * len(self.ADValue) * offset)
-        if (x1 >= 0 and x1 <= len(self.ADValue) * offset):
+        x1 = event.x + int(self.cancassbx.get()[0] * len(self.ADValueX) * offset)
+        if (x1 >= 0 and x1 <= len(self.ADValueX) * offset):
             for v in self.cavasverticalline:
                 self.datacavas.delete(v)
             self.cavasverticalline = []
-            self.cavasverticalline.append(self.datacavas.create_line(x1, 0, x1, 512, fill="green"))
-            self.statusbar.setdata("%s", "X:" + str(x1 / offset) + ",Y:" + str(self.ADValue[x1 / offset]))
+            self.cavasverticalline.append(self.datacavas.create_line(x1, 0, x1, 512, fill="purple"))
+            self.statusbar.setdata("%s", "Position:" + str(x1 / offset) + ",X:" + str(self.ADValueX[x1 / offset]) + ",Y:" + str(self.ADValueY[x1 / offset]))
             self.datatext.see(float(str(x1 / offset) + ".0"))
 
     def minusmiddle(self, event):
