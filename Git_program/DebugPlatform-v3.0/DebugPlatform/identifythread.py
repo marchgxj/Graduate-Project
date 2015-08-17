@@ -47,22 +47,27 @@ class myThread (threading.Thread):
                     if len(buf)!= 0:
                         if ord(buf)==0x7D:
                             # 不是采集5位需要改的
-                            buf+=self.uart.read(15)
+                            buf+=self.uart.read(4)
                             for v in buf:
                                 self.file = open(self.filename,"a+")
                                 self.file.write(binascii.b2a_hex(v)+" ")
                                 self.file.close()
                             # 不是采集5位需要改的   
-                            self.sensordata=[]
-                            self.sensordata.append(ord(buf[1])<<8|ord(buf[2]))
-                            self.sensordata.append(ord(buf[3])<<8|ord(buf[4]))
-                            self.sensordata.append(ord(buf[5])<<8|ord(buf[6]))
-                            self.sensordata.append(ord(buf[7])<<8|ord(buf[8]))
-                            self.sensordata.append(ord(buf[9])<<8|ord(buf[10]))
-                            self.app.Drawonce(count=self.count,value=self.sensordata)
-                            self.root.status.setdata('RX:%s ',self.sensordata) 
+                            self.valuex=[]
+                            self.valuex.append(ord(buf[1])<<8|ord(buf[2]))
+                            self.valuey=[]
+                            self.valuey.append(ord(buf[3])<<8|ord(buf[4]))
+                            # self.sensordata.append(ord(buf[3])<<8|ord(buf[4]))
+                            # self.sensordata.append(ord(buf[5])<<8|ord(buf[6]))
+                            # self.sensordata.append(ord(buf[7])<<8|ord(buf[8]))
+                            # self.sensordata.append(ord(buf[9])<<8|ord(buf[10]))
+                            self.app.Drawonce(count=self.count,valuex=self.valuex,valuey=self.valuey)
+                            try:
+                                self.root.status.setdata('X:%s Y:%s',self.valuex,self.valuey)
+                            except:
+                                print "I'm identifythread line 66"
                             self.uart.read(self.uart.inWaiting())
-                            self.count+=5
+                            self.count+=1
 #                     time.sleep(0.5)
                     #每次有5个新数据
                     # 不是采集5位需要改的

@@ -16,6 +16,8 @@ typedef struct{
 }DataPacketStruct;
 
 extern DataPacketStruct DataPacket;
+extern uint16 Draw_DataX;          
+extern uint16 Draw_DataY;         
 
 extern void DataSend(void);
 extern void DataACKHandler();

@@ -22,11 +22,5 @@ int main(void)
     for(;;)
     {
         Process_Event();
-
-        if(ReJoinFlag == 1)
-        {
-            ReJoinFlag = 0;
-            REBOOT;
-        }
     }
 }
