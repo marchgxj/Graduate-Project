@@ -29,6 +29,8 @@
 #define    EVENT_A7139_RESET              20
 #define    EVENT_COLLECT_DATA_F           21
 #define    EVENT_UPLOAD_DRAWDATA          22
+#define    EVENT_CALIBRATE_SENSOR         23
+#define    EVENT_GET_VARIANCE             24
 
 extern void Init_TQ(void);
 extern uint8 PostTask(uint8 event);

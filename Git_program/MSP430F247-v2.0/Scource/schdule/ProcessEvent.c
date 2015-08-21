@@ -96,6 +96,12 @@ uint8 Process_Event()
       case EVENT_COLLECT_DATA_F:
         SampleChannel(&Draw_DataX,&Draw_DataY);
         break;
+      case EVENT_CALIBRATE_SENSOR:
+        Calibration();
+        break;
+      case EVENT_GET_VARIANCE:
+        GetVariance();
+        break;
         
     }
     return current_event;

@@ -756,8 +756,7 @@ void A7139_WakeToRecv(void)
 #if (SLEEP_EN)    
     A7139_Wake();
     RXMode();
-    TIME1_LOW;
-#endif    
+#endif
 }
 void A7139_Deep_Wake(void)
 {

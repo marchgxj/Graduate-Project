@@ -12,6 +12,18 @@
 #define THRESHOLD       100
 #define IDENTIFY_WIDTH  10
 
+//传感器监测状态
+#define NOCAR      0            //没有停车
+#define CAR        1            //停车
+#define NOCAR2CAR  2            //无车到有车中间状态
+#define CAR2NOCAR  3            //有车到无车中间状态
+#define COLLECTING 4            //采集数据中
+#define STABLE     5            //传感器稳定
+
+#define CAL_PERIOD  6000          //10分钟校准一次
+
+#define VAR_THRESHOLD  5000             //判断是否停车阈值
+
 typedef struct
 {
     uint16 value;
@@ -20,6 +32,8 @@ typedef struct
 
 extern void CollectData();
 extern void IdentifyCar();
+extern void Calibration();
+extern void GetVariance();
 
 extern uint8 Data_Change_Flag;
 extern uint16 AD_middle_valueX;
@@ -30,4 +44,11 @@ extern int16 Magnet_Value[COLLECT_WIDTH];
 extern uint8  Start_Collect;
 extern int Ave_Slop;
 extern uint8 Car_Status;
+extern uint16 Cal_Time;          //校准周期
+extern uint8 Parking_State;     //传感器状态
+extern uint8 Parking_State_M;     //传感器状态
+extern uint16 VarianceX;           //X轴方差
+extern uint16 VarianceY;           //Y轴方差
+extern uint16 VarianceAve;         //两轴平均方差
+extern uint16 VarianceM;           //两轴方差差值
 #endif 

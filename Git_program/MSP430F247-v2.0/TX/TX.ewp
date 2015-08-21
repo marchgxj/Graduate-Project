@@ -97,7 +97,7 @@
         </option>
         <option>
           <name>OGChipSelectMenu</name>
-          <state>MSP430F2132	MSP430F2132</state>
+          <state>MSP430F247	MSP430F247</state>
         </option>
         <option>
           <name>GStackHeapOverride</name>
@@ -277,7 +277,7 @@
         </option>
         <option>
           <name>CCDiagSuppress</name>
-          <state></state>
+          <state>Pa050</state>
         </option>
         <option>
           <name>CCDiagRemark</name>
@@ -754,7 +754,7 @@
         </option>
         <option>
           <name>SecondaryOutputFile</name>
-          <state></state>
+          <state>(None for the selected format)</state>
         </option>
         <option>
           <name>XDefines</name>
@@ -806,7 +806,7 @@
         </option>
         <option>
           <name>XclFile</name>
-          <state>lnk0t.xcl</state>
+          <state>$TOOLKIT_DIR$\config\linker\lnk430f247.xcl</state>
         </option>
         <option>
           <name>XclFileSlave</name>
@@ -894,7 +894,7 @@
         </option>
         <option>
           <name>xcProgramEntryLabel</name>
-          <state></state>
+          <state>__program_start</state>
         </option>
         <option>
           <name>DebugInformation</name>
@@ -934,7 +934,7 @@
         </option>
         <option>
           <name>ExtraOutputFile</name>
-          <state></state>
+          <state>TX.a43</state>
         </option>
         <option>
           <name>ExtraOutputFormat</name>
@@ -1099,7 +1099,11 @@
         <debug>1</debug>
         <option>
           <name>CUTest</name>
-          <state>###Uninitialized###</state>
+          <state>-I$TOOLKIT_DIR$\inc</state>
+          <state>-@$TOOLKIT_DIR$\bin\iar.cmd</state>
+          <state>-@$PROJ_DIR$\source.txt</state>
+          <state>-@$PROJ_DIR$\include.txt</state>
+          <state>--preinclude=$PROJ_DIR$\IAR_ULPAdvisor_Defs.h</state>
         </option>
         <option>
           <name>ULPRules</name>
@@ -2290,10 +2294,10 @@
   <group>
     <name>schdule</name>
     <file>
-      <name>$PROJ_DIR$\..\Scource\schdule\device.c</name>
+      <name>$PROJ_DIR$\..\Scource\schdule\detect.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\Scource\schdule\device.h</name>
+      <name>$PROJ_DIR$\..\Scource\schdule\detect.h</name>
     </file>
     <file>
       <name>$PROJ_DIR$\..\Scource\schdule\interrupt.c</name>
@@ -2306,6 +2310,12 @@
     </file>
     <file>
       <name>$PROJ_DIR$\..\Scource\schdule\join.h</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\Scource\schdule\mac.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\Scource\schdule\mac.h</name>
     </file>
     <file>
       <name>$PROJ_DIR$\..\Scource\schdule\ProcessEvent.c</name>

@@ -46,7 +46,7 @@ void CreatSendData()
     DataPacket.src_cluster_innernum = EndPointDevice.cluster_innernum;
     
     DataPacket.ab_slot_num = (uint16)Ave_Slop>>8;
-    DataPacket.data = Car_Status;
+    DataPacket.data = Parking_State;
     //DataPacket.data = (uint8)Ave_Slop;
     
     DataSendBuffer[0] = DataPacket.pack_length;
@@ -65,6 +65,11 @@ void CreatSendData()
         DataSendBuffer[10] = Draw_DataY>>8;
         DataSendBuffer[11] = Draw_DataY;
         PostTask(EVENT_COLLECT_DATA_F);
+        /*DataSendBuffer[8] = VarianceX>>8;
+        DataSendBuffer[9] = VarianceX;
+        DataSendBuffer[10] = VarianceY>>8;
+        DataSendBuffer[11] = VarianceY;
+        PostTask(EVENT_GET_VARIANCE);*/
     }
     //低功耗时只发送识别结果
     else
@@ -93,7 +98,6 @@ void DataSend(void)
     before_slot_wake = (c-WAKE_TIME)/100;
     
     DIS_INT;
-    TIME1_HIGH;
     
     while(Frame_Time<=before_slot_wake);
     TIME2_HIGH;

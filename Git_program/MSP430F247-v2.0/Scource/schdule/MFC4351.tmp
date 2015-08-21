@@ -75,9 +75,9 @@ void IdentifyCar()
 {
     if(VarianceM > VAR_THRESHOLD)
     {
+        State1_Count++;
         if(Parking_State!=CAR)
         {
-            State1_Count++;
             if(State1_Count>STATE1)
             {
                 Parking_State = CAR;
@@ -105,17 +105,13 @@ void IdentifyCar()
         }
         else
         {
-            if(Parking_State != NOCAR)
+            State3_Count++;
+            if(State3_Count>STATE3)
             {
-                State3_Count++;
-                if(State3_Count>STATE3)
-                {
-                    Parking_State = NOCAR;
-                    halLedClear(4);
-                    State3_Count = 0;
-                }
+                Parking_State = NOCAR;
+                halLedClear(4);
+                State3_Count = 0;
             }
-            
         }
         
     }

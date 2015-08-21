@@ -81,7 +81,7 @@ void BeaconHandler(uint8 beacon[])
     EndPointDevice.free_node = beacon[6];
     EndPointDevice.csma_length = (MAX_DEVICE_NUM - EndPointDevice.free_node)/3+1;
     //EndPointDevice.power =  beacon[1]&0x01;   
-    EndPointDevice.power = 0;
+    EndPointDevice.power = 1;
     if(EndPointDevice.connected == 0)                   //未连接，发送加入请求
     {
         PostTask(EVENT_JOINREQUEST_SEND);

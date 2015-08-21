@@ -63,9 +63,9 @@ void AD_cal()
     uint16 ADvalueX=0,ADvalueY=0;
     for(i=0;i<16;i++)
     {
-      SampleChannel(&ADvalueX,&ADvalueY);
-          AD_middle_valueX += ADvalueX;
-          AD_middle_valueY += ADvalueY;
+        SampleChannel(&ADvalueX,&ADvalueY);
+        AD_middle_valueX += ADvalueX;
+        AD_middle_valueY += ADvalueY;
     }
     AD_middle_valueX = AD_middle_valueX>>4;
     AD_middle_valueY = AD_middle_valueY>>4;
