@@ -80,8 +80,16 @@ void BeaconHandler(uint8 beacon[])
     TIME2_HIGH;
     EndPointDevice.free_node = beacon[6];
     EndPointDevice.csma_length = (MAX_DEVICE_NUM - EndPointDevice.free_node)/3+1;
-    //EndPointDevice.power =  beacon[1]&0x01;   
-    EndPointDevice.power = 1;
+    EndPointDevice.power =  beacon[1]&0x01;   
+    //EndPointDevice.power = 1;
+    if(EndPointDevice.power)
+    {
+        halLedSet(3);
+    }
+    else
+    {
+        halLedClear(3);
+    }
     if(EndPointDevice.connected == 0)                   //未连接，发送加入请求
     {
         PostTask(EVENT_JOINREQUEST_SEND);
@@ -91,8 +99,9 @@ void BeaconHandler(uint8 beacon[])
         if(EndPointDevice.power == 0)//不是自己发送时隙，先睡眠
         {
             A7139_Sleep();
+            
         }
-        
+
         PostTask(EVENT_DATA_SEND);
     }
     TIME2_LOW;

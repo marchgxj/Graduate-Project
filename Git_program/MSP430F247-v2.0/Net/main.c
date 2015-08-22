@@ -8,6 +8,7 @@ int main(void)
     __disable_interrupt();
     
     halBoardInit(); 
+ReJoin:
     EndPointDevice.pyh_address = GetPhyAddress();
     EndPointDevice.device_type = DEVICE;
     for(i=0;i<MAX_PACK_LENGTH;i++)
@@ -22,5 +23,10 @@ int main(void)
     for(;;)
     {
         Process_Event();
+        if(ReJoinFlag == 1)
+        {
+            ReJoinFlag = 0;
+            goto ReJoin;
+        }
     }
 }

@@ -14,7 +14,7 @@ int main(void)
 #if (SEND_REJOIN_EN == 1)
 		PostTask(EVENT_REJOIN_SEND);
 #endif
-		
+
 	  for(;;)
 		{
 				Process_Event();

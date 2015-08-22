@@ -176,24 +176,26 @@ void JoinRequestACKHandler()
         CreatJoinRequestACKOK();
         SendPack();
         RXMode();
-        if(EndPointDevice.power == 1)  //执行低功耗模式
+        //入网完成后发送一次数据
+        /*if(EndPointDevice.power == 1)  //执行低功耗模式
         {
             A7139_DeepSleep();
             DIS_INT;
             DIS_TIMER1;
-        }
+        }*/
     }
     else if((accept == 1)&&(ackok==0))                          //接受入网，不需要回复ACK-OK
     {
         EndPointDevice.cluster_id = DataRecvBuffer[6];
         EndPointDevice.cluster_innernum = DataRecvBuffer[7];
         EndPointDevice.connected = 1;
-        if(EndPointDevice.power == 1)  //执行低功耗模式
+        //入网完成后发送一次数据
+        /*if(EndPointDevice.power == 1)  //执行低功耗模式
         {
             A7139_DeepSleep();
             DIS_INT;
             DIS_TIMER1;
-        }
+        }*/
     }
     else
     {}
@@ -208,4 +210,56 @@ void ChannelSelection(uint8 start,uint8 end)
     A7139_Cal();                    
     delay_us(1);
     RXMode();
+}
+void ReJoinHandler()
+{
+    __disable_interrupt();
+    A7139_Init(470.001f);
+    Init_TQ();
+    EndPointDevice.backup_channel = 0;
+    EndPointDevice.channel = 0;
+    EndPointDevice.cluster_id = 0;
+    EndPointDevice.cluster_innernum = 0;
+    EndPointDevice.connected = 0;
+    EndPointDevice.csma_length = 0;
+    EndPointDevice.data_ack = 0;
+    EndPointDevice.des_cluster_id = 0;
+    EndPointDevice.des_cluster_innernum = 0;
+    EndPointDevice.device_type = 0;
+    EndPointDevice.free_node = 0;
+    EndPointDevice.power = 0;
+    EndPointDevice.pyh_address = 0;
+    EndPointDevice.state = 0;
+    EndPointDevice.time_stamp = 0;
+    EndPointDevice.parking_state = NOCAR;
+    EndPointDevice.parking_state_m = NOCAR;
+    VarianceX = 0;           //X轴方差
+    VarianceY = 0;           //Y轴方差
+    VarianceAve = 0;         //两轴平均方差
+    VarianceM = 0;           //两轴方差差值
+    State1_Count = 0;        
+    State2_Count = 0;
+    State3_Count = 0;
+    DataPacket.ab_slot_num = 0;
+
+    for(int i=0;i<CHANNEL_NUM;i++)
+    {
+        ScanChannel[i].channel_free = 0;
+        ScanChannel[i].channel_num = 0;
+        ScanChannel[i].channel_rssi = 0;
+        ScanChannel[i].cluster_id = 0;
+    }
+    ReJoinFlag = 1;
+    halLedSetAll();
+    delay_ms(1000);
+    halLedClearAll();
+    delay_ms(50);
+    halLedSetAll();
+    delay_ms(50);
+    halLedClearAll();
+    delay_ms(50);
+    halLedSetAll();
+    delay_ms(50);
+    halLedClearAll();
+    delay_ms(50);
 }

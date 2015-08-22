@@ -26,9 +26,7 @@ void halBoardInit(void)
     halMcuInit();
     delay_s(1);
     GPIO_Init();
-    //halUartInit(0, 0);
-    halLedSet(2);
-    halLedSet(2);  
+    //halUartInit(0, 0); 
    // sched_init();
     //÷–∂œ≥ı ºªØ
     time_init();

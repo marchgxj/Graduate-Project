@@ -14,12 +14,8 @@ uint16 Ave_StableX = 0;          //稳定后的值
 uint16 Ave_StableY = 0;
 uint32 Sum_ValueX = 0;
 uint32 Sum_ValueY = 0;
-uint8 Car_Status = 0;
-uint8 car_status_memory = 0;
 uint16 Draw_DataX = 0;          //绘制曲线数据X轴
 uint16 Draw_DataY = 0;          //绘制曲线数据Y轴
-uint8 Parking_State = NOCAR;     //传感器状态
-uint8 Parking_State_M = NOCAR;     //传感器状态
 uint16 Cal_Time = 0;            //校准周期
 uint16 VarianceX = 0;           //X轴方差
 uint16 VarianceY = 0;           //Y轴方差
@@ -75,42 +71,42 @@ void IdentifyCar()
 {
     if(VarianceM > VAR_THRESHOLD)
     {
-        if(Parking_State!=CAR)
+        if(EndPointDevice.parking_state!=CAR)
         {
             State1_Count++;
             if(State1_Count>STATE1)
             {
-                Parking_State = CAR;
+                EndPointDevice.parking_state = CAR;
                 halLedSet(4);
                 State1_Count = 0;
             }
             else
             {
-                Parking_State = NOCAR2CAR;
+                EndPointDevice.parking_state = NOCAR2CAR;
             }
         }
 
     }
     else
     {
-        if(Parking_State == NOCAR2CAR)
+        if(EndPointDevice.parking_state == NOCAR2CAR)
         {
             State2_Count++;
             if(State2_Count>STATE2)
             {
-                Parking_State = NOCAR;
+                EndPointDevice.parking_state = NOCAR;
                 State2_Count = 0;
                 State1_Count = 0;
             }
         }
         else
         {
-            if(Parking_State != NOCAR)
+            if(EndPointDevice.parking_state != NOCAR)
             {
                 State3_Count++;
                 if(State3_Count>STATE3)
                 {
-                    Parking_State = NOCAR;
+                    EndPointDevice.parking_state = NOCAR;
                     halLedClear(4);
                     State3_Count = 0;
                 }
@@ -119,13 +115,13 @@ void IdentifyCar()
         }
         
     }
-    if(Parking_State_M!=Parking_State)
+    if(EndPointDevice.parking_state_m!=EndPointDevice.parking_state)
     {
         A7139_Deep_Wake();
         EN_INT;
         EN_TIMER1;
     }
-    Parking_State_M = Parking_State;
+    EndPointDevice.parking_state_m = EndPointDevice.parking_state;
     /*Start_Collect = 1;
     //非低功耗模式测试先注释掉
     if(Data_Change_Flag == 1)

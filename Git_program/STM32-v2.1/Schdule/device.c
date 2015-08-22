@@ -3,7 +3,7 @@ uint8 DataSendBuffer[MAX_PACK_LENGTH];
 uint8 DataRecvBuffer[MAX_PACK_LENGTH];
 RootDeviceStruct RootDevice;
 uint16 Frame_Time = 0;
-uint8 Power_Mode = 0;    //0：每个超帧都发送  1：数据变化时发送
+uint8 Power_Mode = 1;    //0：每个超帧都发送  1：数据变化时发送
 uint8 Unpack(uint8 *type)
 {
     type++;

@@ -68,5 +68,6 @@ extern void CreatJoinRequest();
 extern void JoinRequestACKHandler();
 extern void SendJoinRequest();
 extern void ChannelSelection(uint8 start,uint8 end);
+extern void ReJoinHandler();
 
 #endif

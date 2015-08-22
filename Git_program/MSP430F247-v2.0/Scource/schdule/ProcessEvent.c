@@ -88,7 +88,7 @@ uint8 Process_Event()
         IdentifyCar();
         break;
       case EVENT_REJOIN_HANDLER:
-        REBOOT;
+        ReJoinHandler();
         break;
       case EVENT_A7139_RESET:
         A7139_Reset();

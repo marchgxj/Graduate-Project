@@ -45,8 +45,7 @@ void CreatSendData()
     DataPacket.src_cluster_id = EndPointDevice.cluster_id;
     DataPacket.src_cluster_innernum = EndPointDevice.cluster_innernum;
     
-    DataPacket.ab_slot_num = (uint16)Ave_Slop>>8;
-    DataPacket.data = Parking_State;
+    DataPacket.data = EndPointDevice.parking_state;
     //DataPacket.data = (uint8)Ave_Slop;
     
     DataSendBuffer[0] = DataPacket.pack_length;
@@ -133,10 +132,19 @@ void DataSend(void)
     }
 
 }
+uint8 rejoin_flag = 0;
 void DataACKHandler()
 {
-    EndPointDevice.time_stamp = DataSendBuffer[6]<<8|DataSendBuffer[7];
+
+    EndPointDevice.time_stamp = DataRecvBuffer[6]<<8|DataRecvBuffer[7];
     EndPointDevice.data_ack = 1;
+    DataPacket.ab_slot_num++;
+    rejoin_flag = DataRecvBuffer[1]&0x01;
+    if(rejoin_flag == 1)
+    {
+        PostTask(EVENT_REJOIN_HANDLER);
+    }
+    
 }
 void CSMADataResend()
 {

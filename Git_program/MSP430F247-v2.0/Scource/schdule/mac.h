@@ -61,6 +61,8 @@ typedef struct{
     uint8 time_stamp;                   //时间戳
     uint8 data_ack;                     //数据ack
     uint8 power;			//是否开启低功耗
+    uint8 parking_state;                //停车状态
+    uint8 parking_state_m;              //上一次停车状态
 }EndPointDeviceStruct;
 
 extern EndPointDeviceStruct EndPointDevice;

@@ -45,10 +45,11 @@ extern uint8  Start_Collect;
 extern int Ave_Slop;
 extern uint8 Car_Status;
 extern uint16 Cal_Time;          //校准周期
-extern uint8 Parking_State;     //传感器状态
-extern uint8 Parking_State_M;     //传感器状态
 extern uint16 VarianceX;           //X轴方差
 extern uint16 VarianceY;           //Y轴方差
 extern uint16 VarianceAve;         //两轴平均方差
 extern uint16 VarianceM;           //两轴方差差值
+extern uint8  State1_Count;        
+extern uint8  State2_Count;
+extern uint8  State3_Count;
 #endif 

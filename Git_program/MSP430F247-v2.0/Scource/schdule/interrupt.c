@@ -47,9 +47,6 @@ __interrupt void port1_ISR(void)
               case JOINREQUESTACK_TYPE:
                 PostTask(EVENT_JOINREQUESTACK_HANDLER);
                 break;
-              case REJOIN_TYPE:
-                PostTask(EVENT_REJOIN_HANDLER);
-                break;
             }
             halLedSet(1);
         }
@@ -170,7 +167,7 @@ __interrupt void Timer_A0(void)
         if(Cal_Time == CAL_PERIOD)
         {
             Cal_Time = 0;
-            if((Parking_State == NOCAR))//如果是没有车状态 ，则进行校准
+            if((EndPointDevice.parking_state == NOCAR))//如果是没有车状态 ，则进行校准
             {
                 PostTask(EVENT_CALIBRATE_SENSOR);
             }
