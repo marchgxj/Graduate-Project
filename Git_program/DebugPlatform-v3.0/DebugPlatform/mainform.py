@@ -75,7 +75,6 @@ class MenuBar(tk.Menu):
         self.datamodecboxbuf = "串口数据"
         self.root = parent
 
-
     def show(self):
         '''
         Parameter：
@@ -422,8 +421,10 @@ class Application(ttk.Notebook):
             if num in self.carnumbind:
                 if act == "1":
                     self.canvas.itemconfigure(('text' + str(num)), text=num + ":\n已停车", fill='red')
-                else:
+                elif act == '0':
                     self.canvas.itemconfigure(('text' + str(num)), text=num + ":\n未停车", fill='green')
+                elif act == '2':
+                    self.canvas.itemconfigure(('text' + str(num)), text=num + ":\n识别中", fill='blue')
             else:
                 self.carnumbind.append(num)
                 if self.stopedcarnum < topnum:
@@ -431,19 +432,27 @@ class Application(ttk.Notebook):
                         self.canvas.create_text(self.stopedcarnum * topwidth + topwidth / 2, self.height / 6,
                                                 text=num + ":\n已停车", font=self.front, fill='red',
                                                 tag=('text' + str(num)))
-                    else:
+                    elif act == '0':
                         self.canvas.create_text(self.stopedcarnum * topwidth + topwidth / 2, self.height / 6,
                                                 text=num + ":\n未停车", font=self.front, fill='green',
+                                                tag=('text' + str(num)))
+                    elif act == '2':
+                        self.canvas.create_text(self.stopedcarnum * topwidth + topwidth / 2, self.height / 6,
+                                                text=num + ":\n识别中", font=self.front, fill='blue',
                                                 tag=('text' + str(num)))
                 else:
                     if act == '1':
                         self.canvas.create_text((self.stopedcarnum - topnum) * bottomwidth + bottomwidth / 2,
                                                 self.height - self.height / 6, text=num + ":\n已停车", font=self.front,
                                                 fill='red', tag=('text' + str(num)))
-                    else:
+                    elif act == '0':
                         self.canvas.create_text((self.stopedcarnum - topnum) * bottomwidth + bottomwidth / 2,
                                                 self.height - self.height / 6, text=num + ":\n未停车", font=self.front,
                                                 fill='green', tag=('text' + str(num)))
+                    elif act == '2':
+                        self.canvas.create_text((self.stopedcarnum - topnum) * bottomwidth + bottomwidth / 2,
+                                                self.height - self.height / 6, text=num + ":\n识别中", font=self.front,
+                                                fill='blue', tag=('text' + str(num)))
                 self.stopedcarnum = self.stopedcarnum + 1
 
     def NetStatus(self):
@@ -925,7 +934,10 @@ class Application(ttk.Notebook):
         '''
         countx = count
         county = count
-        offset = int(self.datascale.get())
+        try:
+            offset = int(self.datascale.get())
+        except  error:
+            print error
         # 显示中线
         # if self.admiddleflag == 0:
         #     self.admiddle = 512 - value[0] / 8
@@ -935,18 +947,20 @@ class Application(ttk.Notebook):
         #     print self.admiddle
 
         for v in valuex:
-            if (v > 4096):
-                v = 4096
-            y = 512 - v / 8
+            if (v > 65535):
+                v = 65535
+            y = 512 - v / 128
+
             xm = countx * offset
             ym = self.globalxym
 
             self.canvasline.append(self.datacavas.create_line(xm, ym, xm + offset, y, fill="darkgreen"))
-            if self.dataspinbox.get() != "":
-                try:
-                    self.admiddle = 512 - int(self.dataspinbox.get()) / 2
-                except ValueError, error:
-                    print error
+            try:
+                if self.dataspinbox.get() != "":
+
+                        self.admiddle = 512 - int(self.dataspinbox.get()) / 2
+            except ValueError, error:
+                print error
 
             # self.admiddleline.append(
             #     self.datacavas.create_line(xm, self.admiddle, xm + offset, self.admiddle, fill="darkblue"))
@@ -954,18 +968,22 @@ class Application(ttk.Notebook):
             countx += 1
 
         for v in valuey:
-            if (v > 4096):
-                v = 4096
-            y = 512 - v / 8
+
+            if (v > 65535):
+                v = 65535
+            y = 512 - v / 128
+
+
             xm = county * offset
             ym = self.globalyym
 
             self.canvasline.append(self.datacavas.create_line(xm, ym, xm + offset, y, fill="red"))
-            if self.dataspinbox.get() != "":
-                try:
-                    self.admiddle = 512 - int(self.dataspinbox.get()) / 2
-                except ValueError, error:
-                    print error
+            try:
+                if self.dataspinbox.get() != "":
+
+                        self.admiddle = 512 - int(self.dataspinbox.get()) / 2
+            except ValueError, error:
+                print error
 
             # self.admiddleline.append(
             #     self.datacavas.create_line(xm, self.admiddle, xm + offset, self.admiddle, fill="darkblue"))
