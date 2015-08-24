@@ -43,7 +43,7 @@ void DataHandler(void)
 	  ab_slot_num = DataRecvBuffer[6]<<8|DataRecvBuffer[7];
 		inner_num = DataRecvBuffer[5];
 		if((RootDevice.endpoint_device[inner_num].pyh_address==0)||
-			 (ab_slot_num>RootDevice.endpoint_device[inner_num].ab_slot_num)
+			 (ab_slot_num!=RootDevice.endpoint_device[inner_num].ab_slot_num)
 			)
 		{
 				rejoin = 1;
