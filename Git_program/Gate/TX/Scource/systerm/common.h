@@ -4,6 +4,8 @@
 #define    MAX_PACK_LENGTH      12
 #define    MAX_DEVICE_NUM       254
 #define    CHANNEL  470.001f
+#define    DIRECTION   1//1：进门端 2：出门端
+
 
 #include "types.h"
 #include "A7139.h"

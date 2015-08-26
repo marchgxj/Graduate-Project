@@ -125,7 +125,7 @@ void BeaconHandler(uint8 beacon[])
 uint8 PackValid(void)
 {
     uint16 phy_address = 0;
-    if(DataRecvBuffer[0]==1)
+    if((DataRecvBuffer[0]==1)&&(DataRecvBuffer[1]==DIRECTION))
     {
         return 1;
     }

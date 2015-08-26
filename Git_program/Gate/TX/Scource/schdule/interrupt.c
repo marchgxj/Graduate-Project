@@ -107,5 +107,5 @@ __interrupt void Timer_A0(void)
     TA0CCTL0 &= ~CCIFG;
     halLedToggle(2);
     
-    PostTask(EVENT_GET_VARIANCE);
+    PostTask(EVENT_IDENTIFY_CAR);
 }

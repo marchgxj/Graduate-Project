@@ -66,9 +66,11 @@ void AD_cal()
         SampleChannel(&ADvalueX,&ADvalueY);
         AD_middle_valueX += ADvalueX;
         AD_middle_valueY += ADvalueY;
+        delay_ms(50);
     }
     AD_middle_valueX = AD_middle_valueX>>4;
     AD_middle_valueY = AD_middle_valueY>>4;
+    ExtremumValueMiddle = abs(AD_middle_valueX-AD_middle_valueY);
     
     halLedSetAll();
     delay_ms(1000);

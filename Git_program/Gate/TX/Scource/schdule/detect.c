@@ -25,7 +25,9 @@ uint8  State1_Count = 0;
 uint8  State2_Count = 0;
 uint8  State3_Count = 0;
 uint8 Parking_State = 0;
-
+uint8 ExtremumCount = 0;        //采集计数
+uint16 ExtremumValue = 0;       //1S内极值
+uint16 ExtremumValueMiddle = 0; //两轴差标定值
 
 //first calculate the slop of the (X-Y)
 //if slop less than thredhold, judge (Xavg1 - Xavg0)  and (Yavg1 - Yavg0)
@@ -65,12 +67,13 @@ void bubbledata(DataStruct *a,uint16 n)
     }
     
 }
-#define STATE1 5
-#define STATE2 5
-#define STATE3 5
-void IdentifyCar()
+#define STATE1 5                //从无车到有车
+#define STATE2 10                //中间态回无车
+#define STATE3 15                //有车回无车
+
+void MultiState(uint16 value,uint16 threshold)
 {
-    if(VarianceM > VAR_THRESHOLD)
+    if(value > threshold)
     {
         if(EndPointDevice.parking_state!=CAR)
         {
@@ -86,7 +89,7 @@ void IdentifyCar()
                 EndPointDevice.parking_state = NOCAR2CAR;
             }
         }
-
+        
     }
     else
     {
@@ -116,13 +119,30 @@ void IdentifyCar()
         }
         
     }
+}
+/*方差多状态机识别*/
+void VarianceMultiState()
+{
+    GetVariance();
+    MultiState(VarianceM,VAR_THRESHOLD);
+}
+/*极值多状态机识别*/
+void ExtremumMultiState()
+{
+    GetExtremum();
+    MultiState(ExtremumValue,50);
+    
+    
+}
+void IdentifyCar()
+{
+    //VarianceMultiState();
+    ExtremumMultiState();
     if(EndPointDevice.parking_state_m!=EndPointDevice.parking_state)
     {
         A7139_Deep_Wake();
         Parking_State = EndPointDevice.parking_state;
         PostTask(EVENT_CSMA_RESEND);
-        
-
     }
     EndPointDevice.parking_state_m = EndPointDevice.parking_state;
     /*Start_Collect = 1;
@@ -159,5 +179,15 @@ void GetVariance()
     VarianceY = abs(ADvalueY - AD_middle_valueY)*abs(ADvalueY - AD_middle_valueY);
     VarianceAve = (VarianceX + VarianceY)>>1;
     VarianceM = abs(VarianceY-VarianceX/100);
-    IdentifyCar();
+
+}
+void GetExtremum()
+{
+    uint16 ADvalueX=0;
+    uint16 ADvalueY=0;
+    uint16 minus = 0;
+
+    SampleChannel(&ADvalueX,&ADvalueY);
+    minus = abs(ADvalueX - ADvalueY);
+    ExtremumValue = abs(minus - ExtremumValueMiddle);
 }

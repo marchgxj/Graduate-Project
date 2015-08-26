@@ -35,12 +35,16 @@ __interrupt void port1_ISR(void)
         A7139_StrobeCmd(CMD_RX);
         delay_us(2);
         EndPointDevice.state = CMD_RX;
-        Camera_Statue = DataRecvBuffer[2];
-        halLedSet(1);
-        SendPack();
+        if(DataRecvBuffer[3] == DIRECTION)
+        {
+            Camera_Statue = DataRecvBuffer[2];
+            halLedSet(1);
+            SendPack();
+            Receive_Timeout = 0;  
+            PostTask(EVENT_SWITCH_CAMERA);
+        }  
         RXMode();
-        Receive_Timeout = 0;  
-        PostTask(EVENT_SWITCH_CAMERA);
+        
     } 
 }
 

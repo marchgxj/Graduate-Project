@@ -150,6 +150,7 @@ void CreatCSMASendData()
     DataSendBuffer[0] = EndPointDevice.pyh_address>>8;
     DataSendBuffer[1] = EndPointDevice.pyh_address;
     DataSendBuffer[2] = Parking_State;
+    DataSendBuffer[3] = DIRECTION;
 }
 void CSMADataResend()
 {
