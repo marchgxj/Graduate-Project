@@ -173,6 +173,6 @@ __interrupt void Timer_A0(void)
             }
             
         }
-        PostTask(EVENT_GET_VARIANCE);
+        PostTask(EVENT_IDENTIFY_CAR);
     }
 }

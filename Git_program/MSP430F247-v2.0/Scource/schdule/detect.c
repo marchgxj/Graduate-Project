@@ -24,6 +24,8 @@ uint16 VarianceM = 0;           //两轴方差差值
 uint8  State1_Count = 0;        
 uint8  State2_Count = 0;
 uint8  State3_Count = 0;
+uint16 ExtremumValueMiddle = 0; //两轴差标定值
+uint16 ExtremumValue = 0;       //两轴差值
 
 
 //first calculate the slop of the (X-Y)
@@ -64,12 +66,13 @@ void bubbledata(DataStruct *a,uint16 n)
     }
     
 }
-#define STATE1 5
-#define STATE2 5
-#define STATE3 5
-void IdentifyCar()
+#define STATE1 5                //从无车到有车
+#define STATE2 10                //中间态回无车
+#define STATE3 15                //有车回无车
+
+void MultiState(uint16 value,uint16 threshold)
 {
-    if(VarianceM > VAR_THRESHOLD)
+    if(value > threshold)
     {
         if(EndPointDevice.parking_state!=CAR)
         {
@@ -85,7 +88,7 @@ void IdentifyCar()
                 EndPointDevice.parking_state = NOCAR2CAR;
             }
         }
-
+        
     }
     else
     {
@@ -115,6 +118,24 @@ void IdentifyCar()
         }
         
     }
+}
+/*方差多状态机识别*/
+void VarianceMultiState()
+{
+    GetVariance();
+    MultiState(VarianceM,VAR_THRESHOLD);
+}
+/*极值多状态机识别*/
+void ExtremumMultiState()
+{
+    GetExtremum();
+    MultiState(ExtremumValue,EXT_THRESHOLD);
+    
+}
+void IdentifyCar()
+{
+        //VarianceMultiState();
+    ExtremumMultiState();
     if(EndPointDevice.parking_state_m!=EndPointDevice.parking_state)
     {
         A7139_Deep_Wake();
@@ -156,5 +177,15 @@ void GetVariance()
     VarianceY = abs(ADvalueY - AD_middle_valueY)*abs(ADvalueY - AD_middle_valueY);
     VarianceAve = (VarianceX + VarianceY)>>1;
     VarianceM = abs(VarianceY-VarianceX/100);
-    IdentifyCar();
+}
+
+void GetExtremum()
+{
+    uint16 ADvalueX=0;
+    uint16 ADvalueY=0;
+    uint16 minus = 0;
+
+    SampleChannel(&ADvalueX,&ADvalueY);
+    minus = abs(ADvalueX - ADvalueY);
+    ExtremumValue = abs(minus - ExtremumValueMiddle);
 }

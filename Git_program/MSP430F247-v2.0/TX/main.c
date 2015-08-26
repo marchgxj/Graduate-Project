@@ -27,19 +27,30 @@ int main(void)
     while(1) 
     {    
         
-        //GetVariance();
-        SampleChannel(&ADvalueX,&ADvalueY);
-        VarianceX = abs(ADvalueX - AD_middle_valueX)*abs(ADvalueX - AD_middle_valueX);
-        VarianceY = abs(ADvalueY - AD_middle_valueY)*abs(ADvalueY - AD_middle_valueY);
-        VarianceM = abs(VarianceY-VarianceX/100);
-        //SampleChannel(&ADvalueX,&ADvalueY);
-        minus =  abs(VarianceY-VarianceX/100);
-        normal_test[0] = minus>>8;
-        normal_test[1] = minus;
-        normal_test[2] = 30000>>8;
-        normal_test[3] = 30000;
+//        //GetVariance();
+//        SampleChannel(&ADvalueX,&ADvalueY);
+//        VarianceX = abs(ADvalueX - AD_middle_valueX)*abs(ADvalueX - AD_middle_valueX);
+//        VarianceY = abs(ADvalueY - AD_middle_valueY)*abs(ADvalueY - AD_middle_valueY);
+//        VarianceM = abs(VarianceY-VarianceX/100);
+//        //SampleChannel(&ADvalueX,&ADvalueY);
+//        minus = abs(ADvalueX - ADvalueY);
+        GetExtremum();
+        normal_test[0] = ExtremumValue>>8;
+        normal_test[1] = ExtremumValue;
+//        normal_test[2] = minus>>8;
+//        normal_test[3] = minus;
 //        normal_test[2] = VarianceX>>8;
 //        normal_test[3] = VarianceX;
+        
+        
+//        while(GetExtremum()!=1)
+//        {
+//            delay_ms(100);
+//        }
+//        normal_test[0] = ExtremumValue>>8;
+//        normal_test[1] = ExtremumValue;
+//        normal_test[2] = 100>>8;
+//        normal_test[3] = 100;
         A7139_WriteFIFO(normal_test,4);
         delay_us(1);
         A7139_StrobeCmd(CMD_TX);
@@ -47,7 +58,6 @@ int main(void)
         halLedToggle(1);
         while(GIO1)
         {}
-
         delay_ms(100);
     }
     /*************************************************/  

@@ -59,6 +59,7 @@ void JoinRequestHandler()
 						joinstatus = 1;
 						accept = 1;
 						CreateJoinRequectACK(joinstatus,accept,i,new_node_pyh_address);
+						RootDevice.endpoint_device[i].ab_slot_num = 0;
 						SendPack();
 						RXMode();
 						return ;
@@ -79,6 +80,7 @@ void JoinRequestACKOKHandler()
 		RootDevice.endpoint_device[RootDevice.connected_devece_count].cluster_id = DataRecvBuffer[4];
 		RootDevice.endpoint_device[RootDevice.connected_devece_count].cluster_innernum = DataRecvBuffer[5];
 	  RootDevice.endpoint_device[RootDevice.connected_devece_count].pyh_address = new_node_pyh_address;
+		RootDevice.endpoint_device[RootDevice.connected_devece_count].ab_slot_num = 0;
 		RootDevice.free_node = MAX_NODE_NUM-RootDevice.connected_devece_count;
 }
 void CreadReJoin(uint8 cluster_innernum,uint16 phyaddress)
