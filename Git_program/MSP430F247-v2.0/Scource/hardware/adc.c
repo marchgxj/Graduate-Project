@@ -61,6 +61,8 @@ void AD_cal()
 {
     int i=0;
     uint16 ADvalueX=0,ADvalueY=0;
+    AD_middle_valueX = 0;
+    AD_middle_valueY = 0;
     for(i=0;i<16;i++)
     {
         SampleChannel(&ADvalueX,&ADvalueY);
@@ -70,6 +72,8 @@ void AD_cal()
     }
     AD_middle_valueX = AD_middle_valueX>>4;
     AD_middle_valueY = AD_middle_valueY>>4;
+    AD_middle_valueXM = AD_middle_valueX;
+    AD_middle_valueYM = AD_middle_valueY;
     ExtremumValueMiddle = abs(AD_middle_valueX-AD_middle_valueY);
     
     halLedSetAll();

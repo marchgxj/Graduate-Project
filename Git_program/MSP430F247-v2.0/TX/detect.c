@@ -28,7 +28,10 @@ uint8  State2_Count = 0;
 uint8  State3_Count = 0;
 uint16 ExtremumValueMiddle = 0; //两轴差标定值
 uint16 ExtremumValue = 0;       //两轴差值
-
+uint16 XValue = 0;
+uint16 YValue = 0;
+uint8 Ext_state = 0;
+uint8 Var_state = 0;
 
 //first calculate the slop of the (X-Y)
 //if slop less than thredhold, judge (Xavg1 - Xavg0)  and (Yavg1 - Yavg0)
@@ -72,7 +75,7 @@ void bubbledata(DataStruct *a,uint16 n)
 #define STATE2 10                //中间态回无车
 #define STATE3 15                //有车回无车
 
-void MultiState(uint16 value,uint16 threshold)
+uint8 MultiState(uint16 value,uint16 threshold)
 {
     if(value > threshold)
     {
@@ -120,31 +123,33 @@ void MultiState(uint16 value,uint16 threshold)
         }
         
     }
+    return EndPointDevice.parking_state;
 }
 /*方差多状态机识别*/
 void VarianceMultiState()
 {
     GetVariance();
-    MultiState(VarianceM,VAR_THRESHOLD);
+    Var_state = MultiState(VarianceM,VAR_THRESHOLD);
 }
 /*极值多状态机识别*/
 void ExtremumMultiState()
 {
     GetExtremum();
-    MultiState(ExtremumValue,EXT_THRESHOLD);
-    
+    Ext_state = MultiState(ExtremumValue,EXT_THRESHOLD);
 }
 void IdentifyCar()
 {
-        //VarianceMultiState();
+    SampleChannel(&XValue,&YValue);    
+    VarianceMultiState();
     ExtremumMultiState();
-    if(EndPointDevice.parking_state_m!=EndPointDevice.parking_state)
+    
+    /*if(EndPointDevice.parking_state_m!=EndPointDevice.parking_state)
     {
         A7139_Deep_Wake();
         EN_INT;
         EN_TIMER1;
     }
-    EndPointDevice.parking_state_m = EndPointDevice.parking_state;
+    EndPointDevice.parking_state_m = EndPointDevice.parking_state;*/
     /*Start_Collect = 1;
     //非低功耗模式测试先注释掉
     if(Data_Change_Flag == 1)
@@ -156,6 +161,7 @@ void IdentifyCar()
     }*/
         
 }
+
 void Calibration()
 {
     uint8 count = 0;
@@ -191,23 +197,15 @@ void Calibration()
 }
 void GetVariance()
 {
-    uint16 ADvalueX=0;
-    uint16 ADvalueY=0;
-    SampleChannel(&ADvalueX,&ADvalueY);
-    
-    VarianceX = abs(ADvalueX - AD_middle_valueX)*abs(ADvalueX - AD_middle_valueX);
-    VarianceY = abs(ADvalueY - AD_middle_valueY)*abs(ADvalueY - AD_middle_valueY);
+    VarianceX = abs(XValue - AD_middle_valueX)*abs(XValue - AD_middle_valueX);
+    VarianceY = abs(YValue - AD_middle_valueY)*abs(YValue - AD_middle_valueY);
     VarianceAve = (VarianceX + VarianceY)>>1;
     VarianceM = abs(VarianceY-VarianceX/100);
 }
 
 void GetExtremum()
 {
-    uint16 ADvalueX=0;
-    uint16 ADvalueY=0;
     uint16 minus = 0;
-
-    SampleChannel(&ADvalueX,&ADvalueY);
-    minus = abs(ADvalueX - ADvalueY);
+    minus = abs(XValue - YValue);
     ExtremumValue = abs(minus - ExtremumValueMiddle);
 }

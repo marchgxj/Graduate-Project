@@ -23,7 +23,9 @@
 #define CAL_PERIOD  6000          //10分钟校准一次
 
 #define VAR_THRESHOLD  5000             //方差判断阈值
-#define EXT_THRESHOLD  50               //两轴差值判断阈值
+#define EXT_THRESHOLD  100               //两轴差值判断阈值
+
+#define TEST_LENGTH 16
 
 typedef struct
 {
@@ -36,6 +38,7 @@ extern void IdentifyCar();
 extern void Calibration();
 extern void GetVariance();
 extern void GetExtremum();
+extern uint8 MultiState(uint16 value,uint16 threshold);
 
 extern uint8 Data_Change_Flag;
 extern uint16 AD_middle_valueX;
@@ -56,6 +59,10 @@ extern uint8  State2_Count;
 extern uint8  State3_Count;
 extern uint16 ExtremumValue;       //1S内极值
 extern uint16 ExtremumValueMiddle; 
-extern uint16 AD_middle_valueXM; 
+extern uint16 XValue;
+extern uint16 YValue;
+extern uint8 Ext_state;
+extern uint8 Var_state;
+extern uint16 AD_middle_valueXM; //
 extern uint16 AD_middle_valueYM;
 #endif 
