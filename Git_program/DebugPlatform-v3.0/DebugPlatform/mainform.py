@@ -8,6 +8,8 @@ import tkFont
 import carstop
 import time
 import tkFileDialog
+import matplot
+import matplotold
 
 __author__ = 'xiaoxiami'
 
@@ -231,6 +233,8 @@ class Application(ttk.Notebook):
         self.carnumbind = []
         self.stopedcarnum = 0
         self.tab = 0
+        self.matplotopen = False
+        self.datapath = ""
 
     def bindtab(self):
         self.bind("<<NotebookTabChanged>>", self.updatetab)
@@ -328,7 +332,7 @@ class Application(ttk.Notebook):
             topwidth = self.width / (self.carnum / 2)
             bottomwidth = topwidth
             topnum = self.carnum / 2
-        #             bottomnum = topnum
+        # bottomnum = topnum
         else:
             topwidth = self.width / ((self.carnum + 1) / 2)
             bottomwidth = self.width / ((self.carnum - 1) / 2)
@@ -350,7 +354,7 @@ class Application(ttk.Notebook):
                     self.canvas.delete(text)
         except:
             print "5"
-        #         for i in range(self.carnum):
+        # for i in range(self.carnum):
         #             self.stoptext.append(self.canvas.create_text(0,0))
         if self.carnum > 20:
             self.front.configure(size=10)
@@ -363,12 +367,12 @@ class Application(ttk.Notebook):
             topwidth = self.width / (self.carnum / 2)
             bottomwidth = topwidth
             topnum = self.carnum / 2
-        #             bottomnum = topnum
+        # bottomnum = topnum
         else:
             topwidth = self.width / ((self.carnum + 1) / 2)
             bottomwidth = self.width / ((self.carnum - 1) / 2)
             topnum = (self.carnum + 1) / 2
-        #             bottomnum = (self.carnum - 1) / 2
+        # bottomnum = (self.carnum - 1) / 2
         buf = move.split(",")
         self.carmove = []
         for i in buf:
@@ -404,7 +408,7 @@ class Application(ttk.Notebook):
             topwidth = self.width / (self.carnum / 2)
             bottomwidth = topwidth
             topnum = self.carnum / 2
-        #             bottomnum = topnum
+        # bottomnum = topnum
         else:
             topwidth = self.width / ((self.carnum + 1) / 2)
             bottomwidth = self.width / ((self.carnum - 1) / 2)
@@ -599,7 +603,7 @@ class Application(ttk.Notebook):
             snifferthread.thread_stop = False
             snifferthread.data = []
             self.menu.uartform.snifferthread.openfile()
-        #             uartthread.openfile()
+        # uartthread.openfile()
         except NameError:
             tkmes.showwarning("错误", "串口未启动!")
 
@@ -649,7 +653,7 @@ class Application(ttk.Notebook):
 
         Function：
                                绘制识别界面
-        Autor:xiaoxiami 2015.5.29
+        Autor:xiaoxiami 2015.8.30
         Others：
         '''
 
@@ -664,58 +668,76 @@ class Application(ttk.Notebook):
         self.datapathentry.grid(row=1, column=0, sticky=tk.E + tk.W)
         self.datapathbutton = ttk.Button(self.tab4, text="选择文件", command=self.Selectdata)
         self.datapathbutton.grid(row=1, column=1, sticky=tk.W)
-        self.dataopenbutton = ttk.Button(self.tab4, text="读取并识别文件", command=self.Opendata)
-        self.dataopenbutton.grid(row=1, column=1, sticky=tk.E)
-        self.dataidentifybutton = ttk.Button(self.tab4, text="识别", command=self.Identifydata)
-        #         self.dataidentifybutton.grid(row=1, column=2, sticky=tk.W)
 
-        self.dataRPbutton = tk.Button(self.tab4, command=self.RPdata, background="red", text="开启自动识别")
-        self.dataRPbutton.grid(row=1, column=2, sticky=tk.E)
+
+        self.dataRPbutton = tk.Button(self.tab4, command=self.MatplotlibDrawing, background="red", text="显示图像")
+        self.dataRPbutton.grid(row=1, column=3, sticky=tk.E)
         self.dataclearbutton = tk.Button(self.tab4, text="清屏", command=self.Cleardata)
         self.dataclearbutton.grid(row=1, column=3, padx=20, sticky=tk.W, )
 
-        ttk.Label(self.tab4, text="标定值：").grid(row=1, column=3)
-        self.dataspinbox = tk.Spinbox(self.tab4, width=5, from_=0, to=1024)
-        self.dataspinbox.grid(row=1, column=3, sticky=tk.E, padx=40)
 
-        self.datascale = ttk.Scale(self.tab4, orient=tk.HORIZONTAL, from_=1, to=50, command=self.Zoomcallback)
-        self.datascale.grid(row=1, column=4, sticky=tk.W + tk.E)
-        self.datascalevalue = 10
+        self.datascale = ttk.Scale(self.tab4, orient=tk.HORIZONTAL, from_=1, to=10, command=self.Zoomcallback)
+        self.datascale.grid(row=1, column=2, sticky=tk.W)
+        self.datascalevalue = 5
         self.datascale.set(self.datascalevalue)
-        self.datascalelabel = ttk.Label(self.tab4, text="10")
-        self.datascalelabel.grid(row=1, column=3, sticky=tk.E)
+        self.datascalelabel = ttk.Label(self.tab4, text="5")
+        self.datascalelabel.grid(row=1, column=2, sticky=tk.E)
 
         receivegroup = tk.LabelFrame(self.tab4, text="识别结果")
-        receivegroup.grid(row=0, column=0, columnspan=4, sticky=tk.N + tk.S + tk.E + tk.W)
+        receivegroup.grid(row=0, column=0, columnspan=3, sticky=tk.N + tk.S + tk.E + tk.W)
 
         receivegroup.rowconfigure(0, weight=1)
         receivegroup.columnconfigure(0, weight=1)
 
         self.datacavas = tk.Canvas(receivegroup)
-        self.datacavas.grid(row=0, column=0, sticky=tk.N + tk.S + tk.E + tk.W)
+        self.datacavas.grid(row=0, column=0,columnspan=2, sticky=tk.N + tk.S + tk.E + tk.W)
         self.cancassbx = tk.Scrollbar(self.datacavas, orient=tk.HORIZONTAL)
         self.cancassbx.pack(side=tk.BOTTOM, fill=tk.X)
         self.cancassbx.config(command=self.datacavas.xview)
         self.datacavas.config(xscrollcommand=self.cancassbx.set)
 
-        cancassby = tk.Scrollbar(self.datacavas)
-        cancassby.pack(side=tk.RIGHT, fill=tk.Y)
-        cancassby.config(command=self.datacavas.yview)
-        self.datacavas.config(yscrollcommand=cancassby.set)
+        # cancassby = tk.Scrollbar(self.datacavas)
+        # cancassby.pack(side=tk.RIGHT, fill=tk.Y)
+        # cancassby.config(command=self.datacavas.yview)
+        # self.datacavas.config(yscrollcommand=cancassby.set)
 
         readgroup = tk.LabelFrame(self.tab4, text="数据读取")
-        readgroup.grid(row=0, column=4, columnspan=2, sticky=tk.N + tk.S + tk.E + tk.W)
+        readgroup.grid(row=0, column=3, columnspan=3, sticky=tk.N + tk.S + tk.E + tk.W)
 
-        readgroup.rowconfigure(0, weight=1)
-        readgroup.columnconfigure(0, weight=1)
+        for i in range(10):
+            readgroup.rowconfigure(i, weight=1)
+        for i in range(10):
+            readgroup.columnconfigure(i, weight=1)
+        tk.Label(readgroup,text="XValue:").grid(row = 0,column = 0)
+        self.XValueLabel = tk.Label(readgroup,text="0")
+        self.XValueLabel.grid(row=0,column=1)
+        tk.Label(readgroup,text="YValue:").grid(row = 0,column = 2)
+        self.YValueLabel = tk.Label(readgroup,text="0")
+        self.YValueLabel.grid(row=0,column=3)
+        tk.Label(readgroup,text="VarianceM:").grid(row = 0,column = 4)
+        self.VarianceMLabel = tk.Label(readgroup,text="0")
+        self.VarianceMLabel.grid(row=0,column=5)
+        tk.Label(readgroup,text="AD_middle_valueX:").grid(row = 0,column = 6)
+        self.AD_middle_valueXLabel = tk.Label(readgroup,text="0")
+        self.AD_middle_valueXLabel.grid(row=0,column=7)
+        tk.Label(readgroup,text="AD_middle_valueY:").grid(row = 0,column = 8)
+        self.AD_middle_valueYLabel = tk.Label(readgroup,text="0")
+        self.AD_middle_valueYLabel.grid(row=0,column=9)
+        tk.Label(readgroup,text="ExtremumValue:").grid(row = 1,column = 0)
+        self.ExtremumValueLabel = tk.Label(readgroup,text="0")
+        self.ExtremumValueLabel.grid(row=1,column=1)
+        tk.Label(readgroup,text="ExtremumValueMiddle:").grid(row = 1,column = 2)
+        self.ExtremumValueMiddleLabel = tk.Label(readgroup,text="0")
+        self.ExtremumValueMiddleLabel.grid(row=1,column=3)
 
-        self.datatext = tk.Text(readgroup)
-        self.datatext.grid(row=0, column=0, sticky=tk.N + tk.S + tk.E + tk.W)
 
-        inputsb = tk.Scrollbar(self.datatext)
-        inputsb.pack(side=tk.RIGHT, fill=tk.Y)
-        inputsb.config(command=self.datatext.yview)
-        self.datatext.config(yscrollcommand=inputsb.set)
+        # self.datatext = tk.Text(readgroup)
+        # self.datatext.grid(row=0, column=0, sticky=tk.N + tk.S + tk.E + tk.W)
+
+        # inputsb = tk.Scrollbar(self.datatext)
+        # inputsb.pack(side=tk.RIGHT, fill=tk.Y)
+        # inputsb.config(command=self.datatext.yview)
+        # self.datatext.config(yscrollcommand=inputsb.set)
 
     def Cleardata(self):
         '''
@@ -743,29 +765,32 @@ class Application(ttk.Notebook):
         self.menu.uartform.identifythread.filename = "F:\\Graduate\\Test\\data\\identify\\identify-" + time.strftime(
             '%Y-%m-%d_%H-%M-%S', time.localtime(time.time())) + '.txt'
 
-    def RPdata(self):
+    def MatplotlibDrawing(self):
         '''
         Parameter：
 
         Function：
-                              暂停或继续更新识别界面
-        Autor:xiaoxiami 2015.5.29
+                              用matplotlib 绘图
+        Autor:xiaoxiami 2015.8.30
         Others：
         '''
-        if (self.identifyuartopen == 0):
-            tkmes.showerror("错误！", "串口没有打开，无法开启自动模式！\n请手动载入数据或打开串口！")
-            return
-        self.identifythread = self.menu.uartform.identifythread
-        if self.identifythread.thread_stop == False:
-            self.identifythread.thread_stop = True
-            self.dataRPbutton.configure(background="red", text="开启自动识别")
-            self.dataidentifybutton.configure(state=tk.NORMAL)
-            self.dataopenbutton.configure(state=tk.NORMAL)
+
+        if (self.datapath == ""):
+            if (self.identifyuartopen == 0):
+                tkmes.showerror("错误！", "串口没有打开！\n请手动载入数据或打开串口！")
+                return
+            self.identifythread = self.menu.uartform.identifythread
+            if self.identifythread.thread_stop == False:
+                self.identifythread.thread_stop = True
+                self.dataRPbutton.configure(background="red", text="显示图像")
+            else:
+                self.identifythread.thread_stop = False
+                self.dataRPbutton.configure(background="green", text="显示图像")
+                self.scope = matplot.Scope(thread=self.menu.uartform.identifythread)
+                self.scope.start()
         else:
-            self.identifythread.thread_stop = False
-            self.dataRPbutton.configure(background="green", text="停止自动识别")
-            self.dataidentifybutton.configure(state=tk.DISABLED)
-            self.dataopenbutton.configure(state=tk.DISABLED)
+            self.DrawOldDataByMatplot(data=self.filedata)
+
 
     def Selectdata(self):
         '''
@@ -773,26 +798,14 @@ class Application(ttk.Notebook):
 
         Function：
                               选择txt文件路径
-        Autor:xiaoxiami 2015.5.29
-        Others：默认打开目录为 F:\\Graduate\\Test\\data\\
+        Autor:xiaoxiami 2015.8.30
+        Others：默认打开目录为 F:\Graduate\Git_program\DebugPlatform-v3.0\Data
         '''
 
-        self.datapath = tkFileDialog.askopenfilename(initialdir = 'F:\Graduate\Git_program\DebugPlatform-v3.0\Data')
+        self.datapath = tkFileDialog.askopenfilename(initialdir='F:\Graduate\Git_program\DebugPlatform-v3.0\Data')
         self.datapathentry.delete(0, tk.END)
         self.datapathentry.insert(1, self.datapath)
         self.zoomenable = 1
-
-    def Opendata(self):
-        '''
-        Parameter：
-
-        Function：
-                              将选定的txt文件内容读取，并且绘制出识别后的图像
-        Autor:xiaoxiami 2015.5.29
-        Others：选定identify和sensor文件夹下的文件，识别方式不同
-        '''
-        self.statusbar = self.root.status
-        #         self.datapath = "F:\\Graduate\\Test\\data\\1.txt"
         try:
             self.data_file_object = open(self.datapath)
         except:
@@ -802,8 +815,73 @@ class Application(ttk.Notebook):
             all_the_text = self.data_file_object.read()
         finally:
             self.data_file_object.close()
-        datastr = all_the_text.split(" ")
+        datastr = all_the_text.split("|")
+        databuf = []
+        datatime = []
+        for i in range(len(datastr)):
+            if (i % 2 == 0):
+                if (datastr[i] != ""):
+                    databuf.append(datastr[i].split(" "))
+            else:
+                datatime.append(datastr[i])
+
         data = []
+        j = 0
+        for i in databuf:
+            data.append([])
+            for v in i:
+                if v != "":
+                    data[j].append(v)
+            j += 1
+        self.filedata = data
+        self.Opendata(self.filedata)
+        # self.DrawOldDataByMatplot()
+
+    def DrawOldDataByMatplot(self, data):
+        '''
+        Parameter：
+
+        Function：
+                              根据历史数据绘制图像
+        Autor:xiaoxiami 2015.8.30
+        Others：
+        '''
+        self.DrawOldData = matplotold.ScopeOld(data)
+        self.DrawOldData.show()
+
+    def Opendata(self, data):
+        '''
+        Parameter：
+
+        Function：
+                              将选定的txt文件内容读取，分类存储在list中
+        Autor:xiaoxiami 2015.8.30
+        Others：加变量需要修改
+        '''
+        self.ExtState = []
+        self.VarState = []
+        self.XValue = []
+        self.YValue = []
+        self.VarianceM = []
+        self.ExtremumValueMiddle = []
+        self.ExtremumValue = []
+        self.AD_middle_valueX=[]
+        self.AD_middle_valueY=[]
+
+        #加变量需要修改
+        for v in data:
+            self.XValue.append(v[0])
+            self.YValue.append(v[1])
+            self.VarianceM.append(v[2])
+            self.ExtremumValueMiddle.append(v[3])
+            self.ExtremumValue.append(v[4])
+            self.ExtState.append(v[5])
+            self.VarState.append(v[6])
+            self.AD_middle_valueX.append(v[7])
+            self.AD_middle_valueY.append(v[8])
+
+
+
         # 删除遗留图像
         for v in self.canvasidentifyline:
             self.datacavas.delete(v)
@@ -818,90 +896,41 @@ class Application(ttk.Notebook):
             self.datacavas.delete(v)
         self.admiddleline = []
 
-        for v in datastr:
-            if v != "":
-                data.append(int(v, 16))
-
-        if "sensor" in self.datapath:
-            self.ADValue = []
-            for value in range(len(data)):
-                if data[value] == 0x7D:
-                    self.ADValue.append(data[value + 1] << 8 | data[value + 2])
-            self.dataidentifybutton.configure(state=tk.NORMAL)
-        elif "identify" in self.datapath:
-            self.dataidentifybutton.configure(state=tk.DISABLED)
-
-            self.ADValueX = []
-            self.ADValueY = []
-            databufx = []
-            databufy = []
-            count = 0
-            for value in range(len(data)):
-                if data[value] == 0x7D:
-                    # 不是采集5位需要改的
-                    self.ADValueX.append(data[value + 1] << 8 | data[value + 2])
-                    self.ADValueY.append(data[value + 3] << 8 | data[value + 4])
-
-                    databufx.append(data[value + 1] << 8 | data[value + 2])
-                    databufy.append(data[value + 3] << 8 | data[value + 4])
-
-                    self.Drawonce(count=count, valuex=databufx,valuey=databufy)
-                    count += 1
-                    databufx = []
-                    databufy = []
-        self.datatext.delete(0.0, tk.END)
-        i = 0
-
-        for v in range(len(self.ADValueX)):
-            self.datatext.insert(tk.END, str(i) + ":" + "X:"+str(self.ADValueX[v]) + "  Y:" + str(self.ADValueY[v]) + "\n")
-            i += 1
-
-        offset = int(self.datascale.get())
-        # 画布宽度为data长度  高度为512
-        self.datacavas.config(scrollregion=(0, 0, len(self.ADValueX * offset), 512))
-        xm = 0
+        x = 0
         ym = 0
-        j = 0
-        if "sensor" in self.datapath:
-            for v in self.ADValueX:
-                j += 1
-                if (v > 1024):
-                    v = self.ADValueX[j - 2]
-                y = 512 - v / 2
-                self.canvasline.append(self.datacavas.create_line(xm, ym, xm + offset, y, fill="red"))
-                xm += offset
-                ym = y
-            self.Identifydata()
+        try:
+            offset = int(self.datascale.get())
+        except:
+            print "offset error"
+        self.datacavas.config(scrollregion=(0, 0, len(self.ExtState) * offset, 512))
+        for v in self.ExtState:
+            if(int(v)==1):
+                y=512-(int(2)*50+300)
+            elif(int(v)==2):
+                y=512-(int(1)*50+300)
+            else:
+                y=512-(int(v)*50+300)
+            self.canvasline.append(self.datacavas.create_line(x, ym, x + offset, y, fill="blue"))
+            x += offset
+            ym = y
+        x=0
+        ym=0
+        for v in self.VarState:
+            if(int(v)==1):
+                y=512-(int(2)*50+50)
+            elif(int(v)==2):
+                y=512-(int(1)*50+50)
+            else:
+                y=512-(int(v)*50+50)
+            self.canvasline.append(self.datacavas.create_line(x, ym, x + offset, y, fill="red"))
+            x += offset
+            ym = y
+
         self.datacavas.bind("<Button-1>", self.Showdetaildata)
         self.datacavas.bind("<B1-Motion>", self.Showdetaildata)
-        self.datacavas.bind("<Control-Key>", self.Zoom)
-        # 会跟Ctrl+Key冲突
-        # self.datacavas.bind("<KeyPress-Down>",self.minusmiddle)
-        # self.datacavas.bind("<KeyPress-Up>",self.addmiddle)
+
+
         self.datacavas.focus_set()
-
-    def Zoom(self, event):
-        '''
-        Parameter：
-            event：bind事件
-        Function：
-                              改变zoom值的大小 self.datascalevalue  范围1-50
-        Autor:xiaoxiami 2015.5.29
-        Others：
-        '''
-        if event.keycode == 38:
-            self.datascalevalue += 1
-        elif event.keycode == 40:
-            self.datascalevalue -= 1
-        else:
-            return
-        if self.datascalevalue < 0:
-            self.datascalevalue = 0
-        elif self.datascalevalue > 50:
-            self.datascalevalue = 50
-
-        self.datascale.set(self.datascalevalue)
-        self.datascalelabel.config(text=str(self.datascalevalue))
 
     def Zoomcallback(self, event):
         '''
@@ -909,7 +938,7 @@ class Application(ttk.Notebook):
             event：bind事件
         Function：
                                根据self.datascalevalue重新绘制图像
-        Autor:xiaoxiami 2015.5.29
+        Autor:xiaoxiami 2015.8.30
         Others：
         '''
         self.datascalevalue = int(self.datascale.get())
@@ -920,185 +949,8 @@ class Application(ttk.Notebook):
             pass
         if (self.zoomenable == 0):
             return
-        self.Opendata()
+        self.Opendata(self.filedata)
 
-    def Drawonce(self, count, valuex,valuey):
-        '''
-        Parameter：
-            count：当前数据个数
-            value：当前包的数据，长度为5个
-        Function：
-                                在原有图像基础上绘制当前包图像，并且对斜率识别
-        Autor:xiaoxiami 2015.5.29
-        Others：
-        '''
-        countx = count
-        county = count
-        try:
-            offset = int(self.datascale.get())
-        except  error:
-            print error
-        # 显示中线
-        # if self.admiddleflag == 0:
-        #     self.admiddle = 512 - value[0] / 8
-        #     self.admiddleflag = 1
-        #     self.dataspinbox.insert(1, value[0])
-        #     # self.dataspinbox.configure(value=value[0])
-        #     print self.admiddle
-
-        for v in valuex:
-            if (v > 65535):
-                v = 65535
-            y = 512 - v / 128
-
-            xm = countx * offset
-            ym = self.globalxym
-
-            self.canvasline.append(self.datacavas.create_line(xm, ym, xm + offset, y, fill="darkgreen"))
-            try:
-                if self.dataspinbox.get() != "":
-
-                        self.admiddle = 512 - int(self.dataspinbox.get()) / 2
-            except ValueError, error:
-                print error
-
-            # self.admiddleline.append(
-            #     self.datacavas.create_line(xm, self.admiddle, xm + offset, self.admiddle, fill="darkblue"))
-            self.globalxym = y
-            countx += 1
-
-        for v in valuey:
-
-            if (v > 65535):
-                v = 65535
-            y = 512 - v / 128
-
-
-            xm = county * offset
-            ym = self.globalyym
-
-            self.canvasline.append(self.datacavas.create_line(xm, ym, xm + offset, y, fill="red"))
-            try:
-                if self.dataspinbox.get() != "":
-
-                        self.admiddle = 512 - int(self.dataspinbox.get()) / 2
-            except ValueError, error:
-                print error
-
-            # self.admiddleline.append(
-            #     self.datacavas.create_line(xm, self.admiddle, xm + offset, self.admiddle, fill="darkblue"))
-            self.globalyym = y
-            county += 1
-        self.datacavas.config(scrollregion=(0, 0, county * offset, 512))
-        self.datacanvaswidth = county * offset
-        self.datacavas.xview(tk.MOVETO, 1.0)
-        #self.Identifyonce(Magnet_Value=value, x=xm, y=ym)
-
-    def Slop(self, Magnet_Value):
-        '''
-        Parameter：
-            Magnet_Value：当前传感器数据
-        Function：
-                                返回识别斜率
-        Autor:xiaoxiami 2015.5.29
-        Others：
-        '''
-        # 不是采集5位需要改的
-        Ave_Slop = ((Magnet_Value[1] - Magnet_Value[0])) + ((Magnet_Value[2] - Magnet_Value[0])) / 2 + ((Magnet_Value[
-                                                                                                             3] -
-                                                                                                         Magnet_Value[
-                                                                                                             0])) / 3 + (
-                                                                                                                        (
-                                                                                                                        Magnet_Value[
-                                                                                                                            4] -
-                                                                                                                        Magnet_Value[
-                                                                                                                            0])) / 4
-        Ave_Slop = Ave_Slop / 5
-        return Ave_Slop
-
-    def Identifyonce(self, Magnet_Value, x, y):
-        '''
-        Parameter：
-            Magnet_Value：当前传感器数据
-            x：要绘制圆点的x坐标
-            y；要绘制圆点的y坐标
-        Function：
-                                在识别出的地方绘制圆点
-        Autor:xiaoxiami 2015.5.29
-        Others：正斜率为蓝点，负斜率为黄点
-        '''
-        Ave_Slop = self.Slop(Magnet_Value)
-        if (Ave_Slop > 10):
-            self.canvasoval.append(self.datacavas.create_oval(x - 10, y - 10, x + 10, y + 10, fill="blue"))
-        elif (Ave_Slop < -10):
-            self.canvasoval.append(self.datacavas.create_oval(x - 10, y - 10, x + 10, y + 10, fill="yellow"))
-
-    def Identifydata(self):
-        '''
-        Parameter：
-
-        Function：
-                                存储更多数据时的识别方式
-        Autor:xiaoxiami 2015.5.29
-        Others：两种识别方式，还未完成
-        '''
-
-        offset = int(self.datascale.get())
-        width = 8
-        threshold = 100
-        thresholdk = 10
-        self.ADindexP = []
-        self.ADindexvalueP = []
-        self.ADindexN = []
-        self.ADindexvalueN = []
-        i = 0
-        if len(self.ADValue) == 0:
-            tkmes.showerror("错误！", "没有数据！")
-            return
-        if ("identify" in self.datapath):
-            return
-        ''' 识别算法1 检测跳变沿
-        while (i<len(self.ADValue)-offset):
-            if(((self.ADValue[i] - self.ADValue[i+offset]>threshold)and(self.ADValue[i] - self.ADValue[i+offset]<4096)) or ((self.ADValue[i] - self.ADValue[i+offset]<-threshold)and(self.ADValue[i] - self.ADValue[i+offset]>-4096))):
-                print self.ADValue[i]
-                print self.ADValue[i+offset]
-                print i
-                print "\n"
-                self.ADindex.append(i+offset/2)
-                self.ADindexvalue.append(self.ADValue[i+offset/2])
-                i=i+offset
-            else:
-                i+=1
-        '''
-        '''识别算法2 检测斜率
-        '''
-        while (i < len(self.ADValue) - width):
-            if (self.ADValue[i] < 4096 and self.ADValue[i + width] < 4096):
-                if ((self.ADValue[i + width] - self.ADValue[i]) / width > thresholdk):  # 检测上升沿
-                    j = i
-                    i += 1
-                    while ((self.ADValue[i + width] - self.ADValue[i]) / (width) > thresholdk):  # 一直计算到上升沿结束
-                        i += 1
-                    if (i - j > 5):  # 上升沿长度要足够长
-                        self.ADindexP.append(i)
-                        self.ADindexvalueP.append(i)
-                elif (((self.ADValue[i] - self.ADValue[i + width]) / width > thresholdk)):  # 检测下降沿
-                    j = i
-                    i += 1
-                    while ((self.ADValue[i] - self.ADValue[i + width]) / width > thresholdk):  # 一直计算到下降沿结束
-                        i += 1
-                    if (i - j > 5):  # 下降沿长度要足够长
-                        self.ADindexN.append(i)
-                        self.ADindexvalueN.append(i)
-            i += 1
-
-        for v in self.canvasidentifyline:
-            self.datacavas.delete(v)
-        self.canvasidentifyline = []
-        for v in self.ADindexP:
-            self.canvasidentifyline.append(self.datacavas.create_line(v * offset, 0, v * offset, 512, fill="orange"))
-        for v in self.ADindexN:
-            self.canvasidentifyline.append(self.datacavas.create_line(v * offset, 0, v * offset, 512, fill="purple"))
 
     def Showdetaildata(self, event):
         '''
@@ -1106,56 +958,26 @@ class Application(ttk.Notebook):
             event：bind事件
         Function：
                                 点击图像时显示该点的数据值
-        Autor:xiaoxiami 2015.5.29
+        Autor:xiaoxiami 2015.8.30
         Others：
         '''
+        self.statusbar = self.root.status
         offset = int(self.datascale.get())
-        x1 = event.x + int(self.cancassbx.get()[0] * len(self.ADValueX) * offset)
-        if (x1 >= 0 and x1 <= len(self.ADValueX) * offset):
+        x1 = event.x + int(self.cancassbx.get()[0] * len(self.ExtState) * offset)
+        if (x1 >= 0 and x1 <= len(self.ExtState) * offset):
             for v in self.cavasverticalline:
                 self.datacavas.delete(v)
             self.cavasverticalline = []
             self.cavasverticalline.append(self.datacavas.create_line(x1, 0, x1, 512, fill="purple"))
-            self.statusbar.setdata("%s", "Position:" + str(x1 / offset) + ",X:" + str(self.ADValueX[x1 / offset]) + ",Y:" + str(self.ADValueY[x1 / offset]))
-            self.datatext.see(float(str(x1 / offset) + ".0"))
+            self.statusbar.setdata("%s","方差:" + str(self.VarState[x1 / offset]) + ",极值:" + str(self.ExtState[x1 / offset]))
+            self.XValueLabel.config(text = str(self.XValue[x1/offset]))
+            self.YValueLabel.config(text = str(self.YValue[x1/offset]))
+            self.VarianceMLabel.config(text = str(self.VarianceM[x1/offset]))
+            self.AD_middle_valueXLabel.config(text = str(self.AD_middle_valueX[x1/offset]))
+            self.AD_middle_valueYLabel.config(text = str(self.AD_middle_valueY[x1/offset]))
+            self.ExtremumValueLabel.config(text = str(self.ExtremumValue[x1/offset]))
+            self.ExtremumValueMiddleLabel.config(text = str(self.ExtremumValueMiddle[x1/offset]))
 
-    def minusmiddle(self, event):
-        '''
-        Parameter：
-            event：bind事件
-        Function：
-            将显示中值的线下移
-        Autor:xiaoxiami 2015.5.30
-        Others：实际坐标与canvas相反，最大y值为512
-        '''
-        if self.admiddle > 510:
-            return
-        self.admiddle += 2
-        for v in self.admiddleline:
-            self.datacavas.delete(v)
-        self.admiddleline = []
-
-        self.admiddleline.append(
-            self.datacavas.create_line(0, self.admiddle, self.datacanvaswidth, self.admiddle, fill="darkblue"))
-
-    def addmiddle(self, event):
-        '''
-        Parameter：
-            event：bind事件
-        Function：
-            将显示中值的线上移
-        Autor:xiaoxiami 2015.5.30
-        Others：实际坐标与canvas相反，最小y值为0
-        '''
-        if self.admiddle < 2:
-            return
-        self.admiddle -= 2
-        for v in self.admiddleline:
-            self.datacavas.delete(v)
-        self.admiddleline = []
-
-        self.admiddleline.append(
-            self.datacavas.create_line(0, self.admiddle, self.datacanvaswidth, self.admiddle, fill="darkblue"))
 
 class StatusBar(ttk.Frame):
     def __init__(self, master):
@@ -1169,7 +991,6 @@ class StatusBar(ttk.Frame):
         self.labelicon = ttk.Label(self, relief='sunken', anchor='w')
         self.labelicon.grid(row=0, column=1, sticky=tk.W + tk.E + tk.N + tk.S)
 
-
     def setstatus(self, defformat, *args):
         '''
         Parameter：
@@ -1180,7 +1001,6 @@ class StatusBar(ttk.Frame):
         Others：
         '''
         self.label.config(text=defformat % args)
-
 
     def setdata(self, defformat, *args):
         '''
@@ -1204,6 +1024,7 @@ class StatusBar(ttk.Frame):
         '''
         self.label.config(text="")
         self.label.update_idletasks()
+
 
 if __name__ == '__main__':
     root = MainRoot()

@@ -15,6 +15,7 @@ class myThread (threading.Thread):
         self.carstatus = 0
         self.port = port
         self.baud = baud
+        self.value=[]
 
 
         self.filename = filename
@@ -46,31 +47,43 @@ class myThread (threading.Thread):
                     buf = self.uart.read(1)
                     if len(buf)!= 0:
                         if ord(buf)==0x7D:
-                            # 不是采集5位需要改的
-                            buf+=self.uart.read(4)
-                            for v in buf:
-                                self.file = open(self.filename,"a+")
-                                self.file.write(binascii.b2a_hex(v)+" ")
-                                self.file.close()
-                            # 不是采集5位需要改的   
-                            self.valuex=[]
-                            self.valuex.append(ord(buf[1])<<8|ord(buf[2]))
-                            self.valuey=[]
-                            self.valuey.append(ord(buf[3])<<8|ord(buf[4]))
-                            # self.sensordata.append(ord(buf[3])<<8|ord(buf[4]))
-                            # self.sensordata.append(ord(buf[5])<<8|ord(buf[6]))
-                            # self.sensordata.append(ord(buf[7])<<8|ord(buf[8]))
-                            # self.sensordata.append(ord(buf[9])<<8|ord(buf[10]))
-                            self.app.Drawonce(count=self.count,valuex=self.valuex,valuey=self.valuey)
-                            try:
-                                self.root.status.setdata('X:%s Y:%s',self.valuex,self.valuey)
-                            except:
-                                print "I'm identifythread line 66"
+                            buf=[]
+                            # 加变量需要修改
+                            buf+=self.uart.read(16)
+                            self.file = open(self.filename,"a+")
+                            self.file.write("|"+str(time.time())+"|")
+                            # for v in buf:
+                                # self.file.write(time.time())
+                                # self.file.write(binascii.b2a_hex(v)+" ")
+
+                            # 加变量需要修改
+
+                            self.value=[]
+                            self.value.append(ord(buf[0])<<8|ord(buf[1]))
+                            self.value.append(ord(buf[2])<<8|ord(buf[3]))
+                            self.value.append(ord(buf[4])<<8|ord(buf[5]))
+                            self.value.append(ord(buf[6])<<8|ord(buf[7]))
+                            self.value.append(ord(buf[8])<<8|ord(buf[9]))
+                            self.value.append(ord(buf[10]))
+                            self.value.append(ord(buf[11]))
+                            self.value.append(ord(buf[12])<<8|ord(buf[13]))
+                            self.value.append(ord(buf[14])<<8|ord(buf[15]))
+
+                            #加变量需要修改
+                            self.file.write(str(self.value[0])+" ")
+                            self.file.write(str(self.value[1])+" ")
+                            self.file.write(str(self.value[2])+" ")
+                            self.file.write(str(self.value[3])+" ")
+                            self.file.write(str(self.value[4])+" ")
+                            self.file.write(str(self.value[5])+" ")
+                            self.file.write(str(self.value[6])+" ")
+                            self.file.write(str(self.value[7])+" ")
+                            self.file.write(str(self.value[8])+" ")
+                            self.file.close()
                             self.uart.read(self.uart.inWaiting())
                             self.count+=1
 #                     time.sleep(0.5)
-                    #每次有5个新数据
-                    # 不是采集5位需要改的
+
 
     def update(self):
         while(1):
