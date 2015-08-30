@@ -14,6 +14,8 @@ extern void Interrupt_Init(void);
 extern uint32 Frame_Time;
 extern uint16 Keep_Alive_Count;
 extern uint16 Keep_Alive_Detect;
-extern uint8 Camera_Statue_Buf;
-extern uint8 Camera_Statue;
+extern uint8 Camera1_Statue_Buf;
+extern uint8 Camera1_Statue;
+extern uint8 Camera2_Statue;
+extern uint8 Direction;
 #endif

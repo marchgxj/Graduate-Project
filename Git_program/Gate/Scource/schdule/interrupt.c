@@ -21,8 +21,10 @@ void Interrupt_Init(void)
 int error_test = 0;
 uint16 packet_count = 0;
 uint8 rssi_what = 0;
-uint8 Camera_Statue_Buf = 0;
-uint8 Camera_Statue = 0;
+uint8 Camera1_Statue_Buf = 0;
+uint8 Camera1_Statue = 0;
+uint8 Camera2_Statue = 0;
+uint8 Direction = 0;
 #pragma vector=PORT1_VECTOR
 __interrupt void port1_ISR(void)
 { 
@@ -35,14 +37,23 @@ __interrupt void port1_ISR(void)
         A7139_StrobeCmd(CMD_RX);
         delay_us(2);
         EndPointDevice.state = CMD_RX;
-        if(DataRecvBuffer[3] == DIRECTION)
+        Direction = DataRecvBuffer[3];
+        if(Direction == 1)
         {
-            Camera_Statue = DataRecvBuffer[2];
+            Camera1_Statue = DataRecvBuffer[2];
             halLedSet(1);
             SendPack();
             Receive_Timeout = 0;  
             PostTask(EVENT_SWITCH_CAMERA);
-        }  
+        }
+        else if(Direction == 2)
+        {
+            Camera2_Statue = DataRecvBuffer[2];
+            halLedSet(1);
+            SendPack();
+            Receive_Timeout = 0;  
+            PostTask(EVENT_SWITCH_CAMERA);
+        }
         RXMode();
         
     } 

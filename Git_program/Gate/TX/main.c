@@ -24,8 +24,6 @@ int main(void)
     while(1) 
     {    
         Process_Event();
-
-
 //        CreatCSMASendData();
 //        SendPack();
 //        delay_ms(500);

@@ -18,6 +18,7 @@ int main(void)
     A7139_Cal();                    //更改完频率后校准
     delay_us(1);
     RXMode();
+
     
     for(i=0;i<MAX_PACK_LENGTH;i++)
     {

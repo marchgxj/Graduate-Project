@@ -719,7 +719,7 @@ void RXMode()
 void SendPack()
 {
     DataSendBuffer[0] = 1;
-    DataSendBuffer[1] = DIRECTION;
+    DataSendBuffer[1] = Direction;
     EndPointDevice.state = CMD_TX;
     A7139_StrobeCmd(CMD_PLL);
     delay_us(1);

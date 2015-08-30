@@ -4,6 +4,7 @@ uint32  Frame_Time = 0;                 //超帧内计时
 uint16  Collect_Time = 0;               //采集计时
 uint16 Keep_Alive_Count = 0;
 uint16 Keep_Alive_Detect = 0;
+uint8 Cal_Count = 0;
 void Interrupt_Init(void)
 {
     P1DIR &=~ pinGIO2.pin_bm;
@@ -108,4 +109,17 @@ __interrupt void Timer_A0(void)
     halLedToggle(2);
     
     PostTask(EVENT_IDENTIFY_CAR);
+    if(EndPointDevice.parking_state == NOCAR)
+    {
+        Cal_Count++;
+        if(Cal_Count == 60)
+        {
+            Cal_Count = 0;
+            PostTask(EVENT_CALIBRATE_SENSOR);
+        }
+    }
+    else
+    {
+        Cal_Count = 0;
+    }
 }

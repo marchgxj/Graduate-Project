@@ -56,4 +56,6 @@ extern uint8  State2_Count;
 extern uint8  State3_Count;
 extern uint8 Parking_State;
 extern uint16 ExtremumValueMiddle;
+extern uint16 AD_middle_valueXM; 
+extern uint16 AD_middle_valueYM;
 #endif 

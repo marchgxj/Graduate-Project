@@ -2,6 +2,8 @@
 int16 AD_Value;
 uint16 AD_middle_valueX = 0; //
 uint16 AD_middle_valueY = 0;
+uint16 AD_middle_valueXM = 0; //
+uint16 AD_middle_valueYM = 0;
 uint8 Car_Flag = 0;                             //识别结果
 uint8 Car_Flag_Memory = 0;                      //上一次识别结果
 int16 Magnet_Value[COLLECT_WIDTH];      //why use CODE??       //store X-Y 传感器采集值
@@ -89,7 +91,6 @@ void MultiState(uint16 value,uint16 threshold)
                 EndPointDevice.parking_state = NOCAR2CAR;
             }
         }
-        
     }
     else
     {
@@ -130,7 +131,7 @@ void VarianceMultiState()
 void ExtremumMultiState()
 {
     GetExtremum();
-    MultiState(ExtremumValue,50);
+    MultiState(ExtremumValue,100);
     
     
 }
@@ -156,18 +157,39 @@ void IdentifyCar()
     }*/
         
 }
+    
 void Calibration()
 {
+    uint8 count = 0;
     uint16 ADvalueX=0;
     uint16 ADvalueY=0;
-    
-    SampleChannel(&ADvalueX,&ADvalueY);
-    
-    if((abs(AD_middle_valueX-ADvalueX)<500)&&abs(AD_middle_valueY-ADvalueY))
+    uint8 i=0;
+
+    AD_middle_valueX = 0;
+    AD_middle_valueY = 0;
+    halLedToggle(3);
+    for(i=0;i<4;i++)
     {
-        AD_middle_valueX = (AD_middle_valueX + ADvalueX)>>1;
-        AD_middle_valueY = (AD_middle_valueY + ADvalueY)>>1;
+        SampleChannel(&ADvalueX,&ADvalueY);
+        if((abs(ADvalueX-AD_middle_valueXM)<80)||(abs(ADvalueY-AD_middle_valueYM)<80))
+        {
+            count++;
+            AD_middle_valueX += ADvalueX;
+            AD_middle_valueY += ADvalueY;
+        }
+
+        delay_ms(10);
+        
     }
+    if(count!=0)
+    {
+        AD_middle_valueX = AD_middle_valueX/count;
+        AD_middle_valueY = AD_middle_valueY/count;
+        ExtremumValueMiddle = abs(AD_middle_valueX-AD_middle_valueY);
+        AD_middle_valueXM = AD_middle_valueX;
+        AD_middle_valueYM = AD_middle_valueY;
+    }
+    
 }
 void GetVariance()
 {

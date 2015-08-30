@@ -160,16 +160,22 @@ void GetVariance()
 }
 void SwitchCamera()
 {
-    if(Camera_Statue==1)
+    if(Camera1_Statue==1)
     {
         SWITCH1_HIGH;
-        SWITCH2_HIGH;
-        SWITCH3_HIGH;
+        
     }
-    if(Camera_Statue==0)
+    if(Camera1_Statue==0)
     {
         SWITCH1_LOW;
-        SWITCH2_LOW;
+    }
+    if(Camera2_Statue==1)
+    {
+        SWITCH3_HIGH;
+        
+    }
+    if(Camera2_Statue==0)
+    {
         SWITCH3_LOW;
     }
 }

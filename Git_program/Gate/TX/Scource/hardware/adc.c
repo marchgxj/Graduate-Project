@@ -71,7 +71,8 @@ void AD_cal()
     AD_middle_valueX = AD_middle_valueX>>4;
     AD_middle_valueY = AD_middle_valueY>>4;
     ExtremumValueMiddle = abs(AD_middle_valueX-AD_middle_valueY);
-    
+    AD_middle_valueXM = AD_middle_valueX;
+    AD_middle_valueYM = AD_middle_valueY;
     halLedSetAll();
     delay_ms(1000);
     halLedClearAll();
