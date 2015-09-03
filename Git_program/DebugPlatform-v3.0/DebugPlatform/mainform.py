@@ -235,6 +235,7 @@ class Application(ttk.Notebook):
         self.tab = 0
         self.matplotopen = False
         self.datapath = ""
+        self.matplotoldopen = False
 
     def bindtab(self):
         self.bind("<<NotebookTabChanged>>", self.updatetab)
@@ -729,6 +730,21 @@ class Application(ttk.Notebook):
         tk.Label(readgroup,text="ExtremumValueMiddle:").grid(row = 1,column = 2)
         self.ExtremumValueMiddleLabel = tk.Label(readgroup,text="0")
         self.ExtremumValueMiddleLabel.grid(row=1,column=3)
+        tk.Label(readgroup,text="Intensity:").grid(row = 1,column = 4)
+        self.IntensityLabel = tk.Label(readgroup,text="0")
+        self.IntensityLabel.grid(row=1,column=5)
+        tk.Label(readgroup,text="IntensityMiddle:").grid(row = 1,column = 6)
+        self.IntensityMiddleLabel = tk.Label(readgroup,text="0")
+        self.IntensityMiddleLabel.grid(row=1,column=7)
+        tk.Label(readgroup,text="IntState:").grid(row = 1,column = 8)
+        self.IntStateLabel = tk.Label(readgroup,text="0")
+        self.IntStateLabel.grid(row=1,column=9)
+        tk.Label(readgroup,text="Result:").grid(row = 2,column = 0)
+        self.ResultLabel = tk.Label(readgroup,text="0")
+        self.ResultLabel.grid(row=2,column=1)
+        tk.Label(readgroup,text="IntensityMinus:").grid(row = 2,column = 2)
+        self.IntensityMinus = tk.Label(readgroup,text="0")
+        self.IntensityMinus.grid(row=2,column=3)
 
 
         # self.datatext = tk.Text(readgroup)
@@ -761,9 +777,7 @@ class Application(ttk.Notebook):
             self.datacavas.delete(v)
         self.admiddleline = []
         self.datacavas.config(scrollregion=(0, 0, 0, 512))
-        self.datatext.delete(0.0, tk.END)
-        self.menu.uartform.identifythread.filename = "F:\\Graduate\\Test\\data\\identify\\identify-" + time.strftime(
-            '%Y-%m-%d_%H-%M-%S', time.localtime(time.time())) + '.txt'
+        self.datapath = ""
 
     def MatplotlibDrawing(self):
         '''
@@ -791,7 +805,6 @@ class Application(ttk.Notebook):
         else:
             self.DrawOldDataByMatplot(data=self.filedata)
 
-
     def Selectdata(self):
         '''
         Parameter：
@@ -802,7 +815,7 @@ class Application(ttk.Notebook):
         Others：默认打开目录为 F:\Graduate\Git_program\DebugPlatform-v3.0\Data
         '''
 
-        self.datapath = tkFileDialog.askopenfilename(initialdir='F:\Graduate\Git_program\DebugPlatform-v3.0\Data')
+        self.datapath = tkFileDialog.askopenfilename(initialdir='..\Data')
         self.datapathentry.delete(0, tk.END)
         self.datapathentry.insert(1, self.datapath)
         self.zoomenable = 1
@@ -846,6 +859,7 @@ class Application(ttk.Notebook):
         Autor:xiaoxiami 2015.8.30
         Others：
         '''
+        self.matplotoldopen = True
         self.DrawOldData = matplotold.ScopeOld(data)
         self.DrawOldData.show()
 
@@ -867,8 +881,13 @@ class Application(ttk.Notebook):
         self.ExtremumValue = []
         self.AD_middle_valueX=[]
         self.AD_middle_valueY=[]
+        self.Intensity = []
+        self.IntensityMiddle = []
+        self.IntState = []
+        self.Result = []
 
         #加变量需要修改
+        # if(len(data) == 10):
         for v in data:
             self.XValue.append(v[0])
             self.YValue.append(v[1])
@@ -879,8 +898,10 @@ class Application(ttk.Notebook):
             self.VarState.append(v[6])
             self.AD_middle_valueX.append(v[7])
             self.AD_middle_valueY.append(v[8])
-
-
+            self.Intensity.append(v[9])
+            self.IntensityMiddle.append(v[10])
+            self.IntState.append(v[11])
+            self.Result.append(v[12])
 
         # 删除遗留图像
         for v in self.canvasidentifyline:
@@ -905,11 +926,11 @@ class Application(ttk.Notebook):
         self.datacavas.config(scrollregion=(0, 0, len(self.ExtState) * offset, 512))
         for v in self.ExtState:
             if(int(v)==1):
-                y=512-(int(2)*50+300)
+                y=512-(int(2)*30+10)
             elif(int(v)==2):
-                y=512-(int(1)*50+300)
+                y=512-(int(1)*30+10)
             else:
-                y=512-(int(v)*50+300)
+                y=512-(int(v)*30+10)
             self.canvasline.append(self.datacavas.create_line(x, ym, x + offset, y, fill="blue"))
             x += offset
             ym = y
@@ -917,14 +938,39 @@ class Application(ttk.Notebook):
         ym=0
         for v in self.VarState:
             if(int(v)==1):
-                y=512-(int(2)*50+50)
+                y=512-(int(2)*30+110)
             elif(int(v)==2):
-                y=512-(int(1)*50+50)
+                y=512-(int(1)*30+110)
             else:
-                y=512-(int(v)*50+50)
+                y=512-(int(v)*30+110)
             self.canvasline.append(self.datacavas.create_line(x, ym, x + offset, y, fill="red"))
             x += offset
             ym = y
+        x=0
+        ym=0
+        for v in self.IntState:
+            if(int(v)==1):
+                y=512-(int(2)*30+210)
+            elif(int(v)==2):
+                y=512-(int(1)*30+210)
+            else:
+                y=512-(int(v)*30+210)
+            self.canvasline.append(self.datacavas.create_line(x, ym, x + offset, y, fill="#FF9900"))
+            x += offset
+            ym = y
+        x=0
+        ym=0
+        for v in self.Result:
+            if(int(v)==1):
+                y=512-(int(2)*30+310)
+            elif(int(v)==2):
+                y=512-(int(1)*30+310)
+            else:
+                y=512-(int(v)*30+310)
+            self.canvasline.append(self.datacavas.create_line(x, ym, x + offset, y, fill="#8B0A50"))
+            x += offset
+            ym = y
+
 
         self.datacavas.bind("<Button-1>", self.Showdetaildata)
         self.datacavas.bind("<B1-Motion>", self.Showdetaildata)
@@ -951,7 +997,6 @@ class Application(ttk.Notebook):
             return
         self.Opendata(self.filedata)
 
-
     def Showdetaildata(self, event):
         '''
         Parameter：
@@ -969,7 +1014,8 @@ class Application(ttk.Notebook):
                 self.datacavas.delete(v)
             self.cavasverticalline = []
             self.cavasverticalline.append(self.datacavas.create_line(x1, 0, x1, 512, fill="purple"))
-            self.statusbar.setdata("%s","方差:" + str(self.VarState[x1 / offset]) + ",极值:" + str(self.ExtState[x1 / offset]))
+            self.statusbar.setdata("%s","Count:" + str(x1 / offset))
+            # self.statusbar.setdata("%s","方差:" + str(self.VarState[x1 / offset]) + ",极值:" + str(self.ExtState[x1 / offset]))
             self.XValueLabel.config(text = str(self.XValue[x1/offset]))
             self.YValueLabel.config(text = str(self.YValue[x1/offset]))
             self.VarianceMLabel.config(text = str(self.VarianceM[x1/offset]))
@@ -977,6 +1023,13 @@ class Application(ttk.Notebook):
             self.AD_middle_valueYLabel.config(text = str(self.AD_middle_valueY[x1/offset]))
             self.ExtremumValueLabel.config(text = str(self.ExtremumValue[x1/offset]))
             self.ExtremumValueMiddleLabel.config(text = str(self.ExtremumValueMiddle[x1/offset]))
+            self.IntensityLabel.config(text = str(self.Intensity[x1/offset]))
+            self.IntensityMiddleLabel.config(text = str(self.IntensityMiddle[x1/offset]))
+            self.IntStateLabel.config(text = str(self.IntState[x1/offset]))
+            self.ResultLabel.config(text = str(self.Result[x1/offset]))
+            self.IntensityMinus.config(text = str(abs(int(self.Intensity[x1/offset])-int(self.IntensityMiddle[x1/offset]))))
+            if(self.matplotoldopen == True):
+                self.DrawOldData.set_xlim(x1/offset)
 
 
 class StatusBar(ttk.Frame):

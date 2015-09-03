@@ -105,7 +105,7 @@ __interrupt void Timer_A (void)
 __interrupt void Timer_A0(void)
 {
     TA0CCTL0 &= ~CCIFG;
-    //halLedToggle(2);
+    halLedToggle(2);
     
     if(EndPointDevice.power == 0)
     //每个超帧都要发送时，Beacon接收超时则复位A7139
@@ -152,27 +152,6 @@ __interrupt void Timer_A0(void)
     //测试低功耗时候使用
     else if(EndPointDevice.power == 1)                  
     {
-        /*Receive_Timeout++;
-        if(Receive_Timeout>=(EndPointDevice.cluster_innernum)*10)//若节点时间等于节点编号时发送数据
-        {
-            Receive_Timeout = 0;
-            Data_Change_Flag = 1;
-            Keep_Alive_Detect = 1;
-            Frame_Time = 0;
-            A7139_Deep_Wake();
-            EN_INT;
-            EN_TIMER1;
-        }*/
-        Cal_Time++;
-        if(Cal_Time == CAL_PERIOD)
-        {
-            Cal_Time = 0;
-            if((EndPointDevice.parking_state == NOCAR))//如果是没有车状态 ，则进行校准
-            {
-                PostTask(EVENT_CALIBRATE_SENSOR);
-            }
-            
-        }
         PostTask(EVENT_IDENTIFY_CAR);
     }
 }

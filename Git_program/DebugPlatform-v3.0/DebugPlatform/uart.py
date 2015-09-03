@@ -120,7 +120,7 @@ class UartRoot(tk.Tk):
         self.uartstatus.grid(row=6, column=0)
         self.IsOpen(0)
         self.txtfilname = "sniffer-"+time.strftime('%Y-%m-%d_%H-%M-%S', time.localtime(time.time())) + '.txt'
-        self.txtidentifyfilname = 'F:\Graduate\Git_program\DebugPlatform-v3.0\Data\identify\identify-'+time.strftime('%Y-%m-%d_%H-%M-%S', time.localtime(time.time())) + '.txt'
+        self.txtidentifyfilname = '..\Data\\'+time.strftime('%Y-%m-%d_%H-%M-%S', time.localtime(time.time())) + '.txt'
         self.buttonstatus = 0
         self.datamode = 0
 

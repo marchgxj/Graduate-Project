@@ -13,51 +13,91 @@ class ScopeOld:
         self.VarValue=[]
         self.MiddleValue=[]
         self.ExtValue=[]
+        self.ExtState = []
+        self.VarState = []
+        self.Intensity = []
+        self.IntensityMiddle = []
+        self.IntState = []
+        self.Result = []
         for v in data:
             self.XValue.append(v[0])
             self.YValue.append(v[1])
             self.VarValue.append(v[2])
             self.MiddleValue.append(v[3])
             self.ExtValue.append(v[4])
-        # print self.XValue
-        # print self.YValue
-        # print self.VarValue
-        # print self.MiddleValue
-        # print self.ExtValue
-        # date1 = datetime.datetime( int(time.strftime('%Y', time.localtime(float(datatime[0])))),int(time.strftime('%m', time.localtime(float(datatime[0])))),int(time.strftime('%d', time.localtime(float(datatime[0])))),
-        #                            int(time.strftime('%H', time.localtime(float(datatime[0])))),int(time.strftime('%M', time.localtime(float(datatime[0])))),int(time.strftime('%S', time.localtime(float(datatime[0])))))
-        # date2 = datetime.datetime( int(time.strftime('%Y', time.localtime(float(datatime[-1])))),int(time.strftime('%m', time.localtime(float(datatime[-1])))),int(time.strftime('%d', time.localtime(float(datatime[-1])))),
-        #                            int(time.strftime('%H', time.localtime(float(datatime[-1])))),int(time.strftime('%M', time.localtime(float(datatime[-1])))),int(time.strftime('%S', time.localtime(float(datatime[-1])))))
-        # delta = datetime.timedelta(microseconds = 100000)
-        # self.dates = drange(date1, date2, delta)
+            if(int(v[5])==2):
+                self.VarState.append(1)
+            elif(int(v[5])==1):
+                self.VarState.append(2)
+            else:
+                self.VarState.append(0)
+            if(int(v[6])==2):
+                self.ExtState.append(4)
+            elif(int(v[6])==1):
+                self.ExtState.append(5)
+            else:
+                self.ExtState.append(3)
+            self.Intensity.append(v[9])
+            self.IntensityMiddle.append(v[10])
+            if(int(v[11])==2):
+                self.IntState.append(7)
+            elif(int(v[11])==1):
+                self.IntState.append(8)
+            else:
+                self.IntState.append(6)
+            if(int(v[12])==2):
+                self.Result.append(3)
+            elif(int(v[12])==1):
+                self.Result.append(2)
+            else:
+                self.Result.append(1)
+
+
 
     def show(self):
         self.fig = plt.figure(figsize=(12, 6), dpi=100)
-        self.sensorax = self.fig.add_subplot(2, 2, 1, xlim=(0, 10), ylim=(0, 4096))
-        self.Varianceax = self.fig.add_subplot(2, 2, 3, xlim=(0, 10), ylim=(0, 40000))
-        self.Extremumax = self.fig.add_subplot(2, 2, 4, xlim=(0, 10), ylim=(0, 10000))
-        self.backupax = self.fig.add_subplot(2, 2, 2, xlim=(0, 10), ylim=(0, 10000))
-
+        self.sensorax = self.fig.add_subplot(3, 2, 1, xlim=(0, 10), ylim=(0, 4096))
+        self.Varianceax = self.fig.add_subplot(3, 2, 3, xlim=(0, 10), ylim=(0, 3000))
+        self.Extremumax = self.fig.add_subplot(3, 2, 4, xlim=(0, 10), ylim=(0, 1000))
+        self.Stateax = self.fig.add_subplot(3, 2, 2, xlim=(0, 10), ylim=(0, 9))
+        self.Intensityax = self.fig.add_subplot(3, 2, 5, xlim=(0, 10), ylim=(0, 3000))
+        self.Resultax = self.fig.add_subplot(3, 2, 6, xlim=(0, 10), ylim=(0, 4))
 
         self.sensorax.plot(range(len(self.XValue)),self.XValue)
         self.sensorax.plot(range(len(self.YValue)),self.YValue)
-        self.sensorax.set_xlim(0,len(self.XValue))
+        self.sensorax.set_xlim(0,50)
 
         self.Varianceax.plot(range(len(self.VarValue)),self.VarValue)
-        self.Varianceax.set_xlim(0,len(self.VarValue))
+        self.Varianceax.set_xlim(0,50)
 
-        self.Extremumax.plot(range(len(self.ExtValue)),self.ExtValue)
-        self.Extremumax.set_xlim(0,len(self.ExtValue))
-        # if(len(self.dates)>len(self.XValue)):
-        #     self.sensorax.plot_date(self.dates[:len(self.XValue)],self.XValue)
-        # else:
-        #     self.sensorax.plot_date(self.dates,self.XValue[:len(self.dates)])
-        # self.sensorax.set_xlim(self.dates[0], self.dates[-1] )# ax.xaxis.set_major_locator( DayLocator() )
-        # self.sensorax.xaxis.set_minor_locator( HourLocator(arange(0,25,6)) )
-        # self.sensorax.xaxis.set_major_formatter( DateFormatter('%H:%M:%S') )
-        # self.sensorax.fmt_xdata = DateFormatter('%Y-%m-%d %H:%M:%S')
-        # self.fig.autofmt_xdate()
+        self.Extremumax.plot(range(len(self.ExtValue)),self.ExtValue,'r')
+        self.Extremumax.set_xlim(0,50)
+
+        self.Stateax.plot(range(len(self.VarState)),self.VarState,'b')
+        self.Stateax.plot(range(len(self.ExtState)),self.ExtState,'r')
+        self.Stateax.plot(range(len(self.IntState)),self.IntState,'y')
+        self.Stateax.set_xlim(0,50)
+
+        self.Intensityax.plot(range(len(self.Intensity)),self.Intensity,'y')
+        self.Intensityax.plot(range(len(self.IntensityMiddle)),self.IntensityMiddle,'r')
+        self.Intensityax.set_xlim(0,50)
+
+        self.Resultax.plot(range(len(self.Result)),self.Result,'b')
+        self.Resultax.set_xlim(0,50)
+
         plt.show()
+
+    def set_xlim(self,x):
+        x1 = x-50
+        x2 = x+50
+        self.sensorax.set_xlim(x1 - 50, x2 + 50)
+        self.Varianceax.set_xlim(x1 - 50, x2 + 50)
+        self.Extremumax.set_xlim(x1- 50, x2 + 50)
+        self.Stateax.set_xlim(x1 - 50, x2 + 50)
+        self.Intensityax.set_xlim(x1 - 50, x2 + 50)
+        self.Resultax.set_xlim(x1 - 50, x2 + 50)
+        plt.show()
+
 
 
 

@@ -14,62 +14,118 @@ import datetime
 class Scope:
     def __init__(self, thread):
         self.fig = plt.figure(figsize=(12, 6), dpi=100)
-        self.sensorax = self.fig.add_subplot(2, 2, 1, xlim=(0, 10), ylim=(0, 4096))
-        self.backupax = self.fig.add_subplot(2, 2, 2, xlim=(0, 10), ylim=(0, 10000))
-        self.Varianceax = self.fig.add_subplot(2, 2, 3, xlim=(0, 10), ylim=(0, 40000))
-        self.Extremumax = self.fig.add_subplot(2, 2, 4, xlim=(0, 10), ylim=(0, 3000))
+        self.sensorax = self.fig.add_subplot(3, 2, 1, xlim=(0, 10), ylim=(0, 4096))
+        self.Varianceax = self.fig.add_subplot(3, 2, 3, xlim=(0, 10), ylim=(0, 3000))
+        self.Extremumax = self.fig.add_subplot(3, 2, 4, xlim=(0, 10), ylim=(0, 1000))
+        self.Stateax = self.fig.add_subplot(3, 2, 2, xlim=(0, 10), ylim=(0, 9))
+        self.Intensityax = self.fig.add_subplot(3, 2, 5, xlim=(0, 10), ylim=(0, 4000))
+        self.Resultax = self.fig.add_subplot(3, 2, 6, xlim=(0, 10), ylim=(0, 1.5))
+
         self.thread = thread
 
         self.XValueLinedata = []
         self.YValueLinedata = []
         self.VarValueLinedata = []
-        self.MiddleValueLinedata = []
+
         self.ExtValueLinedata = []
+        self.ExtStateLinedata = []
+        self.VarStateLinedata = []
+        self.IntensityLinedata = []
+        self.IntensityMiddleLinedata = []
+        self.IntStateLinedata = []
+        self.ResultLinedata = []
         self.xdata = []
 
-        self.XValueLine, = self.sensorax.plot([], [], lw=2)
-        self.YValueLine, = self.sensorax.plot([], [], lw=2)
+        self.XValueLine, = self.sensorax.plot([], [], "b", lw=2)
+        self.YValueLine, = self.sensorax.plot([], [], "g", lw=2)
         self.VarValueLine, = self.Varianceax.plot([], [], lw=2)
-        self.MiddleValueLine, = self.Varianceax.plot([], [], lw=2)
-        self.ExtValueLine, = self.Extremumax.plot([], [], lw=2)
+
+        self.ExtValueLine, = self.Extremumax.plot([], [], "r", lw=2)
+        self.ExtStateLine, = self.Stateax.plot([], [], "r", lw=2)
+        self.VarStateLine, = self.Stateax.plot([], [], lw=2)
+        self.IntensityLine, = self.Intensityax.plot([], [], "y", lw=2)
+        self.IntensityMiddleLine, = self.Intensityax.plot([], [], "r", lw=2)
+        self.IntStateLine, = self.Stateax.plot([], [], "y", lw=2)
+        self.ResultLine, = self.Resultax.plot([], [], "b", lw=2)
+
         self.count = 0
+
     def init(self):
         self.XValueLine.set_data([], [])
         self.YValueLine.set_data([], [])
         self.VarValueLine.set_data([], [])
-        self.MiddleValueLine.set_data([], [])
+
         self.ExtValueLine.set_data([], [])
-        return self.XValueLine, self.YValueLine, self.VarValueLine, self.MiddleValueLine, self.ExtValueLine
+        self.ExtStateLine.set_data([], [])
+        self.VarStateLine.set_data([], [])
+        self.IntensityLine.set_data([], [])
+        self.IntensityMiddleLine.set_data([], [])
+        self.IntStateLine.set_data([], [])
+        self.ResultLine.set_data([], [])
+        return self.XValueLine, self.YValueLine, self.VarValueLine, self.ExtValueLine, self.ExtStateLine, self.VarStateLine, self.IntensityLine, self.IntensityMiddleLine, self.IntStateLine,self.ResultLine
 
     def update(self, i):
-        self.count += 1
+        self.count = self.thread.framecount
         self.sensorax.set_xlim(self.count - 50, self.count + 50)
         self.Varianceax.set_xlim(self.count - 50, self.count + 50)
         self.Extremumax.set_xlim(self.count - 50, self.count + 50)
-        if (len(self.thread.value) != 0):
+        self.Stateax.set_xlim(self.count - 50, self.count + 50)
+        self.Intensityax.set_xlim(self.count - 50, self.count + 50)
+        self.Resultax.set_xlim(self.count - 50, self.count + 50)
+
+        if (len(self.thread.value) == 13):
             self.xdata.append(self.count)
             self.XValueLinedata.append(self.thread.value[0])
             self.YValueLinedata.append(self.thread.value[1])
             self.VarValueLinedata.append(self.thread.value[2])
-            self.MiddleValueLinedata.append(self.thread.value[3])
+
             self.ExtValueLinedata.append(self.thread.value[4])
+            VarState = int(self.thread.value[5])
+            if (VarState == 2):
+                self.VarStateLinedata.append(1)
+            elif (VarState == 1):
+                self.VarStateLinedata.append(2)
+            else:
+                self.VarStateLinedata.append(self.thread.value[5])
+            ExtState = int(self.thread.value[6])
+            if (ExtState == 2):
+                self.ExtStateLinedata.append(4)
+            elif (ExtState == 1):
+                self.ExtStateLinedata.append(5)
+            else:
+                self.ExtStateLinedata.append(3)
+            self.IntensityLinedata.append(self.thread.value[9])
+            self.IntensityMiddleLinedata.append(self.thread.value[10])
+            IntState = int(self.thread.value[11])
+            if (IntState == 2):
+                self.IntStateLinedata.append(7)
+            elif (IntState == 1):
+                self.IntStateLinedata.append(8)
+            else:
+                self.IntStateLinedata.append(6)
+            self.ResultLinedata.append(self.thread.value[12])
+
+
         self.XValueLine.set_data(self.xdata, self.XValueLinedata)
         self.YValueLine.set_data(self.xdata, self.YValueLinedata)
         self.VarValueLine.set_data(self.xdata, self.VarValueLinedata)
-        self.MiddleValueLine.set_data(self.xdata, self.MiddleValueLinedata)
-        self.ExtValueLine.set_data(self.xdata, self.ExtValueLinedata)
-        return self.XValueLine, self.YValueLine,self.VarValueLine,self.MiddleValueLine,self.ExtValueLine
 
+        self.ExtValueLine.set_data(self.xdata, self.ExtValueLinedata)
+        self.ExtStateLine.set_data(self.xdata, self.ExtStateLinedata)
+        self.VarStateLine.set_data(self.xdata, self.VarStateLinedata)
+        self.IntensityLine.set_data(self.xdata, self.IntensityLinedata)
+        self.IntensityMiddleLine.set_data(self.xdata, self.IntensityMiddleLinedata)
+        self.IntStateLine.set_data(self.xdata, self.IntStateLinedata)
+        self.ResultLine.set_data(self.xdata, self.ResultLinedata)
+        return self.XValueLine, self.YValueLine, self.VarValueLine, self.ExtValueLine, self.VarStateLine, self.ExtStateLine, self.IntensityLine, self.IntensityMiddleLine, self.IntStateLine,self.ResultLine
 
     def start(self):
-        ani = animation.FuncAnimation(self.fig, self.update, init_func=self.init, frames=50, interval=100)
+        ani = animation.FuncAnimation(self.fig, self.update, init_func=self.init, frames=50, interval=200)
 
         plt.show()
 
-
     def __del__(self):
         print "delete"
-
 
     def closeing(self):
         plt.close()

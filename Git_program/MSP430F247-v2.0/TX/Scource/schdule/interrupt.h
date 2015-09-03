@@ -15,5 +15,6 @@ extern uint32 Frame_Time;
 extern uint16 Keep_Alive_Count;
 extern uint16 Keep_Alive_Detect;
 extern uint8  ADCal_Flag;
+extern uint16 Direction_Count;
 
 #endif

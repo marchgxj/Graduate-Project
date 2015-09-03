@@ -233,13 +233,19 @@ void ReJoinHandler()
     EndPointDevice.time_stamp = 0;
     EndPointDevice.parking_state = NOCAR;
     EndPointDevice.parking_state_m = NOCAR;
-    VarianceX = 0;           //X轴方差
-    VarianceY = 0;           //Y轴方差
-    VarianceAve = 0;         //两轴平均方差
-    VarianceM = 0;           //两轴方差差值
-    State1_Count = 0;        
-    State2_Count = 0;
-    State3_Count = 0;
+    MagneticUnit.Variance = 0;
+    MagneticUnit.Extremum = 0;
+    MagneticUnit.Intensity = 0;
+    VState1_Count = 0;
+    VState2_Count = 0;
+    VState3_Count = 0;
+    EState1_Count = 0;
+    EState2_Count = 0;
+    EState3_Count = 0;
+    IState1_Count = 0;
+    IState2_Count = 0;
+    IState3_Count = 0;
+    CarCaliFlag = 0;
     DataPacket.ab_slot_num = 0;
 
     for(int i=0;i<CHANNEL_NUM;i++)

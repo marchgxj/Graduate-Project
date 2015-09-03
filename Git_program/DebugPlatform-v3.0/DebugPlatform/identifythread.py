@@ -15,12 +15,15 @@ class myThread (threading.Thread):
         self.carstatus = 0
         self.port = port
         self.baud = baud
-        self.value=[]
+        self.value = []
+        for i in range(13):
+            self.value.append(0)
+        self.readenable = 0
 
 
         self.filename = filename
         self.sensordata=[]
-        self.count = 0
+        self.framecount = 0
         self.update = threading.Thread(target = self.update)
         self.update.setDaemon(True)
 #         self.update.start()
@@ -35,7 +38,7 @@ class myThread (threading.Thread):
         Others：线程   
                                     当前数据格式：帧头 0x7D 5个16位传感器数值 高位在前  1个8位停车状态  1个16位斜率 高位在前 有符号型  帧尾0x7E    
         '''
-        self.count = 0
+        self.framecount = 0
         self.app.identifyuartopen = 1
         while(1):
             if(self.thread_stop == True and self.uart.isOpen()==True):
@@ -49,7 +52,8 @@ class myThread (threading.Thread):
                         if ord(buf)==0x7D:
                             buf=[]
                             # 加变量需要修改
-                            buf+=self.uart.read(16)
+                            buf+=self.uart.read(22)
+
                             self.file = open(self.filename,"a+")
                             self.file.write("|"+str(time.time())+"|")
                             # for v in buf:
@@ -57,17 +61,22 @@ class myThread (threading.Thread):
                                 # self.file.write(binascii.b2a_hex(v)+" ")
 
                             # 加变量需要修改
+                            self.value[0] = (ord(buf[0])<<8|ord(buf[1]))
+                            self.value[1] = (ord(buf[2])<<8|ord(buf[3]))
+                            self.value[2] = (ord(buf[4])<<8|ord(buf[5]))
+                            self.value[3] = (ord(buf[6])<<8|ord(buf[7]))
+                            self.value[4] = (ord(buf[8])<<8|ord(buf[9]))
+                            self.value[5] = (ord(buf[10]))
+                            self.value[6] = (ord(buf[11]))
+                            self.value[7] = (ord(buf[12])<<8|ord(buf[13]))
+                            self.value[8] = (ord(buf[14])<<8|ord(buf[15]))
+                            self.value[9] = (ord(buf[16])<<8|ord(buf[17]))
+                            self.value[10] = (ord(buf[18])<<8|ord(buf[19]))
+                            self.value[11] = (ord(buf[20]))
+                            self.value[12] = (ord(buf[21]))
 
-                            self.value=[]
-                            self.value.append(ord(buf[0])<<8|ord(buf[1]))
-                            self.value.append(ord(buf[2])<<8|ord(buf[3]))
-                            self.value.append(ord(buf[4])<<8|ord(buf[5]))
-                            self.value.append(ord(buf[6])<<8|ord(buf[7]))
-                            self.value.append(ord(buf[8])<<8|ord(buf[9]))
-                            self.value.append(ord(buf[10]))
-                            self.value.append(ord(buf[11]))
-                            self.value.append(ord(buf[12])<<8|ord(buf[13]))
-                            self.value.append(ord(buf[14])<<8|ord(buf[15]))
+
+
 
                             #加变量需要修改
                             self.file.write(str(self.value[0])+" ")
@@ -79,9 +88,14 @@ class myThread (threading.Thread):
                             self.file.write(str(self.value[6])+" ")
                             self.file.write(str(self.value[7])+" ")
                             self.file.write(str(self.value[8])+" ")
+                            self.file.write(str(self.value[9])+" ")
+                            self.file.write(str(self.value[10])+" ")
+                            self.file.write(str(self.value[11])+" ")
+                            self.file.write(str(self.value[12])+" ")
+
                             self.file.close()
                             self.uart.read(self.uart.inWaiting())
-                            self.count+=1
+                            self.framecount+=1
 #                     time.sleep(0.5)
 
 

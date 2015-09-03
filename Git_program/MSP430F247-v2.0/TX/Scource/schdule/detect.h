@@ -22,10 +22,11 @@
 
 #define CAL_PERIOD  6000          //10分钟校准一次
 
-#define VAR_THRESHOLD  5000             //方差判断阈值
-#define EXT_THRESHOLD  100               //两轴差值判断阈值
+#define VAR_THRESHOLD  200             //方差判断阈值
+#define EXT_THRESHOLD  80               //两轴差值判断阈值
+#define INT_THRESHOLD  150
 
-#define TEST_LENGTH 16
+#define TEST_LENGTH 22
 
 typedef struct
 {
@@ -33,12 +34,40 @@ typedef struct
     uint16 num;
 }DataStruct;
 
+typedef struct
+{
+    uint16 XValue;
+    uint16 YValue;
+    uint16 XMiddle;
+    uint16 XMiddleM;
+    uint16 YMiddle;
+    uint16 YMiddleM;
+    uint16 Intensity;
+    uint16 CarIntensity;
+    uint16 Int_Middle;
+    uint8  IntState;
+    uint32 Variance;
+    uint32 CarVariance;
+    uint8  VarState;
+    uint16 Extremum;
+    uint16 CarExtremum;
+    uint16 Ext_Middle;
+    uint8  ExtState;
+    
+}MagneticStruct;
+extern MagneticStruct MagneticUnit;
+
+
 extern void CollectData();
 extern void IdentifyCar();
-extern void Calibration();
+extern void NoCarCalibration();
 extern void GetVariance();
 extern void GetExtremum();
 extern uint8 MultiState(uint16 value,uint16 threshold);
+extern unsigned int sqrt_16(unsigned long M);
+extern void GetIntensity();
+extern void CarCalibration();
+extern void TotalJudge();
 
 extern uint8 Data_Change_Flag;
 extern uint16 AD_middle_valueX;
@@ -50,10 +79,10 @@ extern uint8  Start_Collect;
 extern int Ave_Slop;
 extern uint8 Car_Status;
 extern uint16 Cal_Time;          //校准周期
-extern uint16 VarianceX;           //X轴方差
-extern uint16 VarianceY;           //Y轴方差
-extern uint16 VarianceAve;         //两轴平均方差
-extern uint16 VarianceM;           //两轴方差差值
+extern uint32 VarianceX;           //X轴方差
+extern uint32 VarianceY;           //Y轴方差
+extern uint32 VarianceAve;         //两轴平均方差
+extern uint32 VarianceM;           //两轴方差差值
 extern uint8  State1_Count;        
 extern uint8  State2_Count;
 extern uint8  State3_Count;

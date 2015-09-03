@@ -4,16 +4,21 @@ uint8 normal_test[MAX_PACK_LENGTH];
 uint8 test_rssi = 0;
 uint16 address = 0;
 uint16 minus = 0;
-
+uint16 inten = 0;
+uint16 XValue = 0;
+uint16 YValue = 0;
 int main(void)
 {	    
     uint8 i=0;
     __disable_interrupt();
     halBoardInit();
+    TA0CTL = TASSEL_1 + MC_1; 
+    TA0CCR0 = 1650;
+    TA0CCTL0 = CCIE; 
    
     A7139_SetPackLen(TEST_LENGTH);
     delay_us(1);
-    A7139_SetFreq(472.501f);
+    A7139_SetFreq(475.001f);
     delay_us(1);
     A7139_Cal();                    //更改完频率后校准
     delay_us(1);
@@ -23,13 +28,28 @@ int main(void)
        normal_test[i]=i;
     }
     __enable_interrupt();
+    while(1)
+    {
+        SampleChannel(&XValue,&YValue);
+        delay_ms(20);
+        Direction_Count=700;
+        if((XValue>900)&&(XValue<1300)&&(YValue>900)&&(YValue)<1300&&(abs(XValue-YValue)<350)||(Direction_Count==700))
+        {
+            halLedSet(3);
+            delay_ms(2000);
+            Direction_Count=700;
+            NoCarCalibration();
+            halLedClear(3);
+            break;
+        }
+    }
     /****************send test**********************/ 
 
     while(1) 
     {    
         if(ADCal_Flag == 1)
         {
-            Calibration();
+            //NoCarCalibration();
             ADCal_Flag = 0;
         }
 //        //GetVariance();
