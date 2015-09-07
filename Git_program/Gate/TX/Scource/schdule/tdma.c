@@ -60,10 +60,10 @@ void CreatSendData()
     //不在低功耗模式时发送传感器数据，用于绘制变化曲线
     if(EndPointDevice.power == 0)
     {
-        DataSendBuffer[8] = Draw_DataX>>8;
+        /*DataSendBuffer[8] = Draw_DataX>>8;
         DataSendBuffer[9] = Draw_DataX;
         DataSendBuffer[10] = Draw_DataY>>8;
-        DataSendBuffer[11] = Draw_DataY;
+        DataSendBuffer[11] = Draw_DataY;*/
         PostTask(EVENT_COLLECT_DATA_F);
         /*DataSendBuffer[8] = VarianceX>>8;
         DataSendBuffer[9] = VarianceX;

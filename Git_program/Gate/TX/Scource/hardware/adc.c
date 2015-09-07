@@ -24,6 +24,7 @@ int16 SampleChannel(Uint16* SampleValueX,Uint16* SampleValueY)	//½øÐÐ²ÉÑùÍ¨µÀµçÔ
     P6DIR &= 0xaf;   // 1010 1111
     P6SEL |= 0x50;   //0101 0000
     HAL_PLU_SET;
+    delay_1ms();delay_1ms();delay_1ms();delay_1ms();delay_1ms();delay_1ms();delay_1ms();
     //Uint16 *ram_ptr;
     *SampleValueX =0;
     *SampleValueY =0;
@@ -43,11 +44,14 @@ int16 SampleChannel(Uint16* SampleValueX,Uint16* SampleValueY)	//½øÐÐ²ÉÑùÍ¨µÀµçÔ
     ADC12CTL0 |= ENC + ADC12SC;
     delay_1ms();
     while (ADC12IFG & BIT0==0);                         //Wait if ADC10 core is active
+    
     while (ADC12IFG & BIT1==0);                         //Wait if ADC10 core is active
     *SampleValueX=ADC12MEM0;
     *SampleValueY=ADC12MEM1;
-    delay_1ms();
     HAL_PLU_CLR;
+    TIME1_HIGH;
+    delay_1ms();
+    TIME1_LOW;
     
     return (*SampleValueX-*SampleValueY);
 }
@@ -61,20 +65,30 @@ void AD_cal()
 {
     int i=0;
     uint16 ADvalueX=0,ADvalueY=0;
+    uint32 intensity = 0;
+    uint16 ADX,ADY;
+    halLedSetAll();
+    delay_ms(2000);
+    
+    ADX = 0;
+    ADY = 0;
     for(i=0;i<16;i++)
     {
         SampleChannel(&ADvalueX,&ADvalueY);
-        AD_middle_valueX += ADvalueX;
-        AD_middle_valueY += ADvalueY;
+        ADX += ADvalueX;
+        ADY += ADvalueY;
         delay_ms(50);
     }
-    AD_middle_valueX = AD_middle_valueX>>4;
-    AD_middle_valueY = AD_middle_valueY>>4;
-    ExtremumValueMiddle = abs(AD_middle_valueX-AD_middle_valueY);
-    AD_middle_valueXM = AD_middle_valueX;
-    AD_middle_valueYM = AD_middle_valueY;
-    halLedSetAll();
-    delay_ms(1000);
+    MagneticUnit.XMiddle = ADX>>4;
+    MagneticUnit.YMiddle = ADY>>4;
+    MagneticUnit.XMiddleM = MagneticUnit.XMiddle;
+    MagneticUnit.YMiddleM = MagneticUnit.YMiddle;
+    MagneticUnit.Ext_Middle = abs(MagneticUnit.XMiddle-MagneticUnit.YMiddle);
+    
+    intensity = sqrt_16((((uint32)MagneticUnit.XMiddle*(uint32)MagneticUnit.XMiddle)+((uint32)MagneticUnit.YMiddle*(uint32)MagneticUnit.YMiddle)));
+    MagneticUnit.Int_Middle = intensity;
+
+    
     halLedClearAll();
     delay_ms(50);
     halLedSetAll();

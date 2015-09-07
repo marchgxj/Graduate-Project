@@ -233,13 +233,7 @@ void ReJoinHandler()
     EndPointDevice.time_stamp = 0;
     EndPointDevice.parking_state = NOCAR;
     EndPointDevice.parking_state_m = NOCAR;
-    VarianceX = 0;           //X轴方差
-    VarianceY = 0;           //Y轴方差
-    VarianceAve = 0;         //两轴平均方差
-    VarianceM = 0;           //两轴方差差值
-    State1_Count = 0;        
-    State2_Count = 0;
-    State3_Count = 0;
+    
     DataPacket.ab_slot_num = 0;
 
     for(int i=0;i<CHANNEL_NUM;i++)

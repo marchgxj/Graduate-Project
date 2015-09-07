@@ -10,6 +10,7 @@ import time
 import tkFileDialog
 import matplot
 import matplotold
+import matplotoldanimate
 
 __author__ = 'xiaoxiami'
 
@@ -216,6 +217,9 @@ class Application(ttk.Notebook):
 
         self.admiddleflag = 0
 
+        self.xlim = 0
+        self.animateopen = 0
+
         # self.bind("<<NotebookTabChanged>>", self.updatetab)
 
         self.rooterimage = tk.PhotoImage(file="image//rooter.gif")
@@ -236,6 +240,7 @@ class Application(ttk.Notebook):
         self.matplotopen = False
         self.datapath = ""
         self.matplotoldopen = False
+        self.x1 = 0
 
     def bindtab(self):
         self.bind("<<NotebookTabChanged>>", self.updatetab)
@@ -670,12 +675,13 @@ class Application(ttk.Notebook):
         self.datapathbutton = ttk.Button(self.tab4, text="选择文件", command=self.Selectdata)
         self.datapathbutton.grid(row=1, column=1, sticky=tk.W)
 
-
         self.dataRPbutton = tk.Button(self.tab4, command=self.MatplotlibDrawing, background="red", text="显示图像")
         self.dataRPbutton.grid(row=1, column=3, sticky=tk.E)
         self.dataclearbutton = tk.Button(self.tab4, text="清屏", command=self.Cleardata)
         self.dataclearbutton.grid(row=1, column=3, padx=20, sticky=tk.W, )
 
+        self.newtext = tk.Button(self.tab4, command=self.newtext, text="新文件")
+        self.newtext.grid(row=1, column=4)
 
         self.datascale = ttk.Scale(self.tab4, orient=tk.HORIZONTAL, from_=1, to=10, command=self.Zoomcallback)
         self.datascale.grid(row=1, column=2, sticky=tk.W)
@@ -691,7 +697,7 @@ class Application(ttk.Notebook):
         receivegroup.columnconfigure(0, weight=1)
 
         self.datacavas = tk.Canvas(receivegroup)
-        self.datacavas.grid(row=0, column=0,columnspan=2, sticky=tk.N + tk.S + tk.E + tk.W)
+        self.datacavas.grid(row=0, column=0, columnspan=2, sticky=tk.N + tk.S + tk.E + tk.W)
         self.cancassbx = tk.Scrollbar(self.datacavas, orient=tk.HORIZONTAL)
         self.cancassbx.pack(side=tk.BOTTOM, fill=tk.X)
         self.cancassbx.config(command=self.datacavas.xview)
@@ -709,42 +715,42 @@ class Application(ttk.Notebook):
             readgroup.rowconfigure(i, weight=1)
         for i in range(10):
             readgroup.columnconfigure(i, weight=1)
-        tk.Label(readgroup,text="XValue:").grid(row = 0,column = 0)
-        self.XValueLabel = tk.Label(readgroup,text="0")
-        self.XValueLabel.grid(row=0,column=1)
-        tk.Label(readgroup,text="YValue:").grid(row = 0,column = 2)
-        self.YValueLabel = tk.Label(readgroup,text="0")
-        self.YValueLabel.grid(row=0,column=3)
-        tk.Label(readgroup,text="VarianceM:").grid(row = 0,column = 4)
-        self.VarianceMLabel = tk.Label(readgroup,text="0")
-        self.VarianceMLabel.grid(row=0,column=5)
-        tk.Label(readgroup,text="AD_middle_valueX:").grid(row = 0,column = 6)
-        self.AD_middle_valueXLabel = tk.Label(readgroup,text="0")
-        self.AD_middle_valueXLabel.grid(row=0,column=7)
-        tk.Label(readgroup,text="AD_middle_valueY:").grid(row = 0,column = 8)
-        self.AD_middle_valueYLabel = tk.Label(readgroup,text="0")
-        self.AD_middle_valueYLabel.grid(row=0,column=9)
-        tk.Label(readgroup,text="ExtremumValue:").grid(row = 1,column = 0)
-        self.ExtremumValueLabel = tk.Label(readgroup,text="0")
-        self.ExtremumValueLabel.grid(row=1,column=1)
-        tk.Label(readgroup,text="ExtremumValueMiddle:").grid(row = 1,column = 2)
-        self.ExtremumValueMiddleLabel = tk.Label(readgroup,text="0")
-        self.ExtremumValueMiddleLabel.grid(row=1,column=3)
-        tk.Label(readgroup,text="Intensity:").grid(row = 1,column = 4)
-        self.IntensityLabel = tk.Label(readgroup,text="0")
-        self.IntensityLabel.grid(row=1,column=5)
-        tk.Label(readgroup,text="IntensityMiddle:").grid(row = 1,column = 6)
-        self.IntensityMiddleLabel = tk.Label(readgroup,text="0")
-        self.IntensityMiddleLabel.grid(row=1,column=7)
-        tk.Label(readgroup,text="IntState:").grid(row = 1,column = 8)
-        self.IntStateLabel = tk.Label(readgroup,text="0")
-        self.IntStateLabel.grid(row=1,column=9)
-        tk.Label(readgroup,text="Result:").grid(row = 2,column = 0)
-        self.ResultLabel = tk.Label(readgroup,text="0")
-        self.ResultLabel.grid(row=2,column=1)
-        tk.Label(readgroup,text="IntensityMinus:").grid(row = 2,column = 2)
-        self.IntensityMinus = tk.Label(readgroup,text="0")
-        self.IntensityMinus.grid(row=2,column=3)
+        tk.Label(readgroup, text="XValue:").grid(row=0, column=0)
+        self.XValueLabel = tk.Label(readgroup, text="0")
+        self.XValueLabel.grid(row=0, column=1)
+        tk.Label(readgroup, text="YValue:").grid(row=0, column=2)
+        self.YValueLabel = tk.Label(readgroup, text="0")
+        self.YValueLabel.grid(row=0, column=3)
+        tk.Label(readgroup, text="VarianceM:").grid(row=0, column=4)
+        self.VarianceMLabel = tk.Label(readgroup, text="0")
+        self.VarianceMLabel.grid(row=0, column=5)
+        tk.Label(readgroup, text="AD_middle_valueX:").grid(row=0, column=6)
+        self.AD_middle_valueXLabel = tk.Label(readgroup, text="0")
+        self.AD_middle_valueXLabel.grid(row=0, column=7)
+        tk.Label(readgroup, text="AD_middle_valueY:").grid(row=0, column=8)
+        self.AD_middle_valueYLabel = tk.Label(readgroup, text="0")
+        self.AD_middle_valueYLabel.grid(row=0, column=9)
+        tk.Label(readgroup, text="ExtremumValue:").grid(row=1, column=0)
+        self.ExtremumValueLabel = tk.Label(readgroup, text="0")
+        self.ExtremumValueLabel.grid(row=1, column=1)
+        tk.Label(readgroup, text="ExtremumValueMiddle:").grid(row=1, column=2)
+        self.ExtremumValueMiddleLabel = tk.Label(readgroup, text="0")
+        self.ExtremumValueMiddleLabel.grid(row=1, column=3)
+        tk.Label(readgroup, text="Intensity:").grid(row=1, column=4)
+        self.IntensityLabel = tk.Label(readgroup, text="0")
+        self.IntensityLabel.grid(row=1, column=5)
+        tk.Label(readgroup, text="IntensityMiddle:").grid(row=1, column=6)
+        self.IntensityMiddleLabel = tk.Label(readgroup, text="0")
+        self.IntensityMiddleLabel.grid(row=1, column=7)
+        tk.Label(readgroup, text="IntState:").grid(row=1, column=8)
+        self.IntStateLabel = tk.Label(readgroup, text="0")
+        self.IntStateLabel.grid(row=1, column=9)
+        tk.Label(readgroup, text="Result:").grid(row=2, column=0)
+        self.ResultLabel = tk.Label(readgroup, text="0")
+        self.ResultLabel.grid(row=2, column=1)
+        tk.Label(readgroup, text="IntensityMinus:").grid(row=2, column=2)
+        self.IntensityMinus = tk.Label(readgroup, text="0")
+        self.IntensityMinus.grid(row=2, column=3)
 
 
         # self.datatext = tk.Text(readgroup)
@@ -779,6 +785,38 @@ class Application(ttk.Notebook):
         self.datacavas.config(scrollregion=(0, 0, 0, 512))
         self.datapath = ""
 
+    def confirm(self):
+        '''
+        Parameter：
+
+        Function：
+                              输入新的文件名
+        Autor:xiaoxiami 2015.9.05
+        Others：
+        '''
+        self.filenameadd = self.entry.get()
+        self.filenameinput.quit()
+
+    def newtext(self):
+        '''
+        Parameter：
+
+        Function：
+                              新建一个TXT文件，添加备注文件名
+        Autor:xiaoxiami 2015.9.05
+        Others：
+        '''
+        if (self.identifyuartopen != 0):
+            self.filenameinput = tk.Tk()
+            self.entry = tk.Entry(self.filenameinput)
+            enter = tk.Button(self.filenameinput, text="确定", command=self.confirm)
+            self.entry.pack()
+            enter.pack()
+            self.filenameinput.mainloop()
+            self.menu.uartform.identifythread.filename = '..\Data\\' + self.filenameadd + time.strftime(
+                '%Y-%m-%d_%H-%M-%S', time.localtime(time.time())) + '.txt'
+
+
     def MatplotlibDrawing(self):
         '''
         Parameter：
@@ -803,7 +841,9 @@ class Application(ttk.Notebook):
                 self.scope = matplot.Scope(thread=self.menu.uartform.identifythread)
                 self.scope.start()
         else:
-            self.DrawOldDataByMatplot(data=self.filedata)
+            self.matplotanimate = matplotoldanimate.Scope(data=self.filedata, thread=self)
+            self.matplotanimate.start()
+            # self.DrawOldDataByMatplot(data=self.filedata)
 
     def Selectdata(self):
         '''
@@ -879,14 +919,14 @@ class Application(ttk.Notebook):
         self.VarianceM = []
         self.ExtremumValueMiddle = []
         self.ExtremumValue = []
-        self.AD_middle_valueX=[]
-        self.AD_middle_valueY=[]
+        self.AD_middle_valueX = []
+        self.AD_middle_valueY = []
         self.Intensity = []
         self.IntensityMiddle = []
         self.IntState = []
         self.Result = []
 
-        #加变量需要修改
+        # 加变量需要修改
         # if(len(data) == 10):
         for v in data:
             self.XValue.append(v[0])
@@ -925,58 +965,65 @@ class Application(ttk.Notebook):
             print "offset error"
         self.datacavas.config(scrollregion=(0, 0, len(self.ExtState) * offset, 512))
         for v in self.ExtState:
-            if(int(v)==1):
-                y=512-(int(2)*30+10)
-            elif(int(v)==2):
-                y=512-(int(1)*30+10)
+            if (int(v) == 1):
+                y = 512 - (int(2) * 30 + 10)
+            elif (int(v) == 2):
+                y = 512 - (int(1) * 30 + 10)
             else:
-                y=512-(int(v)*30+10)
+                y = 512 - (int(v) * 30 + 10)
             self.canvasline.append(self.datacavas.create_line(x, ym, x + offset, y, fill="blue"))
             x += offset
             ym = y
-        x=0
-        ym=0
+        x = 0
+        ym = 0
         for v in self.VarState:
-            if(int(v)==1):
-                y=512-(int(2)*30+110)
-            elif(int(v)==2):
-                y=512-(int(1)*30+110)
+            if (int(v) == 1):
+                y = 512 - (int(2) * 30 + 110)
+            elif (int(v) == 2):
+                y = 512 - (int(1) * 30 + 110)
             else:
-                y=512-(int(v)*30+110)
+                y = 512 - (int(v) * 30 + 110)
             self.canvasline.append(self.datacavas.create_line(x, ym, x + offset, y, fill="red"))
             x += offset
             ym = y
-        x=0
-        ym=0
+        x = 0
+        ym = 0
         for v in self.IntState:
-            if(int(v)==1):
-                y=512-(int(2)*30+210)
-            elif(int(v)==2):
-                y=512-(int(1)*30+210)
+            if (int(v) == 1):
+                y = 512 - (int(2) * 30 + 210)
+            elif (int(v) == 2):
+                y = 512 - (int(1) * 30 + 210)
             else:
-                y=512-(int(v)*30+210)
+                y = 512 - (int(v) * 30 + 210)
             self.canvasline.append(self.datacavas.create_line(x, ym, x + offset, y, fill="#FF9900"))
             x += offset
             ym = y
-        x=0
-        ym=0
+        x = 0
+        ym = 0
         for v in self.Result:
-            if(int(v)==1):
-                y=512-(int(2)*30+310)
-            elif(int(v)==2):
-                y=512-(int(1)*30+310)
+            if (int(v) == 1):
+                y = 512 - (int(2) * 30 + 310)
+            elif (int(v) == 2):
+                y = 512 - (int(1) * 30 + 310)
             else:
-                y=512-(int(v)*30+310)
+                y = 512 - (int(v) * 30 + 310)
             self.canvasline.append(self.datacavas.create_line(x, ym, x + offset, y, fill="#8B0A50"))
             x += offset
             ym = y
 
-
         self.datacavas.bind("<Button-1>", self.Showdetaildata)
         self.datacavas.bind("<B1-Motion>", self.Showdetaildata)
-
+        self.datacavas.bind("<KeyPress>", self.keyxlim)
 
         self.datacavas.focus_set()
+
+    def keyxlim(self, event):
+
+        if (event.keysym == "Right"):
+            self.x1 += 10
+        elif (event.keysym == "Left"):
+            self.x1 -= 10
+        self.Showdetaildata(0)
 
     def Zoomcallback(self, event):
         '''
@@ -1006,30 +1053,42 @@ class Application(ttk.Notebook):
         Autor:xiaoxiami 2015.8.30
         Others：
         '''
+        x1 = 0
         self.statusbar = self.root.status
         offset = int(self.datascale.get())
-        x1 = event.x + int(self.cancassbx.get()[0] * len(self.ExtState) * offset)
+        try:
+            x1 = event.x + int(self.cancassbx.get()[0] * len(self.ExtState) * offset)
+            self.x1 = x1
+        except:
+            x1  = self.x1
+        self.xlim = x1 / offset
         if (x1 >= 0 and x1 <= len(self.ExtState) * offset):
             for v in self.cavasverticalline:
                 self.datacavas.delete(v)
             self.cavasverticalline = []
             self.cavasverticalline.append(self.datacavas.create_line(x1, 0, x1, 512, fill="purple"))
-            self.statusbar.setdata("%s","Count:" + str(x1 / offset))
+            self.statusbar.setdata("%s", "Count:" + str(x1 / offset))
             # self.statusbar.setdata("%s","方差:" + str(self.VarState[x1 / offset]) + ",极值:" + str(self.ExtState[x1 / offset]))
-            self.XValueLabel.config(text = str(self.XValue[x1/offset]))
-            self.YValueLabel.config(text = str(self.YValue[x1/offset]))
-            self.VarianceMLabel.config(text = str(self.VarianceM[x1/offset]))
-            self.AD_middle_valueXLabel.config(text = str(self.AD_middle_valueX[x1/offset]))
-            self.AD_middle_valueYLabel.config(text = str(self.AD_middle_valueY[x1/offset]))
-            self.ExtremumValueLabel.config(text = str(self.ExtremumValue[x1/offset]))
-            self.ExtremumValueMiddleLabel.config(text = str(self.ExtremumValueMiddle[x1/offset]))
-            self.IntensityLabel.config(text = str(self.Intensity[x1/offset]))
-            self.IntensityMiddleLabel.config(text = str(self.IntensityMiddle[x1/offset]))
-            self.IntStateLabel.config(text = str(self.IntState[x1/offset]))
-            self.ResultLabel.config(text = str(self.Result[x1/offset]))
-            self.IntensityMinus.config(text = str(abs(int(self.Intensity[x1/offset])-int(self.IntensityMiddle[x1/offset]))))
-            if(self.matplotoldopen == True):
-                self.DrawOldData.set_xlim(x1/offset)
+            self.XValueLabel.config(text=str(self.XValue[x1 / offset]))
+            self.YValueLabel.config(text=str(self.YValue[x1 / offset]))
+            self.VarianceMLabel.config(text=str(self.VarianceM[x1 / offset]))
+            self.AD_middle_valueXLabel.config(text=str(self.AD_middle_valueX[x1 / offset]))
+            self.AD_middle_valueYLabel.config(text=str(self.AD_middle_valueY[x1 / offset]))
+            self.ExtremumValueLabel.config(text=str(self.ExtremumValue[x1 / offset]))
+            self.ExtremumValueMiddleLabel.config(text=str(self.ExtremumValueMiddle[x1 / offset]))
+            self.IntensityLabel.config(text=str(self.Intensity[x1 / offset]))
+            self.IntensityMiddleLabel.config(text=str(self.IntensityMiddle[x1 / offset]))
+            self.IntStateLabel.config(text=str(self.IntState[x1 / offset]))
+            self.ResultLabel.config(text=str(self.Result[x1 / offset]))
+            self.IntensityMinus.config(text=str(abs(int(self.Intensity[x1 / offset]) - int(self.IntensityMiddle[x1 / offset]))))
+            # if(self.matplotoldopen == True):
+            #     if(self.animateopen == 0):
+            #         self.animateopen = 1
+            #         self.matplotanimate = matplotoldanimate.Scope(data = self.filedata,thread = self)
+            #         self.matplotanimate.start()
+            # self.DrawOldData.set_xlim(x1/offset)
+
+
 
 
 class StatusBar(ttk.Frame):

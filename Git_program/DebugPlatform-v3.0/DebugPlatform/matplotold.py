@@ -1,6 +1,7 @@
 # coding=utf-8
 import datetime
 import matplotlib.pyplot as plt
+import matplotlib.animation as animation
 from matplotlib.dates import DayLocator, HourLocator, DateFormatter, drange
 from numpy import arange
 import tkMessageBox as tkmes
@@ -45,12 +46,8 @@ class ScopeOld:
                 self.IntState.append(8)
             else:
                 self.IntState.append(6)
-            if(int(v[12])==2):
-                self.Result.append(3)
-            elif(int(v[12])==1):
-                self.Result.append(2)
-            else:
-                self.Result.append(1)
+            self.Result.append(v[12])
+
 
 
 
@@ -85,6 +82,8 @@ class ScopeOld:
         self.Resultax.plot(range(len(self.Result)),self.Result,'b')
         self.Resultax.set_xlim(0,50)
 
+
+
         plt.show()
 
     def set_xlim(self,x):
@@ -97,6 +96,7 @@ class ScopeOld:
         self.Intensityax.set_xlim(x1 - 50, x2 + 50)
         self.Resultax.set_xlim(x1 - 50, x2 + 50)
         plt.show()
+
 
 
 

@@ -106,20 +106,7 @@ __interrupt void Timer_A (void)
 __interrupt void Timer_A0(void)
 {
     TA0CCTL0 &= ~CCIFG;
-    halLedToggle(2);
     
     PostTask(EVENT_IDENTIFY_CAR);
-    if(EndPointDevice.parking_state == NOCAR)
-    {
-        Cal_Count++;
-        if(Cal_Count == 60)
-        {
-            Cal_Count = 0;
-            PostTask(EVENT_CALIBRATE_SENSOR);
-        }
-    }
-    else
-    {
-        Cal_Count = 0;
-    }
+    
 }

@@ -94,10 +94,10 @@ uint8 Process_Event()
         A7139_Reset();
         break;
       case EVENT_COLLECT_DATA_F:
-        SampleChannel(&Draw_DataX,&Draw_DataY);
+        //SampleChannel(&Draw_DataX,&Draw_DataY);
         break;
       case EVENT_CALIBRATE_SENSOR:
-        Calibration();
+        NoCarCalibration();
         break;
       case EVENT_GET_VARIANCE:
         GetVariance();

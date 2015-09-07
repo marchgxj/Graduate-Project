@@ -26,7 +26,7 @@ void time_init(void)
 
   //TimerA used for 1s, use 
   TA0CTL = TASSEL_1 + MC_1; 
-  TA0CCR0 = 3300;
+  TA0CCR0 = 1650;
   TA0CCTL0 = CCIE; 
 }
 //----------------------------------------------------------------------------------

@@ -2,6 +2,7 @@
 import time
 import threading
 import urllib2
+import urllib
 
 import serial
 
@@ -48,9 +49,15 @@ class myThread(threading.Thread):
         Autor:xiaoxiami 2015.5.29
         Others：
         '''
+        data = {}
         while (1):
             if (self.killthread == True):
                 break
+            data["relay_id"] = "0086-110108-00022105-01"
+            data["data"] = "0086-110108-00022105-0001|1,0086-110108-00022105-0002|1"
+            data["park_id"] = "22105"
+            post_data = urllib.urlencode(data)
+            urllib2.urlopen("http://123.57.37.66:8080/sensor/post/status", post_data)
             response = urllib2.urlopen("http://123.57.11.98:8080/mm/get_new", timeout=10)
             content = eval(response.read())
             self.content = content
@@ -93,6 +100,10 @@ class myThread(threading.Thread):
         '''
         a = 0
         count = 0
+        data={}
+        data["relay_id"] = "0086-110108-00022105-01"
+        data["park_id"] = "22105"
+        uploaddatacut=""
         # if self.uartroot.datamode == 0:
         #     self.netuploadthread.start()
         while (1):
@@ -110,36 +121,42 @@ class myThread(threading.Thread):
                             self.notedata = []
                             for i in range(length):
                                 self.datatoshow = ''
+                                data["data"]=""
                                 num = ord(self.uart.read(1)) << 8 | ord(self.uart.read(1))
                                 self.notedata.append(num)  # 偶数位为地址
+                                data["data"] = data["data"]+"0086-110108-00022105-" + str(num) + "|"
                                 self.datatoshow = self.datatoshow + str(num) + "|"
                                 status = ord(self.uart.read(1))
                                 self.notedata.append(status)  # 奇数位为数据
                                 self.datatoshow = self.datatoshow + str(status) + ","
-                                try:
-                                    self.longdata[num * 2 - 1] = status
-                                except:
-                                    pass
-                            '''上传全部数据'''
-                            a=0
-                            self.longdatastr=""
-                            for i in self.longdata[:8]:
-                                a+=1
-                                if(a%2==1):
-                                    self.longdatastr =  self.longdatastr+str(i)+"|"
-                                else:
-                                    self.longdatastr =  self.longdatastr+str(i)+","
-                            ''''''
+                                data["data"] = data["data"] + str(status) + ","
+                                # try:
+                                #     self.longdata[num * 2 - 1] = status
+                                # except:
+                                #     pass
+                            # '''上传全部数据'''
+                            # a=0
+                            # self.longdatastr=""
+                            # for i in self.longdata[:8]:
+                            #     a+=1
+                            #     if(a%2==1):
+                            #         self.longdatastr =  self.longdatastr+str(i)+"|"
+                            #     else:
+                            #         self.longdatastr =  self.longdatastr+str(i)+","
+                            # ''''''
                             if len(self.notedata) == length * 2:
                                 self.uart.write("o")
                             else:
                                 print "uart data error"
                                 self.uart.read(self.uart.inWaiting())  # 清空串口缓冲区内容
-                            self.statusbar.status.setdata('串口数据:%s 计数:%s', self.datatoshow[:-1], count)
+                            # self.statusbar.status.setdata('串口数据:%s 计数:%s', self.datatoshow[:-1], count)
+                            uploaddatacut = data["data"]
+                            self.statusbar.status.setdata('串口数据:%s 计数:%s',uploaddatacut[:-1] , count)
+
                             if self.stopcar.appFrame.carnum == 0:
                                 self.statusbar.status.setstatus('%s', "未配置停车个数")
                             else:
-                                self.stopcar.appFrame.stopcaronce(self.datatoshow[:-1])
+                                self.stopcar.appFrame.stopcaronce( self.datatoshow[:-1])
                                 # if self.uartroot.datamode == 0:
 
                                 #     self.netuploadthread.start()
@@ -147,12 +164,15 @@ class myThread(threading.Thread):
                                     start = time.clock()
                                     try:
                                         '''上传全部数据'''
-                                        urllib2.urlopen(
-                                            "http://123.57.11.98:8080/mm/set_new?data=" + self.longdatastr[:-1],
-                                            timeout=1)
-                                        urllib2.urlopen("http://123.57.11.98:8080/mm/set?data=" + self.longdatastr[:-1],
-                                                        timeout=1)
+                                        # urllib2.urlopen(
+                                        #     "http://123.57.11.98:8080/mm/set_new?data=" + self.longdatastr[:-1],
+                                        #     timeout=1)
+                                        # urllib2.urlopen("http://123.57.11.98:8080/mm/set?data=" + self.longdatastr[:-1],
+                                        #                 timeout=1)
+                                        post_data = urllib.urlencode(data)
+                                        urllib2.urlopen("http://123.57.37.66:8080/sensor/post/status", post_data,timeout=1)
                                         end = time.clock()
+
                                         self.statusbar.status.setstatus('网络延时:%s', str(end - start))
                                         ''''''
                                         # urllib2.urlopen(
