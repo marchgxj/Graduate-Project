@@ -11,13 +11,18 @@ uint8 EState3_Count = 0;
 uint8 IState1_Count = 0;
 uint8 IState2_Count = 0;
 uint8 IState3_Count = 0;
-uint16 Draw_DataX = 0;
-uint16 Draw_DataY = 0;
 MagneticStruct MagneticUnit;
+uint8 Sensor_Drift = 0;
+uint8 After_Drift_Cal = 0;
+FilterStruct FilterData[FILTER_LENGTH];
+uint8 Filter_Count = 0;
+uint8 XValue_Parking = 0;
+uint8 YValue_Parking = 0;
 uint16 CarStableCount = 0;
 uint16 NoCarStableCount = 0;
 uint16 ExtChangeCount = 0;
 uint16 VarChangeCount = 0;
+uint16 IntChangeCount = 0;
 int Ext_Minus,Var_Minus,Int_Minus;
 uint8 CarCaliFlag = 0;
 
@@ -81,8 +86,6 @@ void bubbledata(DataStruct *a,uint16 n)
     }
     
 }
-
-
 
 /*方差多状态机识别*/
 void VarianceMultiState()
@@ -189,47 +192,70 @@ void IntensityMultiState()
     intensity = abs(MagneticUnit.Intensity - MagneticUnit.Int_Middle);
     if(intensity > INT_THRESHOLD)
     {
-        if(MagneticUnit.Int_State!=CAR)
+        if(MagneticUnit.IntState!=CAR)
         {
             IState1_Count++;
             if(IState1_Count>8)
             {
-                MagneticUnit.Int_State = CAR;
+                MagneticUnit.IntState = CAR;
                 IState1_Count = 0;
             }
             else
             {
-                MagneticUnit.Int_State = NOCAR2CAR;
+                MagneticUnit.IntState = NOCAR2CAR;
             }
         }
         
     }
     else
     {
-        if(MagneticUnit.Int_State == NOCAR2CAR)
+        if(MagneticUnit.IntState == NOCAR2CAR)
         {
             IState2_Count++;
             if(IState2_Count>STATE2)
             {
-                MagneticUnit.Int_State = NOCAR;
+                MagneticUnit.IntState = NOCAR;
                 IState2_Count = 0;
                 IState1_Count = 0;
             }
         }
         else
         {
-            if(MagneticUnit.Int_State != NOCAR)
+            if(MagneticUnit.IntState != NOCAR)
             {
                 IState3_Count++;
                 if(IState3_Count>30)
                 {
-                    MagneticUnit.Int_State = NOCAR;
+                    MagneticUnit.IntState = NOCAR;
                     IState3_Count = 0;
                 }
             }
         }
     }
 
+}
+
+void Filter(uint16 xvalue,uint16 yvalue)
+{
+    uint16 xbuf,ybuf;
+    xbuf = 0;
+    ybuf = 0;
+    FilterData[Filter_Count].xvalue = xvalue;
+    FilterData[Filter_Count].yvalue = yvalue;
+    Filter_Count++;
+    if(Filter_Count==FILTER_LENGTH)
+    {
+        Filter_Count = 0;
+    }
+
+    for(int i=0;i<FILTER_LENGTH;i++)
+    {
+        xbuf += FilterData[i].xvalue;
+        ybuf += FilterData[i].yvalue;
+    }
+    MagneticUnit.XValue = xbuf/FILTER_LENGTH;
+    //MagneticUnit.YValue = ybuf/FILTER_LENGTH;
+    
 }
 
 void IdentifyCar()
@@ -265,10 +291,29 @@ void IdentifyCar()
 void TotalJudge()
 {
 
-    if(((MagneticUnit.ExtState==CAR)&&(MagneticUnit.Int_State==CAR))||
-       ((MagneticUnit.VarState==CAR)&&(MagneticUnit.Int_State==CAR))||
+    if(abs(MagneticUnit.XValue - MagneticUnit.XMiddle)>50)
+    {
+        XValue_Parking = 1;
+    }
+    else
+    {
+        XValue_Parking = 0;
+    }
+    if(abs(MagneticUnit.YValue - MagneticUnit.YMiddle)>50)
+    {
+        YValue_Parking = 1;
+    }
+    else
+    {
+        YValue_Parking = 0;
+    }
+    
+    
+    if(((MagneticUnit.ExtState==CAR)&&(MagneticUnit.IntState==CAR))||
+       ((MagneticUnit.VarState==CAR)&&(MagneticUnit.IntState==CAR))||
        ((MagneticUnit.VarState==CAR)&&(MagneticUnit.ExtState==CAR))||
-       ((MagneticUnit.VarState==CAR)&&(MagneticUnit.ExtState==CAR)&&(MagneticUnit.Int_State==CAR)))
+       ((MagneticUnit.VarState==CAR)&&(MagneticUnit.ExtState==CAR)&&(MagneticUnit.IntState==CAR))||
+        (XValue_Parking==1)||(YValue_Parking==1))
     {
         
         CarStableCount++;
@@ -282,15 +327,15 @@ void TotalJudge()
     {
         CarStableCount = 0;
     }
-    if(CarStableCount == 600)
-    {
-        CarCalibration();
-        CarStableCount = 0;
-    }
+//    if(CarStableCount == 600)
+//    {
+//        CarCalibration();
+//        CarStableCount = 0;
+//    }
     if(CarCaliFlag == 1)
     {
         Ext_Minus = MagneticUnit.CarExtremum - MagneticUnit.Extremum;
-        if((Ext_Minus)>50)
+        if(abs(Ext_Minus)>50)
         {
             ExtChangeCount++;
             if(ExtChangeCount>60)
@@ -300,6 +345,7 @@ void TotalJudge()
                 EState1_Count = 0;
                 EState2_Count = 0;
                 EState3_Count = 0;
+                Sensor_Drift = 1;
             }
         }
         else
@@ -307,7 +353,7 @@ void TotalJudge()
             ExtChangeCount = 0;
         }
         Var_Minus = MagneticUnit.CarVariance - MagneticUnit.Variance;
-        if((Var_Minus)>50)
+        if(abs(Var_Minus)>50)
         {
             VarChangeCount++;
             if(VarChangeCount>60)
@@ -317,6 +363,26 @@ void TotalJudge()
                 VState1_Count = 0;
                 VState2_Count = 0;
                 VState3_Count = 0;
+                Sensor_Drift = 1;
+            }
+            
+        }
+        else
+        {
+            VarChangeCount = 0;
+        }
+        Int_Minus = MagneticUnit.CarIntensity - MagneticUnit.Intensity;
+        if(abs(Int_Minus)>50)
+        {
+            IntChangeCount++;
+            if(IntChangeCount>60)
+            {
+                MagneticUnit.IntState=NOCAR;
+                IntChangeCount = 0;
+                IState1_Count = 0;
+                IState2_Count = 0;
+                IState3_Count = 0;
+                Sensor_Drift = 1;
             }
             
         }
@@ -326,10 +392,10 @@ void TotalJudge()
         }
     }
     
-    if(((MagneticUnit.ExtState==NOCAR)&&(MagneticUnit.Int_State==NOCAR))||
-       ((MagneticUnit.VarState==NOCAR)&&(MagneticUnit.Int_State==NOCAR))||
+    if(((MagneticUnit.ExtState==NOCAR)&&(MagneticUnit.IntState==NOCAR))||
+       ((MagneticUnit.VarState==NOCAR)&&(MagneticUnit.IntState==NOCAR))||
        ((MagneticUnit.VarState==NOCAR)&&(MagneticUnit.ExtState==NOCAR))||
-       ((MagneticUnit.VarState==NOCAR)&&(MagneticUnit.ExtState==NOCAR)&&(MagneticUnit.Int_State==NOCAR)))
+       ((MagneticUnit.VarState==NOCAR)&&(MagneticUnit.ExtState==NOCAR)&&(MagneticUnit.IntState==NOCAR)))
     {
         if(NoCarStableCount>60)
         {
@@ -342,11 +408,15 @@ void TotalJudge()
     {
         NoCarStableCount = 0;
     }
-    if(NoCarStableCount >240)
+    if(Sensor_Drift==1)
+    {
+        After_Drift_Cal++;
+    }
+    if((NoCarStableCount >1200)||(After_Drift_Cal>60))
     {
         NoCarStableCount = 0;
-        PostTask(EVENT_CALIBRATE_SENSOR);
-        //NoCarCalibration();
+        After_Drift_Cal = 0;
+        NoCarCalibration();
     }
 }
   
@@ -366,32 +436,67 @@ void NoCarCalibration()
     uint16 ADY = 0;
     uint32 intensity = 0;
     uint8 i=0;
+
+    
     __disable_interrupt();
 
     halLedToggle(3);
     for(i=0;i<4;i++)
     {
+        delay_ms(50);
         SampleChannel(&ADvalueX,&ADvalueY);
-        if((abs(ADvalueX-MagneticUnit.XMiddleM)<80)||(abs(ADvalueY-MagneticUnit.YMiddleM)<80))
+        if((abs(ADvalueX-MagneticUnit.XMiddleM)<200)&&(abs(ADvalueY-MagneticUnit.YMiddleM)<200))
         {
             count++;
             ADX += ADvalueX;
             ADY += ADvalueY;
         }
 
-        delay_ms(10);
+        
         
     }
     if(count!=0)
     {
-        MagneticUnit.XMiddle = ADX/count;
-        MagneticUnit.YMiddle = ADY/count;
-        MagneticUnit.Ext_Middle = abs(MagneticUnit.XMiddle-MagneticUnit.YMiddle);
-        MagneticUnit.XMiddleM = MagneticUnit.XMiddle;
-        MagneticUnit.YMiddleM = MagneticUnit.YMiddle;
+        ADX = ADX/count;
+        ADY = ADY/count;
     }
+    if(abs(ADX - MagneticUnit.XMiddleM)<100)
+    {
+        MagneticUnit.XMiddle = ADX;
+    }
+    else if(abs(ADX - MagneticUnit.XMiddleM)<200)
+    {
+        MagneticUnit.XMiddle = (MagneticUnit.XMiddleM + ADX)>>1;
+    }
+    else if(abs(ADX - MagneticUnit.XMiddleM)<300)
+    {
+        MagneticUnit.XMiddle = (MagneticUnit.XMiddleM << 1 + ADX)/3;
+    }
+    if(abs(ADY - MagneticUnit.YMiddleM)<100)
+    {
+        MagneticUnit.YMiddle = ADY;
+    }
+    else if(abs(ADY - MagneticUnit.YMiddleM)<150)
+    {
+        MagneticUnit.YMiddle = (MagneticUnit.YMiddleM + ADY)>>1;
+    }
+    else if(abs(ADY - MagneticUnit.YMiddleM)<200)
+    {
+        MagneticUnit.YMiddle = (MagneticUnit.YMiddleM << 1 + ADY)/3;
+    }
+
+    MagneticUnit.Ext_Middle = abs(MagneticUnit.XMiddle-MagneticUnit.YMiddle);
+    MagneticUnit.XMiddleM = MagneticUnit.XMiddle;
+    MagneticUnit.YMiddleM = MagneticUnit.YMiddle;
+    
     intensity = sqrt_16((((uint32)MagneticUnit.XMiddle*(uint32)MagneticUnit.XMiddle)+((uint32)MagneticUnit.YMiddle*(uint32)MagneticUnit.YMiddle)));
     MagneticUnit.Int_Middle = intensity;
+    Sensor_Drift = 0;
+    CarCaliFlag = 0;
+    MagneticUnit.CarExtremum = 0;
+    MagneticUnit.CarIntensity = 0;
+    MagneticUnit.CarVariance = 0;
+    delay_ms(50);
     __enable_interrupt();
     
 }
@@ -403,7 +508,8 @@ void GetVariance()
     VarianceX = (uint32)abs(MagneticUnit.XValue - MagneticUnit.XMiddle)*(uint32)abs(MagneticUnit.XValue - MagneticUnit.XMiddle);
     VarianceY = (uint32)abs(MagneticUnit.YValue - MagneticUnit.YMiddle)*(uint32)abs(MagneticUnit.YValue - MagneticUnit.YMiddle);
 //    VarianceAve = (VarianceX + VarianceY)>>1;
-    MagneticUnit.Variance = abs(sqrt_16(VarianceY+VarianceX));
+    //MagneticUnit.Variance = abs(sqrt_16(VarianceY+VarianceX));
+    MagneticUnit.Variance = abs(sqrt_16(VarianceY));
 }
 
 void GetExtremum()

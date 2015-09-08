@@ -36,6 +36,7 @@ __interrupt void port1_ISR(void)
         
         if(PackValid())
         {
+
             switch (Unpack(DataRecvBuffer))
             {
               case BEACON_TYPE:
@@ -66,16 +67,7 @@ __interrupt void Timer_A (void)
     Frame_Time++;
     if(EndPointDevice.power == 0)
     {
-        if(Frame_Time == BEACON_PERIOD*4)//4个周期内收不到Beacon，复位通讯
-        {
-            PostTask(EVENT_A7139_RESET);
-            EN_INT;
-            PostTask(EVENT_WAKE_A7139);
-        }
-        if(Frame_Time>(uint32)BEACON_PERIOD*8)//8个周期内收不到Beacon，重启单片机
-        {
-            REBOOT;
-        }
+        
         if(Frame_Time==BEFOR_BEACON_WAKE)//在接收beacon前使能中断
         {
             PostTask(EVENT_WAKE_A7139);
@@ -105,26 +97,25 @@ __interrupt void Timer_A (void)
 __interrupt void Timer_A0(void)
 {
     TA0CCTL0 &= ~CCIFG;
-    halLedToggle(2);
     
     if(EndPointDevice.power == 0)
     //每个超帧都要发送时，Beacon接收超时则复位A7139
     {
         Receive_Timeout++;
-        if(Receive_Timeout>300)
-        {
-            REBOOT;//很长时间没有收到数据，单片机全部复位.
-        }
+//        if(Receive_Timeout>300)
+//        {
+//            REBOOT;//很长时间没有收到数据，单片机全部复位.
+//        }
         /*else if(Receive_Timeout>15)
         {
             PostTask(EVENT_REJOIN_HANDLER);
             Receive_Timeout = 0;
         }*/
-        else if(Receive_Timeout>50)
-        {
-            A7139_Reset();
-            EN_INT;
-        }
+//        else if(Receive_Timeout>50)
+//        {
+//            A7139_Reset();
+//            EN_INT;
+//        }
     }
 //    else
 //    {

@@ -58,4 +58,5 @@ extern uint16 Frame_Time;
 extern uint8 Power_Mode;
 
 extern uint8 Unpack(uint8 *type);
+extern int abs(int x);
 #endif 

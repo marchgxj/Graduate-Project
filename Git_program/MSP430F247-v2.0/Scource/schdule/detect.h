@@ -27,6 +27,7 @@
 #define INT_THRESHOLD  150
 
 #define TEST_LENGTH 22
+#define FILTER_LENGTH 20
 
 typedef struct
 {
@@ -45,7 +46,7 @@ typedef struct
     uint16 Intensity;
     uint16 CarIntensity;
     uint16 Int_Middle;
-    uint8  Int_State;
+    uint8  IntState;
     uint32 Variance;
     uint32 CarVariance;
     uint8  VarState;
@@ -56,6 +57,11 @@ typedef struct
     
 }MagneticStruct;
 extern MagneticStruct MagneticUnit;
+typedef struct
+{
+    uint16 xvalue;
+    uint16 yvalue;
+}FilterStruct;
 
 
 extern void CollectData();
@@ -69,9 +75,7 @@ extern void GetIntensity();
 extern void CarCalibration();
 extern void TotalJudge();
 
-extern uint8 Data_Change_Flag;
-extern uint8 Ext_state;
-extern uint8 Var_state;
+extern FilterStruct FilterData[FILTER_LENGTH];
 extern uint8 VState1_Count;
 extern uint8 VState2_Count;
 extern uint8 VState3_Count;
@@ -81,7 +85,5 @@ extern uint8 EState3_Count;
 extern uint8 IState1_Count;
 extern uint8 IState2_Count;
 extern uint8 IState3_Count;
-extern uint16 Draw_DataX;
-extern uint16 Draw_DataY;
 extern uint8 CarCaliFlag;
 #endif 

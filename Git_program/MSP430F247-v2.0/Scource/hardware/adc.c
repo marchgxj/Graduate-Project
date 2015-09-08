@@ -24,7 +24,7 @@ int16 SampleChannel(Uint16* SampleValueX,Uint16* SampleValueY)	//½øÐÐ²ÉÑùÍ¨µÀµçÔ
     P6DIR &= 0xaf;   // 1010 1111
     P6SEL |= 0x50;   //0101 0000
     HAL_PLU_SET;
-    
+    delay_1ms();delay_1ms();delay_1ms();delay_1ms();delay_1ms();delay_1ms();delay_1ms();
     //Uint16 *ram_ptr;
     *SampleValueX =0;
     *SampleValueY =0;
@@ -49,6 +49,9 @@ int16 SampleChannel(Uint16* SampleValueX,Uint16* SampleValueY)	//½øÐÐ²ÉÑùÍ¨µÀµçÔ
     *SampleValueX=ADC12MEM0;
     *SampleValueY=ADC12MEM1;
     HAL_PLU_CLR;
+    TIME1_HIGH;
+    delay_1ms();
+    TIME1_LOW;
     
     return (*SampleValueX-*SampleValueY);
 }
