@@ -210,7 +210,8 @@ class myThread (threading.Thread):
         Autor:xiaoxiami 2015.5.29
         Others：线程
         '''
-        self.count = 0         
+        self.count = 0
+        self.showdata.appFrame.updatetext()
         while(1): 
             while(self.thread_stop == False):
 #                 try:
@@ -264,7 +265,7 @@ class myThread (threading.Thread):
 #                                         print str(self.count)+"--"+self.dataintext
                                         self.file.write(self.dataintext+"\n")
                                         self.file.write('RX:%s Count:%s\n' % (self.data,self.count))
-                                        if self.count%1000==0:
+                                        if self.count % 2000 == 0:
                                             self.showdata.appFrame.cleartext()
                                     else:
                                         try:
@@ -276,12 +277,13 @@ class myThread (threading.Thread):
     def updatetext(self):
         '''
         Parameter：
-           
+
         Function：
                                定时更新数据
         Autor:xiaoxiami 2015.5.29
         Others：线程
         '''
+
         while(1):
             if self.currenttab == 2:
                 self.showdata.appFrame.updatetext(self.dataintextbuf,self.datatype)

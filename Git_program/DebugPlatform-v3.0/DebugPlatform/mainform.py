@@ -11,6 +11,7 @@ import tkFileDialog
 import matplot
 import matplotold
 import matplotoldanimate
+import ctypes
 
 __author__ = 'xiaoxiami'
 
@@ -613,7 +614,7 @@ class Application(ttk.Notebook):
         except NameError:
             tkmes.showwarning("错误", "串口未启动!")
 
-    def updatetext(self, chars, type):
+    def updatetext(self):
         '''
         Parameter：
             chars：需要显示的数据
@@ -623,10 +624,14 @@ class Application(ttk.Notebook):
         Autor:xiaoxiami 2015.5.29
         Others：
         '''
-        try:
-            self.receivetext.insert(1.0, chars)
-        except:
-            print "6"
+        self.receivetext.after(500,self.updatetext)
+        if(self.tab == 2):
+            self.receivetext.insert(1.0, self.menu.uartform.snifferthread.dataintextbuf)
+            self.menu.uartform.snifferthread.dataintextbuf=""
+        # try:
+        #     self.receivetext.insert(1.0, chars)
+        # except:
+        #     print "6"
 
     def cleartext(self):
         '''
@@ -715,42 +720,84 @@ class Application(ttk.Notebook):
             readgroup.rowconfigure(i, weight=1)
         for i in range(10):
             readgroup.columnconfigure(i, weight=1)
+
+        self.XValueString = tk.StringVar()
         tk.Label(readgroup, text="XValue:").grid(row=0, column=0)
-        self.XValueLabel = tk.Label(readgroup, text="0")
+        self.XValueLabel = tk.Label(readgroup, text="0",textvariable=self.XValueString)
         self.XValueLabel.grid(row=0, column=1)
+        self.XValueString.set(0)
+        self.YValueString = tk.StringVar()
         tk.Label(readgroup, text="YValue:").grid(row=0, column=2)
-        self.YValueLabel = tk.Label(readgroup, text="0")
+        self.YValueLabel = tk.Label(readgroup, text="0",textvariable=self.YValueString)
         self.YValueLabel.grid(row=0, column=3)
-        tk.Label(readgroup, text="VarianceM:").grid(row=0, column=4)
-        self.VarianceMLabel = tk.Label(readgroup, text="0")
+        self.YValueString.set(0)
+        self.VarianceString = tk.StringVar()
+        tk.Label(readgroup, text="Variance:").grid(row=0, column=4)
+        self.VarianceMLabel = tk.Label(readgroup, text="0",textvariable=self.VarianceString)
         self.VarianceMLabel.grid(row=0, column=5)
-        tk.Label(readgroup, text="AD_middle_valueX:").grid(row=0, column=6)
-        self.AD_middle_valueXLabel = tk.Label(readgroup, text="0")
+        self.VarianceString.set(0)
+        self.XMiddleString = tk.StringVar()
+        tk.Label(readgroup, text="XMiddle:").grid(row=0, column=6)
+        self.AD_middle_valueXLabel = tk.Label(readgroup, text="0",textvariable=self.XMiddleString)
         self.AD_middle_valueXLabel.grid(row=0, column=7)
-        tk.Label(readgroup, text="AD_middle_valueY:").grid(row=0, column=8)
-        self.AD_middle_valueYLabel = tk.Label(readgroup, text="0")
+        self.XMiddleString.set(0)
+        self.YMiddleString = tk.StringVar()
+        tk.Label(readgroup, text="YMiddle:").grid(row=0, column=8)
+        self.AD_middle_valueYLabel = tk.Label(readgroup, text="0",textvariable=self.YMiddleString)
         self.AD_middle_valueYLabel.grid(row=0, column=9)
-        tk.Label(readgroup, text="ExtremumValue:").grid(row=1, column=0)
-        self.ExtremumValueLabel = tk.Label(readgroup, text="0")
+        self.YMiddleString.set(0)
+        self.ExtremumString = tk.StringVar()
+        tk.Label(readgroup, text="Extremum:").grid(row=1, column=0)
+        self.ExtremumValueLabel = tk.Label(readgroup, text="0",textvariable=self.ExtremumString)
         self.ExtremumValueLabel.grid(row=1, column=1)
-        tk.Label(readgroup, text="ExtremumValueMiddle:").grid(row=1, column=2)
-        self.ExtremumValueMiddleLabel = tk.Label(readgroup, text="0")
+        self.ExtremumString.set(0)
+        self.Ext_MiddleString = tk.StringVar()
+        tk.Label(readgroup, text="Ext_Middle:").grid(row=1, column=2)
+        self.ExtremumValueMiddleLabel = tk.Label(readgroup, text="0",textvariable=self.Ext_MiddleString)
         self.ExtremumValueMiddleLabel.grid(row=1, column=3)
+        self.Ext_MiddleString.set(0)
+        self.IntensityeString = tk.StringVar()
         tk.Label(readgroup, text="Intensity:").grid(row=1, column=4)
-        self.IntensityLabel = tk.Label(readgroup, text="0")
+        self.IntensityLabel = tk.Label(readgroup, text="0",textvariable=self.IntensityeString)
         self.IntensityLabel.grid(row=1, column=5)
-        tk.Label(readgroup, text="IntensityMiddle:").grid(row=1, column=6)
-        self.IntensityMiddleLabel = tk.Label(readgroup, text="0")
+        self.IntensityeString.set(0)
+        self.Int_MiddleString = tk.StringVar()
+        tk.Label(readgroup, text="Int_Middle:").grid(row=1, column=6)
+        self.IntensityMiddleLabel = tk.Label(readgroup, text="0",textvariable=self.Int_MiddleString)
         self.IntensityMiddleLabel.grid(row=1, column=7)
+        self.Int_MiddleString.set(0)
+        self.IntStateString = tk.StringVar()
         tk.Label(readgroup, text="IntState:").grid(row=1, column=8)
-        self.IntStateLabel = tk.Label(readgroup, text="0")
+        self.IntStateLabel = tk.Label(readgroup, text="0",textvariable=self.IntStateString)
         self.IntStateLabel.grid(row=1, column=9)
+        self.IntStateString.set(0)
+        self.ResultString = tk.StringVar()
         tk.Label(readgroup, text="Result:").grid(row=2, column=0)
-        self.ResultLabel = tk.Label(readgroup, text="0")
+        self.ResultLabel = tk.Label(readgroup, text="0",textvariable=self.ResultString)
         self.ResultLabel.grid(row=2, column=1)
+        self.ResultString.set(0)
+        self.IntensityMinusString = tk.StringVar()
         tk.Label(readgroup, text="IntensityMinus:").grid(row=2, column=2)
-        self.IntensityMinus = tk.Label(readgroup, text="0")
+        self.IntensityMinus = tk.Label(readgroup, text="0",textvariable=self.IntensityMinusString)
         self.IntensityMinus.grid(row=2, column=3)
+        self.IntensityMinusString.set(0)
+        self.XAve_SlopString = tk.StringVar()
+        tk.Label(readgroup, text="XAve_Slop:").grid(row=2, column=4)
+        self.XAve_SlopLabel = tk.Label(readgroup, text="0",textvariable=self.XAve_SlopString)
+        self.XAve_SlopLabel.grid(row=2, column=5)
+        self.XAve_SlopString.set(0)
+        self.YAve_SlopString = tk.StringVar()
+        tk.Label(readgroup, text="YAve_Slop:").grid(row=2, column=6)
+        self.YAve_SlopLabel = tk.Label(readgroup, text="0",textvariable=self.YAve_SlopString)
+        self.YAve_SlopLabel.grid(row=2, column=7)
+        self.YAve_SlopString.set(0)
+        self.Side_ParkingString = tk.StringVar()
+        tk.Label(readgroup, text="Side_Parking:").grid(row=2, column=8)
+        self.Side_ParkingLabel = tk.Label(readgroup, text="0",textvariable=self.Side_ParkingString)
+        self.Side_ParkingLabel.grid(row=2, column=9)
+        self.Side_ParkingString.set(0)
+
+
 
 
         # self.datatext = tk.Text(readgroup)
@@ -832,6 +879,7 @@ class Application(ttk.Notebook):
                 tkmes.showerror("错误！", "串口没有打开！\n请手动载入数据或打开串口！")
                 return
             self.identifythread = self.menu.uartform.identifythread
+            self.updatelabel()
             if self.identifythread.thread_stop == False:
                 self.identifythread.thread_stop = True
                 self.dataRPbutton.configure(background="red", text="显示图像")
@@ -841,6 +889,7 @@ class Application(ttk.Notebook):
                 self.scope = matplot.Scope(thread=self.menu.uartform.identifythread)
                 self.scope.start()
         else:
+
             self.matplotanimate = matplotoldanimate.Scope(data=self.filedata, thread=self)
             self.matplotanimate.start()
             # self.DrawOldDataByMatplot(data=self.filedata)
@@ -925,6 +974,8 @@ class Application(ttk.Notebook):
         self.IntensityMiddle = []
         self.IntState = []
         self.Result = []
+        self.XAve_Slop = []
+        self.YAve_Slop = []
 
         # 加变量需要修改
         # if(len(data) == 10):
@@ -942,6 +993,9 @@ class Application(ttk.Notebook):
             self.IntensityMiddle.append(v[10])
             self.IntState.append(v[11])
             self.Result.append(v[12])
+            self.XAve_Slop.append(v[13])
+            self.YAve_Slop.append(v[14])
+
 
         # 删除遗留图像
         for v in self.canvasidentifyline:
@@ -1044,13 +1098,59 @@ class Application(ttk.Notebook):
             return
         self.Opendata(self.filedata)
 
+    def updatelabel(self):
+        '''
+        Parameter：
+
+        Function：
+                               串口打开时实时更新变量显示
+        Autor:xiaoxiami 2015.9.17
+        Others：
+        '''
+        self.XValueString.set(self.menu.uartform.identifythread.value[0])
+        self.YValueString.set(self.menu.uartform.identifythread.value[1])
+        self.VarianceString.set(self.menu.uartform.identifythread.value[2])
+
+        self.XMiddleString.set(self.menu.uartform.identifythread.value[7])
+        self.YMiddleString.set(self.menu.uartform.identifythread.value[8])
+        self.ExtremumString.set(self.menu.uartform.identifythread.value[4])
+        self.Ext_MiddleString.set(self.menu.uartform.identifythread.value[3])
+        self.IntensityeString.set(self.menu.uartform.identifythread.value[9])
+        self.Int_MiddleString.set(self.menu.uartform.identifythread.value[10])
+        self.IntStateString.set(self.menu.uartform.identifythread.value[11])
+        self.ResultString.set(self.menu.uartform.identifythread.value[12])
+        self.IntensityMinusString.set(abs(self.menu.uartform.identifythread.value[9]-self.menu.uartform.identifythread.value[10]))
+        self.XAve_SlopString.set(ctypes.c_int16(self.menu.uartform.identifythread.value[13]))
+        self.YAve_SlopString.set(ctypes.c_int16(self.menu.uartform.identifythread.value[14]))
+        if(abs(self.menu.uartform.identifythread.value[0]-self.menu.uartform.identifythread.value[7])>100 and (self.menu.uartform.identifythread.value[2])<60):
+            self.Side_ParkingString.set(1)
+        else:
+            self.Side_ParkingString.set(0)
+
+
+        self.XValueLabel.after(50,self.updatelabel)
+        # self.XValueString.set(value[0])
+        # self.YValueString.set(value[1])
+        # self.VarianceMLabel.config(text=str(value[2]))
+        # self.AD_middle_valueXLabel.config(text=str(value[7]))
+        # self.AD_middle_valueYLabel.config(text=str(value[8]))
+        # self.ExtremumValueLabel.config(text=str(value[4]))
+        # self.ExtremumValueMiddleLabel.config(text=str(value[3]))
+        # self.IntensityLabel.config(text=str(value[9]))
+        # self.IntensityMiddleLabel.config(text=str(value[10]))
+        # self.IntStateLabel.config(text=str(value[11]))
+        # self.ResultLabel.config(text=str(value[12]))
+        # self.IntensityMinus.config(text=str(abs(int(value[9]) - int(value[10]))))
+        # self.XAve_SlopLabel.config(text=str(value[13]))
+        # self.YAve_SlopLabel.config(text=str(value[14]))
+
     def Showdetaildata(self, event):
         '''
         Parameter：
             event：bind事件
         Function：
                                 点击图像时显示该点的数据值
-        Autor:xiaoxiami 2015.8.30
+        Autor:xiaoxiami 2015.9.17
         Others：
         '''
         x1 = 0
@@ -1069,18 +1169,28 @@ class Application(ttk.Notebook):
             self.cavasverticalline.append(self.datacavas.create_line(x1, 0, x1, 512, fill="purple"))
             self.statusbar.setdata("%s", "Count:" + str(x1 / offset))
             # self.statusbar.setdata("%s","方差:" + str(self.VarState[x1 / offset]) + ",极值:" + str(self.ExtState[x1 / offset]))
-            self.XValueLabel.config(text=str(self.XValue[x1 / offset]))
-            self.YValueLabel.config(text=str(self.YValue[x1 / offset]))
-            self.VarianceMLabel.config(text=str(self.VarianceM[x1 / offset]))
-            self.AD_middle_valueXLabel.config(text=str(self.AD_middle_valueX[x1 / offset]))
-            self.AD_middle_valueYLabel.config(text=str(self.AD_middle_valueY[x1 / offset]))
-            self.ExtremumValueLabel.config(text=str(self.ExtremumValue[x1 / offset]))
-            self.ExtremumValueMiddleLabel.config(text=str(self.ExtremumValueMiddle[x1 / offset]))
-            self.IntensityLabel.config(text=str(self.Intensity[x1 / offset]))
-            self.IntensityMiddleLabel.config(text=str(self.IntensityMiddle[x1 / offset]))
-            self.IntStateLabel.config(text=str(self.IntState[x1 / offset]))
-            self.ResultLabel.config(text=str(self.Result[x1 / offset]))
-            self.IntensityMinus.config(text=str(abs(int(self.Intensity[x1 / offset]) - int(self.IntensityMiddle[x1 / offset]))))
+
+            self.XValueString.set(self.XValue[x1 / offset])
+            self.YValueString.set(self.YValue[x1 / offset])
+            self.VarianceString.set(self.VarianceM[x1 / offset])
+
+            self.XMiddleString.set(self.AD_middle_valueX[x1 / offset])
+            self.YMiddleString.set(self.AD_middle_valueY[x1 / offset])
+            self.ExtremumString.set(self.ExtremumValue[x1 / offset])
+            self.Ext_MiddleString.set(self.ExtremumValueMiddle[x1 / offset])
+            self.IntensityeString.set(self.Intensity[x1 / offset])
+            self.Int_MiddleString.set(self.IntensityMiddle[x1 / offset])
+            self.IntStateString.set(self.IntState[x1 / offset])
+            self.ResultString.set(self.Result[x1 / offset])
+            self.IntensityMinusString.set(abs(int(self.Intensity[x1 / offset]) - int(self.IntensityMiddle[x1 / offset])))
+            self.XAve_SlopString.set(ctypes.c_int16(int(self.XAve_Slop[x1 / offset])))
+            self.YAve_SlopString.set(ctypes.c_int16(int(self.YAve_Slop[x1 / offset])))
+            if(abs(int(self.XValue[x1 / offset])-int(self.AD_middle_valueX[x1 / offset]))>100 and (int(self.VarianceM[x1 / offset]))<60):
+                self.Side_ParkingString.set(1)
+            # else:
+                self.Side_ParkingString.set(0)
+
+
             # if(self.matplotoldopen == True):
             #     if(self.animateopen == 0):
             #         self.animateopen = 1

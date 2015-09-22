@@ -73,7 +73,7 @@ class Scope:
         self.Intensityax.set_xlim(self.count - 50, self.count + 50)
         self.Resultax.set_xlim(self.count - 50, self.count + 50)
 
-        if (len(self.thread.value) == 13):
+        if (len(self.thread.value) == 15):
             self.xdata.append(self.count)
             self.XValueLinedata.append(self.thread.value[0])
             self.YValueLinedata.append(self.thread.value[1])

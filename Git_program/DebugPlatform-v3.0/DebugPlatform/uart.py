@@ -9,6 +9,7 @@ import relaythread
 import snifferthread
 import threading
 import identifythread
+import tkMessageBox as tkmes
 
 class GetSerialPorts(object):
     # list contains all port device info
@@ -30,7 +31,9 @@ class GetSerialPorts(object):
         try:
             key = winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE, path)
         except WindowsError:
-            raise self.IterationError
+            tkmes.showwarning("错误！","没有找到串口！")
+            return
+            # raise self.IterationError
         self.portList=[]
         for i in itertools.count():
             try:
@@ -174,9 +177,9 @@ class UartRoot(tk.Tk):
                 self.parent_menu.snifferthread = self.snifferthread
                 self.snifferthread.setDaemon(True)
                 self.snifferthread.start()
-                self.updatethread = threading.Thread(target=self.snifferthread.updatetext)
-                self.updatethread.setDaemon(True)
-                self.updatethread.start()
+                # self.updatethread = threading.Thread(target=self.snifferthread.updatetext)
+                # self.updatethread.setDaemon(True)
+                # self.updatethread.start()
                 # 识别
             elif self.datasourcecbox.current() == 2:
                 self.identifythread = identifythread.myThread(rootframe=self.parent,threadID=1, name='identify',port=self.comnumbox.get(), baud=self.bordratecbox.get(),filename = self.txtidentifyfilname)
