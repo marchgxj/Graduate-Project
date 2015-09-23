@@ -62,24 +62,28 @@ __interrupt void ADC12_ISR(void)
 {
    __bic_SR_register_on_exit(CPUOFF);         // Clear CPUOFF bit from 0(SR)  
 }
-
+uint16 ADX,ADY;
+uint16 ADvalueX=0,ADvalueY=0;
 void AD_cal()
 {
     int i=0;
-    uint16 ADvalueX=0,ADvalueY=0;
+
     uint32 intensity = 0;
-    uint16 ADX,ADY;
+
     halLedSetAll();
     delay_ms(2000);
     
     ADX = 0;
     ADY = 0;
-    for(i=0;i<16;i++)
+    for(i=0;i<26;i++)
     {
-        SampleChannel(&ADvalueX,&ADvalueY);
-        ADX += ADvalueX;
-        ADY += ADvalueY;
-        delay_ms(50);
+        if(i>=10)
+        {
+            SampleChannel(&ADvalueX,&ADvalueY);
+            ADX += ADvalueX;
+            ADY += ADvalueY;
+            delay_ms(50);
+        }
     }
     MagneticUnit.XMiddle = ADX>>4;
     MagneticUnit.YMiddle = ADY>>4;
@@ -97,6 +101,14 @@ void AD_cal()
         FilterData[i].yvalue = ADvalueY;
         delay_ms(50);
     }
+    for(int i=0;i<SLOP_LENGTH;i++)
+    {
+        SampleChannel(&ADvalueX,&ADvalueY);
+        SlopData[i].xvalue = ADvalueX;
+        SlopData[i].yvalue = ADvalueY;
+        delay_ms(50);
+    }
+  
 
     //NoCarCalibration();
     halLedClearAll();

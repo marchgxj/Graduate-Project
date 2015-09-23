@@ -26,8 +26,9 @@
 #define EXT_THRESHOLD  80               //¡Ω÷·≤Ó÷µ≈–∂œ„–÷µ
 #define INT_THRESHOLD  150
 
-#define TEST_LENGTH 22
+#define TEST_LENGTH 26
 #define FILTER_LENGTH 20
+#define SLOP_LENGTH 3
 
 typedef struct
 {
@@ -54,6 +55,8 @@ typedef struct
     uint16 CarExtremum;
     uint16 Ext_Middle;
     uint8  ExtState;
+    int XAve_Slop;
+    int YAve_Slop;
     
 }MagneticStruct;
 extern MagneticStruct MagneticUnit;
@@ -76,4 +79,7 @@ extern void CarCalibration();
 extern void TotalJudge();
 
 extern FilterStruct FilterData[FILTER_LENGTH];
+extern uint16 Collect_Period;
+extern FilterStruct SlopData[SLOP_LENGTH];
+extern uint8 Quick_Collect;
 #endif 

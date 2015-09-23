@@ -15,7 +15,7 @@ ReJoin:
     {
        normal_test[i]=i;
     }
-    ChannelSelection(StartChannel,EndChannel);
+    ChannelSelection(CHANNEL_4,CHANNEL_6);
     halLedClearAll();
     
     __enable_interrupt();

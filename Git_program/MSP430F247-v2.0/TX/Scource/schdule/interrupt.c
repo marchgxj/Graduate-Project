@@ -68,84 +68,117 @@ __interrupt void Timer_A (void)
 
     
 }
-
-//1s
 uint8 DataSendDraw[TEST_LENGTH];
 uint16 cal_count = 0;
+void TestSend()
+{
+    //数据包格式：
+    /**********************************************
+    0:0、1：X轴AD
+    1:2、3：Y轴AD
+    2:4、5：VarianceM
+    3:6、7：ExtremumValueMiddle
+    4:8、9：ExtremumValue
+    5:10：方差识别停车状态
+    6:11：极值识别停车状态
+    7:12、13：NoCar_Magnetic.XMiddle
+    8:14、15：NoCar_Magnetic.YMiddle
+    9:16、17：NoCar_Magnetic.Intensity
+    10:18、19：NoCar_Magnetic.IntensityMiddle
+    11:20:NoCar_Magnetic.Int_State
+    12:21:EndpointDeviece.parking
+    13:22\23:XAve_Slpo
+    14:24\25:YAve_Slop
+    **********************************************/
+    DataSendDraw[0] = MagneticUnit.XValue>>8;
+    DataSendDraw[1] = MagneticUnit.XValue;
+    DataSendDraw[2] = MagneticUnit.YValue>>8;
+    DataSendDraw[3] = MagneticUnit.YValue;
+    DataSendDraw[4] = MagneticUnit.Variance>>8;
+    DataSendDraw[5] = MagneticUnit.Variance;
+    DataSendDraw[6] = MagneticUnit.Ext_Middle>>8;
+    DataSendDraw[7] = MagneticUnit.Ext_Middle;
+    DataSendDraw[8] = MagneticUnit.Extremum>>8;
+    DataSendDraw[9] = MagneticUnit.Extremum;
+    DataSendDraw[10] = MagneticUnit.VarState;
+    DataSendDraw[11] = MagneticUnit.ExtState;
+    DataSendDraw[12] = MagneticUnit.XMiddle>>8;
+    DataSendDraw[13] = MagneticUnit.XMiddle;
+    DataSendDraw[14] = MagneticUnit.YMiddle>>8;
+    DataSendDraw[15] = MagneticUnit.YMiddle;
+    DataSendDraw[16] = MagneticUnit.Intensity>>8;
+    DataSendDraw[17] = MagneticUnit.Intensity;
+    DataSendDraw[18] = MagneticUnit.Int_Middle>>8;
+    DataSendDraw[19] = MagneticUnit.Int_Middle;
+    DataSendDraw[20] = MagneticUnit.IntState;
+    DataSendDraw[21] = EndPointDevice.parking_state;
+    DataSendDraw[22] = MagneticUnit.XAve_Slop>>8;
+    DataSendDraw[23] = MagneticUnit.XAve_Slop;
+    DataSendDraw[24] = MagneticUnit.YAve_Slop>>8;
+    DataSendDraw[25] = MagneticUnit.YAve_Slop;
+    
+    A7139_WriteFIFO(DataSendDraw,TEST_LENGTH);
+    delay_us(1);
+    A7139_StrobeCmd(CMD_TX);
+    delay_us(1);
+    
+    while(GIO1)
+    {}
+}
+//1s
+
 #pragma vector=TIMERA0_VECTOR
 __interrupt void Timer_A0(void)
 {
-    Direction_Count++;
-    if(Direction_Count>300)
+    
+    
+//    Direction_Count++;
+//    if(Direction_Count>300)
+//    {
+//        Direction_Count = 700;
+//    }
+//    if(Direction_Count==700)
     {
-        Direction_Count = 700;
-    }
-    if(Direction_Count==700)
-    {
-        IdentifyCar();
         
-        
-        if(EndPointDevice.parking_state==NOCAR)
+        Collect_Period++;
+        if(Quick_Collect==0)
         {
-            cal_count++;
-            if(cal_count == 100)
+            if(Collect_Period==20)
             {
-                cal_count = 0;
-                ADCal_Flag = 1;
+                Collect_Period = 0;
+                IdentifyCar();
+                TestSend();
             }
         }
         else
         {
-            cal_count = 0;
+            IdentifyCar();
+            TestSend();
+            if(Collect_Period == 200)
+            {
+                Collect_Period = 0;
+                Quick_Collect = 0;
+            }
         }
         
         
-        //数据包格式：
-        /**********************************************
-        0:0、1：X轴AD
-        1:2、3：Y轴AD
-        2:4、5：VarianceM
-        3:6、7：ExtremumValueMiddle
-        4:8、9：ExtremumValue
-        5:10：方差识别停车状态
-        6:11：极值识别停车状态
-        7:12、13：NoCar_Magnetic.XMiddle
-        8:14、15：NoCar_Magnetic.YMiddle
-        9:16、17：NoCar_Magnetic.Intensity
-        10:18、19：NoCar_Magnetic.IntensityMiddle
-        11:20:NoCar_Magnetic.Int_State
-        12:21:EndpointDeviece.parking
-        **********************************************/
-        DataSendDraw[0] = MagneticUnit.XValue>>8;
-        DataSendDraw[1] = MagneticUnit.XValue;
-        DataSendDraw[2] = MagneticUnit.YValue>>8;
-        DataSendDraw[3] = MagneticUnit.YValue;
-        DataSendDraw[4] = MagneticUnit.Variance>>8;
-        DataSendDraw[5] = MagneticUnit.Variance;
-        DataSendDraw[6] = MagneticUnit.Ext_Middle>>8;
-        DataSendDraw[7] = MagneticUnit.Ext_Middle;
-        DataSendDraw[8] = MagneticUnit.Extremum>>8;
-        DataSendDraw[9] = MagneticUnit.Extremum;
-        DataSendDraw[10] = MagneticUnit.VarState;
-        DataSendDraw[11] = MagneticUnit.ExtState;
-        DataSendDraw[12] = MagneticUnit.XMiddle>>8;
-        DataSendDraw[13] = MagneticUnit.XMiddle;
-        DataSendDraw[14] = MagneticUnit.YMiddle>>8;
-        DataSendDraw[15] = MagneticUnit.YMiddle;
-        DataSendDraw[16] = MagneticUnit.Intensity>>8;
-        DataSendDraw[17] = MagneticUnit.Intensity;
-        DataSendDraw[18] = MagneticUnit.Int_Middle>>8;
-        DataSendDraw[19] = MagneticUnit.Int_Middle;
-        DataSendDraw[20] = MagneticUnit.IntState;
-        DataSendDraw[21] = EndPointDevice.parking_state;
-
-        A7139_WriteFIFO(DataSendDraw,TEST_LENGTH);
-        delay_us(1);
-        A7139_StrobeCmd(CMD_TX);
-        delay_us(1);
-        halLedToggle(1);
-        while(GIO1)
-        {}
+        
+//        if(EndPointDevice.parking_state==NOCAR)
+//        {
+//            cal_count++;
+//            if(cal_count == 100)
+//            {
+//                cal_count = 0;
+//                ADCal_Flag = 1;
+//            }
+//        }
+//        else
+//        {
+//            cal_count = 0;
+//        }
+        
+        
+        
     }
     
     

@@ -13,7 +13,7 @@ uint8 RecvDataACK()
             resend_count++;
             EndPointDevice.data_ack = 0;
             RXMode();
-           //test by wyd PostTask(EVENT_CSMA_RESEND);
+
             return EndPointDevice.data_ack;
         }
         

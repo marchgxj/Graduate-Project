@@ -55,7 +55,7 @@ int main(void)
         while (ADC12IFG & BIT1==0);                         //Wait if ADC10 core is active
         XValue=ADC12MEM0;
         YValue=ADC12MEM1;
-        HAL_PLU_CLR;
+        //HAL_PLU_CLR;
 
         delay_ms(50);
         halLedToggle(1);

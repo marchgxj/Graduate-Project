@@ -2,8 +2,8 @@
 #include "join.h"
 const float CODE ChannelList[]={0,470.001f,472.501f,475.001f,477.501f,480.001f,482.501f,485.001f,487.501f,
                            490.001f,492.501f,495.001f,497.501f,500.001f,502.501f,505.001f,507.501f};
-uint8 StartChannel = CHANNEL_4;
-uint8 EndChannel = CHANNEL_6;
+uint8 StartChannel = CHANNEL_1;
+uint8 EndChannel = CHANNEL_2;
 ChannelTable ScanChannel[CHANNEL_NUM];
 JoinRequestPacketStruct JoinRequestPacket;
 JoinRequestACKOKPacketStruct JoinRequestACKOKPacket;

@@ -25,7 +25,7 @@ if not "%1" == "" goto debugFile
 
 @echo on 
 
-"E:\Program Files (x86)\IAR Systems\Embedded Workbench MSP430 7.2\common\bin\cspybat" -f "F:\Graduate\Git_program\MSP430F247-v2.0\TX\settings\TX.Debug.general.xcl" --backend -f "F:\Graduate\Git_program\MSP430F247-v2.0\TX\settings\TX.Debug.driver.xcl" 
+"D:\IAR Systems\Embedded Workbench 7.2\common\bin\cspybat" -f "D:\Graduate1\Git_program\MSP430F247-v2.0\TX\settings\TX.Debug.general.xcl" --backend -f "D:\Graduate1\Git_program\MSP430F247-v2.0\TX\settings\TX.Debug.driver.xcl" 
 
 @echo off 
 goto end 
@@ -34,7 +34,7 @@ goto end
 
 @echo on 
 
-"E:\Program Files (x86)\IAR Systems\Embedded Workbench MSP430 7.2\common\bin\cspybat" -f "F:\Graduate\Git_program\MSP430F247-v2.0\TX\settings\TX.Debug.general.xcl" "--debug_file=%1" --backend -f "F:\Graduate\Git_program\MSP430F247-v2.0\TX\settings\TX.Debug.driver.xcl" 
+"D:\IAR Systems\Embedded Workbench 7.2\common\bin\cspybat" -f "D:\Graduate1\Git_program\MSP430F247-v2.0\TX\settings\TX.Debug.general.xcl" "--debug_file=%1" --backend -f "D:\Graduate1\Git_program\MSP430F247-v2.0\TX\settings\TX.Debug.driver.xcl" 
 
 @echo off 
 :end
