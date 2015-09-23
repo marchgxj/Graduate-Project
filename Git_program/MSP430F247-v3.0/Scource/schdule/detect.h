@@ -2,6 +2,8 @@
 #define _DETECT_h_
 #include "common.h"
 
+#define SENSOR_MODE  1  //0:只用GMI 1：只用5983  2:两个都用
+
 #define COLLECT_EN   0          //是否开启数据采集
 #define COLLECT_PERIOD  1000   //采集周期  单位：100us
 #define COLLECT_PERIOD_L  1    //低功耗模式，采集周期  单位：1s
@@ -26,8 +28,9 @@
 #define EXT_THRESHOLD  80               //两轴差值判断阈值
 #define INT_THRESHOLD  150
 
-#define TEST_LENGTH 22
+#define TEST_LENGTH 26
 #define FILTER_LENGTH 20
+#define SLOP_LENGTH 3
 
 typedef struct
 {
@@ -54,6 +57,8 @@ typedef struct
     uint16 CarExtremum;
     uint16 Ext_Middle;
     uint8  ExtState;
+    int XAve_Slop;
+    int YAve_Slop;
     
 }MagneticStruct;
 extern MagneticStruct MagneticUnit;
@@ -76,6 +81,9 @@ extern void CarCalibration();
 extern void TotalJudge();
 
 extern FilterStruct FilterData[FILTER_LENGTH];
+extern uint16 Collect_Period;
+extern FilterStruct SlopData[SLOP_LENGTH];
+extern uint8 Quick_Collect;
 extern uint8 VState1_Count;
 extern uint8 VState2_Count;
 extern uint8 VState3_Count;

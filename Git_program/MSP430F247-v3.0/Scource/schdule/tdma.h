@@ -22,4 +22,5 @@ extern uint16 Draw_DataY;
 extern void DataSend(void);
 extern void DataACKHandler();
 extern void CSMADataResend();
+extern void KeepAliveSend();
 #endif

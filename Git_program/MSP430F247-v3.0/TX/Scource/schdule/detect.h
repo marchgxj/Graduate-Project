@@ -26,7 +26,7 @@
 #define EXT_THRESHOLD  80               //¡Ω÷·≤Ó÷µ≈–∂œ„–÷µ
 #define INT_THRESHOLD  150
 
-#define TEST_LENGTH 26
+#define TEST_LENGTH 38
 #define FILTER_LENGTH 20
 #define SLOP_LENGTH 3
 
@@ -39,11 +39,23 @@ typedef struct
 typedef struct
 {
     uint16 XValue;
-    uint16 YValue;
     uint16 XMiddle;
     uint16 XMiddleM;
+    uint16 YValue;
     uint16 YMiddle;
     uint16 YMiddleM;
+    uint16 ZValue;
+    uint16 ZMiddle;
+    uint16 ZMiddleM;
+    
+    
+    uint16 GMI_XValue;
+    uint16 GMI_XMiddle;
+    uint16 GMI_XMiddleM;
+    uint16 GMI_YValue;
+    uint16 GMI_YMiddle;
+    uint16 GMI_YMiddleM;
+    
     uint16 Intensity;
     uint16 CarIntensity;
     uint16 Int_Middle;
@@ -57,6 +69,7 @@ typedef struct
     uint8  ExtState;
     int XAve_Slop;
     int YAve_Slop;
+    int ZAve_Slop;
     
 }MagneticStruct;
 extern MagneticStruct MagneticUnit;
@@ -64,6 +77,7 @@ typedef struct
 {
     uint16 xvalue;
     uint16 yvalue;
+    uint16 zvalue;
 }FilterStruct;
 
 

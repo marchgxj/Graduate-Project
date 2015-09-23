@@ -105,7 +105,13 @@ void inline delay_1ms()
      delay_100us();
      delay_100us();
  }
-  
+void inline delay_300us()
+{
+    delay_100us();
+    delay_100us();
+    delay_100us();
+}
+
 void inline delay_10ms()
 {
     delay_1ms();

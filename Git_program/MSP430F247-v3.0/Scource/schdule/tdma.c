@@ -80,9 +80,6 @@ void CreatSendData()
     }
 
 }
- 
-    
-
 
 void DataSend(void)
 {
@@ -132,6 +129,7 @@ void DataSend(void)
     }
 
 }
+
 uint8 rejoin_flag = 0;
 void DataACKHandler()
 {
@@ -146,9 +144,17 @@ void DataACKHandler()
     }
     
 }
+
 void CSMADataResend()
 {
     SendByCSMA(DataSendBuffer,MAX_PACK_LENGTH);
     A7139_Sleep();
     TIME2_HIGH;
+}
+
+void KeepAliveSend()
+{
+    A7139_Deep_Wake();
+    EN_INT;
+    EN_TIMER1;
 }

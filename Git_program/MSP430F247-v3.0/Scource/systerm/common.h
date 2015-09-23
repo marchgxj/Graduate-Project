@@ -31,6 +31,7 @@
 #include "tdma.h"
 #include "flash.h"
 #include "detect.h"
+#include "HMC5983.h"
 
 
 

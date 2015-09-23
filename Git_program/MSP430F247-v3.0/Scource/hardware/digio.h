@@ -63,7 +63,26 @@ uint8 halDigioIntSetEdge(const digioConfig *p, uint8 edge);
 #define TIME1_LOW     (P3OUT &= ~ BIT6)
 #define TIME2_HIGH    (P3OUT |= BIT7)
 #define TIME2_LOW     (P3OUT &= ~ BIT7)
+//#define SDA_L         (P6OUT &= ~ BIT6)
+//#define SDA_H         (P6OUT |= BIT6)
+//#define SCL_L         (P6OUT &= ~ BIT5)
+//#define SCL_H         (P6OUT |= BIT5)
+//#define SDA_IN        SDA_in();
+//#define SDA_OUT       SDA_out();
+//#define SDA_val       ((P6IN & BIT6)>>6)
+
+#define SDA_L         (P3OUT &= ~ BIT3)
+#define SDA_H         (P3OUT |= BIT3)
+#define SCL_L         (P3OUT &= ~ BIT2)
+#define SCL_H         (P3OUT |= BIT2)
+#define SDA_IN        SDA_in();
+#define SDA_OUT       SDA_out();
+#define SDA_val       ((P3IN & BIT3)>>3)
+#define IRD_LOW       (P1OUT &= ~ BIT6)
+#define IRD_HIGH      (P1OUT |= BIT6)
 extern void GPIO_Init();
+extern void SDA_in();
+extern void SDA_out();
 
 /**********************************************************************************/
 #endif

@@ -1,6 +1,6 @@
 #include "common.h"
 #define	SlaveAddress   0x3C
-uint8 buffer[6] ;
+
 uint8 ack=0;
 uint8 const HMC_Config[3] = {0xFC,0x00,0x00};
 
@@ -166,27 +166,14 @@ unsigned char Single_Read_HMC(unsigned char REG_Addr)
     
 }
 
-void single_read_data()
+int zvalue = 0;    
+void Multi_Read_HMC(uint16* XValue,uint16* YValue)
 {
     int i;
-    Single_Write_HMC(0x02,0x01);
-    HMC_Start();
-    HMC_SendByte(0x3c+1);  //slave Address
-    //	HMC_SendByte(0x06);
-    for( i=0;i<6;i++)
-    {
-        buffer[i] = HMC_ReceiveByte();
-        if(i==5) 
-            HMC_SendACK(1);
-        else
-            HMC_SendACK(0);	
-    }
-    
-}
+    int xvalue = 0;
+    int yvalue = 0;
+    uint8 buffer[6];
 
-void Multi_Read_HMC()
-{
-    int i;
     HMC_Start();
     HMC_SendByte(0x3c);  //slave Address
     HMC_SendByte(0x03);	
@@ -201,13 +188,26 @@ void Multi_Read_HMC()
         else
             HMC_SendACK(0);	
     }
-    
-    
-    
-    
     HMC_Stop();
-    delay_ms(5);
-    
+    xvalue = (buffer[0]<<8)|buffer[1];
+    yvalue = (buffer[2]<<8)|buffer[3];
+    zvalue = (buffer[4]<<8)|buffer[5];
+    if(xvalue!=-4096)
+    {
+        *XValue = xvalue + 2048;
+    }
+    else
+    {
+        *XValue = 0;
+    }
+    if(yvalue!=-4096)
+    {
+        *YValue = yvalue + 2048;
+    }
+    else
+    {
+        *YValue = 0;
+    }
 }
 
 
@@ -270,4 +270,63 @@ void Init_5983()
         }
     }
     
+}
+void HMC5983_cal()
+{
+    int i=0;
+    uint16 ADvalueX=0,ADvalueY=0;
+    uint16 ADX,ADY;
+    uint32 intensity = 0;
+    
+    halLedSetAll();
+    delay_ms(2000);
+    
+    ADX = 0;
+    ADY = 0;
+    for(i=0;i<26;i++)
+    {
+        if(i>=10)
+        {
+            Multi_Read_HMC(&ADvalueX,&ADvalueY);
+            ADX += ADvalueX;
+            ADY += ADvalueY;
+            delay_ms(50);
+        }
+    }
+    MagneticUnit.XMiddle = ADX>>4;
+    MagneticUnit.YMiddle = ADY>>4;
+    MagneticUnit.XMiddleM = MagneticUnit.XMiddle;
+    MagneticUnit.YMiddleM = MagneticUnit.YMiddle;
+    MagneticUnit.Ext_Middle = abs(MagneticUnit.XMiddle-MagneticUnit.YMiddle);
+    
+    intensity = sqrt_16((((uint32)MagneticUnit.XMiddle*(uint32)MagneticUnit.XMiddle)+((uint32)MagneticUnit.YMiddle*(uint32)MagneticUnit.YMiddle)));
+    MagneticUnit.Int_Middle = intensity;
+    
+    for(int i=0;i<FILTER_LENGTH;i++)
+    {
+        Multi_Read_HMC(&ADvalueX,&ADvalueY);
+        FilterData[i].xvalue = ADvalueX;
+        FilterData[i].yvalue = ADvalueY;
+        delay_ms(50);
+    }
+    for(int i=0;i<SLOP_LENGTH;i++)
+    {
+        Multi_Read_HMC(&ADvalueX,&ADvalueY);
+        SlopData[i].xvalue = ADvalueX;
+        SlopData[i].yvalue = ADvalueY;
+        delay_ms(50);
+    }
+  
+
+    //NoCarCalibration();
+    halLedClearAll();
+    delay_ms(50);
+    halLedSetAll();
+    delay_ms(50);
+    halLedClearAll();
+    delay_ms(50);
+    halLedSetAll();
+    delay_ms(50);
+    halLedClearAll();
+    delay_ms(50);
 }

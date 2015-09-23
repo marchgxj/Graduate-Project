@@ -35,6 +35,7 @@ uint8 Slop_Count = 0;
 uint8 ReCal_Count = 0;
 uint16 XReCal = 0;
 uint16 YReCal = 0;
+uint16 ZReCal = 0;
 unsigned int sqrt_16(unsigned long M)
 {
     uint16 result;
@@ -276,13 +277,15 @@ void Filter(uint16 xvalue,uint16 yvalue)
     
 }
 
-void GetSlop(uint16 xvalue,uint16 yvalue)
+void GetSlop(uint16 xvalue,uint16 yvalue,uint16 zvalue)
 {
     uint8 i=0;
     int xslopbuf = 0;
     int yslopbuf = 0;
+    int zslopbuf = 0;
     SlopData[Slop_Count].xvalue = xvalue;
     SlopData[Slop_Count].yvalue = yvalue;
+    SlopData[Slop_Count].zvalue = zvalue;
     Slop_Count++;
     if(Slop_Count==SLOP_LENGTH)
     {
@@ -292,11 +295,13 @@ void GetSlop(uint16 xvalue,uint16 yvalue)
     {
         xslopbuf +=(int)((SlopData[i].xvalue-SlopData[0].xvalue))/i;
         yslopbuf +=(int)((SlopData[i].yvalue-SlopData[0].yvalue))/i;
+        zslopbuf +=(int)((SlopData[i].zvalue-SlopData[0].zvalue))/i;
     }
     MagneticUnit.XAve_Slop = xslopbuf/SLOP_LENGTH;
     MagneticUnit.YAve_Slop = yslopbuf/SLOP_LENGTH;
+    MagneticUnit.ZAve_Slop = zslopbuf/SLOP_LENGTH;
     
-    if((abs(MagneticUnit.XAve_Slop)>20)||(abs(MagneticUnit.YAve_Slop)>20))
+    if((abs(MagneticUnit.XAve_Slop)>20)||(abs(MagneticUnit.YAve_Slop)>20)||(abs(MagneticUnit.ZAve_Slop)>20))
     {
         Quick_Collect = 1;
         Collect_Period = 0;
@@ -305,19 +310,25 @@ void GetSlop(uint16 xvalue,uint16 yvalue)
 
 void ReCal()
 {
-    
+    //刚开始上电校准可能和此处不一样，重新校准
     
     if(ReCal_Count<3)
     {
         ReCal_Count++;
         XReCal+=MagneticUnit.XValue;
         YReCal+=MagneticUnit.YValue;
+        ZReCal+=MagneticUnit.ZValue;
         
     }
     else if(ReCal_Count==3)
     {
         MagneticUnit.XMiddle = XReCal/3;
         MagneticUnit.YMiddle = YReCal/3;
+        MagneticUnit.ZMiddle = ZReCal/3;
+        MagneticUnit.XMiddleM = MagneticUnit.XMiddle;
+        MagneticUnit.YMiddleM = MagneticUnit.YMiddle;
+        MagneticUnit.ZMiddleM = MagneticUnit.ZMiddle;
+        MagneticUnit.Int_Middle = MagneticUnit.Intensity;
         ReCal_Count = 20;
         halLedClearAll();
         delay_ms(10);
@@ -335,10 +346,15 @@ void ReCal()
 void IdentifyCar()
 {
     halLedToggle(1);
-    //SampleChannel(&MagneticUnit.XValue,&MagneticUnit.YValue);
-    Multi_Read_HMC(&MagneticUnit.XValue,&MagneticUnit.YValue);
+    
+
+    SampleChannel(&MagneticUnit.GMI_XValue,&MagneticUnit.GMI_YValue);
+    halLedSet(2);
+    //delay_300us();
+    Multi_Read_HMC(&MagneticUnit.XValue,&MagneticUnit.YValue,&MagneticUnit.ZValue);
+    halLedClear(2);
     ReCal();
-    GetSlop(MagneticUnit.XValue,MagneticUnit.YValue);
+    GetSlop(MagneticUnit.XValue,MagneticUnit.YValue,MagneticUnit.ZValue);
     //Filter(MagneticUnit.XValue,MagneticUnit.YValue);
     GetVariance();
     GetExtremum();
@@ -659,9 +675,10 @@ void NoCarCalibration()
 
 void GetVariance()
 {
-    uint32 VarianceX,VarianceY;
+    uint32 VarianceX,VarianceY,VarianceZ;
     VarianceX = (uint32)abs(MagneticUnit.XValue - MagneticUnit.XMiddle)*(uint32)abs(MagneticUnit.XValue - MagneticUnit.XMiddle);
     VarianceY = (uint32)abs(MagneticUnit.YValue - MagneticUnit.YMiddle)*(uint32)abs(MagneticUnit.YValue - MagneticUnit.YMiddle);
+    VarianceZ = (uint32)abs(MagneticUnit.ZValue - MagneticUnit.ZMiddle)*(uint32)abs(MagneticUnit.ZValue - MagneticUnit.ZMiddle);
 //    VarianceAve = (VarianceX + VarianceY)>>1;
     //MagneticUnit.Variance = abs(sqrt_16(VarianceY+VarianceX));
     MagneticUnit.Variance = abs(sqrt_16(VarianceY));
@@ -678,6 +695,7 @@ void GetIntensity()
 {
 
     intensity = ((uint32)(MagneticUnit.XValue)*(uint32)(MagneticUnit.XValue))
-                +((uint32)(MagneticUnit.YValue)*(uint32)(MagneticUnit.YValue));
+                +((uint32)(MagneticUnit.YValue)*(uint32)(MagneticUnit.YValue))
+                +((uint32)(MagneticUnit.ZValue)*(uint32)(MagneticUnit.ZValue));
     MagneticUnit.Intensity = sqrt_16(intensity);
 } 

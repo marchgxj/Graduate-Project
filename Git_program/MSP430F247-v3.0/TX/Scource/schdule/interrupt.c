@@ -81,14 +81,21 @@ void TestSend()
     4:8、9：ExtremumValue
     5:10：方差识别停车状态
     6:11：极值识别停车状态
-    7:12、13：NoCar_Magnetic.XMiddle
-    8:14、15：NoCar_Magnetic.YMiddle
-    9:16、17：NoCar_Magnetic.Intensity
-    10:18、19：NoCar_Magnetic.IntensityMiddle
-    11:20:NoCar_Magnetic.Int_State
+    7:12、13：MagneticUnit.XMiddle
+    8:14、15：MagneticUnit.YMiddle
+    9:16、17：MagneticUnit.Intensity
+    10:18、19：NMagneticUnit.IntensityMiddle
+    11:20:MagneticUnit.Int_State
     12:21:EndpointDeviece.parking
-    13:22\23:XAve_Slpo
-    14:24\25:YAve_Slop
+    13:22、23:XAve_Slpo
+    14:24、25:YAve_Slop
+    
+    15:26、27:ZAve_Slop
+    16:28、29:Z轴AD
+    17:30、31:X轴AD GMI
+    18:32、33:Y轴AD GMI
+    19:34、35:XMiddle GMI
+    20:36、37:YMiddle GMI
     **********************************************/
     DataSendDraw[0] = MagneticUnit.XValue>>8;
     DataSendDraw[1] = MagneticUnit.XValue;
@@ -116,6 +123,18 @@ void TestSend()
     DataSendDraw[23] = MagneticUnit.XAve_Slop;
     DataSendDraw[24] = MagneticUnit.YAve_Slop>>8;
     DataSendDraw[25] = MagneticUnit.YAve_Slop;
+    DataSendDraw[26] = MagneticUnit.ZAve_Slop>>8;
+    DataSendDraw[27] = MagneticUnit.ZAve_Slop;
+    DataSendDraw[28] = MagneticUnit.ZValue>>8;
+    DataSendDraw[29] = MagneticUnit.ZValue;
+    DataSendDraw[30] = MagneticUnit.GMI_XValue>>8;
+    DataSendDraw[31] = MagneticUnit.GMI_XValue;
+    DataSendDraw[32] = MagneticUnit.GMI_YValue>>8;
+    DataSendDraw[33] = MagneticUnit.GMI_YValue;
+    DataSendDraw[34] = MagneticUnit.GMI_XMiddle>>8;
+    DataSendDraw[35] = MagneticUnit.GMI_XMiddle;
+    DataSendDraw[36] = MagneticUnit.GMI_YMiddle>>8;
+    DataSendDraw[37] = MagneticUnit.GMI_YMiddle;
     
     A7139_WriteFIFO(DataSendDraw,TEST_LENGTH);
     delay_us(1);

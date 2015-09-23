@@ -97,52 +97,48 @@ __interrupt void Timer_A (void)
 __interrupt void Timer_A0(void)
 {
     TA0CCTL0 &= ~CCIFG;
-    
+    //halLedToggle(2);
     if(EndPointDevice.power == 0)
     //每个超帧都要发送时，Beacon接收超时则复位A7139
     {
         Receive_Timeout++;
-//        if(Receive_Timeout>300)
-//        {
-//            REBOOT;//很长时间没有收到数据，单片机全部复位.
-//        }
-        /*else if(Receive_Timeout>15)
+        if(Receive_Timeout>300)
         {
-            PostTask(EVENT_REJOIN_HANDLER);
-            Receive_Timeout = 0;
-        }*/
-//        else if(Receive_Timeout>50)
-//        {
-//            A7139_Reset();
-//            EN_INT;
-//        }
+            REBOOT;//很长时间没有收到数据，单片机全部复位.
+        }
     }
-//    else
-//    {
-//        Keep_Alive_Count++;
-//        if(Keep_Alive_Count == KEEP_ALIVE_PERIOD)
-//        {
-//            Keep_Alive_Detect = 1;
-//            Data_Change_Flag = 1;
-//            Keep_Alive_Count = 0;
-//        }
-//#if (COLLECT_EN)                                //开启数据采集
-//        if(Start_Collect)
-//        {
-//            Collect_Time++;
-//            if(Collect_Time == COLLECT_PERIOD_L)              //1S采集一次
-//            {
-//                Collect_Time = 0;
-//                PostTask(EVENT_COLLECT_DATA);
-//                //  halLedToggle(2);
-//            } 
-//        }
-//#endif
-//    
-//    }
     //测试低功耗时候使用
     else if(EndPointDevice.power == 1)                  
     {
-        PostTask(EVENT_IDENTIFY_CAR);
+        //PostTask(EVENT_IDENTIFY_CAR);
+        Keep_Alive_Count++;
+        //if(Keep_Alive_Count == KEEP_ALIVE_PERIOD)
+        //if(Keep_Alive_Count == 5+EndPointDevice.pyh_address*2) 
+        if(Keep_Alive_Count == 100)
+        {
+            Keep_Alive_Count = 0;
+            PostTask(EVENT_KEEPALIVE_SEND);
+        }
+        
+        
+        Collect_Period++;
+        if(Quick_Collect==0)
+        {
+            if(Collect_Period==20)
+            {
+                Collect_Period = 0;
+                //IdentifyCar();
+                PostTask(EVENT_IDENTIFY_CAR);
+            }
+        }
+        else
+        {
+            PostTask(EVENT_IDENTIFY_CAR);
+            if(Collect_Period == 200)
+            {
+                Collect_Period = 0;
+                Quick_Collect = 0;
+            }
+        }
     }
 }

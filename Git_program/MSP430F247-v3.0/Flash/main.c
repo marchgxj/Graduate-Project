@@ -3,11 +3,14 @@
 uint8 normal_test[MAX_PACK_LENGTH];
 uint8 test_rssi = 0;
 uint16 address = 0;
-#define    PHY_ADDRESS_WRITE          0x0009
+#define    PHY_ADDRESS_WRITE          0x0014
 int main(void)
 {	    
-    __disable_interrupt();
-    halBoardInit();    
+    __disable_interrupt(); 
+    halMcuInit();
+    delay_s(1);
+    GPIO_Init();
+    FLASHInit();
     FLASH_Erase((uint16 *)PHY_ADDRESS_SEGMENT);
     FLASH_Writew((uint16 *)PHY_ADDRESS_SEGMENT,PHY_ADDRESS_WRITE);
     address = GetPhyAddress();
@@ -15,10 +18,11 @@ int main(void)
     
     if(address == PHY_ADDRESS_WRITE)
     {
-        halLedSet(1);
-        halLedSet(2);
-        halLedSet(3);
-        halLedSet(4);
+        halLedSetAll();
+    }
+    else
+    {
+        halLedClearAll();
     }
     for(;;)
     {

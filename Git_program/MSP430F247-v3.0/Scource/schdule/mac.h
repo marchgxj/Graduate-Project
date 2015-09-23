@@ -3,7 +3,7 @@
 /****************更改beacon周期需要重新调的参数*************/
 #define    BEACON_PERIOD     5000
 #define    BEFOR_BEACON_WAKE BEACON_PERIOD-300   //在beacon前1.5ms时唤醒芯片
-#define    KEEP_ALIVE_PERIOD   60  //单位s
+#define    KEEP_ALIVE_PERIOD   1800  //单位50 ms  15分钟发一次keepalive
 
 /**********************************************************/
 #define    SLOT_LENGTH     20000     //单位us

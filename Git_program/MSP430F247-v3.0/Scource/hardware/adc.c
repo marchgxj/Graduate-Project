@@ -74,7 +74,12 @@ void AD_cal()
     ADY = 0;
     for(i=0;i<16;i++)
     {
+#if (SENSOR_MODE == 0)
         SampleChannel(&ADvalueX,&ADvalueY);
+#elif (SENSOR_MODE == 1)
+        Multi_Read_HMC(&ADvalueX,&ADvalueY);
+#elif (SENSOR_MODE == 2)
+#endif
         ADX += ADvalueX;
         ADY += ADvalueY;
         delay_ms(50);

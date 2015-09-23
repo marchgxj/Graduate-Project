@@ -24,6 +24,7 @@ int main(void)
     {
        normal_test[i]=i;
     }
+
     __enable_interrupt();
 //    while(1)
 //    {

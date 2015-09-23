@@ -102,6 +102,9 @@ uint8 Process_Event()
       case EVENT_GET_VARIANCE:
         GetVariance();
         break;
+      case EVENT_KEEPALIVE_SEND:
+        KeepAliveSend();
+        break;
         
     }
     return current_event;
