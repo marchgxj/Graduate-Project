@@ -27,8 +27,9 @@
 #define INT_THRESHOLD  150
 
 
-#define TEST_LENGTH 22
+#define TEST_LENGTH 26
 #define FILTER_LENGTH 20
+#define SLOP_LENGTH  5
 typedef struct
 {
     uint16 value;
@@ -53,6 +54,8 @@ typedef struct
     uint16 CarExtremum;
     uint16 Ext_Middle;
     uint8  ExtState;
+    int XAve_Slop;
+    int YAve_Slop;
     
 }MagneticStruct;
 extern MagneticStruct MagneticUnit;
@@ -72,6 +75,10 @@ extern unsigned int sqrt_16(unsigned long M);
 extern void GetIntensity();
 extern void CarCalibration();
 extern void TotalJudge();
+extern void VarianceMultiState();
+extern void IntensityMultiState();
+extern void ExtremumMultiState();
+extern void GetSlop(uint16 xvalue,uint16 yvalue);
 
 extern FilterStruct FilterData[FILTER_LENGTH];
 extern uint8 VState1_Count;

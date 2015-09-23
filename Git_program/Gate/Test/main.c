@@ -23,26 +23,9 @@ int main(void)
     A7139_Cal();                    //更改完频率后校准
     delay_us(1);
 
-    for(i=0;i<MAX_PACK_LENGTH;i++)
-    {
-       normal_test[i]=i;
-    }
+
     __enable_interrupt();
-    while(1)
-    {
-        SampleChannel(&XValue,&YValue);
-        delay_ms(20);
-        Direction_Count=700;
-        if((XValue>900)&&(XValue<1300)&&(YValue>900)&&(YValue)<1300&&(abs(XValue-YValue)<350)||(Direction_Count==700))
-        {
-            halLedSet(3);
-            delay_ms(2000);
-            Direction_Count=700;
-            NoCarCalibration();
-            halLedClear(3);
-            break;
-        }
-    }
+    
     /****************send test**********************/ 
 
     while(1) 

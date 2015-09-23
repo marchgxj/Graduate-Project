@@ -56,11 +56,18 @@ uint8 SendByCSMA(u8 *buff,uint8 length)
         ack_flag = RecvDataACK();
         if(ack_flag == 1)
         {      
-            A7139_DeepSleep();
+            //A7139_DeepSleep();
+            A7139_SetFreq(CHANNEL_SEE);
+            delay_us(1);
+            A7139_SetPackLen(TEST_LENGTH);
+            delay_us(1);
+            A7139_Cal();
+            delay_us(1);
             halLedClear(1);
         }
         else
         {
+            
             PostTask(EVENT_CSMA_RESEND);
             EndPointDevice.data_ack = 0;
             
@@ -81,6 +88,7 @@ uint8 SendByCSMA(u8 *buff,uint8 length)
     } 
     else
     {
+        
         return CSMA_SUCCESS;
     }
     

@@ -154,6 +154,12 @@ void CreatCSMASendData()
 }
 void CSMADataResend()
 {
+    A7139_SetFreq(CHANNEL);
+    delay_us(1);
+    A7139_SetPackLen(MAX_PACK_LENGTH);
+    delay_us(1);
+    A7139_Cal();
+    delay_us(1);
     CreatCSMASendData();
     SendByCSMA(DataSendBuffer,MAX_PACK_LENGTH);
 }

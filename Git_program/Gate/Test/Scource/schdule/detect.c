@@ -135,6 +135,7 @@ void VarianceMultiState()
         
     }
 }
+
 /*极值多状态机识别*/
 void ExtremumMultiState()
 {
@@ -161,7 +162,7 @@ void ExtremumMultiState()
         if(MagneticUnit.ExtState == NOCAR2CAR)
         {
             EState2_Count++;
-            if(EState2_Count>20)
+            if(EState2_Count>15)
             {
                 MagneticUnit.ExtState = NOCAR;
                 EState2_Count = 0;
@@ -185,6 +186,7 @@ void ExtremumMultiState()
     }
     //Ext_state = MultiState(ExtremumValue,EXT_THRESHOLD);
 }
+
 void IntensityMultiState()
 {
     uint16 intensity = 0;
@@ -195,7 +197,7 @@ void IntensityMultiState()
         if(MagneticUnit.IntState!=CAR)
         {
             IState1_Count++;
-            if(IState1_Count>20)
+            if(IState1_Count>10)
             {
                 MagneticUnit.IntState = CAR;
                 IState1_Count = 0;
@@ -224,7 +226,7 @@ void IntensityMultiState()
             if(MagneticUnit.IntState != NOCAR)
             {
                 IState3_Count++;
-                if(IState3_Count>30)
+                if(IState3_Count>20)
                 {
                     MagneticUnit.IntState = NOCAR;
                     IState3_Count = 0;
@@ -317,7 +319,7 @@ void TotalJudge()
     {
         
         CarStableCount++;
-        if(CarStableCount>60)
+        if(CarStableCount>10)
         {
             EndPointDevice.parking_state = CAR;
             halLedSet(4);
@@ -375,7 +377,7 @@ void TotalJudge()
         if(abs(Int_Minus)>50)
         {
             IntChangeCount++;
-            if(IntChangeCount>60)
+            if(IntChangeCount>20)
             {
                 MagneticUnit.IntState=NOCAR;
                 IntChangeCount = 0;
@@ -397,7 +399,7 @@ void TotalJudge()
        ((MagneticUnit.VarState==NOCAR)&&(MagneticUnit.ExtState==NOCAR))||
        ((MagneticUnit.VarState==NOCAR)&&(MagneticUnit.ExtState==NOCAR)&&(MagneticUnit.IntState==NOCAR)))
     {
-        if(NoCarStableCount>60)
+        if(NoCarStableCount>20)
         {
             EndPointDevice.parking_state = NOCAR;
             halLedClear(4);
