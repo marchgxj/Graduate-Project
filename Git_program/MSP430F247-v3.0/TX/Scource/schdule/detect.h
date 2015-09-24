@@ -22,13 +22,18 @@
 
 #define CAL_PERIOD  6000          //10分钟校准一次
 
-#define VAR_THRESHOLD  200             //方差判断阈值
-#define EXT_THRESHOLD  80               //两轴差值判断阈值
-#define INT_THRESHOLD  150
+#define VAR_THRESHOLD  50             //方差判断阈值
+#define EXT_THRESHOLD  40               //两轴差值判断阈值
+#define INT_THRESHOLD  60
 
 #define TEST_LENGTH 38
 #define FILTER_LENGTH 20
 #define SLOP_LENGTH 3
+
+#define LOWPOWER_THRESHOLD 2030
+
+#define OPEN_GMI_COUNT   400  //多长时间后检测是否开启GMI  单位：50ms
+#define CLOSE_GMI_COUNT  1200  //  单位：50ms
 
 typedef struct
 {
@@ -96,4 +101,6 @@ extern FilterStruct FilterData[FILTER_LENGTH];
 extern uint16 Collect_Period;
 extern FilterStruct SlopData[SLOP_LENGTH];
 extern uint8 Quick_Collect;
+extern uint8 HMC_Changed;
+extern uint16 OpenGMI_Count;
 #endif 

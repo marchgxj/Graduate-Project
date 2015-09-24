@@ -53,8 +53,8 @@ uint8 halDigioIntEnable(const digioConfig *p);
 uint8 halDigioIntDisable(const digioConfig *p);
 uint8 halDigioIntClear(const digioConfig *p);
 uint8 halDigioIntSetEdge(const digioConfig *p, uint8 edge);
-extern void SDA_in();
-extern void SDA_out();
+//extern void SDA_in();
+//extern void SDA_out();
 
 
 #ifdef  __cplusplus
@@ -77,9 +77,9 @@ extern void SDA_out();
 #define SDA_H         (P3OUT |= BIT3)
 #define SCL_L         (P3OUT &= ~ BIT2)
 #define SCL_H         (P3OUT |= BIT2)
-#define SDA_IN        SDA_in();
-#define SDA_OUT       SDA_out();
-#define SDA_val       ((P3IN & BIT3)>>3)
+#define SDA_in        P3DIR &= ~BIT3
+#define SDA_out       P3DIR |= BIT3
+#define SDA_val       P3IN&BIT3
 #define IRD_LOW       (P1OUT &= ~ BIT6)
 #define IRD_HIGH      (P1OUT |= BIT6)
 extern void GPIO_Init();

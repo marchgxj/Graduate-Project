@@ -1,8 +1,7 @@
 #ifndef _DETECT_h_
 #define _DETECT_h_
 #include "common.h"
-
-#define SENSOR_MODE  1  //0:只用GMI 1：只用5983  2:两个都用
+#define MCU_SLEEP_ENABLE 1
 
 #define COLLECT_EN   0          //是否开启数据采集
 #define COLLECT_PERIOD  1000   //采集周期  单位：100us
@@ -24,13 +23,20 @@
 
 #define CAL_PERIOD  6000          //10分钟校准一次
 
-#define VAR_THRESHOLD  200             //方差判断阈值
-#define EXT_THRESHOLD  80               //两轴差值判断阈值
-#define INT_THRESHOLD  150
+#define VAR_THRESHOLD  50             //方差判断阈值
+#define EXT_THRESHOLD  40               //两轴差值判断阈值
+#define INT_THRESHOLD  60
 
-#define TEST_LENGTH 26
+#define TEST_LENGTH 38
 #define FILTER_LENGTH 20
 #define SLOP_LENGTH 3
+
+
+#define LOWPOWER_THRESHOLD 2030
+
+#define OPEN_GMI_COUNT   400  //多长时间后检测是否开启GMI  单位：50ms
+#define CLOSE_GMI_COUNT  1200  //  单位：50ms
+
 
 typedef struct
 {
@@ -41,11 +47,23 @@ typedef struct
 typedef struct
 {
     uint16 XValue;
-    uint16 YValue;
     uint16 XMiddle;
     uint16 XMiddleM;
+    uint16 YValue;
     uint16 YMiddle;
     uint16 YMiddleM;
+    uint16 ZValue;
+    uint16 ZMiddle;
+    uint16 ZMiddleM;
+    
+    
+    uint16 GMI_XValue;
+    uint16 GMI_XMiddle;
+    uint16 GMI_XMiddleM;
+    uint16 GMI_YValue;
+    uint16 GMI_YMiddle;
+    uint16 GMI_YMiddleM;
+    
     uint16 Intensity;
     uint16 CarIntensity;
     uint16 Int_Middle;
@@ -59,6 +77,7 @@ typedef struct
     uint8  ExtState;
     int XAve_Slop;
     int YAve_Slop;
+    int ZAve_Slop;
     
 }MagneticStruct;
 extern MagneticStruct MagneticUnit;
@@ -66,6 +85,7 @@ typedef struct
 {
     uint16 xvalue;
     uint16 yvalue;
+    uint16 zvalue;
 }FilterStruct;
 
 
@@ -81,6 +101,7 @@ extern void CarCalibration();
 extern void TotalJudge();
 
 extern FilterStruct FilterData[FILTER_LENGTH];
+
 extern uint16 Collect_Period;
 extern FilterStruct SlopData[SLOP_LENGTH];
 extern uint8 Quick_Collect;
@@ -94,4 +115,7 @@ extern uint8 IState1_Count;
 extern uint8 IState2_Count;
 extern uint8 IState3_Count;
 extern uint8 CarCaliFlag;
+extern uint8 HMC_Changed;
+extern uint16 OpenGMI_Count;
+extern uint8 Exit_Sleep;
 #endif 

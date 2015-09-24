@@ -46,7 +46,7 @@ Counter0=AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 [EEM Cycle Counter 1]
 Counter1=AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 [DebugChecksum]
-Checksum=1689267347
+Checksum=-1425016210
 [CallStack]
 ShowArgs=0
 [Disassembly]
@@ -77,13 +77,13 @@ Fmt3={W}1:Data_Change_Flag	3	0
 Fmt4={W}1:Receive_Timeout	3	0
 Fmt5={W}1:cca_value	3	0
 Fmt6={W}1:rejoin_flag	3	0
+[TermIOLog]
+LoggingEnabled=_ 0
+LogFile=_ ""
 [Log file]
 LoggingEnabled=_ 0
 LogFile=_ ""
 Category=_ 0
-[TermIOLog]
-LoggingEnabled=_ 0
-LogFile=_ ""
 [Breakpoints]
 Bp0=_ "STD_CODE" "{E:\Program Files (x86)\IAR Systems\Embedded Workbench MSP430 7.2}.101.2" 0 0 0 0 "" 0 ""
 Bp1=_ "STD_CODE" "{E:\Program Files (x86)\IAR Systems\Embedded Workbench MSP430 7.2}.714.1" 0 0 0 0 "" 0 ""
@@ -94,7 +94,8 @@ Bp5=_ "STD_CODE" "{E:\Program Files (x86)\IAR Systems\Embedded Workbench MSP430 
 Bp6=_ "STD_CODE" "{E:\Program Files (x86)\IAR Systems\Embedded Workbench MSP430 7.2}.23.5" 0 0 0 0 "" 0 ""
 Bp7=_ "STD_CODE" "{E:\Program Files (x86)\IAR Systems\Embedded Workbench MSP430 7.2}.46.17" 0 0 0 0 "" 0 ""
 Bp8=_ "STD_CODE" "{$PROJ_DIR$\..\Scource\schdule\ProcessEvent.c}.1.1" 0 0 0 0 "" 0 ""
-Count=9
+Bp9=_ "STD_CODE" "{$PROJ_DIR$\..\Scource\schdule\tdma.c}.114.13" 0 0 0 0 "" 0 ""
+Count=10
 [FET]
 Clock mode=46
 Extended Clock mode=1

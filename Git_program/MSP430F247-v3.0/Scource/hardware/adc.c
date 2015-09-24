@@ -64,36 +64,62 @@ __interrupt void ADC12_ISR(void)
 void AD_cal()
 {
     int i=0;
-    uint16 ADvalueX=0,ADvalueY=0;
+    uint16 ADX,ADY,ADZ,GMIADX,GMIADY;
+    uint16 ADvalueX=0,ADvalueY=0,ADvalueZ = 0;
+    uint16 GMI_ADvalueX=0,GMI_ADvalueY=0;
     uint32 intensity = 0;
-    uint16 ADX,ADY;
+    
     halLedSetAll();
     delay_ms(2000);
     
     ADX = 0;
     ADY = 0;
-    for(i=0;i<16;i++)
+    for(i=0;i<26;i++)
     {
-#if (SENSOR_MODE == 0)
-        SampleChannel(&ADvalueX,&ADvalueY);
-#elif (SENSOR_MODE == 1)
-        Multi_Read_HMC(&ADvalueX,&ADvalueY);
-#elif (SENSOR_MODE == 2)
-#endif
-        ADX += ADvalueX;
-        ADY += ADvalueY;
-        delay_ms(50);
+        if(i>=10)
+        {
+            SampleChannel(&GMI_ADvalueX,&GMI_ADvalueY);
+            Multi_Read_HMC(&ADvalueX,&ADvalueY,&ADvalueZ);
+            ADX += ADvalueX;
+            ADY += ADvalueY;
+            ADZ += ADvalueZ;
+            GMIADX += GMI_ADvalueX;
+            GMIADY += GMI_ADvalueY;
+            delay_ms(50);
+        }
     }
     MagneticUnit.XMiddle = ADX>>4;
     MagneticUnit.YMiddle = ADY>>4;
+    MagneticUnit.ZMiddle = ADZ>>4;
+    MagneticUnit.GMI_XMiddle = GMIADX>>4;
+    MagneticUnit.GMI_YMiddle = GMIADY>>4;
     MagneticUnit.XMiddleM = MagneticUnit.XMiddle;
     MagneticUnit.YMiddleM = MagneticUnit.YMiddle;
+    MagneticUnit.ZMiddleM = MagneticUnit.ZMiddle;
+    MagneticUnit.GMI_XMiddleM = MagneticUnit.GMI_XMiddle;
+    MagneticUnit.GMI_YMiddleM = MagneticUnit.GMI_YMiddle;
     MagneticUnit.Ext_Middle = abs(MagneticUnit.XMiddle-MagneticUnit.YMiddle);
     
-    intensity = sqrt_16((((uint32)MagneticUnit.XMiddle*(uint32)MagneticUnit.XMiddle)+((uint32)MagneticUnit.YMiddle*(uint32)MagneticUnit.YMiddle)));
+    intensity = sqrt_16((((uint32)MagneticUnit.XMiddle*(uint32)MagneticUnit.XMiddle)+((uint32)MagneticUnit.YMiddle*(uint32)MagneticUnit.YMiddle)+((uint32)MagneticUnit.ZMiddle*(uint32)MagneticUnit.ZMiddle)));
     MagneticUnit.Int_Middle = intensity;
-
     
+    for(int i=0;i<FILTER_LENGTH;i++)
+    {
+        SampleChannel(&ADvalueX,&ADvalueY);
+        FilterData[i].xvalue = ADvalueX;
+        FilterData[i].yvalue = ADvalueY;
+        delay_ms(50);
+    }
+    for(int i=0;i<SLOP_LENGTH;i++)
+    {
+        SampleChannel(&ADvalueX,&ADvalueY);
+        SlopData[i].xvalue = ADvalueX;
+        SlopData[i].yvalue = ADvalueY;
+        delay_ms(50);
+    }
+  
+
+    //NoCarCalibration();
     halLedClearAll();
     delay_ms(50);
     halLedSetAll();

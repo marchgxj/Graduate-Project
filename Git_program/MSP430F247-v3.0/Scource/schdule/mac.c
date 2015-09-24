@@ -105,6 +105,7 @@ void BeaconHandler(uint8 beacon[])
         PostTask(EVENT_DATA_SEND);
     }
     TIME2_LOW;
+    
 }
 
 uint8 PackValid(void)

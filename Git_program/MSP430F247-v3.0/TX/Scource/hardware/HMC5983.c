@@ -18,13 +18,13 @@ uint8 const HMC_Config[3] = {0xFC,0x00,0x00};
 //}
 void HMC_Start()
 {
-	SDA_H;
-	SCL_H;
-	delay_us(7);
-	SDA_L;
-	delay_us(7);
-	SCL_L;
-
+    SDA_H;                    //拉高数据线
+    SCL_H;                    //拉高时钟线
+    delay_5us();                 //延时
+    SDA_L;                    //产生下降沿
+    delay_5us();                 //延时
+    SCL_L;                    //拉低时钟线
+    
 }
 //void HMC_Stop()
 //{
@@ -39,12 +39,12 @@ void HMC_Start()
 
 void HMC_Stop()
 {
-	SCL_H;
-    SDA_L;
-	delay_us(7);
-	SDA_H;
-	delay_us(7);
-	
+    SDA_L;                    //拉低数据线
+    SCL_H;                    //拉高时钟线
+    delay_5us();                 //延时
+    SDA_H;                    //产生上升沿
+    delay_5us();                 //延时
+    
 }
 
 //void HMC_SendACK(unsigned char ack)
@@ -69,25 +69,23 @@ void HMC_Stop()
 
 void HMC_SendACK(unsigned char ack)
 {
-	if (ack==0)
-	{
-	   	SCL_L;
-		SDA_L;
-		delay_us(7);
-		SCL_H;
-		delay_us(7);
-		SCL_L;
-	}
-	else
-	{
-	   	SCL_L;
-		SDA_H;
-		delay_us(7);
-		SCL_H;
-		delay_us(7);
-		SCL_L; 
-	}
-
+    if (ack==0)
+    {
+        SDA_L;                  //写应答信号
+        SCL_H;                    //拉高时钟线
+        delay_5us();                 //延时
+        SCL_L;                    //拉低时钟线
+        delay_5us();                 //延时
+    }
+    else
+    {
+        SDA_H;                  //写应答信号
+        SCL_H;                    //拉高时钟线
+        delay_5us();                 //延时
+        SCL_L;                    //拉低时钟线
+        delay_5us();                 //延时
+    }
+    
 }
 //unsigned char HMC_ReceiveACK()
 //{
@@ -97,7 +95,7 @@ void HMC_SendACK(unsigned char ack)
 //    SCL_L; //SCL为低,由低变高读应答??????????????
 //    SDA_H; //接收模式先把SDA拉高
 //    delay_300us();
-//    SDA_IN;//把SDA改变为输入
+//    SDA_in;//把SDA改变为输入
 //    delay_300us();
 //                                               
 //    SCL_H;//SCL变为高
@@ -105,26 +103,26 @@ void HMC_SendACK(unsigned char ack)
 //    ack = SDA_val;
 //    delay_300us();
 //
-//    SDA_OUT;
+//    SDA_out;
 //    return ack;
 //    
 //}
 
 unsigned char HMC_ReceiveACK()
 {
-    unsigned char ack;
-	SCL_L;		
-	delay_us(7);
-	SCL_H;
-	delay_us(7);
-	if(SDA_val)
-	{
-        SCL_L;
-        return 0;
-	}
-	SCL_L;
-	return 1;
-	
+    uint8 a;   
+    SDA_in;
+    
+    SCL_H;                    //拉高时钟线
+    delay_5us();                 //延时
+    
+    a = SDA_val;                 //读应答信号
+    SCL_L;                    //拉低时钟线
+    delay_5us();                 //延时
+    SDA_out;
+
+    return a;
+    
 }
 //void HMC_SendByte(unsigned char data)
 //{
@@ -152,7 +150,7 @@ unsigned char HMC_ReceiveACK()
 //    delay_300us();
 //    SCL_H;
 //    delay_300us();
-//    SDA_IN;
+//    SDA_in;
 //    delay_300us();
 //    if(SDA_val)
 //    {
@@ -163,30 +161,29 @@ unsigned char HMC_ReceiveACK()
 //        ack = 1;      /*判断是否接收到应答信号*/
 //    }
 //    delay_300us();
-//    SDA_OUT;
+//    SDA_out;
 //    delay_300us();
 //    SCL_L;
 //}
 
-void HMC_SendByte(unsigned char data)
+void HMC_SendByte(unsigned char dat)
 {
-    int i=8;
-    while(i--)
-    {	
-        SCL_L;//SCL?aμíμ???SDA2??éò?±??ˉ
-        delay_us(7);
-      	if(data&0x80)
-            SDA_H;  
-      	else 
-            SDA_L;   
-        data<<=1;  
-        
+    uint8 i;
+
+    for(i = 0;i < 8;i++)//8位计数器
+    {
+      
+       if(dat & 0x80)//1
+            SDA_H;            
+        else 			    
+            SDA_L;
         SCL_H;
-        delay_us(7);
-    }
-    SCL_L;
-    if (!HMC_ReceiveACK())
-        HMC_Stop();
+        delay_5us();
+        SCL_L;
+        delay_5us();
+        dat <<= 1;
+    }    
+    HMC_ReceiveACK();  
 }
 //unsigned char HMC_ReceiveByte()
 //{	
@@ -195,7 +192,7 @@ void HMC_SendByte(unsigned char data)
 //    delay_300us();
 //    SDA_H; 
 //    delay_300us();
-//    SDA_IN;
+//    SDA_in;
 //    delay_300us();
 //
 //    for(i = 0; i < 8; i++)
@@ -213,36 +210,43 @@ void HMC_SendByte(unsigned char data)
 //    }
 //    SCL_L;
 //    delay_300us();
-//    SDA_OUT;
+//    SDA_out;
 //    delay_300us();
 //    return rec_byte;
 //}
 
 unsigned char HMC_ReceiveByte()
 {	
-	int i=8;
+    int i=8;
     unsigned char ReceiveByte=0;
-    SDA_H;				
+    SDA_H;
+    SDA_in;
     while(i--)
     {
         ReceiveByte<<=1;      
         SCL_L;
-        delay_us(7);
+        
+        delay_5us();
         SCL_H;
-        delay_us(7);	
+        delay_5us();
       	if(SDA_val)
        	{
        		ReceiveByte|=0x01;
        	}
+        
+        SCL_L;
      }
-      SCL_L;
+      SDA_out;
     return ReceiveByte;
-}
+    
 
+}
+uint8 addr = 0;
 void Single_Write_HMC(unsigned char REG_Addr, unsigned char REG_data)
 {							   
     HMC_Start();
     HMC_SendByte(0x3c);  //slave Address
+    addr = REG_Addr;
     HMC_SendByte(REG_Addr);
     HMC_SendByte(REG_data);
     HMC_Stop();
@@ -330,11 +334,10 @@ void Multi_Read_HMC(uint16* XValue,uint16* YValue,uint16* ZValue)
 void Init_HMC(uint8* buffer)
 {
     int i;
-    
+    Single_Write_HMC(0x00,HMC_Config[0]);       //第一次发送没有ack
     Single_Write_HMC(0x00,HMC_Config[0]);
     Single_Write_HMC(0x01,HMC_Config[1]);   //  0x20  92nT   0x00  73nT   0x40 122nT
     Single_Write_HMC(0x02,HMC_Config[2]);
-    delay_ms(6);
     
     HMC_Start();
     HMC_SendByte(0x3c);  //slave Address
@@ -362,7 +365,7 @@ void Init_5983()
 {
     uint8 buffer[6];
     IRD_HIGH;
-    Init_HMC(buffer);
+    delay_ms(1000);
     Init_HMC(buffer);
     if((buffer[0]!=HMC_Config[0])||(buffer[1]!=HMC_Config[1])||buffer[2]!=HMC_Config[2])
     {

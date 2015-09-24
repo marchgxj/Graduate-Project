@@ -105,6 +105,10 @@ uint8 Process_Event()
       case EVENT_KEEPALIVE_SEND:
         KeepAliveSend();
         break;
+      case EVENT_MCUSLEEP_ENABLE:
+        LPM3;
+        break;
+
         
     }
     return current_event;

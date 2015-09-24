@@ -15,10 +15,32 @@ ReJoin:
     {
        normal_test[i]=i;
     }
+    
+    
+    /*A7139_SetPackLen(TEST_LENGTH);
+    delay_us(1);
+    A7139_SetFreq(475.001f);
+    delay_us(1);
+    A7139_Cal();                    //更改完频率后校准
+    delay_us(1);
+    while(1)
+    {
+        IdentifyCar();
+        TestSend();
+        delay_ms(50);
+    }*/
+    
+    
     ChannelSelection(CHANNEL_4,CHANNEL_6);
-    halLedClearAll();
+//    IRD_LOW;
+//    halLedSet(1);
+//    halLedClearAll();
+//    A7139_DeepSleep();
+//    halLedClear(1);
+//    LPM3;
     
     __enable_interrupt();
+    //LPM3;
 
     for(;;)
     {

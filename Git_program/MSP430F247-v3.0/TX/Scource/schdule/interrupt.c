@@ -159,7 +159,7 @@ __interrupt void Timer_A0(void)
 //    if(Direction_Count==700)
     {
         
-        Quick_Collect = 1;
+        
         
         
         Collect_Period++;
@@ -179,8 +179,12 @@ __interrupt void Timer_A0(void)
             if(Collect_Period == 200)
             {
                 Collect_Period = 0;
-                //Quick_Collect = 0;
+                Quick_Collect = 0;
             }
+        }
+        if(HMC_Changed == 1)
+        {
+            OpenGMI_Count++;
         }
         
         

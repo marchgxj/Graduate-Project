@@ -36,6 +36,6 @@ void halBoardInit(void)
     Interrupt_Init();
     Init_TQ();
     Init_5983();
-    HMC5983_cal();
-//    AD_cal(); 
+    
+    AD_cal(); 
 }

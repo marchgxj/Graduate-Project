@@ -261,8 +261,8 @@ const digioConfig TIME2   = {3, 7, BIT7, HAL_DIGIO_OUTPUT, 0};
 //const digioConfig SDA      = {6, 6, BIT6, HAL_DIGIO_OUTPUT, 0};
 //const digioConfig SDAIN   = {6, 6, BIT6, HAL_DIGIO_INPUT, 0};
 const digioConfig SDAIN   = {3, 3, BIT3, HAL_DIGIO_INPUT, 0};
-const digioConfig SCL      = {3, 2, BIT2, HAL_DIGIO_OUTPUT, 0};
-const digioConfig SDA     = {3, 3, BIT3, HAL_DIGIO_OUTPUT, 0};
+const digioConfig SCL      = {3, 2, BIT2, HAL_DIGIO_OUTPUT, 1};
+const digioConfig SDA     = {3, 3, BIT3, HAL_DIGIO_OUTPUT, 1};
 const digioConfig IRD     = {1, 6, BIT6, HAL_DIGIO_OUTPUT, 0};
 
 void GPIO_Init()
@@ -279,12 +279,7 @@ void GPIO_Init()
     halDigioConfig(&SDA);
     halDigioConfig(&SCL);
     halDigioConfig(&IRD); 
+	SDA_L;
+    SCL_L;
 }
-void SDA_in()
-{
-    halDigioConfig(&SDAIN);
-}
-void SDA_out()
-{
-    halDigioConfig(&SDA);
-}
+

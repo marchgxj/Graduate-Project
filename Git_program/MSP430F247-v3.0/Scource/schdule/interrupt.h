@@ -10,6 +10,7 @@
 #define   DIS_INT       P1IE &= ~pinGIO2.pin_bm;
 
 extern void Interrupt_Init(void);
+extern void TestSend();
 
 extern uint32 Frame_Time;
 extern uint16 Keep_Alive_Count;

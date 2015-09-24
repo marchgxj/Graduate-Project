@@ -142,6 +142,12 @@ void DataACKHandler()
     {
         PostTask(EVENT_REJOIN_HANDLER);
     }
+#if (MCU_SLEEP_ENABLE == 1)
+    else
+    {
+        PostTask(EVENT_MCUSLEEP_ENABLE);
+    }
+#endif
     
 }
 

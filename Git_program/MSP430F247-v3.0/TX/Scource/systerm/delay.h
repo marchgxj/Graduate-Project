@@ -30,6 +30,7 @@ void delay_10ms();
 void delay_100ms();
 void delay_1s();
 void delay_300us();
+void delay_5us();
 //void delay_10s();
 
 
