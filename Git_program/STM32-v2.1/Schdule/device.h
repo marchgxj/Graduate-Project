@@ -8,7 +8,8 @@
 #define    ACK_EN     1
 #define    ACK_DIS    0 
 
-#define 	 LOW_POWER  0
+#define 	 LOW_POWER  254
+#define    NET_LOST   253
 
 
 //packet type define
@@ -35,7 +36,8 @@ typedef struct{
     uint16 pyh_address;									//物理地址
     uint8  data;												//数据
 	  uint16 ab_slot_num;									//绝对时隙号
-	
+		uint8  keep_alive;									//alive标志位 
+		
 }EndPointDeviceStruct;
 
 typedef struct{

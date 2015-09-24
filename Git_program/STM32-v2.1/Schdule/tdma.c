@@ -53,6 +53,7 @@ void DataHandler(void)
 				rejoin = 0;
 				RootDevice.endpoint_device[inner_num].ab_slot_num++;
 				RootDevice.endpoint_device[inner_num].data = DataRecvBuffer[8];
+				RootDevice.endpoint_device[inner_num].keep_alive = 1;
 				bufnode.address = RootDevice.endpoint_device[inner_num].pyh_address;
 				bufnode.data = RootDevice.endpoint_device[inner_num].data;
 #if (UPLOAD_DATA_EN == 1)
@@ -77,4 +78,21 @@ void DataHandler(void)
 				TIME2_LOW;
 
 		
+}
+
+void KeepAliveCheck(void)
+{
+		uint8 i = 0;
+		UartDataStruct bufnode;
+		for(i=1;i<=RootDevice.connected_devece_count;i++)
+		{
+				if(RootDevice.endpoint_device[i].keep_alive == 0)
+				{
+						bufnode.address = RootDevice.endpoint_device[i].pyh_address;
+						bufnode.data = NET_LOST;
+					  PostUploadNode(&bufnode);
+				}
+				RootDevice.endpoint_device[i].keep_alive = 0;
+		}
+
 }

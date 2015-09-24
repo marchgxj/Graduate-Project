@@ -14,7 +14,10 @@ typedef struct{
 	  uint16  time_stamp;									//Ê±¼ä´Á
 }DataACKPacketStruct;
 
+#define KEEPALIBEPERIOD  3600
+
 extern void DataHandler(void);
+extern void KeepAliveCheck(void);
 
 extern uint16 Draw_DataX;
 extern uint16 Draw_DataY;

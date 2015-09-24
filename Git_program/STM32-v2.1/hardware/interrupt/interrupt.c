@@ -1,5 +1,7 @@
 #include "common.h"
-int time_out = 0;
+uint16 time_out = 0;
+uint8 TIM3_Count = 0;
+uint16 KeepAliveCheck_Count = 0;
 
 /*******************************************************************************
 * Function Name  : Interrupt_Init
@@ -58,7 +60,7 @@ void Interrupt_Init(void)
 * Output         : None
 * Return         : None
 *******************************************************************************/
-uint8 TIM3_Count = 0;
+
 void TIM3_IRQHandler(void)   //500ms
 {
     TIM_ClearITPendingBit(TIM3, TIM_IT_Update  );  //清除TIMx更新中断标志 
@@ -76,6 +78,13 @@ void TIM3_IRQHandler(void)   //500ms
 #if (UPLOAD_DATA_EN == 1)
 				PostTask(EVENT_UPLOAD_DATA);
 #endif
+		}
+		
+		KeepAliveCheck_Count++;
+		if(KeepAliveCheck_Count == KEEPALIBEPERIOD)
+		{
+				KeepAliveCheck_Count = 0;
+				PostTask(EVENT_KEEPALIVE_CHECK);
 		}
 		
 		Frame_Time = 0;

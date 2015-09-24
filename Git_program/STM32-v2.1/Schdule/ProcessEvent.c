@@ -81,6 +81,8 @@ uint8 Process_Event()
 		  case EVENT_UPLOAD_DRAWDATA:
 			  UploadDrawData();
 			  break;
+		  case EVENT_KEEPALIVE_CHECK:
+        KeepAliveCheck();
 			
     }
     return current_event;
