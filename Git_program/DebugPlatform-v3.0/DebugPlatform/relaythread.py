@@ -126,6 +126,7 @@ class myThread(threading.Thread):
 
                                 num = ord(self.uart.read(1)) << 8 | ord(self.uart.read(1))
                                 num = num
+                                num = 16
                                 self.notedata.append(num)  # 偶数位为地址
                                 data["data"] = data["data"]+"0086-110108-00022105-" + str(num).zfill(4) + "|"
                                 self.datatoshow = self.datatoshow + str(num).zfill(4) + "|"
@@ -151,25 +152,25 @@ class myThread(threading.Thread):
                             self.datatoshow = ''
                             if self.uartroot.datamode == 0:
                                 start = time.clock()
-                                try:
-                                    '''上传全部数据'''
-                                    # urllib2.urlopen(
-                                    #     "http://123.57.11.98:8080/mm/set_new?data=" + self.longdatastr[:-1],
-                                    #     timeout=1)
-                                    # urllib2.urlopen("http://123.57.11.98:8080/mm/set?data=" + self.longdatastr[:-1],
-                                    #                 timeout=1)
-                                    post_data = urllib.urlencode(data)
-                                    data["data"] = ""
-                                    response = urllib2.urlopen("http://123.57.37.66:8080/sensor/post/status", post_data,timeout=1)
-                                    serverresponse =  response.read()
-                                    eval(serverresponse)
-                                    # print serverresponse
-                                    end = time.clock()
+                                # try:
+                                '''上传全部数据'''
+                                # urllib2.urlopen(
+                                #     "http://123.57.11.98:8080/mm/set_new?data=" + self.longdatastr[:-1],
+                                #     timeout=1)
+                                # urllib2.urlopen("http://123.57.11.98:8080/mm/set?data=" + self.longdatastr[:-1],
+                                #                 timeout=1)
+                                post_data = urllib.urlencode(data)
+                                data["data"] = ""
+                                response = urllib2.urlopen("http://123.57.37.66:8080/sensor/post/status", post_data,timeout=1)
+                                serverresponse =  response.read()
+                                serverresponsedic = eval(serverresponse)
+                                # print serverresponse
+                                end = time.clock()
 
-                                    self.statusbar.status.setstatus('网络延时:%s'+"  "+serverresponse["err_msg"], str(end - start))
-                                    ''''''
-                                except:
-                                    self.statusbar.status.setstatus('%s', "网络连接超时，请检查网络或关闭数据上传下载功能")
+                                self.statusbar.status.setstatus('网络延时:%s'+"  "+serverresponsedic["err_msg"], str(end - start))
+                                ''''''
+                                # except:
+                                #     self.statusbar.status.setstatus('%s', "网络连接超时，请检查网络或关闭数据上传下载功能")
 
                             else:
                                 if self.threadstartflag == 0:

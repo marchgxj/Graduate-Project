@@ -18,7 +18,7 @@ class myThread(threading.Thread):
         self.port = port
         self.baud = baud
         self.value = []
-        for i in range(15):
+        for i in range(21):
             self.value.append(0)
         self.readenable = 0
 
@@ -54,7 +54,7 @@ class myThread(threading.Thread):
                         if ord(buf) == 0x7D:
                             buf = []
                             # 加变量需要修改
-                            buf += self.uart.read(26)
+                            buf += self.uart.read(38)
 
                             self.file = open(self.filename, "a+")
                             self.file.write("|" + str(time.time()) + "|")
@@ -78,6 +78,12 @@ class myThread(threading.Thread):
                             self.value[12] = (ord(buf[21]))
                             self.value[13] = (ord(buf[22]) << 8 | ord(buf[23]))
                             self.value[14] = (ord(buf[24]) << 8 | ord(buf[25]))
+                            self.value[15] = (ord(buf[26]) << 8 | ord(buf[27]))
+                            self.value[16] = (ord(buf[28]) << 8 | ord(buf[29]))
+                            self.value[17] = (ord(buf[30]) << 8 | ord(buf[31]))
+                            self.value[18] = (ord(buf[32]) << 8 | ord(buf[33]))
+                            self.value[19] = (ord(buf[34]) << 8 | ord(buf[35]))
+                            self.value[20] = (ord(buf[36]) << 8 | ord(buf[37]))
 
                             # self.app.XValueString.set(self.value[0])
                             # self.app.YValueString.set(self.value[1])
@@ -101,6 +107,12 @@ class myThread(threading.Thread):
                             self.file.write(str(self.value[12]) + " ")
                             self.file.write(str(self.value[13]) + " ")
                             self.file.write(str(self.value[14]) + " ")
+                            self.file.write(str(self.value[15]) + " ")
+                            self.file.write(str(self.value[16]) + " ")
+                            self.file.write(str(self.value[17]) + " ")
+                            self.file.write(str(self.value[18]) + " ")
+                            self.file.write(str(self.value[19]) + " ")
+                            self.file.write(str(self.value[20]) + " ")
 
                             self.file.close()
                             self.uart.read(self.uart.inWaiting())

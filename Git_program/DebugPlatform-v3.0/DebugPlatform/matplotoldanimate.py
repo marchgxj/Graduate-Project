@@ -18,13 +18,16 @@ class Scope:
         self.sensorax = self.fig.add_subplot(3, 2, 1, xlim=(0, 10), ylim=(0, 4096))
         self.Varianceax = self.fig.add_subplot(3, 2, 3, xlim=(0, 10), ylim=(0, 3000))
         self.Extremumax = self.fig.add_subplot(3, 2, 4, xlim=(0, 10), ylim=(0, 1000))
-        self.Stateax = self.fig.add_subplot(3, 2, 2, xlim=(0, 10), ylim=(0, 9))
+        self.Stateax = self.fig.add_subplot(3, 2, 2, xlim=(0, 10), ylim=(0, 12))
         self.Intensityax = self.fig.add_subplot(3, 2, 5, xlim=(0, 10), ylim=(0, 4000))
-        self.Resultax = self.fig.add_subplot(3, 2, 6, xlim=(0, 10), ylim=(0, 1.5))
+        self.GMIsensorax = self.fig.add_subplot(3, 2, 6, xlim=(0, 10), ylim=(0, 4096))
 
         self.therad  = thread
         self.XValueLinedata = []
         self.YValueLinedata = []
+        self.ZValueLinedata = []
+        self.GMI_YValueLinedata = []
+        self.GMI_XValueLinedata = []
         self.VarValueLinedata = []
 
         self.ExtValueLinedata = []
@@ -38,6 +41,9 @@ class Scope:
 
         self.XValueLine, = self.sensorax.plot([], [], "b", lw=2)
         self.YValueLine, = self.sensorax.plot([], [], "g", lw=2)
+        self.ZValueLine, = self.sensorax.plot([], [], "r", lw=2)
+        self.GMI_XValueLine, = self.GMIsensorax.plot([], [], "b", lw=2)
+        self.GMI_YValueLine, = self.GMIsensorax.plot([], [], "g", lw=2)
         self.VarValueLine, = self.Varianceax.plot([], [], lw=2)
 
         self.ExtValueLine, = self.Extremumax.plot([], [], "r", lw=2)
@@ -53,6 +59,9 @@ class Scope:
         for v in data:
             self.XValueLinedata.append(v[0])
             self.YValueLinedata.append(v[1])
+            self.ZValueLinedata.append(v[16])
+            self.GMI_XValueLinedata.append(v[17])
+            self.GMI_YValueLinedata.append(v[18])
             self.VarValueLinedata.append(v[2])
             self.ExtValueLinedata.append(v[4])
             if(int(v[5])==2):
@@ -75,8 +84,10 @@ class Scope:
                 self.IntStateLinedata.append(8)
             else:
                 self.IntStateLinedata.append(6)
-
-            self.ResultLinedata.append(v[12])
+            if(int(v[12])==1):
+                self.ResultLinedata.append(11)
+            else:
+                self.ResultLinedata.append(9)
 
 
     def init(self):
@@ -84,6 +95,9 @@ class Scope:
             self.xdata.append(i)
         self.XValueLine.set_data(self.xdata, self.XValueLinedata)
         self.YValueLine.set_data(self.xdata, self.YValueLinedata)
+        self.ZValueLine.set_data(self.xdata, self.ZValueLinedata)
+        self.GMI_XValueLine.set_data(self.xdata, self.GMI_XValueLinedata)
+        self.GMI_YValueLine.set_data(self.xdata, self.GMI_YValueLinedata)
         self.VarValueLine.set_data(self.xdata, self.VarValueLinedata)
 
         self.ExtValueLine.set_data(self.xdata, self.ExtValueLinedata)
@@ -102,7 +116,7 @@ class Scope:
         self.Extremumax.set_xlim(self.xlim - 50, self.xlim + 50)
         self.Stateax.set_xlim(self.xlim - 50, self.xlim + 50)
         self.Intensityax.set_xlim(self.xlim - 50, self.xlim + 50)
-        self.Resultax.set_xlim(self.xlim - 50, self.xlim + 50)
+        self.GMIsensorax.set_xlim(self.xlim - 50, self.xlim + 50)
         return
         # return self.XValueLine, self.YValueLine, self.VarValueLine, self.ExtValueLine, self.VarStateLine, self.ExtStateLine, self.IntensityLine, self.IntensityMiddleLine, self.IntStateLine,self.ResultLine
 

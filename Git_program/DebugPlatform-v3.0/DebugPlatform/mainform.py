@@ -436,6 +436,8 @@ class Application(ttk.Notebook):
                     self.canvas.itemconfigure(('text' + str(num)), text=num + ":\n未停车", fill='green')
                 elif act == '2':
                     self.canvas.itemconfigure(('text' + str(num)), text=num + ":\n识别中", fill='blue')
+                elif act == '253':
+                    self.canvas.itemconfigure(('text' + str(num)), text=num + ":\n掉线", fill='yellow')
             else:
                 self.carnumbind.append(num)
                 if self.stopedcarnum < topnum:
@@ -451,6 +453,10 @@ class Application(ttk.Notebook):
                         self.canvas.create_text(self.stopedcarnum * topwidth + topwidth / 2, self.height / 6,
                                                 text=num + ":\n识别中", font=self.front, fill='blue',
                                                 tag=('text' + str(num)))
+                    elif act == '253':
+                        self.canvas.create_text(self.stopedcarnum * topwidth + topwidth / 2, self.height / 6,
+                                                text=num + ":\n掉线", font=self.front, fill='yellow',
+                                                tag=('text' + str(num)))
                 else:
                     if act == '1':
                         self.canvas.create_text((self.stopedcarnum - topnum) * bottomwidth + bottomwidth / 2,
@@ -464,6 +470,10 @@ class Application(ttk.Notebook):
                         self.canvas.create_text((self.stopedcarnum - topnum) * bottomwidth + bottomwidth / 2,
                                                 self.height - self.height / 6, text=num + ":\n识别中", font=self.front,
                                                 fill='blue', tag=('text' + str(num)))
+                    elif act == '253':
+                        self.canvas.create_text(self.stopedcarnum * topwidth + topwidth / 2, self.height / 6,
+                                                text=num + ":\n掉线", font=self.front, fill='yellow',
+                                                tag=('text' + str(num)))
                 self.stopedcarnum = self.stopedcarnum + 1
 
     def NetStatus(self):
@@ -796,6 +806,32 @@ class Application(ttk.Notebook):
         self.Side_ParkingLabel = tk.Label(readgroup, text="0",textvariable=self.Side_ParkingString)
         self.Side_ParkingLabel.grid(row=2, column=9)
         self.Side_ParkingString.set(0)
+        self.ZvalueString = tk.StringVar()
+        tk.Label(readgroup, text="ZValue:").grid(row=3, column=0)
+        self.ZvalueLabel = tk.Label(readgroup, text="0",textvariable=self.ZvalueString)
+        self.ZvalueLabel.grid(row=3, column=1)
+        self.ZvalueString.set(0)
+        self.GMI_XvalueString = tk.StringVar()
+        tk.Label(readgroup, text="GMI_Xvalue:").grid(row=3, column=2)
+        self.GMI_XValueLabel = tk.Label(readgroup, text="0",textvariable=self.GMI_XvalueString)
+        self.GMI_XValueLabel.grid(row=3, column=3)
+        self.GMI_XvalueString.set(0)
+        self.GMI_XvalueMiddleString = tk.StringVar()
+        tk.Label(readgroup, text="GMI_XvalueM:").grid(row=3, column=4)
+        self.GMI_XValueMiddleLabel = tk.Label(readgroup, text="0",textvariable=self.GMI_XvalueMiddleString)
+        self.GMI_XValueMiddleLabel.grid(row=3, column=5)
+        self.GMI_XvalueMiddleString.set(0)
+        self.GMI_YvalueString = tk.StringVar()
+        tk.Label(readgroup, text="GMI_Yvalue:").grid(row=3, column=6)
+        self.GMI_YValueLabel = tk.Label(readgroup, text="0",textvariable=self.GMI_YvalueString)
+        self.GMI_YValueLabel.grid(row=3, column=7)
+        self.GMI_YvalueString.set(0)
+        self.GMI_YvalueMiddleString = tk.StringVar()
+        tk.Label(readgroup, text="GMI_YvalueM:").grid(row=3, column=8)
+        self.GMI_YValueMiddleLabel = tk.Label(readgroup, text="0",textvariable=self.GMI_YvalueMiddleString)
+        self.GMI_YValueMiddleLabel.grid(row=3, column=9)
+        self.GMI_YvalueMiddleString.set(0)
+
 
 
 
@@ -862,7 +898,6 @@ class Application(ttk.Notebook):
             self.filenameinput.mainloop()
             self.menu.uartform.identifythread.filename = '..\Data\\' + self.filenameadd + time.strftime(
                 '%Y-%m-%d_%H-%M-%S', time.localtime(time.time())) + '.txt'
-
 
     def MatplotlibDrawing(self):
         '''
@@ -965,6 +1000,9 @@ class Application(ttk.Notebook):
         self.VarState = []
         self.XValue = []
         self.YValue = []
+        self.ZValue = []
+        self.GMI_XValue = []
+        self.GMI_YValue = []
         self.VarianceM = []
         self.ExtremumValueMiddle = []
         self.ExtremumValue = []
@@ -976,12 +1014,20 @@ class Application(ttk.Notebook):
         self.Result = []
         self.XAve_Slop = []
         self.YAve_Slop = []
+        self.GMI_XValueM = []
+        self.GMI_YValueM = []
+
 
         # 加变量需要修改
         # if(len(data) == 10):
         for v in data:
             self.XValue.append(v[0])
             self.YValue.append(v[1])
+            self.ZValue.append(v[16])
+            self.GMI_XValue.append(v[17])
+            self.GMI_YValue.append(v[18])
+            self.GMI_XValueM.append(v[19])
+            self.GMI_YValueM.append(v[20])
             self.VarianceM.append(v[2])
             self.ExtremumValueMiddle.append(v[3])
             self.ExtremumValue.append(v[4])
@@ -1109,6 +1155,11 @@ class Application(ttk.Notebook):
         '''
         self.XValueString.set(self.menu.uartform.identifythread.value[0])
         self.YValueString.set(self.menu.uartform.identifythread.value[1])
+        self.ZvalueString.set(self.menu.uartform.identifythread.value[16])
+        self.GMI_XvalueString.set(self.menu.uartform.identifythread.value[17])
+        self.GMI_YvalueString.set(self.menu.uartform.identifythread.value[18])
+        self.GMI_XvalueMiddleString.set(self.menu.uartform.identifythread.value[19])
+        self.GMI_YvalueMiddleString.set(self.menu.uartform.identifythread.value[20])
         self.VarianceString.set(self.menu.uartform.identifythread.value[2])
 
         self.XMiddleString.set(self.menu.uartform.identifythread.value[7])
@@ -1172,6 +1223,11 @@ class Application(ttk.Notebook):
 
             self.XValueString.set(self.XValue[x1 / offset])
             self.YValueString.set(self.YValue[x1 / offset])
+            self.ZValueString.set(self.ZValue[x1 / offset])
+            self.GMI_XvalueString.set(self.GMI_XValue[x1 / offset])
+            self.GMI_YvalueString.set(self.GMI_YValue[x1 / offset])
+            self.GMI_XvalueMiddleString.set(self.GMI_XValueM[x1 / offset])
+            self.GMI_YvalueMiddleString.set(self.GMI_YValueM[x1 / offset])
             self.VarianceString.set(self.VarianceM[x1 / offset])
 
             self.XMiddleString.set(self.AD_middle_valueX[x1 / offset])
@@ -1197,8 +1253,6 @@ class Application(ttk.Notebook):
             #         self.matplotanimate = matplotoldanimate.Scope(data = self.filedata,thread = self)
             #         self.matplotanimate.start()
             # self.DrawOldData.set_xlim(x1/offset)
-
-
 
 
 class StatusBar(ttk.Frame):
