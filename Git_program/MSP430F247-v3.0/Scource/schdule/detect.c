@@ -1,7 +1,7 @@
 #include "common.h"
 #define STATE1 10                //从无车到有车
-#define STATE2 20                //中间态回无车
-#define STATE3 25                //有车回无车
+#define STATE2 15                //中间态回无车
+#define STATE3 20                //有车回无车
 //uint8  State1_Count = 0;        
 //uint8  State2_Count = 0;
 //uint8  State3_Count = 0;
@@ -452,12 +452,6 @@ void IdentifyCar()
     }
     TotalJudge();
     halLedClear(2);
-    /*if(Exit_Sleep == 1)
-    {
-        A7139_Deep_Wake();
-        EN_INT;
-        EN_TIMER1;
-    }*/
     if(EndPointDevice.parking_state_m!=EndPointDevice.parking_state)
     {
         Exit_Sleep  = 1;
@@ -633,7 +627,7 @@ void TotalJudge()
     {
         if(Quick_Collect==1)
         {
-            if(NoCarStableCount>60)
+            if(NoCarStableCount>30)
             {
                 EndPointDevice.parking_state = NOCAR;
                 halLedClear(4);

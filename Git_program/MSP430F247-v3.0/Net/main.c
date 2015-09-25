@@ -16,8 +16,8 @@ ReJoin:
        normal_test[i]=i;
     }
     
-    
-    /*A7139_SetPackLen(TEST_LENGTH);
+    /*    ´«¸ÐÆ÷²âÊÔ
+    A7139_SetPackLen(TEST_LENGTH);
     delay_us(1);
     A7139_SetFreq(475.001f);
     delay_us(1);
@@ -25,19 +25,25 @@ ReJoin:
     delay_us(1);
     while(1)
     {
+        Quick_Collect =  1;
         IdentifyCar();
         TestSend();
         delay_ms(50);
     }*/
+    /*    ¹¦ºÄ²âÊÔ
+    IRD_LOW;
+    delay_ms(1000);
+    halLedSet(1);
+    halLedClearAll();
+    A7139_DeepSleep();
+    delay_ms(2000);
+    halLedClear(1);
+    LPM3;
+    */
     
     
     ChannelSelection(CHANNEL_4,CHANNEL_6);
-//    IRD_LOW;
-//    halLedSet(1);
-//    halLedClearAll();
-//    A7139_DeepSleep();
-//    halLedClear(1);
-//    LPM3;
+
     
     __enable_interrupt();
     //LPM3;
