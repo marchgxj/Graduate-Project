@@ -106,6 +106,7 @@ void bubbledata(DataStruct *a,uint16 n)
 /*方差多状态机识别*/
 void VarianceMultiState(uint16 state1,uint16 state2,uint16 state3)
 {
+	MagneticUnit.VarStateM = MagneticUnit.VarState;
     if(MagneticUnit.Variance > VAR_THRESHOLD)
     {
         if(MagneticUnit.VarState!=CAR)
@@ -154,7 +155,7 @@ void VarianceMultiState(uint16 state1,uint16 state2,uint16 state3)
 /*极值多状态机识别*/
 void ExtremumMultiState(uint16 state1,uint16 state2,uint16 state3)
 {
-    
+    MagneticUnit.ExtStateM = MagneticUnit.ExtState;
     if(MagneticUnit.Extremum > EXT_THRESHOLD)
     {
         if(MagneticUnit.ExtState!=CAR)
@@ -204,7 +205,7 @@ void ExtremumMultiState(uint16 state1,uint16 state2,uint16 state3)
 void IntensityMultiState(uint16 state1,uint16 state2,uint16 state3)
 {
     uint16 intensity = 0;
-    
+    MagneticUnit.IntStateM = MagneticUnit.IntState;
     intensity = abs(MagneticUnit.Intensity - MagneticUnit.Int_Middle);
     if(intensity > INT_THRESHOLD)
     {
@@ -297,7 +298,9 @@ void GetSlop(uint16 xvalue,uint16 yvalue,uint16 zvalue)
     MagneticUnit.YAve_Slop = yslopbuf/SLOP_LENGTH;
     MagneticUnit.ZAve_Slop = zslopbuf/SLOP_LENGTH;
     
-    if((abs(MagneticUnit.XAve_Slop)>20)||(abs(MagneticUnit.YAve_Slop)>20)||(abs(MagneticUnit.ZAve_Slop)>20))
+    if((abs(MagneticUnit.XAve_Slop)>20)||(abs(MagneticUnit.YAve_Slop)>20)||(abs(MagneticUnit.ZAve_Slop)>20)
+       ||(abs(MagneticUnit.ExtStateM - MagneticUnit.ExtState)>0)||(abs(MagneticUnit.VarStateM - MagneticUnit.VarState)>0)||(abs(MagneticUnit.IntStateM - MagneticUnit.IntState)>0)
+       )
     {
         Quick_Collect = 1;
         Collect_Period = 0;
@@ -507,11 +510,12 @@ void TotalJudge()
         GMI_Identify();
     }
 
-    if(((MagneticUnit.ExtState==CAR)&&(MagneticUnit.IntState==CAR))||
+    /*if(((MagneticUnit.ExtState==CAR)&&(MagneticUnit.IntState==CAR))||
        ((MagneticUnit.VarState==CAR)&&(MagneticUnit.IntState==CAR))||
            ((MagneticUnit.VarState==CAR)&&(MagneticUnit.ExtState==CAR))||
                ((MagneticUnit.VarState==CAR)&&(MagneticUnit.ExtState==CAR)&&(MagneticUnit.IntState==CAR))||
-                   (XValue_Parking==1)||(YValue_Parking==1))
+                   (XValue_Parking==1)||(YValue_Parking==1))*/
+    if((MagneticUnit.ExtState==CAR)||(MagneticUnit.IntState==CAR)||(MagneticUnit.VarState==CAR))
     {
         
         CarStableCount++;
@@ -519,6 +523,7 @@ void TotalJudge()
         {
             if(CarStableCount>60)
             {
+                halLedSet(1);
                 EndPointDevice.parking_state = CAR;
                 if(HMC_Identify_Fail == 1)
                 {
@@ -535,6 +540,7 @@ void TotalJudge()
         {
             if(CarStableCount>6)
             {
+                halLedSet(1);
                 EndPointDevice.parking_state = CAR;
                 if(HMC_Identify_Fail == 1)
                 {
@@ -629,16 +635,17 @@ void TotalJudge()
         {
             if(NoCarStableCount>30)
             {
+                halLedClear(1);
                 EndPointDevice.parking_state = NOCAR;
                 halLedClear(4);
             }
         }
         else
         {
-            if(NoCarStableCount>6)
+            if(NoCarStableCount>3)
             {
                 EndPointDevice.parking_state = NOCAR;
-                halLedClear(4);
+                halLedClear(1);
             }
         }
         NoCarStableCount++;
@@ -647,25 +654,22 @@ void TotalJudge()
     {
         NoCarStableCount = 0;
     }
-    if(Sensor_Drift==1)
-    {
-        After_Drift_Cal++;
-    }
+
     if(Quick_Collect == 1)
     {
-        if((NoCarStableCount >400)||(After_Drift_Cal>60))
+        if((NoCarStableCount >400))//||(After_Drift_Cal>60))
         {
             NoCarStableCount = 0;
-            After_Drift_Cal = 0;
+            //After_Drift_Cal = 0;
             NoCarCalibration();
         }
     }
     else
     {
-        if((NoCarStableCount >60)||(After_Drift_Cal>60))
+        if((NoCarStableCount >60))//||(After_Drift_Cal>60))
         {
             NoCarStableCount = 0;
-            After_Drift_Cal = 0;
+            //After_Drift_Cal = 0;
             NoCarCalibration();
         }
     }

@@ -1,7 +1,7 @@
 #ifndef _DETECT_h_
 #define _DETECT_h_
 #include "common.h"
-#define MCU_SLEEP_ENABLE 1
+#define MCU_SLEEP_ENABLE 0
 
 #define COLLECT_EN   0          //是否开启数据采集
 #define COLLECT_PERIOD  1000   //采集周期  单位：100us
@@ -68,13 +68,16 @@ typedef struct
     uint16 CarIntensity;
     uint16 Int_Middle;
     uint8  IntState;
+    uint8  IntStateM;
     uint32 Variance;
     uint32 CarVariance;
     uint8  VarState;
+    uint8  VarStateM;
     uint16 Extremum;
     uint16 CarExtremum;
     uint16 Ext_Middle;
     uint8  ExtState;
+    uint8  ExtStateM;
     int XAve_Slop;
     int YAve_Slop;
     int ZAve_Slop;

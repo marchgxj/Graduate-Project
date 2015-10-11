@@ -35,7 +35,7 @@ void halBoardInit(void)
     A7139_Init(470.001f);
     Interrupt_Init();
     Init_TQ();
-    //Init_5983();
+    Init_5983();
     
-    //AD_cal(); 
+    AD_cal(); 
 }

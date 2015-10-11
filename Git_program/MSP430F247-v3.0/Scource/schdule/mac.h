@@ -3,7 +3,7 @@
 /****************更改beacon周期需要重新调的参数*************/
 #define    BEACON_PERIOD     5000
 #define    BEFOR_BEACON_WAKE BEACON_PERIOD-300   //在beacon前1.5ms时唤醒芯片
-#define    KEEP_ALIVE_PERIOD   14400  //单位50 ms  15分钟发一次keepalive
+#define    KEEP_ALIVE_PERIOD   1200  //单位50 ms  
 
 /**********************************************************/
 #define    SLOT_LENGTH     20000     //单位us
@@ -63,6 +63,7 @@ typedef struct{
     uint8 power;			//是否开启低功耗
     uint8 parking_state;                //停车状态
     uint8 parking_state_m;              //上一次停车状态
+    uint8 cmd;                          //命令
 }EndPointDeviceStruct;
 
 extern EndPointDeviceStruct EndPointDevice;

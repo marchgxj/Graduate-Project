@@ -762,8 +762,17 @@ void A7139_Deep_Wake(void)
 {
 #if (SLEEP_EN)    
     A7139_StrobeCmd(CMD_STBY);
+    delay_ms(10);
+    A7139_StrobeCmd(CMD_STBY);
+    delay_ms(10);
     A7139_Init(ChannelList[EndPointDevice.channel]);
+    delay_ms(10);
+    A7139_Init(ChannelList[EndPointDevice.channel]);
+    delay_ms(10);
     RXMode();
+    delay_ms(10);
+    RXMode();
+    delay_ms(10);
 #endif   
 }
 void A7139_Reset()

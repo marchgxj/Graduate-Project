@@ -65,13 +65,16 @@ typedef struct
     uint16 CarIntensity;
     uint16 Int_Middle;
     uint8  IntState;
+    uint8  IntStateM;
     uint32 Variance;
     uint32 CarVariance;
     uint8  VarState;
+    uint8  VarStateM;
     uint16 Extremum;
     uint16 CarExtremum;
     uint16 Ext_Middle;
     uint8  ExtState;
+    uint8  ExtStateM;
     int XAve_Slop;
     int YAve_Slop;
     int ZAve_Slop;

@@ -1,7 +1,7 @@
 #include "common.h"
 #define STATE1 10                //从无车到有车
-#define STATE2 20                //中间态回无车
-#define STATE3 25                //有车回无车
+#define STATE2 15                //中间态回无车
+#define STATE3 20                //有车回无车
 //uint8  State1_Count = 0;        
 //uint8  State2_Count = 0;
 //uint8  State3_Count = 0;
@@ -110,7 +110,7 @@ void bubbledata(DataStruct *a,uint16 n)
 
 void VarianceMultiState(uint16 state1,uint16 state2,uint16 state3)
 {
-    
+    MagneticUnit.VarStateM = MagneticUnit.VarState;
     if(MagneticUnit.Variance > VAR_THRESHOLD)
     {
         if(MagneticUnit.VarState!=CAR)
@@ -161,7 +161,7 @@ void VarianceMultiState(uint16 state1,uint16 state2,uint16 state3)
 
 void ExtremumMultiState(uint16 state1,uint16 state2,uint16 state3)
 {
-    
+    MagneticUnit.ExtStateM = MagneticUnit.ExtState;
     if(MagneticUnit.Extremum > EXT_THRESHOLD)
     {
         if(MagneticUnit.ExtState!=CAR)
@@ -213,7 +213,7 @@ void IntensityMultiState(uint16 state1,uint16 state2,uint16 state3)
 {
     
     uint16 intensity = 0;
-    
+    MagneticUnit.IntStateM = MagneticUnit.IntState;
     intensity = abs(MagneticUnit.Intensity - MagneticUnit.Int_Middle);
     if(intensity > INT_THRESHOLD)
     {
@@ -306,7 +306,9 @@ void GetSlop(uint16 xvalue,uint16 yvalue,uint16 zvalue)
     MagneticUnit.YAve_Slop = yslopbuf/SLOP_LENGTH;
     MagneticUnit.ZAve_Slop = zslopbuf/SLOP_LENGTH;
     
-    if((abs(MagneticUnit.XAve_Slop)>20)||(abs(MagneticUnit.YAve_Slop)>20)||(abs(MagneticUnit.ZAve_Slop)>20))
+    if((abs(MagneticUnit.XAve_Slop)>20)||(abs(MagneticUnit.YAve_Slop)>20)||(abs(MagneticUnit.ZAve_Slop)>20)
+       ||(abs(MagneticUnit.ExtStateM - MagneticUnit.ExtState)>0)||(abs(MagneticUnit.VarStateM - MagneticUnit.VarState)>0)||(abs(MagneticUnit.IntStateM - MagneticUnit.IntState)>0)
+       )
     {
         Quick_Collect = 1;
         Collect_Period = 0;
@@ -519,6 +521,7 @@ void TotalJudge()
     {
         GMI_Identify();
     }
+    
     
     
    

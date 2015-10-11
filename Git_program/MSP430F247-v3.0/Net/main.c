@@ -31,14 +31,14 @@ ReJoin:
         delay_ms(50);
     }*/
     /*    ¹¦ºÄ²âÊÔ*/
-    IRD_LOW;
+    /*IRD_LOW;
     delay_ms(1000);
     halLedSet(1);
     halLedClearAll();
     A7139_DeepSleep();
     delay_ms(2000);
     halLedClear(1);
-    LPM3;
+    LPM3;*/
     
     
     
@@ -46,7 +46,7 @@ ReJoin:
 
     
     __enable_interrupt();
-    //LPM3;
+
 
     for(;;)
     {
