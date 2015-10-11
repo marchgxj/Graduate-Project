@@ -8,6 +8,7 @@ uint8 current_upload_tsk;
 uint8 last_upload_tsk;
 uint8 Node_Inwaiting = 0;							//队列中节点的数量
 uint16 Pop_Count = 0;
+uint8 Upload_Ack = 0;
 
 void Clear_Node(UartDataStruct *node)
 {
@@ -114,8 +115,11 @@ void Upload_Data()
     }
 		//Usart1_PutChar(0x7E);
 		//Usart1_PutChar(0x7D);
+		DIS_USARTINT;
+		delay_ms(1);
 		if(Power_Mode == 1)			//只发送一次时要求确认
 		{
+				
 				while (USART_GetFlagStatus(USART1, USART_FLAG_RXNE) == RESET)
 				{
 						if (time_out++ > 200)
@@ -130,8 +134,9 @@ void Upload_Data()
 						current_upload_tsk = 0;				//如果没有收到确认，发送指针置头，重新发送
 						return;
 				}
+				
 		}
-		
+		EN_USARTINT;
 		//若发送成功，清空队列中节点信息，插入和发送指针置头
 		Clear_Buffer(current_memory,last_memory);
 		current_upload_tsk = 0;

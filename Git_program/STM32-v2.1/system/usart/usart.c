@@ -1,6 +1,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "sys.h"
 #include "usart.h"	  
+#include "common.h"
  
 //如果使用ucos,则包括下面的头文件即可.
 #if SYSTEM_SUPPORT_UCOS
@@ -73,12 +74,12 @@ void uart_init(){
   GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;//IO口悬空输入
   GPIO_Init(GPIOA, &GPIO_InitStructure);               //初始化串口2输入IO
 	
-	/*NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);
+	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);
   NVIC_InitStructure.NVIC_IRQChannel	=	USART1_IRQn;
   NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority	=	3;
   NVIC_InitStructure.NVIC_IRQChannelSubPriority	=	2;
   NVIC_InitStructure.NVIC_IRQChannelCmd	=	ENABLE;
-  NVIC_Init(&NVIC_InitStructure);*/
+  NVIC_Init(&NVIC_InitStructure);
 
 }
 void Usart1_PutChar(uint8_t ch)
@@ -104,14 +105,37 @@ void Usart1_PutData(uint8_t *buffer,uint8_t count)
  * 输出  ：无
  */	
 uint8 buda = 0;
+uint8 Usart_Count = 0;
+uint8 Usart_Data[4] = 0;
 void USART1_IRQHandler(void)
 {
-
-	if(USART_GetITStatus(USART1, USART_IT_RXNE) != RESET)//接收中断(接收到的数据必须是0x0d 0x0a结尾)
+	uint8 buf;
+	if(USART_GetITStatus(USART1, USART_IT_RXNE) != RESET)//接收中断
 	{
 			USART_ClearFlag(USART1 , USART_FLAG_RXNE);
-			buda=USART_ReceiveData(USART1);
-		
+		  buf = USART_ReceiveData(USART1);
+			if(buf == 'o')
+			{
+					Upload_Ack = 1;
+			}
+			else
+			{
+					Upload_Ack = 0;
+				  if(buf == 0xAA)
+					{
+							Usart_Count = 0;
+					}
+					Usart_Data[Usart_Count++] = buf;
+					if(buf==0xBB)
+					{
+							Usart_Count = 0;
+							Cmd_Address = Usart_Data[1];
+							Cmd_Command = Usart_Data[2];
+							Usart1_PutChar(0xAA);
+							LED5_REV();
+					}
+			}
+			
 	}
 } 
 uint8 USART1_Getchar(void)

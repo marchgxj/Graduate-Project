@@ -2,9 +2,11 @@
 DataACKPacketStruct DataACKPacket;
 uint16 Draw_DataX = 0;
 uint16 Draw_DataY = 0;
+uint16 Cmd_Address = 0;
+uint8 Cmd_Command = 0;
 
 
-void CreateDataACK(uint8 src_cluster_id,uint8 src_cluster_innernum,uint8 rejoin)
+void CreateDataACK(uint8 src_cluster_id,uint8 src_cluster_innernum,uint8 rejoin,uint16 phy_address)
 {
 		DataACKPacket.pack_length = DATAACK_PACK_LENGTH;
 	  DataACKPacket.pack_type = DATAACK_TYPE;
@@ -15,6 +17,10 @@ void CreateDataACK(uint8 src_cluster_id,uint8 src_cluster_innernum,uint8 rejoin)
 	  DataACKPacket.src_cluster_id = RootDevice.cluster_id;
 	  DataACKPacket.src_cluster_innernum = RootDevice.cluster_innernum;
 	  DataACKPacket.time_stamp = Frame_Time;
+		if(Cmd_Address == phy_address)
+		{
+				DataACKPacket.cmd = Cmd_Command;
+		}
 	
 		DataSendBuffer[0] = DataACKPacket.pack_length;
 		DataSendBuffer[1] = DataACKPacket.pack_type<<2|DataACKPacket.ack_en<<1|DataACKPacket.rejoin;
@@ -24,10 +30,12 @@ void CreateDataACK(uint8 src_cluster_id,uint8 src_cluster_innernum,uint8 rejoin)
 		DataSendBuffer[5] = DataACKPacket.src_cluster_innernum;
 		DataSendBuffer[6] = DataACKPacket.time_stamp>>8;
 		DataSendBuffer[7] = DataACKPacket.time_stamp;
-		DataSendBuffer[8] = 0;
+		DataSendBuffer[8] = DataACKPacket.cmd;
 		DataSendBuffer[9] = 0;
 		DataSendBuffer[10] = 0;
 		DataSendBuffer[11] = 0;
+		DataACKPacket.cmd = 0;
+
 }
 UartDataStruct bufnode;
 void DataHandler(void)
@@ -71,7 +79,7 @@ void DataHandler(void)
 #endif
 				TIME2_HIGH;
 		}
-				CreateDataACK(src_cluster_id,src_cluster_innernum,rejoin);
+				CreateDataACK(src_cluster_id,src_cluster_innernum,rejoin,RootDevice.endpoint_device[inner_num].pyh_address);
 				
 				SendPack();
 				RXMode();
