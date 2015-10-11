@@ -30,7 +30,7 @@ ReJoin:
         TestSend();
         delay_ms(50);
     }*/
-    /*    ¹¦ºÄ²âÊÔ
+    /*    ¹¦ºÄ²âÊÔ*/
     IRD_LOW;
     delay_ms(1000);
     halLedSet(1);
@@ -39,7 +39,7 @@ ReJoin:
     delay_ms(2000);
     halLedClear(1);
     LPM3;
-    */
+    
     
     
     ChannelSelection(CHANNEL_4,CHANNEL_6);

@@ -45,11 +45,6 @@ int main(void)
 
     while(1) 
     {    
-        if(ADCal_Flag == 1)
-        {
-            //NoCarCalibration();
-            ADCal_Flag = 0;
-        }
     
 //        SampleChannel(&MagneticUnit.XValue,&MagneticUnit.YValue); 
 //        HAL_PLU_CLR;

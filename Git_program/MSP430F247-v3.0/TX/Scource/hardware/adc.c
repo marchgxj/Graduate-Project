@@ -24,7 +24,7 @@ int16 SampleChannel(Uint16* SampleValueX,Uint16* SampleValueY)	//½øÐÐ²ÉÑùÍ¨µÀµçÔ
     P6DIR &= 0xaf;   // 1010 1111
     P6SEL |= 0x50;   //0101 0000
     HAL_PLU_SET;
-    delay_1ms();delay_1ms();delay_1ms();delay_1ms();delay_1ms();delay_1ms();delay_1ms();
+    delay_1ms();
     //Uint16 *ram_ptr;
     *SampleValueX =0;
     *SampleValueY =0;
@@ -40,10 +40,7 @@ int16 SampleChannel(Uint16* SampleValueX,Uint16* SampleValueY)	//½øÐÐ²ÉÑùÍ¨µÀµçÔ
     ADC12MCTL0=INCH_4;
     //ADC12MCTL5=INCH_5;
     ADC12MCTL1=INCH_6+EOS;
-    delay_1ms();
     ADC12CTL0 |= ENC + ADC12SC;
-    delay_1ms();
-    delay_1ms();
     while (ADC12IFG & BIT0==0);                         //Wait if ADC10 core is active
     
     while (ADC12IFG & BIT1==0);                         //Wait if ADC10 core is active

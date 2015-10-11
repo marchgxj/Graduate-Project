@@ -176,7 +176,7 @@ __interrupt void Timer_A0(void)
         {
             IdentifyCar();
             TestSend();
-            if(Collect_Period == 200)
+            if(Collect_Period == 600)
             {
                 Collect_Period = 0;
                 Quick_Collect = 0;

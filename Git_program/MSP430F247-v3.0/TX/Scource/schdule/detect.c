@@ -446,9 +446,9 @@ void IdentifyCar()
     ReCal();
     GetSlop(MagneticUnit.XValue,MagneticUnit.YValue,MagneticUnit.ZValue);
     //Filter(MagneticUnit.XValue,MagneticUnit.YValue);
-    GetVariance();
-    GetExtremum();
-    GetIntensity();
+    GetVariance();  //方差
+    GetExtremum();      //极值
+    GetIntensity();     //绝对强度
     
     if(Quick_Collect == 1)
     {
@@ -522,11 +522,12 @@ void TotalJudge()
     
     
    
-    if(((MagneticUnit.ExtState==CAR)&&(MagneticUnit.IntState==CAR))||
+    /*if(((MagneticUnit.ExtState==CAR)&&(MagneticUnit.IntState==CAR))||
        ((MagneticUnit.VarState==CAR)&&(MagneticUnit.IntState==CAR))||
            ((MagneticUnit.VarState==CAR)&&(MagneticUnit.ExtState==CAR))||
                ((MagneticUnit.VarState==CAR)&&(MagneticUnit.ExtState==CAR)&&(MagneticUnit.IntState==CAR))||
-                   (XValue_Parking==1)||(YValue_Parking==1))
+                   (XValue_Parking==1)||(YValue_Parking==1))*/
+    if((MagneticUnit.ExtState==CAR)||(MagneticUnit.IntState==CAR)||(MagneticUnit.VarState==CAR))
     {
         
         CarStableCount++;
@@ -642,7 +643,7 @@ void TotalJudge()
     {
         if(Quick_Collect==1)
         {
-            if(NoCarStableCount>60)
+            if(NoCarStableCount>30)
             {
                 EndPointDevice.parking_state = NOCAR;
                 halLedClear(4);
@@ -650,37 +651,36 @@ void TotalJudge()
         }
         else
         {
-            if(NoCarStableCount>6)
+            if(NoCarStableCount>3)
             {
                 EndPointDevice.parking_state = NOCAR;
                 halLedClear(4);
             }
         }
         NoCarStableCount++;
+        
     }
     else
     {
         NoCarStableCount = 0;
     }
-    if(Sensor_Drift==1)
-    {
-        After_Drift_Cal++;
-    }
+
+
     if(Quick_Collect == 1)
     {
-        if((NoCarStableCount >400)||(After_Drift_Cal>60))
+        if((NoCarStableCount >400))//||(After_Drift_Cal>60))
         {
             NoCarStableCount = 0;
-            After_Drift_Cal = 0;
+            //After_Drift_Cal = 0;
             NoCarCalibration();
         }
     }
     else
     {
-        if((NoCarStableCount >60)||(After_Drift_Cal>60))
+        if((NoCarStableCount >60))//||(After_Drift_Cal>60))
         {
             NoCarStableCount = 0;
-            After_Drift_Cal = 0;
+            //After_Drift_Cal = 0;
             NoCarCalibration();
         }
     }
