@@ -153,11 +153,13 @@ class myThread (threading.Thread):
         Others：
         '''
         return "DataACK: 应答:" + str((self.data[1]&0x02)>>1)+\
+            "  重新入网:"+str(self.data[1]&0x01)+\
             "  目的簇ID:"+str(self.data[2])+\
             "  目的编号:"+str(self.data[3])+\
             "  源簇ID:" + str(self.data[4])+\
             "  源编号:"+str(self.data[5])+\
-            "  时间戳:"+str(self.data[6]<<8|self.data[7])
+            "  时间戳:"+str(self.data[6]<<8|self.data[7])+\
+            "  控制命令:"+str(self.data[8])
             
     def ReJoin(self):
         return "ReJoin: 应答:" + str((self.data[1]&0x02)>>1)+\

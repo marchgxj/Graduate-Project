@@ -57,6 +57,9 @@ class MainRoot(tk.Tk):
     def StopStatus(self):
         self.appFrame.StopStatus()
 
+    def Command(self):
+        self.appFrame.SendCommand()
+
     def NetSniffer(self):
         self.appFrame.DrawSensor()
 
@@ -138,6 +141,7 @@ class MenuBar(tk.Menu):
         global root
 
         self.uartform = uart.UartRoot(comnum=self.portlistsort, frame=root)
+
         self.root.appFrame.bindtab()
         self.uartform.showupdate()
         self.uartform.protocol("WM_DELETE_WINDOW", self.uart_shutdown_ttk_repeat)  # 防止退出报错
@@ -198,11 +202,13 @@ class Application(ttk.Notebook):
         self.tab2 = ttk.Frame(self)
         self.tab3 = ttk.Frame(self)
         self.tab4 = ttk.Frame(self)
+        self.tab5 = ttk.Frame(self)
 
         self.add(self.tab1, text="停车状态")
         self.add(self.tab2, text="网络拓扑")
         self.add(self.tab3, text="数据显示")
         self.add(self.tab4, text="数据识别")
+        self.add(self.tab5, text="控制命令")
         self.topline = []
         self.bottomline = []
         self.carnum = 0
@@ -1254,6 +1260,28 @@ class Application(ttk.Notebook):
             #         self.matplotanimate.start()
             # self.DrawOldData.set_xlim(x1/offset)
 
+    def SendCommand(self):
+
+        def cmdtext(cmd):
+            address = cmdinput.get()
+
+            try:
+                self.menu.uartform.relaythread.SendCmd(address,cmd)
+            except:
+                tkmes.showerror("错误！","串口未打开，无法发送！")
+
+        for i in range(6):
+            self.tab5.columnconfigure(i, weight=1)
+        phyaddtxtfont = tkFont.Font(size=20, family="黑体")
+        tk.Label(self.tab5,text = "物理地址：",font = phyaddtxtfont).grid(row=0,column=1,sticky=tk.E)
+        cmdinput = tk.Entry(self.tab5, width=15)
+        cmdinput.grid(row=0,column=2,sticky=tk.W)
+        buttonfont = tkFont.Font(size=16, family="黑体")
+        cmdbutton1 = tk.Button(self.tab5,text="数据回传",command = lambda: cmdtext(1),font=buttonfont)
+        cmdbutton2 = tk.Button(self.tab5,text="传感器校准",command = lambda: cmdtext(2),font=buttonfont)
+        cmdbutton1.grid(row=1,column=0)
+        cmdbutton2.grid(row=1,column=1)
+
 
 class StatusBar(ttk.Frame):
     def __init__(self, master):
@@ -1310,5 +1338,6 @@ if __name__ == '__main__':
     root.StopStatus()  # 停车状态
     root.NetSniffer()  # 网络抓包
     root.SysStatus()  # 状态栏
+    root.Command()  #命令
     root.Identify()
     root.mainloop()

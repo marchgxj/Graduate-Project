@@ -113,6 +113,7 @@ class myThread(threading.Thread):
                             self.file.write(str(self.value[18]) + " ")
                             self.file.write(str(self.value[19]) + " ")
                             self.file.write(str(self.value[20]) + " ")
+                            self.file.write("\n")
 
                             self.file.close()
                             self.uart.read(self.uart.inWaiting())
@@ -130,3 +131,5 @@ class myThread(threading.Thread):
         self.uart = serial.Serial()
         self.uart.port = self.port
         self.uart.baudrate = self.baud
+
+

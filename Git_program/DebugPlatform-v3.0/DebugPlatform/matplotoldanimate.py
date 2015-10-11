@@ -52,7 +52,7 @@ class Scope:
         self.IntensityLine, = self.Intensityax.plot([], [], "y", lw=2)
         self.IntensityMiddleLine, = self.Intensityax.plot([], [], "r", lw=2)
         self.IntStateLine, = self.Stateax.plot([], [], "y", lw=2)
-        self.ResultLine, = self.Resultax.plot([], [], "b", lw=2)
+        self.ResultLine, = self.GMIsensorax.plot([], [], "b", lw=2)
 
         self.count = 0
 

@@ -3,8 +3,8 @@ import time
 import threading
 import urllib2
 import urllib
-
 import serial
+import tkMessageBox as tkmes
 
 
 class myThread(threading.Thread):
@@ -39,6 +39,7 @@ class myThread(threading.Thread):
         self.notedata = []
         self.longdata = [1, 0, 2, 0, 3, 0, 4, 0, 5, 0, 6, 0, 7, 0, 8, 0, 9, 0]
         self.longdatastr = ""
+        self.cmdaddress = ""
 
     def netupdate(self):
         '''
@@ -113,82 +114,96 @@ class myThread(threading.Thread):
                 try:
                     self.currenttab = self.showdata.appFrame.index('current')
                 except:
-                    print "1"
+                    print "relaytherad.py line117"
 
                 if self.currenttab == 0:
-                    if ord(self.uart.read(1)) == 0x7D:
-                        if ord(self.uart.read(1)) == 0x7E:
-                            count += 1
-                            length = ord(self.uart.read(1))  # 读出这一包要发的节点个数
-                            self.notedata = []
-                            for i in range(length):
+                    self.statusbar.status.setstatus("停车状态")
+                    ordbuf = self.uart.read(1)
+                    if(ordbuf!=""):
+                        if ord(ordbuf) == 0x7D:
+                            if ord(self.uart.read(1)) == 0x7E:
+                                count += 1
+                                length = ord(self.uart.read(1))  # 读出这一包要发的节点个数
+                                self.notedata = []
+                                data["data"]=""
+                                for i in range(length):
+                                    num = ord(self.uart.read(1)) << 8 | ord(self.uart.read(1))
+                                    self.notedata.append(num)  # 偶数位为地址
+                                    data["data"] = data["data"]+"0086-110108-00022105-" + str(num).zfill(4) + "|"
+                                    self.datatoshow = self.datatoshow + str(num).zfill(4) + "|"
+                                    status = ord(self.uart.read(1))
+                                    self.notedata.append(status)  # 奇数位为数据
+                                    self.datatoshow = self.datatoshow + str(status) + ","
+                                    data["data"] = data["data"] + str(status) + ","
 
 
-                                num = ord(self.uart.read(1)) << 8 | ord(self.uart.read(1))
-                                num = num
-                                num = 16
-                                self.notedata.append(num)  # 偶数位为地址
-                                data["data"] = data["data"]+"0086-110108-00022105-" + str(num).zfill(4) + "|"
-                                self.datatoshow = self.datatoshow + str(num).zfill(4) + "|"
-                                status = ord(self.uart.read(1))
-                                self.notedata.append(status)  # 奇数位为数据
-                                self.datatoshow = self.datatoshow + str(status) + ","
-                                data["data"] = data["data"] + str(status) + ","
+                                if len(self.notedata) == length * 2:
+                                    self.uart.write("o")
+                                    print "upload ack"
+                                else:
+                                    print "uart data error"
+                                    self.uart.read(self.uart.inWaiting())  # 清空串口缓冲区内容
+                                # self.statusbar.status.setdata('串口数据:%s 计数:%s', self.datatoshow[:-1], count)
+                                uploaddatacut = data["data"]
+                                data["data"] = uploaddatacut[:-1]
+                                self.statusbar.status.setdata('串口数据:%s 计数:%s',data["data"] , count)
+                                if self.stopcar.appFrame.carnum == 0:
+                                    self.statusbar.status.setstatus('%s', "未配置停车个数")
+                                else:
+                                    self.stopcar.appFrame.stopcaronce(self.datatoshow[:-1])
+                                self.datatoshow = ''
+                                if self.uartroot.datamode == 0:
+                                    start = time.clock()
+                                    # try:
+                                    '''上传全部数据'''
+                                    # post_data = urllib.urlencode(data)
+                                    # data["data"] = ""
+                                    # response = urllib2.urlopen("http://123.57.37.66:8080/sensor/post/status", post_data,timeout=1)
+                                    # serverresponse =  response.read()
+                                    # serverresponsedic = eval(serverresponse)
+                                    # end = time.clock()
+                                    #
+                                    # self.statusbar.status.setstatus('网络延时:%s'+"  "+serverresponsedic["err_msg"], str(end - start))
+                                    ''''''
+                                    # except:
+                                    #     self.statusbar.status.setstatus('%s', "网络连接超时，请检查网络或关闭数据上传下载功能")
 
-
-                            if len(self.notedata) == length * 2:
-                                self.uart.write("o")
+                                else:
+                                    if self.threadstartflag == 0:
+                                        self.threadstartflag = 1
+                                        self.netreceive.start()
+                                    comtent = self.content
+                                    self.netdatabuf = ''
+                                    try:
+                                        if comtent['err_code'] == 0:
+                                            for items in comtent['data']:
+                                                self.netdatabuf = self.netdatabuf + str(
+                                                    items['name'] + '|' + items['value'] + ',')
+                                            self.stopcar.appFrame.stopcaronce(self.netdatabuf[:-1])
+                                            self.statusbar.status.setstatus('%s', "网络数据:" + self.netdatabuf[:-1])
+                                        else:
+                                            self.statusbar.status.setstatus('%s', "数据返回错误")
+                                    except:
+                                        print "2"
+                else:
+                    self.statusbar.status.setstatus("节点控制")
+                    if(self.cmdaddress!=""):
+                        if(self.cmdaddress!="0"):
+                            if(int(self.cmdaddress)>255):
+                                self.statusbar.status.setdata("地址超出范围！")
                             else:
-                                print "uart data error"
-                                self.uart.read(self.uart.inWaiting())  # 清空串口缓冲区内容
-                            # self.statusbar.status.setdata('串口数据:%s 计数:%s', self.datatoshow[:-1], count)
-                            uploaddatacut = data["data"]
-                            data["data"] = uploaddatacut[:-1]
-                            self.statusbar.status.setdata('串口数据:%s 计数:%s',data["data"] , count)
-                            if self.stopcar.appFrame.carnum == 0:
-                                self.statusbar.status.setstatus('%s', "未配置停车个数")
-                            else:
-                                self.stopcar.appFrame.stopcaronce(self.datatoshow[:-1])
-                            self.datatoshow = ''
-                            if self.uartroot.datamode == 0:
-                                start = time.clock()
-                                # try:
-                                '''上传全部数据'''
-                                # urllib2.urlopen(
-                                #     "http://123.57.11.98:8080/mm/set_new?data=" + self.longdatastr[:-1],
-                                #     timeout=1)
-                                # urllib2.urlopen("http://123.57.11.98:8080/mm/set?data=" + self.longdatastr[:-1],
-                                #                 timeout=1)
-                                post_data = urllib.urlencode(data)
-                                data["data"] = ""
-                                response = urllib2.urlopen("http://123.57.37.66:8080/sensor/post/status", post_data,timeout=1)
-                                serverresponse =  response.read()
-                                serverresponsedic = eval(serverresponse)
-                                # print serverresponse
-                                end = time.clock()
+                                self.uart.write("\xAA")
+                                self.uart.write((chr(int(self.cmdaddress))))
+                                self.uart.write((chr(int(self.cmd))))
+                                self.uart.write("\xBB")
+                                if(ord(self.uart.read(1))==0xAA):
+                                    self.statusbar.status.setdata('%s', "发送命令：" + str(self.cmdaddress) + "," + str(self.cmd))
+                                    self.cmdaddress = "0"
+                    else:
+                        self.statusbar.status.setdata("请填写地址！")
 
-                                self.statusbar.status.setstatus('网络延时:%s'+"  "+serverresponsedic["err_msg"], str(end - start))
-                                ''''''
-                                # except:
-                                #     self.statusbar.status.setstatus('%s', "网络连接超时，请检查网络或关闭数据上传下载功能")
 
-                            else:
-                                if self.threadstartflag == 0:
-                                    self.threadstartflag = 1
-                                    self.netreceive.start()
-                                comtent = self.content
-                                self.netdatabuf = ''
-                                try:
-                                    if comtent['err_code'] == 0:
-                                        for items in comtent['data']:
-                                            self.netdatabuf = self.netdatabuf + str(
-                                                items['name'] + '|' + items['value'] + ',')
-                                        self.stopcar.appFrame.stopcaronce(self.netdatabuf[:-1])
-                                        self.statusbar.status.setstatus('%s', "网络数据:" + self.netdatabuf[:-1])
-                                    else:
-                                        self.statusbar.status.setstatus('%s', "数据返回错误")
-                                except:
-                                    print "2"
+                    time.sleep(0.3)
 
                     '''旧版数据接收
                     if ord(self.uart.read(1))==0x7D:
@@ -231,6 +246,10 @@ class myThread(threading.Thread):
                     '''
 
     def Createuart(self):
-        self.uart = serial.Serial()
+        self.uart = serial.Serial(timeout=2)
         self.uart.port = self.port
         self.uart.baudrate = self.baud
+
+    def SendCmd(self,address,cmd):
+        self.cmdaddress = address
+        self.cmd = cmd
