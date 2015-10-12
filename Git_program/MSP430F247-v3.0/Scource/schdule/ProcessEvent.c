@@ -108,6 +108,9 @@ uint8 Process_Event()
       case EVENT_MCUSLEEP_ENABLE:
         LPM3;
         break;
+      case EVENT_CMD_HANDLER:
+        CmdHandler();
+        break;
 
         
     }

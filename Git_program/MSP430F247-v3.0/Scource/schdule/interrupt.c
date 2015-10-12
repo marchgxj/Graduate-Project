@@ -200,6 +200,7 @@ __interrupt void Timer_A0(void)
         
         {
             Keep_Alive_Count = 0;
+            Exit_Sleep  = 1;
             PostTask(EVENT_KEEPALIVE_SEND);
         }
         

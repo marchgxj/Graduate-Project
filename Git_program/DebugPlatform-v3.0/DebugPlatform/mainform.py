@@ -206,7 +206,7 @@ class Application(ttk.Notebook):
 
         self.add(self.tab1, text="停车状态")
         self.add(self.tab2, text="网络拓扑")
-        self.add(self.tab3, text="数据显示")
+        self.add(self.tab3, text="网络抓包")
         self.add(self.tab4, text="数据识别")
         self.add(self.tab5, text="控制命令")
         self.topline = []
@@ -444,6 +444,8 @@ class Application(ttk.Notebook):
                     self.canvas.itemconfigure(('text' + str(num)), text=num + ":\n识别中", fill='blue')
                 elif act == '253':
                     self.canvas.itemconfigure(('text' + str(num)), text=num + ":\n掉线", fill='yellow')
+                elif act == '252':
+                    self.canvas.itemconfigure(('text' + str(num)), text=num + ":\n电量低", fill='yellow')
             else:
                 self.carnumbind.append(num)
                 if self.stopedcarnum < topnum:
@@ -463,6 +465,10 @@ class Application(ttk.Notebook):
                         self.canvas.create_text(self.stopedcarnum * topwidth + topwidth / 2, self.height / 6,
                                                 text=num + ":\n掉线", font=self.front, fill='yellow',
                                                 tag=('text' + str(num)))
+                    elif act == '252':
+                        self.canvas.create_text(self.stopedcarnum * topwidth + topwidth / 2, self.height / 6,
+                                                text=num + ":\n电量低", font=self.front, fill='yellow',
+                                                tag=('text' + str(num)))
                 else:
                     if act == '1':
                         self.canvas.create_text((self.stopedcarnum - topnum) * bottomwidth + bottomwidth / 2,
@@ -479,6 +485,10 @@ class Application(ttk.Notebook):
                     elif act == '253':
                         self.canvas.create_text(self.stopedcarnum * topwidth + topwidth / 2, self.height / 6,
                                                 text=num + ":\n掉线", font=self.front, fill='yellow',
+                                                tag=('text' + str(num)))
+                    elif act == '252':
+                        self.canvas.create_text(self.stopedcarnum * topwidth + topwidth / 2, self.height / 6,
+                                                text=num + ":\n电量低", font=self.front, fill='yellow',
                                                 tag=('text' + str(num)))
                 self.stopedcarnum = self.stopedcarnum + 1
 

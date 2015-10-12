@@ -105,7 +105,7 @@ class UartRoot(tk.Tk):
         
         ttk.Label(self, text="数据源类型:", padding=5).grid(row=4)
         self.datasourcecbox = ttk.Combobox(self, width=10)
-        self.datasourcecbox['value'] = ("中继","Sniffer","识别")
+        self.datasourcecbox['value'] = ("中继","抓包","识别")
         self.datasourcecbox.set(self.parent_menu.datasourcecboxbuf)
         self.datasourcecbox.grid(row=4, column=1)
 

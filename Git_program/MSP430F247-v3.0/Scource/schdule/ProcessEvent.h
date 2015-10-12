@@ -34,6 +34,7 @@
 #define    EVENT_KEEPALIVE_SEND           25
 #define    EVENT_KEEPALIVE_CHECK          26
 #define    EVENT_MCUSLEEP_ENABLE          27
+#define    EVENT_CMD_HANDLER              28
 
 
 extern void Init_TQ(void);

@@ -40,6 +40,7 @@ class myThread(threading.Thread):
         self.longdata = [1, 0, 2, 0, 3, 0, 4, 0, 5, 0, 6, 0, 7, 0, 8, 0, 9, 0]
         self.longdatastr = ""
         self.cmdaddress = ""
+        self.Control_Resend = 0
 
     def netupdate(self):
         '''
@@ -90,6 +91,7 @@ class myThread(threading.Thread):
             time.sleep(0.5)
             self.statusbar.status.setstatus('网络时延:%s', str(end - start))
 
+
     def run(self):
         '''
         Parameter：
@@ -111,13 +113,15 @@ class myThread(threading.Thread):
         #     self.netuploadthread.start()
         while (1):
             while (self.thread_stop == False and self.uart.isOpen() == True):
-                try:
-                    self.currenttab = self.showdata.appFrame.index('current')
-                except:
-                    print "relaytherad.py line117"
+                # self.currenttab = self.showdata.appFrame.tab
+                # try:
+                #     # self.currenttab = self.showdata.appFrame.index('current')
+                #     self.currenttab = self.showdata.appFrame.tab
+                # except:
+                #     print "relaytherad.py line117"
 
-                if self.currenttab == 0:
-                    self.statusbar.status.setstatus("停车状态")
+                if self.showdata.appFrame.tab == 0 or self.showdata.appFrame.tab == 4:
+                    # self.statusbar.status.setstatus("停车状态")
                     ordbuf = self.uart.read(1)
                     if(ordbuf!=""):
                         if ord(ordbuf) == 0x7D:
@@ -139,14 +143,14 @@ class myThread(threading.Thread):
 
                                 if len(self.notedata) == length * 2:
                                     self.uart.write("o")
-                                    print "upload ack"
                                 else:
                                     print "uart data error"
                                     self.uart.read(self.uart.inWaiting())  # 清空串口缓冲区内容
                                 # self.statusbar.status.setdata('串口数据:%s 计数:%s', self.datatoshow[:-1], count)
                                 uploaddatacut = data["data"]
                                 data["data"] = uploaddatacut[:-1]
-                                self.statusbar.status.setdata('串口数据:%s 计数:%s',data["data"] , count)
+                                if self.showdata.appFrame.tab == 0:
+                                    self.statusbar.status.setdata('串口数据:%s 计数:%s',data["data"] , count)
                                 if self.stopcar.appFrame.carnum == 0:
                                     self.statusbar.status.setstatus('%s', "未配置停车个数")
                                 else:
@@ -156,14 +160,14 @@ class myThread(threading.Thread):
                                     start = time.clock()
                                     # try:
                                     '''上传全部数据'''
-                                    # post_data = urllib.urlencode(data)
-                                    # data["data"] = ""
-                                    # response = urllib2.urlopen("http://123.57.37.66:8080/sensor/post/status", post_data,timeout=1)
-                                    # serverresponse =  response.read()
-                                    # serverresponsedic = eval(serverresponse)
-                                    # end = time.clock()
-                                    #
-                                    # self.statusbar.status.setstatus('网络延时:%s'+"  "+serverresponsedic["err_msg"], str(end - start))
+                                    post_data = urllib.urlencode(data)
+                                    data["data"] = ""
+                                    response = urllib2.urlopen("http://123.57.37.66:8080/sensor/post/status", post_data,timeout=1)
+                                    serverresponse =  response.read()
+                                    serverresponsedic = eval(serverresponse)
+                                    end = time.clock()
+
+                                    self.statusbar.status.setstatus('网络延时:%s'+"  "+serverresponsedic["err_msg"], str(end - start))
                                     ''''''
                                     # except:
                                     #     self.statusbar.status.setstatus('%s', "网络连接超时，请检查网络或关闭数据上传下载功能")
@@ -185,8 +189,8 @@ class myThread(threading.Thread):
                                             self.statusbar.status.setstatus('%s', "数据返回错误")
                                     except:
                                         print "2"
-                else:
-                    self.statusbar.status.setstatus("节点控制")
+                if (self.showdata.appFrame.tab == 4):
+                    # self.statusbar.status.setstatus("节点控制")
                     if(self.cmdaddress!=""):
                         if(self.cmdaddress!="0"):
                             if(int(self.cmdaddress)>255):
@@ -196,9 +200,19 @@ class myThread(threading.Thread):
                                 self.uart.write((chr(int(self.cmdaddress))))
                                 self.uart.write((chr(int(self.cmd))))
                                 self.uart.write("\xBB")
-                                if(ord(self.uart.read(1))==0xAA):
-                                    self.statusbar.status.setdata('%s', "发送命令：" + str(self.cmdaddress) + "," + str(self.cmd))
-                                    self.cmdaddress = "0"
+                                buf1 = self.uart.read(1)
+                                if(buf1!=""):
+                                    if(ord(buf1)==0xAA):   #收ack
+                                        self.statusbar.status.setdata('%s', "发送命令：" + str(self.cmdaddress) + "," + str(self.cmd))
+                                        self.cmdaddress = "0"
+                                    else:
+                                        self.Control_Resend+=1
+                                        self.statusbar.status.setdata('%s',"重试：" + str(self.Control_Resend))
+                                        if(self.Control_Resend==10):
+                                            self.Control_Resend = 0
+                                            self.statusbar.status.setdata("发送失败！")
+                                            self.cmdaddress = "0"
+
                     else:
                         self.statusbar.status.setdata("请填写地址！")
 

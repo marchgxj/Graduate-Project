@@ -133,14 +133,19 @@ void DataSend(void)
 uint8 rejoin_flag = 0;
 void DataACKHandler()
 {
-
     EndPointDevice.time_stamp = DataRecvBuffer[6]<<8|DataRecvBuffer[7];
     EndPointDevice.data_ack = 1;
+    EndPointDevice.cmd = DataRecvBuffer[8];
     DataPacket.ab_slot_num++;
     rejoin_flag = DataRecvBuffer[1]&0x01;
     if(rejoin_flag == 1)
     {
         PostTask(EVENT_REJOIN_HANDLER);
+    }
+    if(EndPointDevice.cmd!=0)
+    {
+        PostTask(EVENT_CMD_HANDLER);
+        return;
     }
 #if (MCU_SLEEP_ENABLE == 1)
     else
@@ -148,6 +153,7 @@ void DataACKHandler()
         PostTask(EVENT_MCUSLEEP_ENABLE);
     }
 #endif
+    
     
 }
 
@@ -160,6 +166,7 @@ void CSMADataResend()
 
 void KeepAliveSend()
 {
+    
     A7139_Deep_Wake();
     EN_INT;
     EN_TIMER1;

@@ -20,6 +20,8 @@ void CreateDataACK(uint8 src_cluster_id,uint8 src_cluster_innernum,uint8 rejoin,
 		if(Cmd_Address == phy_address)
 		{
 				DataACKPacket.cmd = Cmd_Command;
+				Cmd_Address = 0;
+				Cmd_Command = 0;
 		}
 	
 		DataSendBuffer[0] = DataACKPacket.pack_length;
@@ -35,6 +37,7 @@ void CreateDataACK(uint8 src_cluster_id,uint8 src_cluster_innernum,uint8 rejoin,
 		DataSendBuffer[10] = 0;
 		DataSendBuffer[11] = 0;
 		DataACKPacket.cmd = 0;
+		
 
 }
 UartDataStruct bufnode;

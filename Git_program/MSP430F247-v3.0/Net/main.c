@@ -16,20 +16,20 @@ ReJoin:
        normal_test[i]=i;
     }
     
-    /*    传感器测试
-    A7139_SetPackLen(TEST_LENGTH);
-    delay_us(1);
-    A7139_SetFreq(475.001f);
-    delay_us(1);
-    A7139_Cal();                    //更改完频率后校准
-    delay_us(1);
-    while(1)
-    {
-        Quick_Collect =  1;
-        IdentifyCar();
-        TestSend();
-        delay_ms(50);
-    }*/
+    //    传感器测试
+//    A7139_SetPackLen(TEST_LENGTH);
+//    delay_us(1);
+//    A7139_SetFreq(476.001f);
+//    delay_us(1);
+//    A7139_Cal();                    //更改完频率后校准
+//    delay_us(1);
+//    while(1)
+//    {
+//        Quick_Collect =  1;
+//        IdentifyCar();
+//        TestSend();
+//        delay_ms(50);
+//    }
     /*    功耗测试*/
     /*IRD_LOW;
     delay_ms(1000);

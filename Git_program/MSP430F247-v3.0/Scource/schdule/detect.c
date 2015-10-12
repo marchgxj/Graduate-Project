@@ -42,7 +42,7 @@ uint8 HMC_Identify_Fail = 0;
 uint16 OpenGMI_Count = 0;
 uint8 HMC_Changed = 0;
 uint8 Exit_Sleep = 0;
-
+uint8 Test_NoSleep = 0;
 
 unsigned int sqrt_16(unsigned long M)
 {
@@ -320,7 +320,6 @@ void ReCal()
         ZReCal+=MagneticUnit.ZValue;
         GMI_XReCal+=MagneticUnit.GMI_XValue;
         GMI_YReCal+=MagneticUnit.GMI_YValue;
-        
     }
     else if(ReCal_Count==3)
     {
@@ -354,7 +353,6 @@ void ReCal()
         halLedClearAll();
         delay_ms(10);
     }
-    
 }
 void GMI_Identify()
 {
@@ -374,7 +372,6 @@ void GMI_Identify()
             MagneticUnit.GMI_XValue = 0;
             MagneticUnit.GMI_YValue = 0;
         }
-        
     }
     else
     {
@@ -387,8 +384,6 @@ void GMI_Identify()
             MagneticUnit.GMI_XValue = 0;
             MagneticUnit.GMI_YValue = 0;
         }
-
-        
     }
     if(abs(MagneticUnit.GMI_YValue - MagneticUnit.GMI_YMiddle)>80)
     {
@@ -405,7 +400,6 @@ void GMI_Identify()
             MagneticUnit.GMI_XValue = 0;
             MagneticUnit.GMI_YValue = 0;
         }
-        
     }
     else
     {
@@ -418,6 +412,14 @@ void GMI_Identify()
             MagneticUnit.GMI_XValue = 0;
             MagneticUnit.GMI_YValue = 0;
         }
+    }
+}
+void GetVoltage()
+{
+    SampleVoltage(&EndPointDevice.vlotage);
+    if(EndPointDevice.vlotage<LOWPOWER_THRESHOLD)
+    {
+        EndPointDevice.parking_state = LOWPOWER;
     }
 }
 void IdentifyCar()
@@ -441,6 +443,7 @@ void IdentifyCar()
     GetExtremum();
     GetIntensity();
     
+    
     if(Quick_Collect == 1)
     {
         VarianceMultiState(10,20,25);
@@ -455,14 +458,18 @@ void IdentifyCar()
     }
     TotalJudge();
     halLedClear(2);
-    if(EndPointDevice.parking_state_m!=EndPointDevice.parking_state)
+    if(Test_NoSleep == 0)
     {
-        Exit_Sleep  = 1;
-        A7139_Deep_Wake();
-        EN_INT;
-        EN_TIMER1;
+        if(EndPointDevice.parking_state_m!=EndPointDevice.parking_state)
+        {
+            Exit_Sleep  = 1;
+            A7139_Deep_Wake();
+            EN_INT;
+            EN_TIMER1;
+        }
+        EndPointDevice.parking_state_m = EndPointDevice.parking_state;
     }
-    EndPointDevice.parking_state_m = EndPointDevice.parking_state;
+    
 
         
 }
@@ -673,6 +680,7 @@ void TotalJudge()
             NoCarCalibration();
         }
     }
+    GetVoltage();
 
 
 }
@@ -701,7 +709,6 @@ void NoCarCalibration()
     uint32 intensity = 0;
     uint8 i=0;
 
-    
     __disable_interrupt();
 
     halLedToggle(3);
@@ -845,4 +852,43 @@ void GetIntensity()
                 +((uint32)(MagneticUnit.YValue)*(uint32)(MagneticUnit.YValue))
                 +((uint32)(MagneticUnit.ZValue)*(uint32)(MagneticUnit.ZValue));
     MagneticUnit.Intensity = sqrt_16(intensity);
-} 
+}
+void CmdSendHandler()
+{
+    uint16 i = 0;
+    __disable_interrupt();
+    Test_NoSleep = 1;
+    A7139_StrobeCmd(CMD_STBY);
+    delay_ms(10);
+    A7139_Init(470.001f);
+    delay_ms(10);
+    A7139_SetFreq(476.001f);
+    delay_us(1);
+    A7139_Cal();                    //更改完频率后校准
+    delay_us(1);
+    A7139_SetPackLen(TEST_LENGTH);
+    delay_us(1);
+    
+    for(i=0;i<1200;i++)
+    {
+        IdentifyCar();
+        TestSend();
+        delay_ms(50);
+    }
+    Test_NoSleep = 0;
+    __enable_interrupt();
+}
+void CmdHandler()
+{
+    switch(EndPointDevice.cmd)
+    {
+        case SEND_TEST:
+          CmdSendHandler();
+          break;
+        case RECAL:
+          NoCarCalibration();
+          break;
+    }
+      
+    halLedToggle(1);
+}

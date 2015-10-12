@@ -1,7 +1,7 @@
 #ifndef _DETECT_h_
 #define _DETECT_h_
 #include "common.h"
-#define MCU_SLEEP_ENABLE 0
+#define MCU_SLEEP_ENABLE 1
 
 #define COLLECT_EN   0          //是否开启数据采集
 #define COLLECT_PERIOD  1000   //采集周期  单位：100us
@@ -20,6 +20,8 @@
 #define CAR2NOCAR  3            //有车到无车中间状态
 #define COLLECTING 4            //采集数据中
 #define STABLE     5            //传感器稳定
+#define OFFLINE    253            //电量低
+#define LOWPOWER   252            //电量低
 
 #define CAL_PERIOD  6000          //10分钟校准一次
 
@@ -36,6 +38,10 @@
 
 #define OPEN_GMI_COUNT   400  //多长时间后检测是否开启GMI  单位：50ms
 #define CLOSE_GMI_COUNT  1200  //  单位：50ms
+
+//控制命令
+#define SEND_TEST        1
+#define RECAL            2
 
 
 typedef struct
@@ -102,6 +108,7 @@ extern unsigned int sqrt_16(unsigned long M);
 extern void GetIntensity();
 extern void CarCalibration();
 extern void TotalJudge();
+extern void CmdHandler();
 
 extern FilterStruct FilterData[FILTER_LENGTH];
 

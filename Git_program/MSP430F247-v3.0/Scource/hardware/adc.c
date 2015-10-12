@@ -24,7 +24,7 @@ int16 SampleChannel(Uint16* SampleValueX,Uint16* SampleValueY)	//½øÐÐ²ÉÑùÍ¨µÀµçÔ
     P6DIR &= 0xaf;   // 1010 1111
     P6SEL |= 0x50;   //0101 0000
     HAL_PLU_SET;
-    delay_1ms();delay_1ms();delay_1ms();delay_1ms();delay_1ms();delay_1ms();delay_1ms();
+    delay_1ms();
     //Uint16 *ram_ptr;
     *SampleValueX =0;
     *SampleValueY =0;
@@ -42,7 +42,6 @@ int16 SampleChannel(Uint16* SampleValueX,Uint16* SampleValueY)	//½øÐÐ²ÉÑùÍ¨µÀµçÔ
     ADC12MCTL1=INCH_6+EOS;
     delay_1ms();
     ADC12CTL0 |= ENC + ADC12SC;
-    delay_1ms();
     while (ADC12IFG & BIT0==0);                         //Wait if ADC10 core is active
     
     while (ADC12IFG & BIT1==0);                         //Wait if ADC10 core is active
@@ -54,6 +53,29 @@ int16 SampleChannel(Uint16* SampleValueX,Uint16* SampleValueY)	//½øÐÐ²ÉÑùÍ¨µÀµçÔ
     TIME1_LOW;
     
     return (*SampleValueX-*SampleValueY);
+}
+int16 SampleVoltage(Uint16* Value)
+{     
+    P6DIR &= 0xFE;   // 1010 1111
+    P6SEL |= 0x01;   //0101 0000
+    //Uint16 *ram_ptr;
+    //±£´æµÄ²ÉÑùÖµ
+    ADC12CTL0 &= ~ENC;                                 //ÔÚ¸Ä±äÉèÖÃÇ°Í£Ö¹A/D×ª»»
+    //while (ADC12CTL1 & ADC12BUSY);                         //Wait if ADC10 core is active
+    
+    ADC12CTL0 = SHT0_2+ADC12ON+MSC;  //t_sample=16 x ADC10CLKs,²Î¿¼µçÑ¹AVCC AVSS£¬¿ªÆôADCÄ£¿é
+
+    ADC12CTL1 = CONSEQ_1+ADC12SSEL_0+SHP+CSTARTADD_0; 
+
+    
+    ADC12MCTL0 = INCH_0+EOS;
+    ADC12MCTL0 |= SREF_6;
+    delay_1ms();
+    ADC12CTL0 |= ENC + ADC12SC;
+    while (ADC12IFG & BIT0==0);                         //Wait if ADC10 core is active
+    *Value=ADC12MEM0;   
+    return *Value;
+
 }
 #pragma vector=ADC12_VECTOR
 __interrupt void ADC12_ISR(void)
