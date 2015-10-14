@@ -86,7 +86,7 @@ void bubble(ChannelTable *a,uint8 n)
     
 } 
 
-void SortChannel()
+void SortChannel(uint8 startch,uint8 endch)
 {
     bubble(ScanChannel,CHANNEL_NUM);
     EndPointDevice.channel = ScanChannel[0].channel_num;
@@ -99,12 +99,22 @@ void SortChannel()
     {
         A7139_DeepSleep();
         delay_ms(SCAN_PERIOD);
-        halLedToggleAll();
+        HAL_LED_TGL_1;
+        HAL_LED_TGL_3;
         A7139_StrobeCmd(CMD_STBY);
+        delay_ms(10);
+        A7139_StrobeCmd(CMD_STBY);
+        delay_ms(10);
         A7139_Init(470.001f);
+        delay_ms(10);
+        A7139_Init(470.001f);
+        delay_ms(10);
         RXMode();
-        Scan_Channel(StartChannel,EndChannel);
-        SortChannel();
+        delay_ms(10);
+        RXMode();
+        delay_ms(10);
+        Scan_Channel(startch,endch);
+        SortChannel(startch,endch);
     }
 
 }
@@ -205,7 +215,8 @@ void JoinRequestACKHandler()
 void ChannelSelection(uint8 start,uint8 end)
 {
     Scan_Channel(start,end);
-    SortChannel();
+    SortChannel(start,end);
+    
     A7139_SetFreq(ChannelList[EndPointDevice.channel]);
     delay_us(1);
     A7139_Cal();                    

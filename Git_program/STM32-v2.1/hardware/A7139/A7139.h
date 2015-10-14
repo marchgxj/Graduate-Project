@@ -89,4 +89,5 @@ extern void A7139_ReadFIFO(u8 *buf,u8 bufSize);
 extern u8 A7139_SetPackLen(u8 len);
 extern void RXMode(void);
 extern void SendPack(void);
+extern u8 A7139_SetDataRate(u8 datRate);
 #endif

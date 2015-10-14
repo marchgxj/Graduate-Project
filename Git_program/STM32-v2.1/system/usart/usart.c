@@ -110,9 +110,10 @@ uint8 Usart_Data[4] = 0;
 void USART1_IRQHandler(void)
 {
 	uint8 buf;
+	USART_ClearFlag(USART1 , USART_FLAG_RXNE);
 	if(USART_GetITStatus(USART1, USART_IT_RXNE) != RESET)//Ω” ’÷–∂œ
 	{
-			USART_ClearFlag(USART1 , USART_FLAG_RXNE);
+			
 		  buf = USART_ReceiveData(USART1);
 			if(buf == 'o')
 			{

@@ -112,7 +112,7 @@ void VarianceMultiState(uint16 state1,uint16 state2,uint16 state3)
         if(MagneticUnit.VarState!=CAR)
         {
             VState1_Count++;
-            if(VState1_Count>STATE1)
+            if(VState1_Count>state1)
             {
                 MagneticUnit.VarState = CAR;
                 VState1_Count = 0;
@@ -129,7 +129,7 @@ void VarianceMultiState(uint16 state1,uint16 state2,uint16 state3)
         if(MagneticUnit.VarState == NOCAR2CAR)
         {
             VState2_Count++;
-            if(VState2_Count>STATE2)
+            if(VState2_Count>state2)
             {
                 MagneticUnit.VarState = NOCAR;
                 VState2_Count = 0;
@@ -141,7 +141,7 @@ void VarianceMultiState(uint16 state1,uint16 state2,uint16 state3)
             if(MagneticUnit.VarState != NOCAR)
             {
                 VState3_Count++;
-                if(VState3_Count>STATE3)
+                if(VState3_Count>state3)
                 {
                     MagneticUnit.VarState = NOCAR;
                     VState3_Count = 0;
@@ -161,7 +161,7 @@ void ExtremumMultiState(uint16 state1,uint16 state2,uint16 state3)
         if(MagneticUnit.ExtState!=CAR)
         {
             EState1_Count++;
-            if(EState1_Count>STATE1)
+            if(EState1_Count>state1)
             {
                 MagneticUnit.ExtState = CAR;
                 EState1_Count = 0;
@@ -178,7 +178,7 @@ void ExtremumMultiState(uint16 state1,uint16 state2,uint16 state3)
         if(MagneticUnit.ExtState == NOCAR2CAR)
         {
             EState2_Count++;
-            if(EState2_Count>20)
+            if(EState2_Count>state2)
             {
                 MagneticUnit.ExtState = NOCAR;
                 EState2_Count = 0;
@@ -190,7 +190,7 @@ void ExtremumMultiState(uint16 state1,uint16 state2,uint16 state3)
             if(MagneticUnit.ExtState != NOCAR)
             {
                 EState3_Count++;
-                if(EState3_Count>30)
+                if(EState3_Count>state3)
                 {
                     MagneticUnit.ExtState = NOCAR;
                     EState3_Count = 0;
@@ -212,7 +212,7 @@ void IntensityMultiState(uint16 state1,uint16 state2,uint16 state3)
         if(MagneticUnit.IntState!=CAR)
         {
             IState1_Count++;
-            if(IState1_Count>20)
+            if(IState1_Count>state1)
             {
                 MagneticUnit.IntState = CAR;
                 IState1_Count = 0;
@@ -229,7 +229,7 @@ void IntensityMultiState(uint16 state1,uint16 state2,uint16 state3)
         if(MagneticUnit.IntState == NOCAR2CAR)
         {
             IState2_Count++;
-            if(IState2_Count>STATE2)
+            if(IState2_Count>state2)
             {
                 MagneticUnit.IntState = NOCAR;
                 IState2_Count = 0;
@@ -241,7 +241,7 @@ void IntensityMultiState(uint16 state1,uint16 state2,uint16 state3)
             if(MagneticUnit.IntState != NOCAR)
             {
                 IState3_Count++;
-                if(IState3_Count>30)
+                if(IState3_Count>state3)
                 {
                     MagneticUnit.IntState = NOCAR;
                     IState3_Count = 0;
@@ -334,6 +334,7 @@ void ReCal()
         MagneticUnit.GMI_XMiddleM = MagneticUnit.GMI_XMiddle;
         MagneticUnit.GMI_YMiddleM = MagneticUnit.GMI_YMiddle;
         MagneticUnit.Int_Middle = MagneticUnit.Intensity;
+        MagneticUnit.Ext_Middle = abs(MagneticUnit.XMiddle-MagneticUnit.YMiddle);
         ReCal_Count = 20;
         MagneticUnit.GMI_XValue = 0;
         MagneticUnit.GMI_YValue = 0;
@@ -416,10 +417,14 @@ void GMI_Identify()
 }
 void GetVoltage()
 {
-    SampleVoltage(&EndPointDevice.vlotage);
+    SampleVoltage(&EndPointDevice.vlotage,&EndPointDevice.temperature);
     if(EndPointDevice.vlotage<LOWPOWER_THRESHOLD)
     {
         EndPointDevice.parking_state = LOWPOWER;
+    }
+    if((EndPointDevice.temperature>TEMP_THRESHOLD_HIGH)&&((EndPointDevice.vlotage<TEMP_THRESHOLD_LOW)))
+    {
+        EndPointDevice.parking_state = TEMPOVER;
     }
 }
 void IdentifyCar()
@@ -457,6 +462,7 @@ void IdentifyCar()
         IntensityMultiState(2,2,2);
     }
     TotalJudge();
+    GetVoltage();
     halLedClear(2);
     if(Test_NoSleep == 0)
     {
@@ -540,12 +546,12 @@ void TotalJudge()
                     MagneticUnit.GMI_YValue = 0;
                 }
                 
-                halLedSet(4);
+                halLedSet(1);
             }  
         }
         else
         {
-            if(CarStableCount>6)
+            if(CarStableCount>2)
             {
                 halLedSet(1);
                 EndPointDevice.parking_state = CAR;
@@ -556,7 +562,7 @@ void TotalJudge()
                     MagneticUnit.GMI_XValue = 0;
                     MagneticUnit.GMI_YValue = 0;
                 }
-                halLedSet(4);
+                halLedSet(1);
             }  
         }
         
@@ -644,12 +650,11 @@ void TotalJudge()
             {
                 halLedClear(1);
                 EndPointDevice.parking_state = NOCAR;
-                halLedClear(4);
             }
         }
         else
         {
-            if(NoCarStableCount>3)
+            if(NoCarStableCount>2)
             {
                 EndPointDevice.parking_state = NOCAR;
                 halLedClear(1);
@@ -680,7 +685,7 @@ void TotalJudge()
             NoCarCalibration();
         }
     }
-    GetVoltage();
+    
 
 
 }
@@ -711,7 +716,7 @@ void NoCarCalibration()
 
     __disable_interrupt();
 
-    halLedToggle(3);
+
     for(i=0;i<4;i++)
     {
         delay_ms(50);
@@ -723,7 +728,7 @@ void NoCarCalibration()
             GMI_ADX += GMI_ADvalueX;
             GMI_ADY += GMI_ADvalueY;
         }
-        Multi_Read_HMC(&MagneticUnit.XValue,&MagneticUnit.YValue,&MagneticUnit.ZValue);
+        Multi_Read_HMC(&ADvalueX,&ADvalueY,&ADvalueZ);
         if((abs(ADvalueX-MagneticUnit.XMiddleM)<100)&&(abs(ADvalueY-MagneticUnit.YMiddleM)<100)&&abs(ADvalueZ-MagneticUnit.ZMiddleM)<100)
         {
             count++;
@@ -826,6 +831,71 @@ void NoCarCalibration()
     
 }
 
+void CmdCalibration()
+{
+    uint16 ADvalueX=0;
+    uint16 ADvalueY=0;
+    uint16 ADvalueZ=0;
+    uint16 GMI_ADvalueX=0;
+    uint16 GMI_ADvalueY=0;
+    uint16 ADX = 0;
+    uint16 ADY = 0;
+    uint16 ADZ = 0;
+    uint16 GMI_ADX = 0;
+    uint16 GMI_ADY = 0;
+    uint32 intensity = 0;
+    uint8 i=0;
+
+    
+    __disable_interrupt();
+
+    halLedToggle(3);
+    SampleChannel(&GMI_ADX,&GMI_ADY);
+    Multi_Read_HMC(&ADX,&ADY,&ADZ);
+    for(i=0;i<4;i++)
+    {
+        delay_ms(100);
+        SampleChannel(&GMI_ADvalueX,&GMI_ADvalueY);
+        GMI_ADX = (GMI_ADvalueX+GMI_ADX)/2;
+        GMI_ADY = (GMI_ADvalueY+GMI_ADY)/2; 
+        Multi_Read_HMC(&ADvalueX,&ADvalueY,&ADvalueZ);
+        
+        ADX = (ADvalueX+ADX)/2;
+        ADY = (ADvalueY+ADY)/2;
+        ADZ = (ADvalueZ+ADZ)/2;
+        
+    }
+//    ADX = ADX/4;
+//    ADY = ADY/4;
+//    ADZ = ADZ/4;
+//    GMI_ADX = GMI_ADX/4;
+//    GMI_ADY = GMI_ADY/4;
+    
+    MagneticUnit.XMiddle = ADX;
+    MagneticUnit.YMiddle = ADY;
+    MagneticUnit.ZMiddle = ADZ;
+    MagneticUnit.GMI_XMiddle = GMI_ADX;
+    MagneticUnit.GMI_YMiddle = GMI_ADY;
+
+    MagneticUnit.Ext_Middle = abs(MagneticUnit.XMiddle-MagneticUnit.YMiddle);
+    MagneticUnit.XMiddleM = MagneticUnit.XMiddle;
+    MagneticUnit.YMiddleM = MagneticUnit.YMiddle;
+    MagneticUnit.ZMiddleM = MagneticUnit.ZMiddle;
+    
+    MagneticUnit.GMI_XMiddleM = MagneticUnit.GMI_XMiddle;
+    MagneticUnit.GMI_YMiddleM = MagneticUnit.GMI_YMiddle;
+    
+    intensity = sqrt_16((((uint32)MagneticUnit.XMiddle*(uint32)MagneticUnit.XMiddle)+((uint32)MagneticUnit.YMiddle*(uint32)MagneticUnit.YMiddle))+((uint32)MagneticUnit.ZMiddle*(uint32)MagneticUnit.ZMiddle));
+    MagneticUnit.Int_Middle = intensity;
+    Sensor_Drift = 0;
+    CarCaliFlag = 0;
+    MagneticUnit.CarExtremum = 0;
+    MagneticUnit.CarIntensity = 0;
+    MagneticUnit.CarVariance = 0;
+    delay_ms(50);
+    __enable_interrupt();
+    
+}
 
 void GetVariance()
 {
@@ -886,7 +956,7 @@ void CmdHandler()
           CmdSendHandler();
           break;
         case RECAL:
-          NoCarCalibration();
+          CmdCalibration();
           break;
     }
       

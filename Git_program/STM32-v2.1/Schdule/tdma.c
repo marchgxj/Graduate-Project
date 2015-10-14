@@ -63,6 +63,10 @@ void DataHandler(void)
 		{
 				rejoin = 0;
 				RootDevice.endpoint_device[inner_num].ab_slot_num++;
+				if(RootDevice.endpoint_device[inner_num].ab_slot_num == 256)
+				{
+						RootDevice.endpoint_device[inner_num].ab_slot_num = 0;
+				}
 				RootDevice.endpoint_device[inner_num].data = DataRecvBuffer[8];
 				RootDevice.endpoint_device[inner_num].keep_alive = 1;
 				bufnode.address = RootDevice.endpoint_device[inner_num].pyh_address;
@@ -83,7 +87,7 @@ void DataHandler(void)
 				TIME2_HIGH;
 		}
 				CreateDataACK(src_cluster_id,src_cluster_innernum,rejoin,RootDevice.endpoint_device[inner_num].pyh_address);
-				
+				__NOP();__NOP();__NOP();__NOP();__NOP();__NOP();__NOP();__NOP();__NOP();__NOP();
 				SendPack();
 				RXMode();
 				TIME2_LOW;

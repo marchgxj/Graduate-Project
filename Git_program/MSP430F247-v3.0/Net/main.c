@@ -7,7 +7,8 @@ int main(void)
     uint8 i=0;
     __disable_interrupt();
     
-    halBoardInit(); 
+    halBoardInit();
+    halLedClearAll();
 ReJoin:
     EndPointDevice.pyh_address = GetPhyAddress();
     EndPointDevice.device_type = DEVICE;
@@ -19,7 +20,7 @@ ReJoin:
     //    传感器测试
 //    A7139_SetPackLen(TEST_LENGTH);
 //    delay_us(1);
-//    A7139_SetFreq(476.001f);
+//    A7139_SetFreq(475.001f);
 //    delay_us(1);
 //    A7139_Cal();                    //更改完频率后校准
 //    delay_us(1);

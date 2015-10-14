@@ -63,6 +63,9 @@ typedef struct{
     uint8 power;			//是否开启低功耗
     uint8 parking_state;                //停车状态
     uint8 parking_state_m;              //上一次停车状态
+    uint8 cmd;                          //命令
+    uint16 vlotage;                     //电量
+    uint16 temperature;                 //温度
 }EndPointDeviceStruct;
 
 extern EndPointDeviceStruct EndPointDevice;

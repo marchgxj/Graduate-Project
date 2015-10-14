@@ -18,7 +18,7 @@ class myThread(threading.Thread):
         self.port = port
         self.baud = baud
         self.value = []
-        for i in range(21):
+        for i in range(23):
             self.value.append(0)
         self.readenable = 0
 
@@ -54,7 +54,7 @@ class myThread(threading.Thread):
                         if ord(buf) == 0x7D:
                             buf = []
                             # 加变量需要修改
-                            buf += self.uart.read(38)
+                            buf += self.uart.read(42)
 
                             self.file = open(self.filename, "a+")
                             self.file.write("|" + str(time.time()) + "|")
@@ -84,6 +84,8 @@ class myThread(threading.Thread):
                             self.value[18] = (ord(buf[32]) << 8 | ord(buf[33]))
                             self.value[19] = (ord(buf[34]) << 8 | ord(buf[35]))
                             self.value[20] = (ord(buf[36]) << 8 | ord(buf[37]))
+                            self.value[21] = (ord(buf[38]) << 8 | ord(buf[39]))
+                            self.value[22] = (ord(buf[40]) << 8 | ord(buf[41]))
 
                             # self.app.XValueString.set(self.value[0])
                             # self.app.YValueString.set(self.value[1])
@@ -113,6 +115,8 @@ class myThread(threading.Thread):
                             self.file.write(str(self.value[18]) + " ")
                             self.file.write(str(self.value[19]) + " ")
                             self.file.write(str(self.value[20]) + " ")
+                            self.file.write(str(self.value[21]) + " ")
+                            self.file.write(str(self.value[22]) + " ")
                             self.file.write("\n")
 
                             self.file.close()

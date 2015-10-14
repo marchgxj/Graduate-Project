@@ -3,7 +3,7 @@
 uint8 normal_test[MAX_PACK_LENGTH];
 uint8 test_rssi = 0;
 uint16 address = 0;
-#define    PHY_ADDRESS_WRITE          0x0002
+#define    PHY_ADDRESS_WRITE          0x00008
 int main(void)
 {	    
     __disable_interrupt(); 

@@ -32,7 +32,14 @@ uint8 Empty_Node(UartDataStruct *node)
     else
         return 0;
 }
-
+void Clear_Buffer(uint8 current,uint8 last)
+{
+		int i=0;
+		for(i=current;i<last;i++)
+		{
+				Clear_Node(&UploadTQ[i]);
+		}
+}
 /**
 * 任务进队
 */
@@ -49,6 +56,7 @@ uint8 PostUploadNode(UartDataStruct *node)
     else
     {
         //printf("TQ is FULL!\n");
+				Clear_Buffer(0,UPLOAD_NODE_NUM);
         return TQ_FULL;		
     }
 }
@@ -73,14 +81,7 @@ UartDataStruct PopUploadNode(void)
         return node;
     }
 }
-void Clear_Buffer(uint8 current,uint8 last)
-{
-		int i=0;
-		for(i=current;i<last;i++)
-		{
-				Clear_Node(&UploadTQ[i]);
-		}
-}
+
 uint8 rec;
 void Upload_Data()
 {
@@ -110,12 +111,13 @@ void Upload_Data()
 				if(Pop_Count>UPLOAD_NODE_NUM)
 				{
 						//队列已经满了，还没有发出去
+						//加printf输出信息
 						return;
 				}
     }
 		//Usart1_PutChar(0x7E);
 		//Usart1_PutChar(0x7D);
-		DIS_USARTINT;
+		//DIS_USARTINT;
 		delay_ms(1);
 		if(Power_Mode == 1)			//只发送一次时要求确认
 		{
@@ -136,7 +138,7 @@ void Upload_Data()
 				}
 				
 		}
-		EN_USARTINT;
+		//EN_USARTINT;
 		//若发送成功，清空队列中节点信息，插入和发送指针置头
 		Clear_Buffer(current_memory,last_memory);
 		current_upload_tsk = 0;

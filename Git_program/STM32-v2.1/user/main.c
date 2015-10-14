@@ -12,6 +12,7 @@ int main(void)
 		RootDevice.cluster_innernum = 0;
 		RootDevice.free_node = MAX_NODE_NUM;
 		EnableInterrupt();
+		DIS_USARTINT;
 #if (SEND_REJOIN_EN == 1)
 		PostTask(EVENT_REJOIN_SEND);
 #endif

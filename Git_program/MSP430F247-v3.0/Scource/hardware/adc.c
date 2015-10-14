@@ -11,7 +11,15 @@
  */
 #include "adc.h"
 #include "common.h"
-
+void AD_Init()
+{
+    P6DIR &= 0xAE;   // 1010 1111
+    P6SEL |= 0x51;   //0101 0000
+    ADC12CTL0 &= ~ENC;
+    ADC12CTL0 = SHT0_2+ADC12ON; 
+    ADC12CTL1 = CONSEQ_0+ADC12SSEL_0+SHP+CSTARTADD_0; 
+    delay_1ms();
+}
 /*******************************************
 函数名称：SampleChannel(Uint16 ChannelNox)
 功    能：msp430 自带ADC 单通道多次采样 
@@ -21,61 +29,46 @@
 ********************************************/
 int16 SampleChannel(Uint16* SampleValueX,Uint16* SampleValueY)	//进行采样通道电源等的设置
 {     
-    P6DIR &= 0xaf;   // 1010 1111
-    P6SEL |= 0x50;   //0101 0000
+    uint16 buf = 0;
     HAL_PLU_SET;
-    delay_1ms();
+    delay_1ms();delay_1ms();delay_1ms();delay_1ms();delay_1ms();delay_1ms();delay_1ms();delay_1ms();
     //Uint16 *ram_ptr;
     *SampleValueX =0;
     *SampleValueY =0;
-    //保存的采样值
-    ADC12CTL0 &= ~ENC;                                 //在改变设置前停止A/D转换
-    //while (ADC12CTL1 & ADC12BUSY);                         //Wait if ADC10 core is active
-    
-    ADC12CTL0 = SHT0_2+ADC12ON+MSC;  //t_sample=16 x ADC10CLKs,参考电压AVCC AVSS，开启ADC模块
-    //ADC10CTL0 = ADC10SHT_2+MSC+ADC10ON+MSC ;
-    ADC12CTL1 = CONSEQ_1+ADC12SSEL_0+SHP+CSTARTADD_0; 
-   // ADC12CTL1=SHP;
-    //ADC12AE0 |= 0x04;                            //使能相应的通道  
-    ADC12MCTL0=INCH_4;
-    //ADC12MCTL5=INCH_5;
-    ADC12MCTL1=INCH_6+EOS;
-    delay_1ms();
+    ADC12CTL0 &= ~ (ENC+ADC12SC);
+    ADC12MCTL0 = INCH_4;
     ADC12CTL0 |= ENC + ADC12SC;
-    while (ADC12IFG & BIT0==0);                         //Wait if ADC10 core is active
-    
-    while (ADC12IFG & BIT1==0);                         //Wait if ADC10 core is active
+    while (ADC12CTL1 & ADC12BUSY!=0);                         //Wait if ADC10 core is active
     *SampleValueX=ADC12MEM0;
-    *SampleValueY=ADC12MEM1;
+    ADC12CTL0 &= ~ (ENC+ADC12SC);
+    ADC12MCTL0 = INCH_6;
+    ADC12CTL0 |= ENC + ADC12SC;
+    while (ADC12CTL1 & ADC12BUSY!=0);                         //Wait if ADC10 core is active
+    *SampleValueY=ADC12MEM0;
+    ADC12CTL0 &= ~ (ENC+ADC12SC);
     HAL_PLU_CLR;
+    
     TIME1_HIGH;
     delay_1ms();
     TIME1_LOW;
     
     return (*SampleValueX-*SampleValueY);
 }
-int16 SampleVoltage(Uint16* Value)
+int16 SampleVoltage(Uint16* Value,Uint16* Temp)
 {     
-    P6DIR &= 0xFE;   // 1010 1111
-    P6SEL |= 0x01;   //0101 0000
-    //Uint16 *ram_ptr;
-    //保存的采样值
-    ADC12CTL0 &= ~ENC;                                 //在改变设置前停止A/D转换
-    //while (ADC12CTL1 & ADC12BUSY);                         //Wait if ADC10 core is active
-    
-    ADC12CTL0 = SHT0_2+ADC12ON+MSC;  //t_sample=16 x ADC10CLKs,参考电压AVCC AVSS，开启ADC模块
-
-    ADC12CTL1 = CONSEQ_1+ADC12SSEL_0+SHP+CSTARTADD_0; 
-
-    
-    ADC12MCTL0 = INCH_0+EOS;
-    ADC12MCTL0 |= SREF_6;
-    delay_1ms();
+    ADC12CTL0 &= ~ (ENC+ADC12SC);
+    ADC12MCTL0 = INCH_0;
     ADC12CTL0 |= ENC + ADC12SC;
-    while (ADC12IFG & BIT0==0);                         //Wait if ADC10 core is active
-    *Value=ADC12MEM0;   
+    while (ADC12CTL1 & ADC12BUSY!=0);                         //Wait if ADC10 core is active   
+    *Value=ADC12MEM0;
+    ADC12CTL0 &= ~ (ENC+ADC12SC);
+    ADC12MCTL0 = INCH_10;
+    ADC12CTL0 |= ENC + ADC12SC;
+    while (ADC12CTL1 & ADC12BUSY!=0);                         //Wait if ADC10 core is active   
+    *Temp=ADC12MEM0;
+    ADC12CTL0 &= ~ (ENC+ADC12SC);
+    
     return *Value;
-
 }
 #pragma vector=ADC12_VECTOR
 __interrupt void ADC12_ISR(void)

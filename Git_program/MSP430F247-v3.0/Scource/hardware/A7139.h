@@ -96,6 +96,7 @@ extern void A7139_WriteFIFO(uint8 *buf,uint8 bufSize);
 extern void A7139_ReadFIFO(uint8 *buf,uint8 bufSize);
 extern uint8 A7139_SetPackLen(uint8 len);
 extern void A7139_SetFreq(float rfFreq);
+extern uint8 A7139_SetDataRate(uint8 datRate);
 extern void A7139_Receive_Once(uint8 data[],uint8 length);
 extern uint8 A7139_GetRSSI();
 extern uint8 A7139_Cal(void);

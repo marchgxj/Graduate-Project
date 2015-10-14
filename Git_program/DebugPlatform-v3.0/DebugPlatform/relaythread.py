@@ -158,19 +158,19 @@ class myThread(threading.Thread):
                                 self.datatoshow = ''
                                 if self.uartroot.datamode == 0:
                                     start = time.clock()
-                                    # try:
-                                    '''上传全部数据'''
-                                    post_data = urllib.urlencode(data)
-                                    data["data"] = ""
-                                    response = urllib2.urlopen("http://123.57.37.66:8080/sensor/post/status", post_data,timeout=1)
-                                    serverresponse =  response.read()
-                                    serverresponsedic = eval(serverresponse)
-                                    end = time.clock()
+                                    try:
+                                        '''上传全部数据'''
+                                        post_data = urllib.urlencode(data)
+                                        data["data"] = ""
+                                        response = urllib2.urlopen("http://123.57.37.66:8080/sensor/post/status", post_data,timeout=1)
+                                        serverresponse =  response.read()
+                                        serverresponsedic = eval(serverresponse)
+                                        end = time.clock()
 
-                                    self.statusbar.status.setstatus('网络延时:%s'+"  "+serverresponsedic["err_msg"], str(end - start))
-                                    ''''''
-                                    # except:
-                                    #     self.statusbar.status.setstatus('%s', "网络连接超时，请检查网络或关闭数据上传下载功能")
+                                        self.statusbar.status.setstatus('网络延时:%s'+"  "+serverresponsedic["err_msg"], str(end - start))
+                                        ''''''
+                                    except:
+                                        self.statusbar.status.setstatus('%s', "网络连接超时，请检查网络或关闭数据上传下载功能")
 
                                 else:
                                     if self.threadstartflag == 0:

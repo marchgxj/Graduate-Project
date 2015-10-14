@@ -82,7 +82,7 @@ class Scope:
         self.Intensityax.set_xlim(self.count - 50, self.count + 50)
         self.GMIsensorax.set_xlim(self.count - 50, self.count + 50)
 
-        if (len(self.thread.value) == 21):
+        if (len(self.thread.value) == 23):
             self.xdata.append(self.count)
             self.XValueLinedata.append(self.thread.value[0])
             self.YValueLinedata.append(self.thread.value[1])

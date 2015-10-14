@@ -7,6 +7,7 @@ uint16 Keep_Alive_Detect = 0;
 uint16 Time_Count = 0;
 uint8  ADCal_Flag = 0;
 uint16 Direction_Count = 0;
+uint16 test_count = 0;
 void Interrupt_Init(void)
 {
     P1DIR &=~ pinGIO2.pin_bm;
@@ -96,6 +97,9 @@ void TestSend()
     18:32¡¢33:YÖáAD GMI
     19:34¡¢35:XMiddle GMI
     20:36¡¢37:YMiddle GMI
+    21:38¡¢39£ºEndPointDevice.vlotage
+    22:40¡¢41£ºEndPointDevice.temperature
+    23:42¡¢43£ºMagneticUnit.ZMiddle
     **********************************************/
     DataSendDraw[0] = MagneticUnit.XValue>>8;
     DataSendDraw[1] = MagneticUnit.XValue;
@@ -135,6 +139,10 @@ void TestSend()
     DataSendDraw[35] = MagneticUnit.GMI_XMiddle;
     DataSendDraw[36] = MagneticUnit.GMI_YMiddle>>8;
     DataSendDraw[37] = MagneticUnit.GMI_YMiddle;
+    DataSendDraw[38] = EndPointDevice.vlotage>>8;
+    DataSendDraw[39] = EndPointDevice.vlotage;
+    DataSendDraw[40] = EndPointDevice.temperature>>8;
+    DataSendDraw[41] = EndPointDevice.temperature;
     
     A7139_WriteFIFO(DataSendDraw,TEST_LENGTH);
     delay_us(1);
@@ -158,10 +166,6 @@ __interrupt void Timer_A0(void)
 //    }
 //    if(Direction_Count==700)
     {
-        
-        
-        
-        
         Collect_Period++;
         if(Quick_Collect==0)
         {

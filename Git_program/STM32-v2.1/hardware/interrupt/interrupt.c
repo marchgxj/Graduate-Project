@@ -74,7 +74,17 @@ void TIM3_IRQHandler(void)   //500ms
 		else
 		{
 				TIM3_Count = 10;
-				PostBeacon();
+			if(PostBeacon()!=TQ_SUCCESS)
+			{
+					LED0_ON();
+					LED1_ON();
+					LED2_ON();
+					LED3_ON();
+					LED4_ON();
+					LED5_ON();
+					LED6_ON();
+			}
+			
 #if (UPLOAD_DATA_EN == 1)
 				PostTask(EVENT_UPLOAD_DATA);
 #endif

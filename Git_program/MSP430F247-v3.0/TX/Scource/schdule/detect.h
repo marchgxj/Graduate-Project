@@ -19,6 +19,8 @@
 #define CAR2NOCAR  3            //有车到无车中间状态
 #define COLLECTING 4            //采集数据中
 #define STABLE     5            //传感器稳定
+#define OFFLINE    253            //电量低
+#define LOWPOWER   252            //电量低
 
 #define CAL_PERIOD  6000          //10分钟校准一次
 
@@ -26,11 +28,12 @@
 #define EXT_THRESHOLD  40               //两轴差值判断阈值
 #define INT_THRESHOLD  60
 
-#define TEST_LENGTH 38
+#define TEST_LENGTH 42
 #define FILTER_LENGTH 20
 #define SLOP_LENGTH 3
 
-#define LOWPOWER_THRESHOLD 2030
+#define LOWPOWER_THRESHOLD_HIGH 600
+#define LOWPOWER_THRESHOLD_LOW  500
 
 #define OPEN_GMI_COUNT   400  //多长时间后检测是否开启GMI  单位：50ms
 #define CLOSE_GMI_COUNT  1200  //  单位：50ms
@@ -99,6 +102,7 @@ extern unsigned int sqrt_16(unsigned long M);
 extern void GetIntensity();
 extern void CarCalibration();
 extern void TotalJudge();
+extern void CmdCalibration();
 
 extern FilterStruct FilterData[FILTER_LENGTH];
 extern uint16 Collect_Period;

@@ -344,6 +344,7 @@ void ReCal()
         MagneticUnit.GMI_XMiddleM = MagneticUnit.GMI_XMiddle;
         MagneticUnit.GMI_YMiddleM = MagneticUnit.GMI_YMiddle;
         MagneticUnit.Int_Middle = MagneticUnit.Intensity;
+        MagneticUnit.Ext_Middle = abs(MagneticUnit.XMiddle-MagneticUnit.YMiddle);
         ReCal_Count = 20;
         MagneticUnit.GMI_XValue = 0;
         MagneticUnit.GMI_YValue = 0;
@@ -429,9 +430,18 @@ void GMI_Identify()
         }
     }
 }
+void GetVoltage()
+{
+    SampleVoltage(&EndPointDevice.vlotage,&EndPointDevice.temperature);
+    if((EndPointDevice.vlotage<LOWPOWER_THRESHOLD_HIGH)&&((EndPointDevice.vlotage>LOWPOWER_THRESHOLD_LOW)))
+    {
+        EndPointDevice.parking_state = LOWPOWER;
+    }
+}
 void IdentifyCar()
 {
     halLedToggle(1);
+    
     if(OpenGMI_Count >= OPEN_GMI_COUNT)
     {
         if(EndPointDevice.parking_state == NOCAR)
@@ -465,6 +475,7 @@ void IdentifyCar()
         IntensityMultiState(2,2,2);
     }
     TotalJudge();
+    GetVoltage();
     
     
     
@@ -833,6 +844,83 @@ void NoCarCalibration()
     __enable_interrupt();
     
 }
+
+
+void CmdCalibration()
+{
+    uint8 count = 0;
+    uint8 count1 = 0;
+    uint16 ADvalueX=0;
+    uint16 ADvalueY=0;
+    uint16 ADvalueZ=0;
+    uint16 GMI_ADvalueX=0;
+    uint16 GMI_ADvalueY=0;
+    uint16 ADX = 0;
+    uint16 ADY = 0;
+    uint16 ADZ = 0;
+    uint16 GMI_ADX = 0;
+    uint16 GMI_ADY = 0;
+    uint32 intensity = 0;
+    uint8 i=0;
+
+    
+    __disable_interrupt();
+
+    halLedToggle(3);
+    for(i=0;i<4;i++)
+    {
+        delay_ms(50);
+        SampleChannel(&GMI_ADvalueX,&GMI_ADvalueY);
+        count1++;
+        GMI_ADX += GMI_ADvalueX;
+        GMI_ADY += GMI_ADvalueY; 
+        Multi_Read_HMC(&ADvalueX,&ADvalueY,&ADvalueZ);
+        
+        count++;
+        ADX += ADvalueX;
+        ADY += ADvalueY;
+        ADZ += ADvalueZ;
+        
+    }
+    if(count!=0)
+    {
+        ADX = ADX/count;
+        ADY = ADY/count;
+        ADZ = ADZ/count;
+    }
+    if(count1!=0)
+    {
+        GMI_ADX = GMI_ADX/count1;
+        GMI_ADY = GMI_ADY/count1;
+    }
+    
+    
+    MagneticUnit.XMiddle = ADX;
+    MagneticUnit.YMiddle = ADY;
+    MagneticUnit.ZMiddle = ADZ;
+    MagneticUnit.GMI_XMiddle = GMI_ADX;
+    MagneticUnit.GMI_YMiddle = GMI_ADY;
+
+    MagneticUnit.Ext_Middle = abs(MagneticUnit.XMiddle-MagneticUnit.YMiddle);
+    MagneticUnit.XMiddleM = MagneticUnit.XMiddle;
+    MagneticUnit.YMiddleM = MagneticUnit.YMiddle;
+    MagneticUnit.ZMiddleM = MagneticUnit.ZMiddle;
+    
+    MagneticUnit.GMI_XMiddleM = MagneticUnit.GMI_XMiddle;
+    MagneticUnit.GMI_YMiddleM = MagneticUnit.GMI_YMiddle;
+    
+    intensity = sqrt_16((((uint32)MagneticUnit.XMiddle*(uint32)MagneticUnit.XMiddle)+((uint32)MagneticUnit.YMiddle*(uint32)MagneticUnit.YMiddle))+((uint32)MagneticUnit.ZMiddle*(uint32)MagneticUnit.ZMiddle));
+    MagneticUnit.Int_Middle = intensity;
+    Sensor_Drift = 0;
+    CarCaliFlag = 0;
+    MagneticUnit.CarExtremum = 0;
+    MagneticUnit.CarIntensity = 0;
+    MagneticUnit.CarVariance = 0;
+    delay_ms(50);
+    __enable_interrupt();
+    
+}
+
 
 
 void GetVariance()

@@ -31,6 +31,7 @@ void halBoardInit(void)
     time_init();
     SPI3_Init();
     FLASHInit();
+    AD_Init();
     A7139_Init(470.001f);
     Interrupt_Init();
     Init_TQ();
