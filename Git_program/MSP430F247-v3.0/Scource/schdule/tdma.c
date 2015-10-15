@@ -3,6 +3,7 @@ DataPacketStruct DataPacket;
 uint16 ab_slot_num = 0;
 uint32 send_time = 0;
 uint32 resend_count = 0;
+uint16 DataAck_Lost = 0;
 uint8 RecvDataACK()
 {
     send_time = Frame_Time;
@@ -93,6 +94,7 @@ void DataSend(void)
     c = b + 5000;               //每个时隙向后移5ms，让中继切换状态
     before_slot_wake = (c-WAKE_TIME)/100;
     
+    halLedClear(3);
     DIS_INT;
     
     while(Frame_Time<=before_slot_wake);
@@ -109,6 +111,7 @@ void DataSend(void)
     ack_flag = RecvDataACK();
     if(ack_flag == 1)
     {      
+        DataAck_Lost = 0;
         if(EndPointDevice.power == 1)
         {
             A7139_DeepSleep();
@@ -123,8 +126,15 @@ void DataSend(void)
     else
     {
         TIME2_LOW;
+        DataAck_Lost++;
+        if(DataAck_Lost>20)
+        {
+            PostTask(EVENT_A7139_RESET);
+            DataAck_Lost = 0;
+        }
         PostTask(EVENT_CSMA_RESEND);
         EndPointDevice.data_ack = 0;
+        halLedSet(3);
         EN_INT; 
     }
 
@@ -166,8 +176,8 @@ void CSMADataResend()
 
 void KeepAliveSend()
 {
-    
     A7139_Deep_Wake();
+    halLedSet(3);
     EN_INT;
     EN_TIMER1;
 }

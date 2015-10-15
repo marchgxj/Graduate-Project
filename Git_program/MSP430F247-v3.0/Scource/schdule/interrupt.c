@@ -71,6 +71,7 @@ __interrupt void Timer_A (void)
         if(Frame_Time==BEFOR_BEACON_WAKE)//在接收beacon前使能中断
         {
             PostTask(EVENT_WAKE_A7139);
+            halLedSet(3);
             EN_INT;
         }
 #if (COLLECT_EN)                                //开启数据采集
@@ -122,6 +123,8 @@ void TestSend()
     21:38、39：EndPointDevice.vlotage
     22:40、41：EndPointDevice.temperature
     23:42、43：MagneticUnit.ZMiddle
+    24:44:XValue_Parking
+    25:45:YValue_Parking
     **********************************************/
     DataSendDraw[0] = MagneticUnit.XValue>>8;
     DataSendDraw[1] = MagneticUnit.XValue;
@@ -165,6 +168,10 @@ void TestSend()
     DataSendDraw[39] = EndPointDevice.vlotage;
     DataSendDraw[40] = EndPointDevice.temperature>>8;
     DataSendDraw[41] = EndPointDevice.temperature;
+    DataSendDraw[42] = MagneticUnit.ZMiddle>>8;
+    DataSendDraw[43] = MagneticUnit.ZMiddle;
+    DataSendDraw[44] = XValue_Parking;
+    DataSendDraw[45] = YValue_Parking;
     
     A7139_WriteFIFO(DataSendDraw,TEST_LENGTH);
     delay_us(1);

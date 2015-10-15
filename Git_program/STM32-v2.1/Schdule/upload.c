@@ -9,6 +9,7 @@ uint8 last_upload_tsk;
 uint8 Node_Inwaiting = 0;							//队列中节点的数量
 uint16 Pop_Count = 0;
 uint8 Upload_Ack = 0;
+uint8 Receive_Upload_Ack_Fail = 0;
 
 void Clear_Node(UartDataStruct *node)
 {
@@ -56,6 +57,9 @@ uint8 PostUploadNode(UartDataStruct *node)
     else
     {
         //printf("TQ is FULL!\n");
+				Usart1_PutChar(0x7D);
+				Usart1_PutChar(0x7F);
+				printf("Upload Quene Full\n");
 				Clear_Buffer(0,UPLOAD_NODE_NUM);
         return TQ_FULL;		
     }
@@ -94,8 +98,8 @@ void Upload_Data()
 		{
 				return;
 		}
-		
-    Usart1_PutChar(0x7D);
+    Usart1_PutChar(0x00);//发送这个数时接收不到
+		Usart1_PutChar(0x7D);
     Usart1_PutChar(0x7E);								//包头
 		Usart1_PutChar(last_upload_tsk);			//本次要发送的节点个数
     node = PopUploadNode();
@@ -112,6 +116,7 @@ void Upload_Data()
 				{
 						//队列已经满了，还没有发出去
 						//加printf输出信息
+						DebugMsg("Pop_Count Overload");
 						return;
 				}
     }
@@ -122,14 +127,27 @@ void Upload_Data()
 		if(Power_Mode == 1)			//只发送一次时要求确认
 		{
 				
-				while (USART_GetFlagStatus(USART1, USART_FLAG_RXNE) == RESET)
+			//	while (USART_GetFlagStatus(USART1, USART_FLAG_RXNE) == RESET)
+				while (Upload_Ack == 0)
 				{
-						if (time_out++ > 200)
+						if (time_out++ > 150)
 						{
-								delay_us(10);
+								delay_ms(1);
 								current_upload_tsk = 0;				//如果没有收到确认，发送指针置头，重新发送
-								return;
+								Receive_Upload_Ack_Fail = 1;
+							  /*Usart1_PutChar(0x7D);
+								Usart1_PutChar(0x7F);								//包头
+							  printf("upload no ack");*/
+								//return;
+							break;
 						}
+				}
+				Upload_Ack = 0;
+				if(Receive_Upload_Ack_Fail == 1)
+				{
+						Receive_Upload_Ack_Fail = 0;
+						DebugMsg("upload no ack");
+						return;
 				}
 				if(USART1_Getchar()!='o')					//确认数据位'o'
 				{

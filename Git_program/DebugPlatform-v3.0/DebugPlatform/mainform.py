@@ -756,147 +756,223 @@ class Application(ttk.Notebook):
         for i in range(10):
             readgroup.columnconfigure(i, weight=1)
 
+        rowandcloumn = 0
+
         self.XValueString = tk.StringVar()
-        tk.Label(readgroup, text="XValue:").grid(row=0, column=0)
+        tk.Label(readgroup, text="XValue:").grid(row=rowandcloumn/10, column=rowandcloumn%10)
+        rowandcloumn+=1
         self.XValueLabel = tk.Label(readgroup, text="0",textvariable=self.XValueString,width=4)
-        self.XValueLabel.grid(row=0, column=1)
+        self.XValueLabel.grid(row=rowandcloumn/10, column=rowandcloumn%10)
+        rowandcloumn+=1
         self.XValueString.set(0)
 
         self.XMiddleString = tk.StringVar()
-        tk.Label(readgroup, text="XMiddle:").grid(row=0, column=2)
+        tk.Label(readgroup, text="XMiddle:").grid(row=rowandcloumn/10, column=rowandcloumn%10)
+        rowandcloumn+=1
         self.AD_middle_valueXLabel = tk.Label(readgroup, text="0",textvariable=self.XMiddleString,width=4)
-        self.AD_middle_valueXLabel.grid(row=0, column=3)
+        self.AD_middle_valueXLabel.grid(row=rowandcloumn/10, column=rowandcloumn%10)
+        rowandcloumn+=1
         self.XMiddleString.set(0)
 
         self.YValueString = tk.StringVar()
-        tk.Label(readgroup, text="YValue:").grid(row=0, column=4)
+        tk.Label(readgroup, text="YValue:").grid(row=rowandcloumn/10, column=rowandcloumn%10)
+        rowandcloumn+=1
         self.YValueLabel = tk.Label(readgroup, text="0",textvariable=self.YValueString,width=4)
-        self.YValueLabel.grid(row=0, column=5)
+        self.YValueLabel.grid(row=rowandcloumn/10, column=rowandcloumn%10)
+        rowandcloumn+=1
         self.YValueString.set(0)
 
         self.YMiddleString = tk.StringVar()
-        tk.Label(readgroup, text="YMiddle:").grid(row=0, column=6)
+        tk.Label(readgroup, text="YMiddle:").grid(row=rowandcloumn/10, column=rowandcloumn%10)
+        rowandcloumn+=1
         self.AD_middle_valueYLabel = tk.Label(readgroup, text="0",textvariable=self.YMiddleString,width=4)
-        self.AD_middle_valueYLabel.grid(row=0, column=7)
+        self.AD_middle_valueYLabel.grid(row=rowandcloumn/10, column=rowandcloumn%10)
+        rowandcloumn+=1
         self.YMiddleString.set(0)
 
         self.ZvalueString = tk.StringVar()
-        tk.Label(readgroup, text="ZValue:").grid(row=0, column=8)
+        tk.Label(readgroup, text="ZValue:").grid(row=rowandcloumn/10, column=rowandcloumn%10)
+        rowandcloumn+=1
         self.ZvalueLabel = tk.Label(readgroup, text="0",textvariable=self.ZvalueString,width=4)
-        self.ZvalueLabel.grid(row=0, column=9)
+        self.ZvalueLabel.grid(row=rowandcloumn/10, column=rowandcloumn%10)
+        rowandcloumn+=1
         self.ZvalueString.set(0)
 
         self.ZMiddleString = tk.StringVar()
-        tk.Label(readgroup, text="ZMiddle:").grid(row=1, column=0)
+        tk.Label(readgroup, text="ZMiddle:").grid(row=rowandcloumn/10, column=rowandcloumn%10)
+        rowandcloumn+=1
         self.AD_middle_valueZLabel = tk.Label(readgroup, text="0",textvariable=self.ZMiddleString,width=4)
-        self.AD_middle_valueZLabel.grid(row=1, column=1)
+        self.AD_middle_valueZLabel.grid(row=rowandcloumn/10, column=rowandcloumn%10)
+        rowandcloumn+=1
         self.ZMiddleString.set(0)
 
         self.VarianceString = tk.StringVar()
-        tk.Label(readgroup, text="Variance:").grid(row=1, column=2)
+        tk.Label(readgroup, text="Variance:").grid(row=rowandcloumn/10, column=rowandcloumn%10)
+        rowandcloumn+=1
         self.VarianceMLabel = tk.Label(readgroup, text="0",textvariable=self.VarianceString,width=4)
-        self.VarianceMLabel.grid(row=1, column=3)
+        self.VarianceMLabel.grid(row=rowandcloumn/10, column=rowandcloumn%10)
+        rowandcloumn+=1
         self.VarianceString.set(0)
 
+        self.VarStateString = tk.StringVar()
+        tk.Label(readgroup, text="VarState:").grid(row=rowandcloumn/10, column=rowandcloumn%10)
+        rowandcloumn+=1
+        self.VarStateLabel = tk.Label(readgroup, text="0",textvariable=self.VarStateString,width=4)
+        self.VarStateLabel.grid(row=rowandcloumn/10, column=rowandcloumn%10)
+        rowandcloumn+=1
+        self.VarStateString.set(0)
+
         self.ExtremumString = tk.StringVar()
-        tk.Label(readgroup, text="Extremum:").grid(row=1, column=4)
+        tk.Label(readgroup, text="Extremum:").grid(row=rowandcloumn/10, column=rowandcloumn%10)
+        rowandcloumn+=1
         self.ExtremumValueLabel = tk.Label(readgroup, text="0",textvariable=self.ExtremumString,width=4)
-        self.ExtremumValueLabel.grid(row=1, column=5)
+        self.ExtremumValueLabel.grid(row=rowandcloumn/10, column=rowandcloumn%10)
+        rowandcloumn+=1
         self.ExtremumString.set(0)
 
         self.Ext_MiddleString = tk.StringVar()
-        tk.Label(readgroup, text="Ext_Middle:").grid(row=1, column=6)
+        tk.Label(readgroup, text="Ext_Middle:").grid(row=rowandcloumn/10, column=rowandcloumn%10)
+        rowandcloumn+=1
         self.ExtremumValueMiddleLabel = tk.Label(readgroup, text="0",textvariable=self.Ext_MiddleString,width=4)
-        self.ExtremumValueMiddleLabel.grid(row=1, column=7)
+        self.ExtremumValueMiddleLabel.grid(row=rowandcloumn/10, column=rowandcloumn%10)
+        rowandcloumn+=1
         self.Ext_MiddleString.set(0)
 
+        self.ExtStateString = tk.StringVar()
+        tk.Label(readgroup, text="ExtState:").grid(row=rowandcloumn/10, column=rowandcloumn%10)
+        rowandcloumn+=1
+        self.ExtStateLabel = tk.Label(readgroup, text="0",textvariable=self.ExtStateString,width=4)
+        self.ExtStateLabel.grid(row=rowandcloumn/10, column=rowandcloumn%10)
+        rowandcloumn+=1
+        self.ExtStateString.set(0)
+
         self.IntensityeString = tk.StringVar()
-        tk.Label(readgroup, text="Intensity:").grid(row=1, column=8)
+        tk.Label(readgroup, text="Intensity:").grid(row=rowandcloumn/10, column=rowandcloumn%10)
+        rowandcloumn+=1
         self.IntensityLabel = tk.Label(readgroup, text="0",textvariable=self.IntensityeString,width=4)
-        self.IntensityLabel.grid(row=1, column=9)
+        self.IntensityLabel.grid(row=rowandcloumn/10, column=rowandcloumn%10)
+        rowandcloumn+=1
         self.IntensityeString.set(0)
 
         self.Int_MiddleString = tk.StringVar()
-        tk.Label(readgroup, text="Int_Middle:").grid(row=2, column=0)
+        tk.Label(readgroup, text="Int_Middle:").grid(row=rowandcloumn/10, column=rowandcloumn%10)
+        rowandcloumn+=1
         self.IntensityMiddleLabel = tk.Label(readgroup, text="0",textvariable=self.Int_MiddleString,width=4)
-        self.IntensityMiddleLabel.grid(row=2, column=1)
+        self.IntensityMiddleLabel.grid(row=rowandcloumn/10, column=rowandcloumn%10)
+        rowandcloumn+=1
         self.Int_MiddleString.set(0)
 
         self.IntStateString = tk.StringVar()
-        tk.Label(readgroup, text="IntState:").grid(row=2, column=2)
+        tk.Label(readgroup, text="IntState:").grid(row=rowandcloumn/10, column=rowandcloumn%10)
+        rowandcloumn+=1
         self.IntStateLabel = tk.Label(readgroup, text="0",textvariable=self.IntStateString,width=4)
-        self.IntStateLabel.grid(row=2, column=3)
+        self.IntStateLabel.grid(row=rowandcloumn/10, column=rowandcloumn%10)
+        rowandcloumn+=1
         self.IntStateString.set(0)
 
         self.ResultString = tk.StringVar()
-        tk.Label(readgroup, text="Result:").grid(row=2, column=4)
+        tk.Label(readgroup, text="Result:").grid(row=rowandcloumn/10, column=rowandcloumn%10)
+        rowandcloumn+=1
         self.ResultLabel = tk.Label(readgroup, text="0",textvariable=self.ResultString,width=4)
-        self.ResultLabel.grid(row=2, column=5)
+        self.ResultLabel.grid(row=rowandcloumn/10, column=rowandcloumn%10)
+        rowandcloumn+=1
         self.ResultString.set(0)
 
         self.IntensityMinusString = tk.StringVar()
-        tk.Label(readgroup, text="IntensityMinus:").grid(row=2, column=6)
+        tk.Label(readgroup, text="IntensityMinus:").grid(row=rowandcloumn/10, column=rowandcloumn%10)
+        rowandcloumn+=1
         self.IntensityMinus = tk.Label(readgroup, text="0",textvariable=self.IntensityMinusString,width=4)
-        self.IntensityMinus.grid(row=2, column=7)
+        self.IntensityMinus.grid(row=rowandcloumn/10, column=rowandcloumn%10)
+        rowandcloumn+=1
         self.IntensityMinusString.set(0)
 
         self.XAve_SlopString = tk.StringVar()
-        tk.Label(readgroup, text="XAve_Slop:").grid(row=2, column=8)
+        tk.Label(readgroup, text="XAve_Slop:").grid(row=rowandcloumn/10, column=rowandcloumn%10)
+        rowandcloumn+=1
         self.XAve_SlopLabel = tk.Label(readgroup, text="0",textvariable=self.XAve_SlopString,width=4)
-        self.XAve_SlopLabel.grid(row=2, column=9)
+        self.XAve_SlopLabel.grid(row=rowandcloumn/10, column=rowandcloumn%10)
+        rowandcloumn+=1
         self.XAve_SlopString.set(0)
 
         self.YAve_SlopString = tk.StringVar()
-        tk.Label(readgroup, text="YAve_Slop:").grid(row=3, column=0)
+        tk.Label(readgroup, text="YAve_Slop:").grid(row=rowandcloumn/10, column=rowandcloumn%10)
+        rowandcloumn+=1
         self.YAve_SlopLabel = tk.Label(readgroup, text="0",textvariable=self.YAve_SlopString,width=4)
-        self.YAve_SlopLabel.grid(row=3, column=1)
+        self.YAve_SlopLabel.grid(row=rowandcloumn/10, column=rowandcloumn%10)
+        rowandcloumn+=1
         self.YAve_SlopString.set(0)
 
         self.Side_ParkingString = tk.StringVar()
-        tk.Label(readgroup, text="Side_Parking:").grid(row=3, column=2)
+        tk.Label(readgroup, text="Side_Parking:").grid(row=rowandcloumn/10, column=rowandcloumn%10)
+        rowandcloumn+=1
         self.Side_ParkingLabel = tk.Label(readgroup, text="0",textvariable=self.Side_ParkingString,width=4)
-        self.Side_ParkingLabel.grid(row=3, column=3)
+        self.Side_ParkingLabel.grid(row=rowandcloumn/10, column=rowandcloumn%10)
+        rowandcloumn+=1
         self.Side_ParkingString.set(0)
 
         self.GMI_XvalueString = tk.StringVar()
-        tk.Label(readgroup, text="GMI_Xvalue:").grid(row=3, column=4)
+        tk.Label(readgroup, text="GMI_Xvalue:").grid(row=rowandcloumn/10, column=rowandcloumn%10)
+        rowandcloumn+=1
         self.GMI_XValueLabel = tk.Label(readgroup, text="0",textvariable=self.GMI_XvalueString,width=4)
-        self.GMI_XValueLabel.grid(row=3, column=5)
+        self.GMI_XValueLabel.grid(row=rowandcloumn/10, column=rowandcloumn%10)
+        rowandcloumn+=1
         self.GMI_XvalueString.set(0)
 
         self.GMI_XvalueMiddleString = tk.StringVar()
-        tk.Label(readgroup, text="GMI_XvalueM:").grid(row=3, column=6)
+        tk.Label(readgroup, text="GMI_XvalueM:").grid(row=rowandcloumn/10, column=rowandcloumn%10)
+        rowandcloumn+=1
         self.GMI_XValueMiddleLabel = tk.Label(readgroup, text="0",textvariable=self.GMI_XvalueMiddleString,width=4)
-        self.GMI_XValueMiddleLabel.grid(row=3, column=7)
+        self.GMI_XValueMiddleLabel.grid(row=rowandcloumn/10, column=rowandcloumn%10)
+        rowandcloumn+=1
         self.GMI_XvalueMiddleString.set(0)
 
         self.GMI_YvalueString = tk.StringVar()
-        tk.Label(readgroup, text="GMI_Yvalue:").grid(row=3, column=8)
+        tk.Label(readgroup, text="GMI_Yvalue:").grid(row=rowandcloumn/10, column=rowandcloumn%10)
+        rowandcloumn+=1
         self.GMI_YValueLabel = tk.Label(readgroup, text="0",textvariable=self.GMI_YvalueString,width=4)
-        self.GMI_YValueLabel.grid(row=3, column=9)
+        self.GMI_YValueLabel.grid(row=rowandcloumn/10, column=rowandcloumn%10)
+        rowandcloumn+=1
         self.GMI_YvalueString.set(0)
 
         self.GMI_YvalueMiddleString = tk.StringVar()
-        tk.Label(readgroup, text="GMI_YvalueM:").grid(row=4, column=0)
+        tk.Label(readgroup, text="GMI_YvalueM:").grid(row=rowandcloumn/10, column=rowandcloumn%10)
+        rowandcloumn+=1
         self.GMI_YValueMiddleLabel = tk.Label(readgroup, text="0",textvariable=self.GMI_YvalueMiddleString,width=4)
-        self.GMI_YValueMiddleLabel.grid(row=4, column=1)
+        self.GMI_YValueMiddleLabel.grid(row=rowandcloumn/10, column=rowandcloumn%10)
+        rowandcloumn+=1
         self.GMI_YvalueMiddleString.set(0)
 
         self.VoltageString = tk.StringVar()
-        tk.Label(readgroup, text="Voltage:").grid(row=4, column=2)
+        tk.Label(readgroup, text="Voltage:").grid(row=rowandcloumn/10, column=rowandcloumn%10)
+        rowandcloumn+=1
         self.VoltageLabel = tk.Label(readgroup, text="0",textvariable=self.VoltageString,width=4)
-        self.VoltageLabel.grid(row=4, column=3)
+        self.VoltageLabel.grid(row=rowandcloumn/10, column=rowandcloumn%10)
+        rowandcloumn+=1
         self.VoltageString.set(0)
 
         self.TemperatureString = tk.StringVar()
-        tk.Label(readgroup, text="Temperature:").grid(row=4, column=4)
+        tk.Label(readgroup, text="Temperature:").grid(row=rowandcloumn/10, column=rowandcloumn%10)
+        rowandcloumn+=1
         self.TemperatureLabel = tk.Label(readgroup, text="0",textvariable=self.TemperatureString,width=4)
-        self.TemperatureLabel.grid(row=4, column=5)
+        self.TemperatureLabel.grid(row=rowandcloumn/10, column=rowandcloumn%10)
+        rowandcloumn+=1
         self.TemperatureString.set(0)
 
+        self.XValue_ParkingString = tk.StringVar()
+        tk.Label(readgroup, text="XValue_Parking:").grid(row=rowandcloumn/10, column=rowandcloumn%10)
+        rowandcloumn+=1
+        self.XValue_ParkingLabel = tk.Label(readgroup, text="0",textvariable=self.XValue_ParkingString,width=4)
+        self.XValue_ParkingLabel.grid(row=rowandcloumn/10, column=rowandcloumn%10)
+        rowandcloumn+=1
+        self.XValue_ParkingString.set(0)
 
-
-
+        self.YValue_ParkingString = tk.StringVar()
+        tk.Label(readgroup, text="YValue_Parking:").grid(row=rowandcloumn/10, column=rowandcloumn%10)
+        rowandcloumn+=1
+        self.YValue_ParkingLabel = tk.Label(readgroup, text="0",textvariable=self.YValue_ParkingString,width=4)
+        self.YValue_ParkingLabel.grid(row=rowandcloumn/10, column=rowandcloumn%10)
+        rowandcloumn+=1
+        self.YValue_ParkingString.set(0)
 
         # self.datatext = tk.Text(readgroup)
         # self.datatext.grid(row=0, column=0, sticky=tk.N + tk.S + tk.E + tk.W)
@@ -1237,6 +1313,10 @@ class Application(ttk.Notebook):
         self.GMI_YvalueMiddleString.set(self.menu.uartform.identifythread.value[20])
         self.VoltageString.set(self.menu.uartform.identifythread.value[21])
         self.TemperatureString.set(self.menu.uartform.identifythread.value[22])
+        self.ZMiddleString.set(self.menu.uartform.identifythread.value[23])
+        self.XValue_ParkingString.set(self.menu.uartform.identifythread.value[24])
+        self.YValue_ParkingString.set(self.menu.uartform.identifythread.value[25])
+
         if(abs(self.menu.uartform.identifythread.value[0]-self.menu.uartform.identifythread.value[7])>100 and (self.menu.uartform.identifythread.value[2])<60):
             self.Side_ParkingString.set(1)
         else:

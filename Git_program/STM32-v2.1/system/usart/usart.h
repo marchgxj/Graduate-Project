@@ -17,6 +17,8 @@
 #define USART_REC_LEN	200  	//定义最大接收字节数 200
 #define EN_USART1_RX 	1			//使能（1）/禁止（0）串口1接收
 
+
+
 #define DIS_USARTINT USART_ITConfig(USART1 , USART_IT_RXNE, DISABLE);
 #define EN_USARTINT  USART_ITConfig(USART1 , USART_IT_RXNE, ENABLE);
 	  	
@@ -28,6 +30,7 @@ void uart_init(void);
 extern void Usart1_PutChar(uint8_t ch);
 extern void Usart1_PutData(uint8_t *buffer,uint8_t count);
 extern uint8 USART1_Getchar(void);
+extern void DebugMsg(char* msg);
 #endif
 
 

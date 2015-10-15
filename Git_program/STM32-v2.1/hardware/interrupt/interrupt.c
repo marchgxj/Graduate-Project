@@ -76,6 +76,7 @@ void TIM3_IRQHandler(void)   //500ms
 				TIM3_Count = 10;
 			if(PostBeacon()!=TQ_SUCCESS)
 			{
+					DebugMsg("Task Quene Full");
 					LED0_ON();
 					LED1_ON();
 					LED2_ON();

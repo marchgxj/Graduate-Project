@@ -103,6 +103,7 @@ class myThread(threading.Thread):
         '''
         a = 0
         count = 0
+        debug_count = 0
         data={}
         data["relay_id"] = "0086-110108-00022105-01"
         data["park_id"] = "22105"
@@ -125,24 +126,30 @@ class myThread(threading.Thread):
                     ordbuf = self.uart.read(1)
                     if(ordbuf!=""):
                         if ord(ordbuf) == 0x7D:
-                            if ord(self.uart.read(1)) == 0x7E:
+                            ordbuf = ord(self.uart.read(1))
+                            if ordbuf == 0x7E:
                                 count += 1
                                 length = ord(self.uart.read(1))  # 读出这一包要发的节点个数
+                                print length
                                 self.notedata = []
                                 data["data"]=""
                                 for i in range(length):
-                                    num = ord(self.uart.read(1)) << 8 | ord(self.uart.read(1))
-                                    self.notedata.append(num)  # 偶数位为地址
-                                    data["data"] = data["data"]+"0086-110108-00022105-" + str(num).zfill(4) + "|"
-                                    self.datatoshow = self.datatoshow + str(num).zfill(4) + "|"
-                                    status = ord(self.uart.read(1))
-                                    self.notedata.append(status)  # 奇数位为数据
-                                    self.datatoshow = self.datatoshow + str(status) + ","
-                                    data["data"] = data["data"] + str(status) + ","
+                                    try:
+                                        num = ord(self.uart.read(1)) << 8 | ord(self.uart.read(1))
+                                        self.notedata.append(num)  # 偶数位为地址
+                                        data["data"] = data["data"]+"0086-110108-00022105-" + str(num).zfill(4) + "|"
+                                        self.datatoshow = self.datatoshow + str(num).zfill(4) + "|"
+                                        status = ord(self.uart.read(1))
+                                        self.notedata.append(status)  # 奇数位为数据
+                                        self.datatoshow = self.datatoshow + str(status) + ","
+                                        data["data"] = data["data"] + str(status) + ","
+                                    except:
+                                        print "self.uart.read 读出空值"
 
 
                                 if len(self.notedata) == length * 2:
                                     self.uart.write("o")
+                                    print "o"
                                 else:
                                     print "uart data error"
                                     self.uart.read(self.uart.inWaiting())  # 清空串口缓冲区内容
@@ -188,7 +195,12 @@ class myThread(threading.Thread):
                                         else:
                                             self.statusbar.status.setstatus('%s', "数据返回错误")
                                     except:
-                                        print "2"
+                                        print "relaythread.py line 198 error"
+                            elif (ordbuf) == 0x7F:
+                                debug_count+=1
+                                err_msg = self.uart.readline()
+                                err_msg = err_msg[:-1]
+                                self.statusbar.status.setdata('Debug Msg:  %s   %s',err_msg,debug_count)
                 if (self.showdata.appFrame.tab == 4):
                     # self.statusbar.status.setstatus("节点控制")
                     if(self.cmdaddress!=""):
@@ -208,56 +220,17 @@ class myThread(threading.Thread):
                                     else:
                                         self.Control_Resend+=1
                                         self.statusbar.status.setdata('%s',"重试：" + str(self.Control_Resend))
-                                        if(self.Control_Resend==10):
+                                        if(self.Control_Resend==20):
                                             self.Control_Resend = 0
                                             self.statusbar.status.setdata("发送失败！")
                                             self.cmdaddress = "0"
+                                            time.sleep(0.3)
 
                     else:
                         self.statusbar.status.setdata("请填写地址！")
+                    # time.sleep(0.3)
 
 
-                    time.sleep(0.3)
-
-                    '''旧版数据接收
-                    if ord(self.uart.read(1))==0x7D:
-                        if ord(self.uart.read(1))==0x7E:
-
-                            count+=1
-                            buf = self.uart.read(8)
-                            self.datatoshow=''
-                            for i in buf:
-                                a+=1
-                                if(a%2==1):
-                                    self.datatoshow =  self.datatoshow+str(ord(i))+"|"
-                                else:
-                                    self.datatoshow =  self.datatoshow+str(ord(i))+","
-
-
-                            self.statusbar.status.setdata('串口数据:%s Count:%s',self.datatoshow[:-1],count)
-                    if self.stopcar.appFrame.carnum==0:
-                        self.statusbar.status.setstatus('%s',"未配置停车个数")
-                    else:
-                        if self.carstoproot.datamode == 0:
-                            self.stopcar.appFrame.stopcar(self.datatoshow[:-1])
-    #                         self.statusbar.status.setstatus('%s',"未开启网络数据下载")
-                        else:
-                            if self.threadstartflag == 0:
-                                self.threadstartflag = 1
-                                self.netreceive.start()
-                            comtent=self.content
-                            self.netdatabuf=''
-                            try:
-                                if comtent['err_code'] == 0:
-                                    for items in comtent['data']:
-                                        self.netdatabuf = self.netdatabuf+str(items['name']+'|'+items['value']+',')
-                                    self.stopcar.appFrame.stopcar(self.netdatabuf[:-1])
-                                    self.statusbar.status.setstatus('%s',"网络数据:"+self.netdatabuf[:-1])
-                                else:
-                                    self.statusbar.status.setstatus('%s',"数据返回错误")
-                            except:
-                                print "2"
-                    '''
 
     def Createuart(self):
         self.uart = serial.Serial(timeout=2)

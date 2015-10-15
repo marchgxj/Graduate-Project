@@ -87,7 +87,7 @@ void Usart1_PutChar(uint8_t ch)
     USART_SendData(USART1,  ch);
 
     while (USART_GetFlagStatus(USART1, USART_FLAG_TC) == RESET)
-    {}   
+    {} 
 }
 void Usart1_PutData(uint8_t *buffer,uint8_t count)
 {
@@ -110,10 +110,10 @@ uint8 Usart_Data[4] = 0;
 void USART1_IRQHandler(void)
 {
 	uint8 buf;
-	USART_ClearFlag(USART1 , USART_FLAG_RXNE);
+	
 	if(USART_GetITStatus(USART1, USART_IT_RXNE) != RESET)//Ω” ’÷–∂œ
 	{
-			
+			USART_ClearFlag(USART1 , USART_FLAG_RXNE);
 		  buf = USART_ReceiveData(USART1);
 			if(buf == 'o')
 			{
@@ -142,6 +142,18 @@ void USART1_IRQHandler(void)
 uint8 USART1_Getchar(void)
 {
 		return USART_ReceiveData(USART1); 
+}
+
+#define DEBUGMSG_EN  1
+void DebugMsg(char* msg)
+{
+#if DEBUGMSG_EN == 1
+		uint16 i=0;
+		Usart1_PutChar(0x7D);
+		Usart1_PutChar(0x7F);
+		
+		printf("%s\n",msg);
+#endif
 }
 
 

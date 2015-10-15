@@ -36,7 +36,7 @@ class CarStopRoot(tk.Tk):
         
         carnumlabel = tk.Label(self, text="车位数量:")
         carnumlabel.grid(sticky=tk.W)
-        self.carnumspinbox = tk.Spinbox(self, from_=4, to=50, width=10)
+        self.carnumspinbox = tk.Spinbox(self, from_=16, to=50, width=10)
 
         self.carnumspinbox.grid(row=0, column=1)
         carlolabel = tk.Label(self, text="车位位置:")

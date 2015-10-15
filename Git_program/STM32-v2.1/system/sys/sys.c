@@ -20,7 +20,6 @@ void sys_init(void)
 		KEY_Init();	
 		SPI3_Init();
 		A7139_Init(480.001f);
-		//A7139_SetDataRate(10);
 	  TIM3_Int_Init(BECAON_PERIOD*10-1,7200-1);	//10Khz的计数频率，计数到1000为100ms 
 	  //TIM4_Int_Init(72,99);  //最小时间单位 1us
 		Interrupt_Init();

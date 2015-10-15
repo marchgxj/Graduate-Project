@@ -16,6 +16,7 @@ ReJoin:
     {
        normal_test[i]=i;
     }
+
     
     //    ´«¸ÐÆ÷²âÊÔ
 //    A7139_SetPackLen(TEST_LENGTH);

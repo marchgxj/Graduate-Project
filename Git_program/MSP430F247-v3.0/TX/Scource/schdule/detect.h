@@ -28,7 +28,7 @@
 #define EXT_THRESHOLD  40               //¡Ω÷·≤Ó÷µ≈–∂œ„–÷µ
 #define INT_THRESHOLD  60
 
-#define TEST_LENGTH 42
+#define TEST_LENGTH 44
 #define FILTER_LENGTH 20
 #define SLOP_LENGTH 3
 

@@ -453,7 +453,8 @@ void IdentifyCar()
     }
     
     
-    //SampleChannel(&MagneticUnit.GMI_XValue,&MagneticUnit.GMI_YValue);
+//    SampleChannel(&MagneticUnit.GMI_XValue,&MagneticUnit.GMI_YValue);
+//    GMI_Identify();
     Multi_Read_HMC(&MagneticUnit.XValue,&MagneticUnit.YValue,&MagneticUnit.ZValue);
     ReCal();
     GetSlop(MagneticUnit.XValue,MagneticUnit.YValue,MagneticUnit.ZValue);

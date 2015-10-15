@@ -1190,7 +1190,7 @@
         </option>
         <option>
           <name>RTLibraryPath</name>
-          <state>$TOOLKIT_DIR$\LIB\CLIB\cl430f.r43</state>
+          <state>$TOOLKIT_DIR$\lib\clib\cl430f.r43</state>
         </option>
         <option>
           <name>Input variant</name>
@@ -1225,7 +1225,7 @@
         </option>
         <option>
           <name>OGChipSelectMenu</name>
-          <state>MSP430F149	MSP430F149</state>
+          <state>MSP430F247	MSP430F247</state>
         </option>
         <option>
           <name>GStackHeapOverride</name>
@@ -1245,7 +1245,7 @@
         </option>
         <option>
           <name>GHeap20Size</name>
-          <state>###Uninitialized###</state>
+          <state>80</state>
         </option>
         <option>
           <name>GeneralMisraRules98</name>
@@ -1352,7 +1352,7 @@
         </option>
         <option>
           <name>Math description</name>
-          <state></state>
+          <state>Default variants of cos, sin, tan, log, log10, pow, and exp.</state>
         </option>
       </data>
     </settings>
@@ -1478,7 +1478,7 @@
         </option>
         <option>
           <name>OutputFile</name>
-          <state></state>
+          <state>$FILE_BNAME$.r43</state>
         </option>
         <option>
           <name>CCLibConfigHeader</name>
@@ -1518,7 +1518,9 @@
         </option>
         <option>
           <name>newCCIncludePaths</name>
-          <state></state>
+          <state>$PROJ_DIR$\..\Scource\hardware</state>
+          <state>$PROJ_DIR$\..\Scource\schdule</state>
+          <state>$PROJ_DIR$\..\Scource\systerm</state>
         </option>
         <option>
           <name>CCStdIncCheck</name>
@@ -1555,7 +1557,7 @@
         </option>
         <option>
           <name>CCOptLevelSlave</name>
-          <state>1</state>
+          <state>3</state>
         </option>
         <option>
           <name>CInput</name>
@@ -1795,7 +1797,7 @@
         </option>
         <option>
           <name>OutputFile</name>
-          <state></state>
+          <state>$FILE_BNAME$.r43</state>
         </option>
         <option>
           <name>AMultibyteSupport</name>
@@ -1866,7 +1868,7 @@
         </option>
         <option>
           <name>OutputFile</name>
-          <state>templproj.txt</state>
+          <state>Led.txt</state>
         </option>
         <option>
           <name>OutputFormat</name>
@@ -2277,6 +2279,12 @@
     </file>
     <file>
       <name>$PROJ_DIR$\..\Scource\hardware\digio.h</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\Scource\hardware\HMC5983.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\Scource\hardware\HMC5983.h</name>
     </file>
     <file>
       <name>$PROJ_DIR$\..\Scource\hardware\led.c</name>

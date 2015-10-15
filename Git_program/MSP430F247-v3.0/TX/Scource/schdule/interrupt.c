@@ -143,6 +143,8 @@ void TestSend()
     DataSendDraw[39] = EndPointDevice.vlotage;
     DataSendDraw[40] = EndPointDevice.temperature>>8;
     DataSendDraw[41] = EndPointDevice.temperature;
+    DataSendDraw[42] = MagneticUnit.ZMiddle>>8;
+    DataSendDraw[43] = MagneticUnit.ZMiddle;
     
     A7139_WriteFIFO(DataSendDraw,TEST_LENGTH);
     delay_us(1);
