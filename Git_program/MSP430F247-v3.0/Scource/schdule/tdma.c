@@ -4,6 +4,7 @@ uint16 ab_slot_num = 0;
 uint32 send_time = 0;
 uint32 resend_count = 0;
 uint16 DataAck_Lost = 0;
+uint8 Int_Enable_Flag = 0;
 uint8 RecvDataACK()
 {
     send_time = Frame_Time;
@@ -95,6 +96,7 @@ void DataSend(void)
     before_slot_wake = (c-WAKE_TIME)/100;
     
     halLedClear(3);
+    Int_Enable_Flag = 0;
     DIS_INT;
     
     while(Frame_Time<=before_slot_wake);
@@ -127,7 +129,7 @@ void DataSend(void)
     {
         TIME2_LOW;
         DataAck_Lost++;
-        if(DataAck_Lost>20)
+        if(DataAck_Lost>5)
         {
             PostTask(EVENT_A7139_RESET);
             DataAck_Lost = 0;
@@ -135,6 +137,7 @@ void DataSend(void)
         PostTask(EVENT_CSMA_RESEND);
         EndPointDevice.data_ack = 0;
         halLedSet(3);
+        Int_Enable_Flag = 1;
         EN_INT; 
     }
 
@@ -178,6 +181,7 @@ void KeepAliveSend()
 {
     A7139_Deep_Wake();
     halLedSet(3);
+    Int_Enable_Flag = 1;
     EN_INT;
     EN_TIMER1;
 }

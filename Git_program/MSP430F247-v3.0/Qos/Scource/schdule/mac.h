@@ -11,7 +11,7 @@
 #define    BACKOFF_PERIOD  SLOT_LENGTH/BACKOFF_DIV
 #define    WAKE_TIME         4000    //SLEEP唤醒需要2ms
 
-#define    DATAACK_TIMEOUT 300      //ack接收超时，决定是否进入csma重发阶段
+#define    DATAACK_TIMEOUT 800      //ack接收超时，决定是否进入csma重发阶段
 
 #define    SLEEP_EN        1 
 

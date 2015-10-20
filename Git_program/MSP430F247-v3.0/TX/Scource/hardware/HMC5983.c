@@ -295,9 +295,12 @@ void Multi_Read_HMC(uint16* XValue,uint16* YValue,uint16* ZValue)
         else
             HMC_SendACK(0);	
     }
-    HMC_Stop();
-    SDA_H;
-    SCL_H;
+    HMC_Start();
+    HMC_SendByte(0x3c);  
+    HMC_SendByte(0x00);
+    HMC_SendByte(0xFF);
+
+    
     xvalue = (buffer[0]<<8)|buffer[1];
     zvalue = (buffer[2]<<8)|buffer[3];
     yvalue = (buffer[4]<<8)|buffer[5];
@@ -325,6 +328,11 @@ void Multi_Read_HMC(uint16* XValue,uint16* YValue,uint16* ZValue)
     {
         *ZValue = 0;
     }
+    HMC_Start();
+    HMC_SendByte(0x3c);  
+    HMC_SendByte(0x00);
+    HMC_SendByte(HMC_Config[0]);
+    HMC_Stop();
 }
 
 

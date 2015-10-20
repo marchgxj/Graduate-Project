@@ -10,6 +10,7 @@ import snifferthread
 import threading
 import identifythread
 import tkMessageBox as tkmes
+import linkthread
 
 class GetSerialPorts(object):
     # list contains all port device info
@@ -105,7 +106,7 @@ class UartRoot(tk.Tk):
         
         ttk.Label(self, text="数据源类型:", padding=5).grid(row=4)
         self.datasourcecbox = ttk.Combobox(self, width=10)
-        self.datasourcecbox['value'] = ("中继","抓包","识别")
+        self.datasourcecbox['value'] = ("中继","抓包","识别","链路")
         self.datasourcecbox.set(self.parent_menu.datasourcecboxbuf)
         self.datasourcecbox.grid(row=4, column=1)
 
@@ -187,6 +188,12 @@ class UartRoot(tk.Tk):
                 self.identifythread.Creatuart()
                 self.identifythread.uart.open()
                 self.identifythread.start()
+            elif self.datasourcecbox.current() == 3:
+                self.linktestthread = linkthread.myThread(rootframe=self.parent,threadID=1, name='link',port=self.comnumbox.get(), baud=self.bordratecbox.get(),filename = self.txtidentifyfilname)
+                self.linktestthread.setDaemon(True)
+                self.linktestthread.Creatuart()
+                self.linktestthread.uart.open()
+                self.linktestthread.start()
             self.parent_menu.opened_uart.append(self.comnumbox.get())
             self.IsOpen(0)
             self.parent.status.setstatus('%s', self.comnumbox.get() + '已打开')

@@ -21,7 +21,8 @@ u8  PN9_Tab[]=
 
 static void A7139_WriteReg(u8 regAddr, u16 regVal)
 {
-    SCS = 0;
+
+		SCS = 0;
     regAddr |= CMD_Reg_W;
 	
     SPIx_WriteByte(regAddr);
@@ -29,11 +30,13 @@ static void A7139_WriteReg(u8 regAddr, u16 regVal)
     SPIx_WriteWord(regVal);
 	  delay_us(10);
     SCS = 1;
+
 }
 
 static u16 A7139_ReadReg(u8 regAddr)
 {
     u16 regVal;
+
     SCS = 0;
     regAddr |= CMD_Reg_R;
     SPIx_WriteByte(regAddr);
@@ -41,6 +44,7 @@ static u16 A7139_ReadReg(u8 regAddr)
     regVal=SPIx_ReadWord();
 	  delay_us(10);
     SCS = 1;
+
     return regVal;
 }
 
@@ -213,9 +217,11 @@ static u8 A7139_RCOSC_Cal(void)
 
 void A7139_StrobeCmd(u8 cmd)
 {
-    SCS = 0;
+    
+		SCS = 0;
     SPIx_WriteByte(cmd);
     SCS = 1;
+		
 }
 
 u8 A7139_Init(float rfFreq)
@@ -759,11 +765,24 @@ void RXMode()
 }
 void SendPack()
 {
-	  A7139_StrobeCmd(CMD_PLL);
+	  uint8 timeout = 0;
+
+		A7139_StrobeCmd(CMD_PLL);
     delay_us(5);
     A7139_WriteFIFO(DataSendBuffer,MAX_PACK_LENGTH);
     delay_us(5);
     A7139_StrobeCmd(CMD_TX);
-    while(GIO1);
+    while(GIO1)
+		{
+				timeout++;
+				if(timeout>15)
+				{
+						break;
+						DebugMsg("A7139 GIO1 Timeout");
+				}
+				delay_ms(1);
+		}
+		
+			
 }
 

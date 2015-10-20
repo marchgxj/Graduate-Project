@@ -56,6 +56,7 @@ ReJoin:
         if(ReJoinFlag == 1)
         {
             ReJoinFlag = 0;
+            __disable_interrupt();
             goto ReJoin;
         }
     }

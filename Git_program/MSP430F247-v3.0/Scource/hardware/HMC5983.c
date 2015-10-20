@@ -295,7 +295,12 @@ void Multi_Read_HMC(uint16* XValue,uint16* YValue,uint16* ZValue)
         else
             HMC_SendACK(0);	
     }
-    HMC_Stop();
+    HMC_Start();
+    HMC_SendByte(0x3c);  
+    HMC_SendByte(0x00);
+    HMC_SendByte(0xFF);
+
+    
     xvalue = (buffer[0]<<8)|buffer[1];
     zvalue = (buffer[2]<<8)|buffer[3];
     yvalue = (buffer[4]<<8)|buffer[5];
@@ -323,6 +328,11 @@ void Multi_Read_HMC(uint16* XValue,uint16* YValue,uint16* ZValue)
     {
         *ZValue = 0;
     }
+    HMC_Start();
+    HMC_SendByte(0x3c);  
+    HMC_SendByte(0x00);
+    HMC_SendByte(HMC_Config[0]);
+    HMC_Stop();
 }
 
 
@@ -385,62 +395,4 @@ void Init_5983()
     }
     
 }
-void HMC5983_cal()
-{
-//    int i=0;
-//    uint16 ADvalueX=0,ADvalueY=0;
-//    uint16 ADX,ADY;
-//    uint32 intensity = 0;
-//    
-//    halLedSetAll();
-//    delay_ms(2000);
-//    
-//    ADX = 0;
-//    ADY = 0;
-//    for(i=0;i<26;i++)
-//    {
-//        if(i>=10)
-//        {
-//            Multi_Read_HMC(&ADvalueX,&ADvalueY);
-//            ADX += ADvalueX;
-//            ADY += ADvalueY;
-//            delay_ms(50);
-//        }
-//    }
-//    MagneticUnit.XMiddle = ADX>>4;
-//    MagneticUnit.YMiddle = ADY>>4;
-//    MagneticUnit.XMiddleM = MagneticUnit.XMiddle;
-//    MagneticUnit.YMiddleM = MagneticUnit.YMiddle;
-//    MagneticUnit.Ext_Middle = abs(MagneticUnit.XMiddle-MagneticUnit.YMiddle);
-//    
-//    intensity = sqrt_16((((uint32)MagneticUnit.XMiddle*(uint32)MagneticUnit.XMiddle)+((uint32)MagneticUnit.YMiddle*(uint32)MagneticUnit.YMiddle)));
-//    MagneticUnit.Int_Middle = intensity;
-//    
-//    for(int i=0;i<FILTER_LENGTH;i++)
-//    {
-//        Multi_Read_HMC(&ADvalueX,&ADvalueY);
-//        FilterData[i].xvalue = ADvalueX;
-//        FilterData[i].yvalue = ADvalueY;
-//        delay_ms(50);
-//    }
-//    for(int i=0;i<SLOP_LENGTH;i++)
-//    {
-//        Multi_Read_HMC(&ADvalueX,&ADvalueY);
-//        SlopData[i].xvalue = ADvalueX;
-//        SlopData[i].yvalue = ADvalueY;
-//        delay_ms(50);
-//    }
-//  
-//
-//    //NoCarCalibration();
-//    halLedClearAll();
-//    delay_ms(50);
-//    halLedSetAll();
-//    delay_ms(50);
-//    halLedClearAll();
-//    delay_ms(50);
-//    halLedSetAll();
-//    delay_ms(50);
-//    halLedClearAll();
-//    delay_ms(50);
-}
+

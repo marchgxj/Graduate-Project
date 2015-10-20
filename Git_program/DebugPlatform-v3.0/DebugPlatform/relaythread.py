@@ -41,6 +41,7 @@ class myThread(threading.Thread):
         self.longdatastr = ""
         self.cmdaddress = ""
         self.Control_Resend = 0
+        self.filename = "..\Log\\" + time.strftime('%Y-%m-%d_%H-%M-%S', time.localtime(time.time())) + '.txt'
 
     def netupdate(self):
         '''
@@ -148,6 +149,7 @@ class myThread(threading.Thread):
 
 
                                 if len(self.notedata) == length * 2:
+                                    time.sleep(0.005)
                                     self.uart.write("o")
                                     print "o"
                                 else:
@@ -201,6 +203,8 @@ class myThread(threading.Thread):
                                 err_msg = self.uart.readline()
                                 err_msg = err_msg[:-1]
                                 self.statusbar.status.setdata('Debug Msg:  %s   %s',err_msg,debug_count)
+                                self.file = open(self.filename, "a+")
+                                self.file.write(time.strftime('%Y-%m-%d  %H:%M:%S', time.localtime(time.time())) + ":  " + err_msg + "," + str(debug_count)+"\n")
                 if (self.showdata.appFrame.tab == 4):
                     # self.statusbar.status.setstatus("节点控制")
                     if(self.cmdaddress!=""):

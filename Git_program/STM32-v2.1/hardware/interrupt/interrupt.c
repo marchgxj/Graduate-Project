@@ -2,6 +2,7 @@
 uint16 time_out = 0;
 uint8 TIM3_Count = 0;
 uint16 KeepAliveCheck_Count = 0;
+uint32 KeepAliveCount = 0;
 
 /*******************************************************************************
 * Function Name  : Interrupt_Init
@@ -65,6 +66,7 @@ void TIM3_IRQHandler(void)   //500ms
 {
     TIM_ClearITPendingBit(TIM3, TIM_IT_Update  );  //清除TIMx更新中断标志 
     TIM3_Count++;
+		KeepAliveCount++;
 		if(TIM3_Count<5)
 		{	
 #if (SEND_REJOIN_EN == 1)

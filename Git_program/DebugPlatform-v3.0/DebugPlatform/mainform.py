@@ -60,6 +60,9 @@ class MainRoot(tk.Tk):
     def Command(self):
         self.appFrame.SendCommand()
 
+    def QOSTest(self):
+        self.appFrame.QOS()
+
     def NetSniffer(self):
         self.appFrame.DrawSensor()
 
@@ -203,12 +206,14 @@ class Application(ttk.Notebook):
         self.tab3 = ttk.Frame(self)
         self.tab4 = ttk.Frame(self)
         self.tab5 = ttk.Frame(self)
+        self.tab6 = ttk.Frame(self)
 
         self.add(self.tab1, text="停车状态")
         self.add(self.tab2, text="网络拓扑")
         self.add(self.tab3, text="网络抓包")
         self.add(self.tab4, text="数据识别")
         self.add(self.tab5, text="控制命令")
+        self.add(self.tab6, text="链路测试")
         self.topline = []
         self.bottomline = []
         self.carnum = 0
@@ -262,6 +267,8 @@ class Application(ttk.Notebook):
         Others：
         '''
         self.tab = self.index('current')
+        if(self.tab==5):
+            self.QOSUpdateLabel()
         # self.menu.uartform.snifferthread.currenttab = self.index('current')
         # self.menu.uartform.identifythread.currenttab = self.index('current')
         # try:
@@ -1398,8 +1405,70 @@ class Application(ttk.Notebook):
             #         self.matplotanimate.start()
             # self.DrawOldData.set_xlim(x1/offset)
 
-    def SendCommand(self):
+    def QOS(self):
+        '''
+        Parameter：
 
+        Function：
+                                链路质量测试
+        Autor:xiaoxiami 2015.10.17
+        Others：
+        '''
+        for i in range(10):
+            self.tab6.rowconfigure(i, weight=1)
+        for i in range(10):
+            self.tab6.columnconfigure(i, weight=1)
+        txtfont = tkFont.Font(size=20, family="黑体")
+        rowandcloumn = 0
+
+        self.PacketSend_CountString = tk.StringVar()
+        tk.Label(self.tab6, text="节点发送包数量:",font=txtfont).grid(row=rowandcloumn/10, column=rowandcloumn%10)
+        rowandcloumn+=1
+        self.PacketSend_CountLabel = tk.Label(self.tab6, text="0",textvariable=self.PacketSend_CountString,width=5,font=txtfont)
+        self.PacketSend_CountLabel.grid(row=rowandcloumn/10, column=rowandcloumn%10)
+        rowandcloumn+=1
+        self.PacketSend_CountString.set(0)
+
+        self.AckLost_CountString = tk.StringVar()
+        tk.Label(self.tab6, text="ACK丢失数量:",font=txtfont).grid(row=rowandcloumn/10, column=rowandcloumn%10)
+        rowandcloumn+=1
+        self.AckLost_CountLabel = tk.Label(self.tab6, text="0",textvariable=self.AckLost_CountString,width=5,font=txtfont)
+        self.AckLost_CountLabel.grid(row=rowandcloumn/10, column=rowandcloumn%10)
+        rowandcloumn+=1
+        self.AckLost_CountString.set(0)
+
+        self.Lost_PersentString = tk.StringVar()
+        tk.Label(self.tab6, text="丢包率:",font=txtfont).grid(row=rowandcloumn/10, column=rowandcloumn%10)
+        rowandcloumn+=1
+        self.Lost_PersentLabel = tk.Label(self.tab6, text="0",textvariable=self.Lost_PersentString,width=6,font=txtfont)
+        self.Lost_PersentLabel.grid(row=rowandcloumn/10, column=rowandcloumn%10)
+        rowandcloumn+=1
+        self.Lost_PersentString.set(0)
+
+    def QOSUpdateLabel(self):
+        '''
+        Parameter：
+
+        Function：
+                                更新链路质量测试显示
+        Autor:xiaoxiami 2015.10.17
+        Others：
+        '''
+        self.PacketSend_CountString.set(self.menu.uartform.linktestthread.value[0])
+        self.AckLost_CountString.set(self.menu.uartform.linktestthread.value[1])
+        self.Lost_PersentString.set(self.menu.uartform.linktestthread.value[2])
+        self.PacketSend_CountLabel.after(50,self.QOSUpdateLabel)
+
+
+    def SendCommand(self):
+        '''
+        Parameter：
+
+        Function：
+                                向节点发送命令
+        Autor:xiaoxiami 2015.10.15
+        Others：
+        '''
         def cmdtext(cmd):
             address = cmdinput.get()
 
@@ -1477,5 +1546,6 @@ if __name__ == '__main__':
     root.NetSniffer()  # 网络抓包
     root.SysStatus()  # 状态栏
     root.Command()  #命令
+    root.QOSTest()  #链路测试
     root.Identify()
     root.mainloop()

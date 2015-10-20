@@ -471,6 +471,7 @@ void IdentifyCar()
             Exit_Sleep  = 1;
             A7139_Deep_Wake();
             halLedSet(3);
+            Int_Enable_Flag = 1;
             EN_INT;
             EN_TIMER1;
         }

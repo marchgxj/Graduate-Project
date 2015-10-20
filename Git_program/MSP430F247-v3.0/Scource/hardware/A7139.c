@@ -718,15 +718,24 @@ void RXMode()
 }
 void SendPack()
 {
-
+    uint8 timeout = 0;
     EndPointDevice.state = CMD_TX;
     A7139_StrobeCmd(CMD_PLL);
     delay_us(1);
     A7139_WriteFIFO(DataSendBuffer,MAX_PACK_LENGTH);
     delay_us(1);
     A7139_StrobeCmd(CMD_TX);
-    while(GIO1);
+    while(GIO1)
+    {
+        if(timeout++>10)
+        {
+            break;
+        }
+        delay_1ms();
+    }
     halLedClear(1);
+    Send_Error_Flag = 0;
+    
 
 }
 
@@ -760,7 +769,10 @@ void A7139_WakeToRecv(void)
 }
 void A7139_Deep_Wake(void)
 {
-#if (SLEEP_EN)    
+#if (SLEEP_EN)   
+    DIS_INT;
+    DIS_TIMER1;
+    DIS_TIMER0;
     A7139_StrobeCmd(CMD_STBY);
     delay_ms(10);
     A7139_StrobeCmd(CMD_STBY);
@@ -773,6 +785,10 @@ void A7139_Deep_Wake(void)
     delay_ms(10);
     RXMode();
     delay_ms(10);
+    EN_INT;
+    EN_TIMER1;
+    EN_TIMER0;
+
 #endif   
 }
 void A7139_Reset()

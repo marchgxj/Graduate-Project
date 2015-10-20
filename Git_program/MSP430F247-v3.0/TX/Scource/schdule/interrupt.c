@@ -169,16 +169,17 @@ __interrupt void Timer_A0(void)
 //    if(Direction_Count==700)
     {
         Collect_Period++;
-        if(Quick_Collect==0)
-        {
-            if(Collect_Period==20)
-            {
-                Collect_Period = 0;
-                IdentifyCar();
-                TestSend();
-            }
-        }
-        else
+        Quick_Collect = 1;
+//        if(Quick_Collect==0)
+//        {
+//            if(Collect_Period==20)
+//            {
+//                Collect_Period = 0;
+//                IdentifyCar();
+//                TestSend();
+//            }
+//        }
+        //else
         {
             IdentifyCar();
             TestSend();

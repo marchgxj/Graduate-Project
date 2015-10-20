@@ -4,6 +4,9 @@ uint32  Frame_Time = 0;                 //超帧内计时
 uint16  Collect_Time = 0;               //采集计时
 uint16 Keep_Alive_Count = 0;
 uint16 Keep_Alive_Detect = 0;
+uint16 Int_Enable_Count = 0;
+uint8 Send_Error_Flag = 0;
+uint16 Send_Error_Count = 0;
 void Interrupt_Init(void)
 {
     P1DIR &=~ pinGIO2.pin_bm;
@@ -24,6 +27,7 @@ uint8 rssi_what = 0;
 #pragma vector=PORT1_VECTOR
 __interrupt void port1_ISR(void)
 { 
+    uint8 pack_type = 0;
     if(P1IFG & pinGIO2.pin_bm)
     {
         P1IFG &= ~pinGIO2.pin_bm;                           // P1.4 IFG cleared
@@ -37,7 +41,8 @@ __interrupt void port1_ISR(void)
         if(PackValid())
         {
 
-            switch (Unpack(DataRecvBuffer))
+            pack_type = Unpack(DataRecvBuffer);
+            switch (pack_type)
             {
               case BEACON_TYPE:
                 Frame_Time = 0;
@@ -50,6 +55,8 @@ __interrupt void port1_ISR(void)
                 break;
             }
             halLedSet(1);
+            Send_Error_Flag = 1;
+            
         }
 
         
@@ -72,6 +79,7 @@ __interrupt void Timer_A (void)
         {
             PostTask(EVENT_WAKE_A7139);
             halLedSet(3);
+            Int_Enable_Flag = 1;
             EN_INT;
         }
 #if (COLLECT_EN)                                //开启数据采集
@@ -215,6 +223,7 @@ __interrupt void Timer_A0(void)
         {
             Keep_Alive_Count = 0;
             Exit_Sleep  = 1;
+            
             PostTask(EVENT_KEEPALIVE_SEND);
         }
         
@@ -239,9 +248,39 @@ __interrupt void Timer_A0(void)
                 Quick_Collect = 0;
             }
         }
-        if(HMC_Changed == 1)
+        /*if(HMC_Changed == 1)
         {
             OpenGMI_Count++;
+        }*/
+        if(Int_Enable_Flag == 1)
+        {
+            Int_Enable_Count++;
+            if(Int_Enable_Count > 100)
+            {
+                Int_Enable_Count = 0;
+                LPM3_EXIT;
+                ReJoinFlag = 1;
+                PostTask(EVENT_A7139_RESET);
+            }
+        }
+        else
+        {
+            Int_Enable_Count = 0;
+        }
+        if(Send_Error_Flag == 1)
+        {
+            Send_Error_Count++;
+            if(Send_Error_Count > 100)
+            {
+                Send_Error_Count = 0;
+                LPM3_EXIT;
+                ReJoinFlag = 1;
+                PostTask(EVENT_A7139_RESET);
+            }
+        }
+        else
+        {
+            Send_Error_Count = 0;
         }
     }
 }

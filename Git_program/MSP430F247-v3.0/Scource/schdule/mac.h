@@ -15,7 +15,7 @@
 
 #define    SLEEP_EN        1 
 
-#define    CCA   100     //‘ÿ≤®º‡≤‚„–÷µ
+#define    CCA   200     //‘ÿ≤®º‡≤‚„–÷µ
 #define    CSMA_BACKOFF_TIME 8
 #define    CSMA_FAIL    1
 #define    CSMA_SUCCESS 0

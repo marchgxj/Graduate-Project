@@ -83,6 +83,7 @@ uint8 Process_Event()
 			  break;
 		  case EVENT_KEEPALIVE_CHECK:
         KeepAliveCheck();
+				break;
 			
     }
     return current_event;
