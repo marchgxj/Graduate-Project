@@ -41,18 +41,24 @@ void CreateDataACK(uint8 src_cluster_id,uint8 src_cluster_innernum,uint8 rejoin,
 
 }
 UartDataStruct bufnode;
-void DataHandler(void)
+void DataHandler(u8 buf[])
 {
 		uint8 inner_num = 0;
 		uint8 ab_slot_num = 0;
 		uint8 src_cluster_id = 0;
 	  uint8 src_cluster_innernum = 0;
 		uint8 rejoin = 0;
+	
+		if(Unpack(buf)!=DATA_TYPE)
+    {
+        DebugMsg("Data DataRecvBuffer Changed");
+				return;
+    }
 
-	  src_cluster_id = DataRecvBuffer[4];
-	  src_cluster_innernum = DataRecvBuffer[5];
-	  ab_slot_num = DataRecvBuffer[6]<<8|DataRecvBuffer[7];
-		inner_num = DataRecvBuffer[5];
+	  src_cluster_id = buf[4];
+	  src_cluster_innernum = buf[5];
+	  ab_slot_num = buf[6]<<8|buf[7];
+		inner_num = buf[5];
 		if((RootDevice.endpoint_device[inner_num].pyh_address==0)||
 			 (abs(ab_slot_num-RootDevice.endpoint_device[inner_num].ab_slot_num)>10)
 			)
@@ -67,32 +73,20 @@ void DataHandler(void)
 				{
 						RootDevice.endpoint_device[inner_num].ab_slot_num = 0;
 				}
-				RootDevice.endpoint_device[inner_num].data = DataRecvBuffer[8];
+				RootDevice.endpoint_device[inner_num].data = buf[8];
 				RootDevice.endpoint_device[inner_num].keep_alive = KeepAliveCount;
 				bufnode.address = RootDevice.endpoint_device[inner_num].pyh_address;
 				bufnode.data = RootDevice.endpoint_device[inner_num].data;
 #if (UPLOAD_DATA_EN == 1)
-				if(Power_Mode == 0)
-				{
-						Draw_DataX = DataRecvBuffer[8]<<8|DataRecvBuffer[9];
-					  Draw_DataY = DataRecvBuffer[10]<<8|DataRecvBuffer[11];
-					  PostTask(EVENT_UPLOAD_DRAWDATA);
-				}
-				else
-				{
-						PostUploadNode(&bufnode);
-				}
-			  
+				PostUploadNode(&bufnode);
 #endif
 				TIME2_HIGH;
 		}
 				CreateDataACK(src_cluster_id,src_cluster_innernum,rejoin,RootDevice.endpoint_device[inner_num].pyh_address);
 				__NOP();__NOP();__NOP();__NOP();__NOP();__NOP();__NOP();__NOP();__NOP();__NOP();
-				SendPack();
+				SendPack(DataSendBuffer);
 				RXMode();
 				TIME2_LOW;
-
-		
 }
 
 void KeepAliveCheck(void)

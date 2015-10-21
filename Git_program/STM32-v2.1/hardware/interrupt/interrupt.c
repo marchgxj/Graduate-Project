@@ -70,7 +70,7 @@ void TIM3_IRQHandler(void)   //500ms
 		if(TIM3_Count<5)
 		{	
 #if (SEND_REJOIN_EN == 1)
-					PostTask(EVENT_REJOIN_SEND);
+					PostTask(NULL,EVENT_REJOIN_SEND);
 #endif
 		}
 		else
@@ -78,7 +78,7 @@ void TIM3_IRQHandler(void)   //500ms
 				TIM3_Count = 10;
 			if(PostBeacon()!=TQ_SUCCESS)
 			{
-					DebugMsg("Task Quene Full");
+					DebugMsg("Post Beacon Fail");
 					LED0_ON();
 					LED1_ON();
 					LED2_ON();
@@ -89,7 +89,7 @@ void TIM3_IRQHandler(void)   //500ms
 			}
 			
 #if (UPLOAD_DATA_EN == 1)
-				PostTask(EVENT_UPLOAD_DATA);
+				PostTask(NULL,EVENT_UPLOAD_DATA);
 #endif
 		}
 		
@@ -97,7 +97,7 @@ void TIM3_IRQHandler(void)   //500ms
 		if(KeepAliveCheck_Count == KEEPALIBEPERIOD)
 		{
 				KeepAliveCheck_Count = 0;
-				PostTask(EVENT_KEEPALIVE_CHECK);
+				PostTask(NULL,EVENT_KEEPALIVE_CHECK);
 		}
 		
 		Frame_Time = 0;
@@ -151,13 +151,13 @@ void EXTI9_5_IRQHandler(void)
 				switch (Unpack(DataRecvBuffer))
 				{
 						case JOINREQUEST_TYPE:
-							PostTask(EVENT_JOINREQUEST_HANDLER);
+							PostTask(DataRecvBuffer,EVENT_JOINREQUEST_HANDLER);
 							break;
 						case JOINREQUESTACKOK_TYPE:
-							PostTask(EVENT_JOINREQUESTACKOK_HANDLER);
+							PostTask(DataRecvBuffer,EVENT_JOINREQUESTACKOK_HANDLER);
 							break;
 						case DATA_TYPE:
-							PostTask(EVENT_DATA_HANDLER);
+							PostTask(DataRecvBuffer,EVENT_DATA_HANDLER);
 							break;
 				}
 		}

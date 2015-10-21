@@ -183,5 +183,4 @@ void KeepAliveSend()
     halLedSet(3);
     Int_Enable_Flag = 1;
     EN_INT;
-    EN_TIMER1;
 }

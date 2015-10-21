@@ -5,6 +5,7 @@ uint8 BeaconPacketFIFO[BEACON_PACK_LENGTH];
 
 uint8 CreatBeacon()
 {
+		RootDevice.free_node = MAX_NODE_NUM - RootDevice.connected_devece_count;
 		BeaconPacket.length = BEACON_PACK_LENGTH;				//beacon包成长度为5bytes
 		BeaconPacket.cluster_id = ROOT;							//sink节点编号
 		BeaconPacket.cluster_innernum = 0;							//簇内ID sink节点为0
@@ -29,13 +30,14 @@ uint8 CreatBeacon()
 uint8 PostBeacon(void)
 {
 		CreatBeacon();
-		return PostTask(EVENT_BEACON_SEND);
+		return PostTask(DataSendBuffer,EVENT_BEACON_SEND);
 }
 
-void SendBeacon(void)
+void SendBeacon(u8* buf)
 {
 		TIME2_HIGH;
-	  SendPack();
+		
+	  SendPack(buf);
 		LED1_REV();
 		RXMode();
 		TIME2_LOW;

@@ -184,9 +184,9 @@ void JoinRequestACKHandler()
         EndPointDevice.cluster_id = DataRecvBuffer[6];
         EndPointDevice.cluster_innernum = DataRecvBuffer[7];
         EndPointDevice.connected = 1;
-        CreatJoinRequestACKOK();
-        SendPack();
-        RXMode();
+        //CreatJoinRequestACKOK();
+        //SendPack();
+        //RXMode();
         //入网完成后发送一次数据
         /*if(EndPointDevice.power == 1)  //执行低功耗模式
         {

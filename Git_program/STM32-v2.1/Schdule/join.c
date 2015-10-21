@@ -44,15 +44,28 @@ void CreateJoinRequectACK(uint8 joinstatus,uint8 accept,uint8 id,uint32 des_addr
 		DataSendBuffer[10] = 0;
 		DataSendBuffer[11] = 0;
 }
-
-void JoinRequestHandler()
+uint8 node_over = 0;
+void JoinRequestHandler(u8 buf[])
 {
 	  uint8 i=0;
 		uint8 joinstatus = 0;
 	  uint8 accept = 0;
+		if(Unpack(buf)!=JOINREQUEST_TYPE)
+    {
+        DebugMsg("JoinRequest DataRecvBuffer Changed");
+				return;
+    }
+		DisableInterrupt();
 		//uint8 current_node_num = RootDevice.connected_devece_count;
-		new_node_pyh_address = DataRecvBuffer[4]<<8|DataRecvBuffer[5];
-	  for(i=0;i<RootDevice.connected_devece_count+1;i++)
+		new_node_pyh_address = buf[4]<<8|buf[5];
+		if(new_node_pyh_address>30)
+		{
+				DebugMsg("Phyaddress Deny");
+				EnableInterrupt();
+				return ;
+		}
+	  //for(i=0;i<RootDevice.connected_devece_count+1;i++)
+		for(i=0;i<MAX_NODE_NUM;i++)
 		{
 				if(RootDevice.endpoint_device[i].pyh_address == new_node_pyh_address)	//该设备已经入网
 				{
@@ -60,8 +73,9 @@ void JoinRequestHandler()
 						accept = 1;
 						CreateJoinRequectACK(joinstatus,accept,i,new_node_pyh_address);
 						RootDevice.endpoint_device[i].ab_slot_num = 0;
-						SendPack();
+						SendPack(DataSendBuffer);
 						RXMode();
+						EnableInterrupt();
 						return ;
 				}
 		}
@@ -70,15 +84,34 @@ void JoinRequestHandler()
 				accept = 1;
 				RootDevice.connected_devece_count++;
 				RootDevice.endpoint_device[RootDevice.connected_devece_count].pyh_address = new_node_pyh_address;
+				RootDevice.endpoint_device[RootDevice.connected_devece_count].cluster_id = ROOT;
+				RootDevice.endpoint_device[RootDevice.connected_devece_count].cluster_innernum = RootDevice.connected_devece_count;
 				CreateJoinRequectACK(joinstatus,accept,RootDevice.connected_devece_count,new_node_pyh_address);
-				SendPack();
+				SendPack(DataSendBuffer);
 				RXMode();
+				if(RootDevice.connected_devece_count>12)
+				{
+						node_over = 1;
+						LED4_ON();
+						LED5_ON();
+						LED6_ON();
+				}
 		}
+		else
+		{
+				DebugMsg("Node Full");
+		}
+		EnableInterrupt();
 }
-void JoinRequestACKOKHandler()
+void JoinRequestACKOKHandler(u8 buf[])
 {
-		RootDevice.endpoint_device[RootDevice.connected_devece_count].cluster_id = DataRecvBuffer[4];
-		RootDevice.endpoint_device[RootDevice.connected_devece_count].cluster_innernum = DataRecvBuffer[5];
+		if(Unpack(buf)!=JOINREQUESTACKOK_TYPE)
+    {
+        DebugMsg("JoinRequestACKOK DataRecvBuffer Changed");
+				return;
+    }
+		RootDevice.endpoint_device[RootDevice.connected_devece_count].cluster_id = buf[4];
+		RootDevice.endpoint_device[RootDevice.connected_devece_count].cluster_innernum = buf[5];
 	  RootDevice.endpoint_device[RootDevice.connected_devece_count].pyh_address = new_node_pyh_address;
 		RootDevice.endpoint_device[RootDevice.connected_devece_count].ab_slot_num = 0;
 		RootDevice.free_node = MAX_NODE_NUM-RootDevice.connected_devece_count;
@@ -110,7 +143,6 @@ void CreadReJoin(uint8 cluster_innernum,uint16 phyaddress)
 void SendReJoin()
 {
 		CreadReJoin(0xFF,0xFFFF);
-
-    SendPack();
+    SendPack(DataSendBuffer);
     RXMode();
 }

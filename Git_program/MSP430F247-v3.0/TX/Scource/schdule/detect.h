@@ -28,7 +28,7 @@
 #define EXT_THRESHOLD  40               //¡Ω÷·≤Ó÷µ≈–∂œ„–÷µ
 #define INT_THRESHOLD  60
 
-#define TEST_LENGTH 44
+#define TEST_LENGTH 46
 #define FILTER_LENGTH 20
 #define SLOP_LENGTH 3
 
@@ -110,4 +110,6 @@ extern FilterStruct SlopData[SLOP_LENGTH];
 extern uint8 Quick_Collect;
 extern uint8 HMC_Changed;
 extern uint16 OpenGMI_Count;
+extern uint8 XValue_Parking;
+extern uint8 YValue_Parking;
 #endif 

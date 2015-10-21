@@ -3,6 +3,12 @@
 
 #include "common.h"
 
+typedef struct{
+    uint8  data[MAX_PACK_LENGTH];		
+    uint8  event;						
+}TQStruct;
+
+
 #define    MAX_TASK_NUM    5
 #define    TQ_SUCCESS      0
 #define    TQ_FULL         1
@@ -35,7 +41,7 @@
 #define    EVENT_KEEPALIVE_CHECK          26
 
 extern void Init_TQ(void);
-extern uint8 PostTask(uint8 event);
+extern uint8 PostTask(uint8 *data,uint8 event);
 extern uint8 Process_Event(void);
 
 #endif

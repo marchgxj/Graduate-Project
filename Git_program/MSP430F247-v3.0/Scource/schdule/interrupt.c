@@ -206,11 +206,37 @@ __interrupt void Timer_A0(void)
     if(EndPointDevice.power == 0)
     //每个超帧都要发送时，Beacon接收超时则复位A7139
     {
-        Receive_Timeout++;
-        if(Receive_Timeout>300)
+        if(Int_Enable_Flag == 1)
         {
-            REBOOT;//很长时间没有收到数据，单片机全部复位.
+            Int_Enable_Count++;
+            if(Int_Enable_Count > 100)
+            {
+                Int_Enable_Count = 0;
+                LPM3_EXIT;
+                ReJoinFlag = 1;
+                PostTask(EVENT_A7139_RESET);
+            }
         }
+        else
+        {
+            Int_Enable_Count = 0;
+        }
+        if(Send_Error_Flag == 1)
+        {
+            Send_Error_Count++;
+            if(Send_Error_Count > 100)
+            {
+                Send_Error_Count = 0;
+                LPM3_EXIT;
+                ReJoinFlag = 1;
+                PostTask(EVENT_A7139_RESET);
+            }
+        }
+        else
+        {
+            Send_Error_Count = 0;
+        }
+        
     }
     //测试低功耗时候使用
     else if(EndPointDevice.power == 1)                  

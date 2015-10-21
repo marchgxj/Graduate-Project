@@ -41,9 +41,7 @@ ReJoin:
     delay_ms(2000);
     halLedClear(1);
     LPM3;*/
-    
-    
-    
+
     ChannelSelection(CHANNEL_4,CHANNEL_6);
 
     

@@ -28,8 +28,8 @@ typedef struct{
     uint16 des_phy_address;                 //目的物理地址
 }ReJoinPacketStruct;
 
-extern void JoinRequestHandler(void);
-extern void JoinRequestACKOKHandler(void);
+extern void JoinRequestHandler(u8 buf[]);
+extern void JoinRequestACKOKHandler(u8 buf[]);
 extern void SendReJoin(void);
 
 #endif

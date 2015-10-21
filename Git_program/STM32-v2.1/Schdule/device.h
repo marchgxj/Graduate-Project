@@ -3,7 +3,7 @@
 
 #define    ROOT     1
 #define    BROADCAST    0xFF
-#define    MAX_NODE_NUM  254
+#define    MAX_NODE_NUM  16
 
 #define    ACK_EN     1
 #define    ACK_DIS    0 

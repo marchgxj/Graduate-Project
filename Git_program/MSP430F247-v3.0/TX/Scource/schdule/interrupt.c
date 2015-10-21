@@ -100,6 +100,8 @@ void TestSend()
     21:38¡¢39£ºEndPointDevice.vlotage
     22:40¡¢41£ºEndPointDevice.temperature
     23:42¡¢43£ºMagneticUnit.ZMiddle
+    24:44:XValue_Parking
+    25:45:YValue_Parking
     **********************************************/
     DataSendDraw[0] = MagneticUnit.XValue>>8;
     DataSendDraw[1] = MagneticUnit.XValue;
@@ -145,6 +147,8 @@ void TestSend()
     DataSendDraw[41] = EndPointDevice.temperature;
     DataSendDraw[42] = MagneticUnit.ZMiddle>>8;
     DataSendDraw[43] = MagneticUnit.ZMiddle;
+    DataSendDraw[44] = XValue_Parking;
+    DataSendDraw[45] = YValue_Parking;
     
     A7139_WriteFIFO(DataSendDraw,TEST_LENGTH);
     delay_us(1);

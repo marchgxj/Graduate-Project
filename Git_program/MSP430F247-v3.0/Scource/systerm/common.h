@@ -2,7 +2,7 @@
 #define _COMMON_h_
 
 #define    MAX_PACK_LENGTH      12
-#define    MAX_DEVICE_NUM       254
+#define    MAX_DEVICE_NUM       16
 
 #include "types.h"
 #include "A7139.h"

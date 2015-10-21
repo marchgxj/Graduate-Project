@@ -272,6 +272,23 @@ unsigned char Single_Read_HMC(unsigned char REG_Addr)
     
 }
 
+void ResetHMC(uint8 dir)
+{
+    
+    Single_Write_HMC(0x00,0x71);
+    Single_Write_HMC(0x01,0xA0);
+    Single_Write_HMC(0x02,0x00);
+    delay_ms(100);
+    Single_Write_HMC(0x00,0x72);
+    Single_Write_HMC(0x01,0xA0);
+    Single_Write_HMC(0x02,0x00);
+    delay_ms(100);
+    Single_Write_HMC(0x00,HMC_Config[0]);
+    Single_Write_HMC(0x01,HMC_Config[1]);
+    Single_Write_HMC(0x02,HMC_Config[2]);
+    
+    
+}
     
 void Multi_Read_HMC(uint16* XValue,uint16* YValue,uint16* ZValue)
 {
@@ -295,11 +312,7 @@ void Multi_Read_HMC(uint16* XValue,uint16* YValue,uint16* ZValue)
         else
             HMC_SendACK(0);	
     }
-    HMC_Start();
-    HMC_SendByte(0x3c);  
-    HMC_SendByte(0x00);
-    HMC_SendByte(0xFF);
-
+    HMC_Stop();
     
     xvalue = (buffer[0]<<8)|buffer[1];
     zvalue = (buffer[2]<<8)|buffer[3];
@@ -328,11 +341,6 @@ void Multi_Read_HMC(uint16* XValue,uint16* YValue,uint16* ZValue)
     {
         *ZValue = 0;
     }
-    HMC_Start();
-    HMC_SendByte(0x3c);  
-    HMC_SendByte(0x00);
-    HMC_SendByte(HMC_Config[0]);
-    HMC_Stop();
 }
 
 

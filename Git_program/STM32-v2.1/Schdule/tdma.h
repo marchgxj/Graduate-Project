@@ -22,7 +22,7 @@ extern DataACKPacketStruct DataACKPacket;
 
 #define KEEPALIBEPERIOD  240    //µ¥Î»£º500ms
 
-extern void DataHandler(void);
+extern void DataHandler(u8 buf[]);
 extern void KeepAliveCheck(void);
 
 extern uint16 Draw_DataX;
