@@ -424,10 +424,11 @@ u8 A7139_GetRSSI()
 	else
 		rssi = ERR_GET_RSSI;
 	A7139_StrobeCmd(CMD_STBY);
-	delay_us(1);
+	delay_us(5);
 	A7139_StrobeCmd(CMD_PLL);
-	delay_us(1);
+	delay_us(5);
 	A7139_StrobeCmd(CMD_RX);
+	delay_us(5);
 	return rssi;		
 }
 

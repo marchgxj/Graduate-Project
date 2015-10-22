@@ -137,14 +137,14 @@ uint8 rssisee = 0;
 void EXTI9_5_IRQHandler(void)
 {
     EXTI->PR |= EXTI_Line6;
-		rssisee = A7139_GetRSSI();
+		//rssisee = A7139_GetRSSI();
     A7139_ReadFIFO(DataRecvBuffer,MAX_PACK_LENGTH);
 		
     RXMode();
 		time_out = 0;
 		if(PackValid())
 		{
-				LED2_REV();
+				
 			  
 				switch (Unpack(DataRecvBuffer))
 				{

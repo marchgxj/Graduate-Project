@@ -11,81 +11,53 @@ Build target 'Target 1'
 compiling tdma.c...
 ..\HARDWARE\A7139\A7139.h(93): warning:  #1295-D: Deprecated declaration A7139_GetRSSI - give arg types
   extern u8 A7139_GetRSSI();
-..\Schdule\tdma.c(40): warning:  #177-D: variable "inner_num" was declared but never referenced
+..\Schdule\tdma.c(78): warning:  #177-D: variable "inner_num" was declared but never referenced
                 uint8 inner_num = 0;
-..\Schdule\tdma.c(41): warning:  #177-D: variable "ab_slot_num" was declared but never referenced
+..\Schdule\tdma.c(79): warning:  #177-D: variable "ab_slot_num" was declared but never referenced
                 uint8 ab_slot_num = 0;
-..\Schdule\tdma.c(42): warning:  #177-D: variable "src_cluster_id" was declared but never referenced
+..\Schdule\tdma.c(80): warning:  #177-D: variable "src_cluster_id" was declared but never referenced
                 uint8 src_cluster_id = 0;
-..\Schdule\tdma.c(43): warning:  #177-D: variable "src_cluster_innernum" was declared but never referenced
+..\Schdule\tdma.c(81): warning:  #177-D: variable "src_cluster_innernum" was declared but never referenced
           uint8 src_cluster_innernum = 0;
-..\Schdule\tdma.c(44): warning:  #177-D: variable "rejoin" was declared but never referenced
+..\Schdule\tdma.c(82): warning:  #177-D: variable "rejoin" was declared but never referenced
                 uint8 rejoin = 0;
 ..\Schdule\tdma.c: 6 warnings, 0 errors
 linking...
-Program Size: Code=22554 RO-data=586 RW-data=148 ZI-data=4620  
+Program Size: Code=18466 RO-data=410 RW-data=152 ZI-data=4648  
 FromELF: creating hex file...
 After Build - User command #1: fromelf.exe --bin -o ../obj/SPI.bin ../obj/SPI.axf
 "..\OBJ\SPI.axf" - 0 Error(s), 6 Warning(s).
-Load "..\\OBJ\\SPI.axf" 
-Set JLink Project File to "F:\Graduate\Git_program\STM32Qos\user\JLinkSettings.ini"
-* JLink Info: Device "STM32F103VC" selected (256 KB flash, 48 KB RAM).
- 
-JLink info:
-------------
-DLL: V4.80g, compiled Feb 13 2014 20:50:02
-Firmware: J-Link ARM V8 compiled Jul 17 2014 12:31:18
-Hardware: V8.00
-S/N : 286370559 
-Feature(s) : RDI,FlashDL,FlashBP,JFlash 
- 
-* JLink Info: Found SWD-DP with ID 0x1BA01477
-* JLink Info: Found SWD-DP with ID 0x1BA01477
-* JLink Info: Found Cortex-M3 r1p1, Little endian.
-* JLink Info: FPUnit: 6 code (BP) slots and 2 literal slots
-* JLink Info: TPIU fitted.
-* JLink Info: ETM fitted.
-ROMTableAddr = 0xE00FF003
- 
-Target info:
-------------
-Device: STM32F103VC
-VTarget = 5.040V
-State of Pins: 
-TCK: 0, TDI: 1, TDO: 1, TMS: 1, TRES: 1, TRST: 1
-Hardware-Breakpoints: 6
-Software-Breakpoints: 8192
-Watchpoints:          4
-JTAG speed: 4000 kHz
- 
-Full Chip Erase Done.
-Programming Done.
-Verify OK.
-Application running ...
 </pre>
 </body>
 </html>
-00FF003
- 
-Target info:
-------------
-Device: STM32F103VC
-VTarget = 5.040V
-State of Pins: 
-TCK: 0, TDI: 1, TDO: 1, TMS: 1, TRES: 1, TRST: 1
-Hardware-Breakpoints: 6
-Software-Breakpoints: 8192
-Watchpoints:          4
-JTAG speed: 4000 kHz
- 
-Full Chip Erase Done.
-Programming Done.
-Verify OK.
-Application running ...
-ng Done.
-Verify OK.
-Application running ...
- was declared but never referenced
+rrupt.c...
+..\HARDWARE\A7139\A7139.h(93): warning:  #1295-D: Deprecated declaration A7139_GetRSSI - give arg types
+  extern u8 A7139_GetRSSI();
+..\hardware\interrupt\interrupt.c: 1 warning, 0 errors
+compiling flash.c...
+..\HARDWARE\A7139\A7139.h(93): warning:  #1295-D: Deprecated declaration A7139_GetRSSI - give arg types
+  extern u8 A7139_GetRSSI();
+..\hardware\Flash\flash.c: 1 warning, 0 errors
+compiling sys.c...
+..\HARDWARE\A7139\A7139.h(93): warning:  #1295-D: Deprecated declaration A7139_GetRSSI - give arg types
+  extern u8 A7139_GetRSSI();
+..\SYSTEM\sys\sys.c: 1 warning, 0 errors
+compiling usart.c...
+..\HARDWARE\A7139\A7139.h(93): warning:  #1295-D: Deprecated declaration A7139_GetRSSI - give arg types
+  extern u8 A7139_GetRSSI();
+..\SYSTEM\usart\usart.c(46): warning:  #177-D: variable "NVIC_InitStructure" was declared but never referenced
+    NVIC_InitTypeDef    NVIC_InitStructure;
+..\SYSTEM\usart\usart.c(109): warning:  #520-D: initialization with "{...}" expected for aggregate object
+  uint8 Usart_Data[4] = 0;
+..\SYSTEM\usart\usart.c(151): warning:  #177-D: variable "i" was declared but never referenced
+                uint16 i=0;
+..\SYSTEM\usart\usart.c: 4 warnings, 0 errors
+compiling main.c...
+..\HARDWARE\A7139\A7139.h(93): warning:  #1295-D: Deprecated declaration A7139_GetRSSI - give arg types
+  extern u8 A7139_GetRSSI();
+main.c(5): warning:  #177-D: variable "test" was declared but never referenced
+          uint8 test[64],i;
+main.c(5): warning:  #177-D: variable "i" was declared but never referenced
           uint8 test[64],i;
 main.c: 3 warnings, 0 errors
 compiling beacon.c...
@@ -107,15 +79,15 @@ compiling device.c...
 compiling tdma.c...
 ..\HARDWARE\A7139\A7139.h(93): warning:  #1295-D: Deprecated declaration A7139_GetRSSI - give arg types
   extern u8 A7139_GetRSSI();
-..\Schdule\tdma.c(46): warning:  #550-D: variable "inner_num" was set but never used
+..\Schdule\tdma.c(78): warning:  #177-D: variable "inner_num" was declared but never referenced
                 uint8 inner_num = 0;
-..\Schdule\tdma.c(47): warning:  #550-D: variable "ab_slot_num" was set but never used
+..\Schdule\tdma.c(79): warning:  #177-D: variable "ab_slot_num" was declared but never referenced
                 uint8 ab_slot_num = 0;
-..\Schdule\tdma.c(48): warning:  #550-D: variable "src_cluster_id" was set but never used
+..\Schdule\tdma.c(80): warning:  #177-D: variable "src_cluster_id" was declared but never referenced
                 uint8 src_cluster_id = 0;
-..\Schdule\tdma.c(49): warning:  #550-D: variable "src_cluster_innernum" was set but never used
+..\Schdule\tdma.c(81): warning:  #177-D: variable "src_cluster_innernum" was declared but never referenced
           uint8 src_cluster_innernum = 0;
-..\Schdule\tdma.c(50): warning:  #177-D: variable "rejoin" was declared but never referenced
+..\Schdule\tdma.c(82): warning:  #177-D: variable "rejoin" was declared but never referenced
                 uint8 rejoin = 0;
 ..\Schdule\tdma.c: 6 warnings, 0 errors
 compiling upload.c...
@@ -123,7 +95,7 @@ compiling upload.c...
   extern u8 A7139_GetRSSI();
 ..\Schdule\upload.c: 1 warning, 0 errors
 linking...
-Program Size: Code=18298 RO-data=410 RW-data=148 ZI-data=4620  
+Program Size: Code=18466 RO-data=410 RW-data=152 ZI-data=4648  
 FromELF: creating hex file...
 After Build - User command #1: fromelf.exe --bin -o ../obj/SPI.bin ../obj/SPI.axf
-"..\OBJ\SPI.axf" - 0 Error(s), 26 Warning(s).
+"..\OBJ\SPI.axf" - 0 Error(s), 27 Warning(s).

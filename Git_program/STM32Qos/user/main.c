@@ -5,12 +5,16 @@ int main(void)
 	  uint8 test[64],i;
  		DisableInterrupt();
 		sys_init();
+	
+	EnableInterrupt();
+	DIS_USARTINT;
 //		while(1)
 //		{
 //		SendPack();
+//			RXMode();
 //			delay_ms(500);
 //		}
-  
+//  
 
 		RootDevice.pyh_address = 0xFFFF;
 		RootDevice.cluster_id = ROOT;
