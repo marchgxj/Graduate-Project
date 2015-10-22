@@ -133,6 +133,7 @@ void AD_cal()
         {
             SampleChannel(&GMI_ADvalueX,&GMI_ADvalueY);
             Multi_Read_HMC(&ADvalueX,&ADvalueY,&ADvalueZ);
+            //Single_Read_HMC(&ADvalueX,&ADvalueY,&ADvalueZ);
             ADX += ADvalueX;
             ADY += ADvalueY;
             ADZ += ADvalueZ;

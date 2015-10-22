@@ -42,7 +42,11 @@ uint8 SendByCSMA(u8 *buff,uint8 length)
     w=q*SLOT_LENGTH;
     wait_time=w/100;
     
-    while(Frame_Time<=wait_time);      //等待到达CSMA时隙 超帧内时间<=负载数*时隙长度
+    while(Frame_Time<=wait_time)     //等待到达CSMA时隙 超帧内时间<=负载数*时隙长度
+    {
+        halLedToggle(4);
+        delay_ms(100);
+    }
     CSMABackOff();
     cca_value = (A7139_GetRSSI()+A7139_GetRSSI())/2;
             

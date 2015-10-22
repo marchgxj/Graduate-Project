@@ -2,7 +2,7 @@
 #define	SlaveAddress   0x3C
 
 uint8 ack=0;
-uint8 const HMC_Config[3] = {0xFC,0x00,0x00};
+uint8 const HMC_Config[3] = {0xFC,0x00,0x01};
 
 //void HMC_Start()
 //{
@@ -254,26 +254,7 @@ void Single_Write_HMC(unsigned char REG_Addr, unsigned char REG_data)
 
 
 
-unsigned char Single_Read_HMC(unsigned char REG_Addr)
-{
-    unsigned char data=0;
-    HMC_Start();
-    HMC_SendByte(0x3c);  //slave Address
-    HMC_SendByte(REG_Addr);
-    
-    HMC_Start();
-    HMC_SendByte(0x3c+1);  //slave Address
-    HMC_SendByte(REG_Addr);
-    data = HMC_ReceiveByte();
-    HMC_SendACK(1);
-    HMC_Stop();
-    return data;
-    
-    
-}
-
-    
-void Multi_Read_HMC(uint16* XValue,uint16* YValue,uint16* ZValue)
+void Single_Read_HMC(uint16* XValue,uint16* YValue,uint16* ZValue)
 {
     int i;
     int xvalue = 0;
@@ -296,6 +277,67 @@ void Multi_Read_HMC(uint16* XValue,uint16* YValue,uint16* ZValue)
             HMC_SendACK(0);	
     }
     HMC_Stop();
+    Single_Write_HMC(0x02,0x01);
+    
+    xvalue = (buffer[0]<<8)|buffer[1];
+    zvalue = (buffer[2]<<8)|buffer[3];
+    yvalue = (buffer[4]<<8)|buffer[5];
+    if(xvalue!=-4096)
+    {
+        *XValue = xvalue + 2048;
+    }
+    else
+    {
+        *XValue = 0;
+    }
+    if(yvalue!=-4096)
+    {
+        *YValue = yvalue + 2048;
+    }
+    else
+    {
+        *YValue = 0;
+    }
+    if(zvalue!=-4096)
+    {
+        *ZValue = zvalue + 2048;
+    }
+    else
+    {
+        *ZValue = 0;
+    }
+    
+    
+}
+
+    
+void Multi_Read_HMC(uint16* XValue,uint16* YValue,uint16* ZValue)
+{
+    int i;
+    int xvalue = 0;
+    int yvalue = 0;
+    int zvalue = 0;
+    uint8 buffer[6];
+    
+    Single_Write_HMC(0x02,0x01);
+    delay_1ms();delay_1ms();delay_1ms();delay_1ms();delay_1ms();
+
+    HMC_Start();
+    HMC_SendByte(0x3c);  //slave Address
+    HMC_SendByte(0x03);	
+    HMC_Start();
+    HMC_SendByte(0x3c+1);  //slave Address
+    //	HMC_SendByte(0x06);
+    for( i=0;i<6;i++)
+    {
+        buffer[i] = HMC_ReceiveByte();
+        if(i==5) 
+            HMC_SendACK(1);
+        else
+            HMC_SendACK(0);	
+    }
+    HMC_Stop();
+    
     
     xvalue = (buffer[0]<<8)|buffer[1];
     zvalue = (buffer[2]<<8)|buffer[3];

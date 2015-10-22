@@ -1,6 +1,7 @@
 #include "common.h"
 
 uint8 normal_test[MAX_PACK_LENGTH];
+uint16 ADvalueX,ADvalueY,ADvalueZ;
 
 int main(void)
 {	    
@@ -8,8 +9,9 @@ int main(void)
     __disable_interrupt();
     
     halBoardInit();
-    halLedClearAll();
+    
 ReJoin:
+    A7139_Init(470.001f);
     EndPointDevice.pyh_address = GetPhyAddress();
     EndPointDevice.device_type = DEVICE;
     for(i=0;i<MAX_PACK_LENGTH;i++)
@@ -17,7 +19,6 @@ ReJoin:
        normal_test[i]=i;
     }
 
-    
     //    ´«¸ÐÆ÷²âÊÔ
 //    A7139_SetPackLen(TEST_LENGTH);
 //    delay_us(1);
@@ -33,7 +34,8 @@ ReJoin:
 //        delay_ms(50);
 //    }
     /*    ¹¦ºÄ²âÊÔ*/
-    /*IRD_LOW;
+    /*IRD_HIGH;
+    Multi_Read_HMC(&ADvalueX,&ADvalueY,&ADvalueZ);
     delay_ms(1000);
     halLedSet(1);
     halLedClearAll();
@@ -42,11 +44,10 @@ ReJoin:
     halLedClear(1);
     LPM3;*/
 
+    halLedSetAll();
     ChannelSelection(CHANNEL_4,CHANNEL_6);
 
-    
     __enable_interrupt();
-
 
     for(;;)
     {

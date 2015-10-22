@@ -74,14 +74,17 @@ static void  A7139_Config(void)
 }
 void Err_State(void)
 {
-    
+    halLedClearAll();
     while(1){
         halLedToggleAll();
         delay_ms(500);
         A7139_init_err_count++;
-        if(A7139_init_err_count == 10)
+        if(A7139_init_err_count > 10)
         {
-            REBOOT;
+            //REBOOT;
+            A7139_init_err_count = 0;
+            ReJoinFlag = 1;
+            break;
         }
     }
 }

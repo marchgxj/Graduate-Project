@@ -455,6 +455,7 @@ void IdentifyCar()
     
 //    SampleChannel(&MagneticUnit.GMI_XValue,&MagneticUnit.GMI_YValue);
 //    GMI_Identify();
+    //Single_Read_HMC(&MagneticUnit.XValue,&MagneticUnit.YValue,&MagneticUnit.ZValue);
     Multi_Read_HMC(&MagneticUnit.XValue,&MagneticUnit.YValue,&MagneticUnit.ZValue);
     ReCal();
     GetSlop(MagneticUnit.XValue,MagneticUnit.YValue,MagneticUnit.ZValue);
@@ -744,6 +745,7 @@ void NoCarCalibration()
             GMI_ADY += GMI_ADvalueY;
         }
         Multi_Read_HMC(&MagneticUnit.XValue,&MagneticUnit.YValue,&MagneticUnit.ZValue);
+        //Single_Read_HMC(&MagneticUnit.XValue,&MagneticUnit.YValue,&MagneticUnit.ZValue);
         if((abs(ADvalueX-MagneticUnit.XMiddleM)<100)&&(abs(ADvalueY-MagneticUnit.YMiddleM)<100)&&abs(ADvalueZ-MagneticUnit.ZMiddleM)<100)
         {
             count++;
@@ -876,7 +878,7 @@ void CmdCalibration()
         GMI_ADX += GMI_ADvalueX;
         GMI_ADY += GMI_ADvalueY; 
         Multi_Read_HMC(&ADvalueX,&ADvalueY,&ADvalueZ);
-        
+//        Single_Read_HMC(&ADvalueX,&ADvalueY,&ADvalueZ);
         count++;
         ADX += ADvalueX;
         ADY += ADvalueY;

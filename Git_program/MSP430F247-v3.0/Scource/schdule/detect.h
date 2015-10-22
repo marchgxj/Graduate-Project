@@ -1,7 +1,7 @@
 #ifndef _DETECT_h_
 #define _DETECT_h_
 #include "common.h"
-#define MCU_SLEEP_ENABLE 0
+#define MCU_SLEEP_ENABLE 1
 
 #define COLLECT_EN   0          //是否开启数据采集
 #define COLLECT_PERIOD  1000   //采集周期  单位：100us
