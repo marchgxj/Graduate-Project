@@ -24,6 +24,7 @@ int Ext_Minus,Var_Minus,Int_Minus;
 MagneticStruct MagneticUnit;
 uint8 Parking_State = 0;
 uint8 CarCaliFlag;
+uint16 CaliCount = 0;
 
 //first calculate the slop of the (X-Y)
 //if slop less than thredhold, judge (Xavg1 - Xavg0)  and (Yavg1 - Yavg0)
@@ -312,12 +313,12 @@ void IdentifyCar()
         //A7139_Deep_Wake();
         Parking_State = EndPointDevice.parking_state;
         PostTask(EVENT_CSMA_RESEND);
+
     }
-    else
+    /*else
     {
-        
         TestSend();
-    }
+    }*/
     EndPointDevice.parking_state_m = EndPointDevice.parking_state;
     /*Start_Collect = 1;
     //非低功耗模式测试先注释掉
@@ -386,20 +387,13 @@ void TotalJudge()
             EndPointDevice.parking_state = NOCAR;
             halLedClear(4);
         }
-        NoCarStableCount++;
+        
     }
-    else
+   
+    NoCarStableCount++;
+    if((NoCarStableCount >300))
     {
         NoCarStableCount = 0;
-    }
-    if(Sensor_Drift==1)
-    {
-        After_Drift_Cal++;
-    }
-    if((NoCarStableCount >1200)||(After_Drift_Cal>60))
-    {
-        NoCarStableCount = 0;
-        After_Drift_Cal = 0;
         NoCarCalibration();
     }
 }
@@ -429,7 +423,7 @@ void NoCarCalibration()
     {
         delay_ms(50);
         SampleChannel(&ADvalueX,&ADvalueY);
-        if((abs(ADvalueX-MagneticUnit.XMiddleM)<200)&&(abs(ADvalueY-MagneticUnit.YMiddleM)<200))
+        //if((abs(ADvalueX-MagneticUnit.XMiddleM)<200)&&(abs(ADvalueY-MagneticUnit.YMiddleM)<200))
         {
             count++;
             ADX += ADvalueX;
@@ -444,30 +438,11 @@ void NoCarCalibration()
         ADX = ADX/count;
         ADY = ADY/count;
     }
-    if(abs(ADX - MagneticUnit.XMiddleM)<100)
-    {
-        MagneticUnit.XMiddle = ADX;
-    }
-    else if(abs(ADX - MagneticUnit.XMiddleM)<200)
-    {
-        MagneticUnit.XMiddle = (MagneticUnit.XMiddleM + ADX)>>1;
-    }
-    else if(abs(ADX - MagneticUnit.XMiddleM)<300)
-    {
-        MagneticUnit.XMiddle = (MagneticUnit.XMiddleM << 1 + ADX)/3;
-    }
-    if(abs(ADY - MagneticUnit.YMiddleM)<100)
-    {
-        MagneticUnit.YMiddle = ADY;
-    }
-    else if(abs(ADY - MagneticUnit.YMiddleM)<150)
-    {
-        MagneticUnit.YMiddle = (MagneticUnit.YMiddleM + ADY)>>1;
-    }
-    else if(abs(ADY - MagneticUnit.YMiddleM)<200)
-    {
-        MagneticUnit.YMiddle = (MagneticUnit.YMiddleM << 1 + ADY)/3;
-    }
+    
+    MagneticUnit.XMiddle = ADX;
+
+    MagneticUnit.YMiddle = ADY;
+    
 
     MagneticUnit.Ext_Middle = abs(MagneticUnit.XMiddle-MagneticUnit.YMiddle);
     MagneticUnit.XMiddleM = MagneticUnit.XMiddle;

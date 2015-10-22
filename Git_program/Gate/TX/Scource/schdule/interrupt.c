@@ -106,6 +106,7 @@ __interrupt void Timer_A (void)
 __interrupt void Timer_A0(void)
 {
     TA0CCTL0 &= ~CCIFG;
+    halLedToggle(2);
     
     PostTask(EVENT_IDENTIFY_CAR);
     
@@ -124,14 +125,21 @@ void TestSend()
     4:8、9：ExtremumValue
     5:10：方差识别停车状态
     6:11：极值识别停车状态
-    7:12、13：NoCar_Magnetic.XMiddle
-    8:14、15：NoCar_Magnetic.YMiddle
-    9:16、17：NoCar_Magnetic.Intensity
-    10:18、19：NoCar_Magnetic.IntensityMiddle
-    11:20:NoCar_Magnetic.Int_State
+    7:12、13：MagneticUnit.XMiddle
+    8:14、15：MagneticUnit.YMiddle
+    9:16、17：MagneticUnit.Intensity
+    10:18、19：NMagneticUnit.IntensityMiddle
+    11:20:MagneticUnit.Int_State
     12:21:EndpointDeviece.parking
-    13:22\23:XAve_Slpo
-    14:24\25:YAve_Slop
+    13:22、23:XAve_Slpo
+    14:24、25:YAve_Slop
+    
+    15:26、27:ZAve_Slop
+    16:28、29:Z轴AD
+    17:30、31:X轴AD GMI
+    18:32、33:Y轴AD GMI
+    19:34、35:XMiddle GMI
+    20:36、37:YMiddle GMI
     **********************************************/
     DataSendDraw[0] = MagneticUnit.XValue>>8;
     DataSendDraw[1] = MagneticUnit.XValue;
@@ -159,6 +167,26 @@ void TestSend()
     DataSendDraw[23] = MagneticUnit.XAve_Slop;
     DataSendDraw[24] = MagneticUnit.YAve_Slop>>8;
     DataSendDraw[25] = MagneticUnit.YAve_Slop;
+    DataSendDraw[26] = 0;
+    DataSendDraw[27] = 0;
+    DataSendDraw[28] = 0;
+    DataSendDraw[29] = 0;
+    DataSendDraw[30] = 0;
+    DataSendDraw[31] = 0;
+    DataSendDraw[32] = 0;
+    DataSendDraw[33] = 0;
+    DataSendDraw[34] = 0;
+    DataSendDraw[35] = 0;
+    DataSendDraw[36] = 0;
+    DataSendDraw[37] = 0;
+    DataSendDraw[38] = 0;
+    DataSendDraw[39] = 0;
+    DataSendDraw[40] = 0;
+    DataSendDraw[41] = 0;
+    DataSendDraw[42] = 0;
+    DataSendDraw[43] = 0;
+    DataSendDraw[44] = 0;
+    DataSendDraw[45] = 0;
     
     A7139_WriteFIFO(DataSendDraw,TEST_LENGTH);
     delay_us(1);

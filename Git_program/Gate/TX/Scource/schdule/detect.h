@@ -27,7 +27,7 @@
 #define INT_THRESHOLD  150
 
 
-#define TEST_LENGTH 26
+#define TEST_LENGTH 46
 #define FILTER_LENGTH 20
 #define SLOP_LENGTH  5
 typedef struct

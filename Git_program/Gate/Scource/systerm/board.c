@@ -26,12 +26,12 @@ void halBoardInit(void)
     halMcuInit();
     delay_s(1);
     GPIO_Init();
-    //halUartInit(0, 0); 
+    halUartInit(0, 0); 
    // sched_init();
     //÷–∂œ≥ı ºªØ
     time_init();
-    SPI3_Init();
-    FLASHInit();
+    //SPI3_Init();
+    //FLASHInit();
     A7139_Init(470.001f);
     Interrupt_Init();
     Init_TQ();

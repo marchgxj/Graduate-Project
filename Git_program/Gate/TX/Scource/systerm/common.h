@@ -4,8 +4,8 @@
 #define    MAX_PACK_LENGTH      12
 #define    MAX_DEVICE_NUM       254
 #define    CHANNEL  481.001f
-#define    CHANNEL_SEE 508.001f //508.001f
-#define    DIRECTION   2//2：进门端 508.001f 1：出门端 506.001f
+#define    CHANNEL_SEE 506.001f //508.001f
+#define    DIRECTION   1//2：进门端 508.001f 1：出门端 506.001f
 
 
 #include "types.h"
