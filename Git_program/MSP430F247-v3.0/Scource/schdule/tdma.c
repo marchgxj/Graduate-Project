@@ -7,10 +7,12 @@ uint16 DataAck_Lost = 0;
 uint8 Int_Enable_Flag = 0;
 uint8 RecvDataACK()
 {
-    send_time = Frame_Time;
+    send_time = 0;
     while(GIO2==0)
     {
-        if(Frame_Time>send_time+DATAACK_TIMEOUT)             //60为DataACK接收超时，在收到ACK时不会进入if内
+        delay_100us();
+        send_time++;
+        if(send_time>DATAACK_TIMEOUT)             //60为DataACK接收超时，在收到ACK时不会进入if内
         {
             resend_count++;
             EndPointDevice.data_ack = 0;
@@ -88,6 +90,7 @@ void DataSend(void)
     uint8 ack_flag = 0;
     uint32 a,b,c;             //防止第一个节点为负
     uint32 before_slot_wake = WAKE_TIME;
+    uint16 timeout = 0;
     //before_slot_wake = (((EndPointDevice.cluster_innernum-1)*SLOT_LENGTH)-WAKE_TIME)+5000;
     //为什么写一起就不对！！！
     a = (EndPointDevice.cluster_innernum-1);
@@ -99,7 +102,19 @@ void DataSend(void)
     Int_Enable_Flag = 0;
     DIS_INT;
     
-    while(Frame_Time<=before_slot_wake);
+    while(Frame_Time<=before_slot_wake)
+    {
+        if(timeout>6000)
+        {
+            ReJoinFlag = 1;
+            Exit_Sleep = 1;
+            Init_TQ();
+            return;
+        }
+        timeout++;
+        delay_100us();
+    }
+    halLedClear(3);
     TIME2_HIGH;
     EndPointDevice.data_ack = 0;
     
@@ -116,14 +131,15 @@ void DataSend(void)
         DataAck_Lost = 0;
         if(EndPointDevice.power == 1)
         {
+            DIS_TIMER1;
+            DIS_INT;
             A7139_DeepSleep();
         }
         else
         {
             A7139_Sleep();
         }       
-        TIME2_LOW;
-        
+        TIME2_LOW;      
     }
     else
     {
@@ -146,6 +162,10 @@ void DataSend(void)
 uint8 rejoin_flag = 0;
 void DataACKHandler()
 {
+    if(Unpack(DataRecvBuffer)!=DATAACK_TYPE)
+    {
+        return;
+    }
     EndPointDevice.time_stamp = DataRecvBuffer[6]<<8|DataRecvBuffer[7];
     EndPointDevice.data_ack = 1;
     EndPointDevice.cmd = DataRecvBuffer[8];

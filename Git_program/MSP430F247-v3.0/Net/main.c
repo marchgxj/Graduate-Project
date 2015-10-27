@@ -3,21 +3,16 @@
 uint8 normal_test[MAX_PACK_LENGTH];
 uint16 ADvalueX,ADvalueY,ADvalueZ;
 
-int main(void)
+ int main(void)
 {	    
     uint8 i=0;
     __disable_interrupt();
     
     halBoardInit();
-    
 ReJoin:
     A7139_Init(470.001f);
     EndPointDevice.pyh_address = GetPhyAddress();
     EndPointDevice.device_type = DEVICE;
-    for(i=0;i<MAX_PACK_LENGTH;i++)
-    {
-       normal_test[i]=i;
-    }
 
     //    ´«¸ÐÆ÷²âÊÔ
 //    A7139_SetPackLen(TEST_LENGTH);
@@ -45,8 +40,16 @@ ReJoin:
     LPM3;*/
 
     halLedSetAll();
+#if NET_TEST == 1
+    ChannelSelection(CHANNEL_7,CHANNEL_9);
+#else
     ChannelSelection(CHANNEL_4,CHANNEL_6);
+#endif
 
+    halLedClear(4);
+    TA0CCTL0 &= ~CCIFG;
+    TBCCTL0 &= ~CCIFG;
+    EN_INT;
     __enable_interrupt();
 
     for(;;)
@@ -54,8 +57,11 @@ ReJoin:
         Process_Event();
         if(ReJoinFlag == 1)
         {
+            ReJoinHandler();
             ReJoinFlag = 0;
+            halLedSet(4);
             __disable_interrupt();
+            halLedFlow();
             goto ReJoin;
         }
     }

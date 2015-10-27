@@ -304,7 +304,9 @@ void GetSlop(uint16 xvalue,uint16 yvalue,uint16 zvalue)
     {
         Quick_Collect = 1;
         Collect_Period = 0;
+#if (GMI_EN == 1)
         HMC_Changed = 1;
+#endif
     }
 }
 void ReCal()
@@ -473,7 +475,7 @@ void IdentifyCar()
             halLedSet(3);
             Int_Enable_Flag = 1;
             EN_INT;
-            EN_TIMER1;
+            //EN_TIMER1;
         }
         EndPointDevice.parking_state_m = EndPointDevice.parking_state;
     }
@@ -494,7 +496,7 @@ void TotalJudge()
 //        Side_Parking = 0;
 //    }
 
-    //if(HMC_Identify_Fail==0)
+    if(HMC_Identify_Fail==0)
     {
         if(abs(MagneticUnit.XValue - MagneticUnit.XMiddle)>100)
         {
@@ -521,9 +523,9 @@ void TotalJudge()
             YValue_Parking = 0;
         }
     }
-    //else
+    else
     {
-        //GMI_Identify();
+        GMI_Identify();
     }
 
     /*if(((MagneticUnit.ExtState==CAR)&&(MagneticUnit.IntState==CAR))||
@@ -539,7 +541,7 @@ void TotalJudge()
         {
             if(CarStableCount>60)
             {
-                halLedSet(4);
+                //halLedSet(4);
                 EndPointDevice.parking_state = CAR;
                 if(HMC_Identify_Fail == 1)
                 {
@@ -555,7 +557,7 @@ void TotalJudge()
         {
             if(CarStableCount>2)
             {
-                halLedSet(4);
+                //halLedSet(4);
                 EndPointDevice.parking_state = CAR;
                 if(HMC_Identify_Fail == 1)
                 {
@@ -649,7 +651,7 @@ void TotalJudge()
         {
             if(NoCarStableCount>30)
             {
-                halLedClear(4);
+                //halLedClear(4);
                 EndPointDevice.parking_state = NOCAR;
             }
         }
@@ -658,7 +660,7 @@ void TotalJudge()
             if(NoCarStableCount>2)
             {
                 EndPointDevice.parking_state = NOCAR;
-                halLedClear(4);
+                //halLedClear(4);
             }
         }
         NoCarStableCount++;
@@ -719,7 +721,8 @@ void NoCarCalibration()
     uint16 GMI_ADY = 0;
     uint32 intensity = 0;
     uint8 i=0;
-
+    
+    halLedSet(4);
     __disable_interrupt();
 
 
@@ -833,6 +836,8 @@ void NoCarCalibration()
     MagneticUnit.CarIntensity = 0;
     MagneticUnit.CarVariance = 0;
     delay_ms(50);
+    halLedClear(4);
+    TA0CCTL0 &= ~CCIFG;
     __enable_interrupt();
     
 }
@@ -851,7 +856,8 @@ void CmdCalibration()
     uint16 GMI_ADY = 0;
     uint32 intensity = 0;
     uint8 i=0;
-
+    
+    halLedSet(4);
     __disable_interrupt();
 
     SampleChannel(&GMI_ADX,&GMI_ADY);
@@ -867,7 +873,6 @@ void CmdCalibration()
         ADX = (ADvalueX+ADX)/2;
         ADY = (ADvalueY+ADY)/2;
         ADZ = (ADvalueZ+ADZ)/2;
-        
     }
     
     MagneticUnit.XMiddle = ADX;
@@ -892,6 +897,8 @@ void CmdCalibration()
     MagneticUnit.CarIntensity = 0;
     MagneticUnit.CarVariance = 0;
     delay_ms(50);
+    halLedClear(4);
+    TA0CCTL0 &= ~CCIFG;
     __enable_interrupt();
     
 }
@@ -925,6 +932,7 @@ void GetIntensity()
 void CmdSendHandler()
 {
     uint16 i = 0;
+    halLedSet(4);
     __disable_interrupt();
     On_Test = 1;
     A7139_StrobeCmd(CMD_STBY);
@@ -945,6 +953,8 @@ void CmdSendHandler()
         delay_ms(50);
     }
     On_Test = 0;
+    halLedClear(4);
+    TA0CCTL0 &= ~CCIFG;
     __enable_interrupt();
 }
 void CmdHandler()

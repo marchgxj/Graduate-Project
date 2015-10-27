@@ -45,7 +45,7 @@ void CreateJoinRequectACK(uint8 joinstatus,uint8 accept,uint8 id,uint32 des_addr
 		DataSendBuffer[11] = 0;
 }
 uint8 node_over = 0;
-void JoinRequestHandler(u8 buf[])
+void JoinRequestHandler(u8* buf)
 {
 	  uint8 i=0;
 		uint8 joinstatus = 0;
@@ -53,11 +53,16 @@ void JoinRequestHandler(u8 buf[])
 		if(Unpack(buf)!=JOINREQUEST_TYPE)
     {
         DebugMsg("JoinRequest DataRecvBuffer Changed");
+			  for(i=0;i<12;i++)
+			  {
+						errorbuf[i] = *buf++;
+				}
+				i=0;
 				return;
     }
 		DisableInterrupt();
 		//uint8 current_node_num = RootDevice.connected_devece_count;
-		new_node_pyh_address = buf[4]<<8|buf[5];
+		new_node_pyh_address = *(buf+4)<<8|*(buf+5);
 		if(new_node_pyh_address>30)
 		{
 				DebugMsg("Phyaddress Deny");

@@ -763,10 +763,17 @@ void RXMode()
 		A7139_StrobeCmd(CMD_RX);
 		delay_us(100);
 }
+uint8 testbuf[12];
 void SendPack(u8 *buf)
 {
 	  uint8 timeout = 0;
-
+		uint8 i=0;
+		uint8* nbuf;
+    nbuf= buf;
+	  for(i=0;i<12;i++)
+		{
+				testbuf[i] = *nbuf++;
+		}
 		A7139_StrobeCmd(CMD_PLL);
     delay_us(5);
     A7139_WriteFIFO(buf,MAX_PACK_LENGTH);
@@ -777,8 +784,9 @@ void SendPack(u8 *buf)
 				timeout++;
 				if(timeout>15)
 				{
-						break;
+						
 						DebugMsg("A7139 GIO1 Timeout");
+						break;
 				}
 				delay_ms(1);
 		}

@@ -21,6 +21,7 @@
 //  DESCRIPTION:
 //    Set up board. Initialize MCU, configure I/O pins and user interfaces
 //------------------------------------------------------------------------------
+uint16 rebootfalg = 0;
 void halBoardInit(void)
 {
     halMcuInit();
@@ -37,6 +38,7 @@ void halBoardInit(void)
     Interrupt_Init();
     Init_TQ();
     Init_5983();
-    
     AD_cal(); 
+    
+    
 }

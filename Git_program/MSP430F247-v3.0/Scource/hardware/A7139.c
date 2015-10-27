@@ -772,10 +772,9 @@ void A7139_WakeToRecv(void)
 }
 void A7139_Deep_Wake(void)
 {
-#if (SLEEP_EN)   
-    DIS_INT;
-    DIS_TIMER1;
-    DIS_TIMER0;
+#if (SLEEP_EN)
+    halLedSet(4);
+    __disable_interrupt();
     A7139_StrobeCmd(CMD_STBY);
     delay_ms(10);
     A7139_StrobeCmd(CMD_STBY);
@@ -788,9 +787,9 @@ void A7139_Deep_Wake(void)
     delay_ms(10);
     RXMode();
     delay_ms(10);
-    EN_INT;
-    EN_TIMER1;
-    EN_TIMER0;
+    halLedClear(4);
+    TA0CCTL0 &= ~CCIFG;
+    __enable_interrupt();
 
 #endif   
 }

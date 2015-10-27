@@ -34,18 +34,29 @@ void CSMABackOff()
     uint8 cca_value = 0;
     uint32 wait_time = 0;
     uint32 q,w;
+    
 uint8 SendByCSMA(u8 *buff,uint8 length)
 {
-
+    uint16 timeout = 0;
     //wait_time = ((MAX_DEVICE_NUM - EndPointDevice.free_node)*SLOT_LENGTH)/10;
     q=MAX_DEVICE_NUM - EndPointDevice.free_node;
     w=q*SLOT_LENGTH;
     wait_time=w/100;
     
+    
     while(Frame_Time<=wait_time)     //等待到达CSMA时隙 超帧内时间<=负载数*时隙长度
     {
-        halLedToggle(4);
-        delay_ms(100);
+        if(timeout>6000)
+        {
+            
+            ReJoinFlag = 1;
+            Exit_Sleep = 1;
+            Init_TQ();
+            return CSMA_FAIL;
+        }
+        
+        timeout++;
+        delay_100us();
     }
     CSMABackOff();
     cca_value = (A7139_GetRSSI()+A7139_GetRSSI())/2;
@@ -84,7 +95,7 @@ void BeaconHandler(uint8 beacon[])
     TIME2_HIGH;
     EndPointDevice.free_node = beacon[6];
     EndPointDevice.csma_length = (MAX_DEVICE_NUM - EndPointDevice.free_node)/3+1;
-    EndPointDevice.power =  beacon[1]&0x01;   
+    EndPointDevice.power =  1;   
     //EndPointDevice.power = 0;
     if(EndPointDevice.connected == 0)                   //未连接，发送加入请求
     {
@@ -94,8 +105,7 @@ void BeaconHandler(uint8 beacon[])
     {
         if(EndPointDevice.power == 0)//不是自己发送时隙，先睡眠
         {
-            A7139_Sleep();
-            
+            A7139_Sleep(); 
         }
 
         PostTask(EVENT_DATA_SEND);

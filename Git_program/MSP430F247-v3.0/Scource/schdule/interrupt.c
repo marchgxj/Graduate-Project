@@ -40,14 +40,13 @@ __interrupt void port1_ISR(void)
         
         if(PackValid())
         {
-
             pack_type = Unpack(DataRecvBuffer);
             switch (pack_type)
             {
               case BEACON_TYPE:
                 Frame_Time = 0;
-                //EN_TIMER1;
-                TBCCTL0 = CCIE;
+                EN_TIMER1;
+                //TBCCTL0 = CCIE;
                 PostTask(EVENT_BEACON_HANDLER);
                 break;
               case JOINREQUESTACK_TYPE:
@@ -69,7 +68,7 @@ __interrupt void port1_ISR(void)
 #pragma vector=TIMERB0_VECTOR
 __interrupt void Timer_A (void)
 {
-   // TA1CCTL0 &= ~CCIFG;
+    TBCCTL0 &= ~CCIFG;
 
     Frame_Time++;
     if(EndPointDevice.power == 0)
@@ -194,6 +193,7 @@ void TestSend()
 __interrupt void Timer_A0(void)
 {
     TA0CCTL0 &= ~CCIFG;
+
 #if (MCU_SLEEP_ENABLE == 1)
     if(Exit_Sleep == 1)
     {
@@ -206,6 +206,8 @@ __interrupt void Timer_A0(void)
     if(EndPointDevice.power == 0)
     //每个超帧都要发送时，Beacon接收超时则复位A7139
     {
+        halLedToggle(2);
+        halLedToggle(3);
         if(Int_Enable_Flag == 1)
         {
             Int_Enable_Count++;
@@ -243,50 +245,37 @@ __interrupt void Timer_A0(void)
     {
         //PostTask(EVENT_IDENTIFY_CAR);
         Keep_Alive_Count++;
-        if(Keep_Alive_Count == KEEP_ALIVE_PERIOD)
+#if NET_TEST == 1
+        if(Keep_Alive_Count > 20)
+#else
+        if(Keep_Alive_Count > KEEP_ALIVE_PERIOD)
+#endif
         //if(Keep_Alive_Count == 5+EndPointDevice.pyh_address*2) 
-        
         {
             Keep_Alive_Count = 0;
             Exit_Sleep  = 1;
             
             PostTask(EVENT_KEEPALIVE_SEND);
         }
-        
-        
-        Collect_Period++;
-        if(Quick_Collect==0)
-        {
-            if(Collect_Period==20)
-            {
-                Collect_Period = 0;
-                IdentifyCar();
-                //PostTask(EVENT_IDENTIFY_CAR);
-            }
-        }
-        else
-        {
-            //PostTask(EVENT_IDENTIFY_CAR);
-            IdentifyCar();
-            if(Collect_Period == 200)
-            {
-                Collect_Period = 0;
-                Quick_Collect = 0;
-            }
-        }
-        /*if(HMC_Changed == 1)
-        {
-            OpenGMI_Count++;
-        }*/
+        /****************复位*******************/
         if(Int_Enable_Flag == 1)
         {
             Int_Enable_Count++;
             if(Int_Enable_Count > 100)
             {
                 Int_Enable_Count = 0;
+                __disable_interrupt();
                 LPM3_EXIT;
                 ReJoinFlag = 1;
+                Init_TQ();
                 PostTask(EVENT_A7139_RESET);
+                TIME1_HIGH;
+                TIME1_LOW;
+                TIME1_HIGH;
+                TIME1_LOW;
+                TIME1_HIGH;
+                TIME1_LOW;
+                
             }
         }
         else
@@ -299,14 +288,48 @@ __interrupt void Timer_A0(void)
             if(Send_Error_Count > 100)
             {
                 Send_Error_Count = 0;
+                __disable_interrupt();
                 LPM3_EXIT;
                 ReJoinFlag = 1;
+                Init_TQ();
                 PostTask(EVENT_A7139_RESET);
+                TIME1_HIGH;
+                TIME1_LOW;
+                TIME1_HIGH;
+                TIME1_LOW;
             }
         }
         else
         {
             Send_Error_Count = 0;
         }
+        /*************************************/
+        
+        
+        Collect_Period++;
+        if(Quick_Collect==0)
+        {
+            if(Collect_Period>20)
+            {
+                Collect_Period = 0;
+                IdentifyCar();
+                //PostTask(EVENT_IDENTIFY_CAR);
+            }
+        }
+        else
+        {
+            //PostTask(EVENT_IDENTIFY_CAR);
+            IdentifyCar();
+            if(Collect_Period > 200)
+            {
+                Collect_Period = 0;
+                Quick_Collect = 0;
+            }
+        }
+        if(HMC_Changed == 1)
+        {
+            OpenGMI_Count++;
+        }
+        
     }
 }

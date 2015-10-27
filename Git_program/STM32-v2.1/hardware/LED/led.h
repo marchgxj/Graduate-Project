@@ -25,10 +25,10 @@
 #define LED5_REV() PDout(5)^=1
 #define LED6_REV() PDout(6)^=1
 
-#define TIME1_LOW  PCout(0) = 0
-#define TIME1_HIGH PCout(0) = 1
-#define TIME2_LOW  PDout(9) = 0
-#define TIME2_HIGH PDout(9) = 1
+#define TIME1_LOW  PCout(2) = 0
+#define TIME1_HIGH PCout(2) = 1
+#define TIME2_LOW  PCout(3) = 0
+#define TIME2_HIGH PCout(3) = 1
 void LED_Init(void);//≥ı ºªØ
 	 				    
 #endif

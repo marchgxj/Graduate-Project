@@ -1,12 +1,11 @@
 #include "common.h"
-
 int main(void)
 {	 
 	  uint8 test[64],i;
+
  		DisableInterrupt();
 		sys_init();
-	  
-
+	
 		RootDevice.pyh_address = 0xFFFF;
 		RootDevice.cluster_id = ROOT;
 		RootDevice.cluster_innernum = 0;

@@ -177,41 +177,28 @@ void JoinRequestACKHandler()
 {
     uint8 accept = 0;
     uint8 ackok = 0;
+    if(Unpack(DataRecvBuffer)!=JOINREQUESTACK_TYPE)
+    {
+        return;
+    }
     accept = DataRecvBuffer[1]&0x01;
     ackok = (DataRecvBuffer[1]&0x02)>>1;
-    if((accept == 1)&&(ackok==1))                               //接收入网，需要回复ACK-OK
+    
+    EndPointDevice.cluster_id = DataRecvBuffer[6];
+    EndPointDevice.cluster_innernum = DataRecvBuffer[7];
+    EndPointDevice.connected = 1;
+    halLedClearAll();
+    //CreatJoinRequestACKOK();
+    //SendPack();
+    //RXMode();
+    //入网完成后发送一次数据
+    /*if(EndPointDevice.power == 1)  //执行低功耗模式
     {
-        EndPointDevice.cluster_id = DataRecvBuffer[6];
-        EndPointDevice.cluster_innernum = DataRecvBuffer[7];
-        EndPointDevice.connected = 1;
-        halLedClearAll();
-        //CreatJoinRequestACKOK();
-        //SendPack();
-        //RXMode();
-        //入网完成后发送一次数据
-        /*if(EndPointDevice.power == 1)  //执行低功耗模式
-        {
-            A7139_DeepSleep();
-            DIS_INT;
-            DIS_TIMER1;
-        }*/
-    }
-    else if((accept == 1)&&(ackok==0))                          //接受入网，不需要回复ACK-OK
-    {
-        EndPointDevice.cluster_id = DataRecvBuffer[6];
-        EndPointDevice.cluster_innernum = DataRecvBuffer[7];
-        EndPointDevice.connected = 1;
-        halLedClearAll();
-        //入网完成后发送一次数据
-        /*if(EndPointDevice.power == 1)  //执行低功耗模式
-        {
-            A7139_DeepSleep();
-            DIS_INT;
-            DIS_TIMER1;
-        }*/
-    }
-    else
-    {}
+        A7139_DeepSleep();
+        DIS_INT;
+        DIS_TIMER1;
+    }*/
+    
     
 }
 void ChannelSelection(uint8 start,uint8 end)
@@ -227,6 +214,7 @@ void ChannelSelection(uint8 start,uint8 end)
 }
 void ReJoinHandler()
 {
+    halLedSet(4);
     __disable_interrupt();
     A7139_Init(470.001f);
     Init_TQ();
@@ -261,6 +249,11 @@ void ReJoinHandler()
     IState3_Count = 0;
     CarCaliFlag = 0;
     DataPacket.ab_slot_num = 0;
+    Send_Error_Flag = 0;
+    Send_Error_Count = 0;
+    Int_Enable_Count = 0;
+    Int_Enable_Flag = 0;
+    Frame_Time = 0;
 
     for(int i=0;i<CHANNEL_NUM;i++)
     {
@@ -270,7 +263,7 @@ void ReJoinHandler()
         ScanChannel[i].cluster_id = 0;
     }
     ReJoinFlag = 1;
-    halLedSetAll();
+    /*halLedSetAll();
     delay_ms(1000);
     halLedClearAll();
     delay_ms(50);
@@ -281,5 +274,5 @@ void ReJoinHandler()
     halLedSetAll();
     delay_ms(50);
     halLedClearAll();
-    delay_ms(50);
+    delay_ms(50);*/
 }

@@ -3,7 +3,7 @@
 uint8 normal_test[MAX_PACK_LENGTH];
 uint8 test_rssi = 0;
 uint16 address = 0;
-#define    PHY_ADDRESS_WRITE          0x00004
+#define    PHY_ADDRESS_WRITE          0x0005
 int main(void)
 {	    
     __disable_interrupt(); 
@@ -13,6 +13,12 @@ int main(void)
     FLASHInit();
     FLASH_Erase((uint16 *)PHY_ADDRESS_SEGMENT);
     FLASH_Writew((uint16 *)PHY_ADDRESS_SEGMENT,PHY_ADDRESS_WRITE);
+//    FLASH_Erase((uint16 *)XMIDDLE_SEGMENT);
+//    FLASH_Writew((uint16 *)XMIDDLE_SEGMENT,0x0000);
+//    FLASH_Erase((uint16 *)YMIDDLE_SEGMENT);
+//    FLASH_Writew((uint16 *)YMIDDLE_SEGMENT,0x0000);
+//    FLASH_Erase((uint16 *)ZMIDDLE_SEGMENT);
+//    FLASH_Writew((uint16 *)ZMIDDLE_SEGMENT,0x0000);
     address = GetPhyAddress();
 
     

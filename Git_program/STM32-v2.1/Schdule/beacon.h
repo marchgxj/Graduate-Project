@@ -22,5 +22,6 @@ extern uint8 PostBeacon(void);
 extern void SendBeacon(u8* buf);
 extern uint8 CreatBeacon(void);
 extern uint8 PackValid(void);
+extern uint8 errorbuf[12];
 
 #endif

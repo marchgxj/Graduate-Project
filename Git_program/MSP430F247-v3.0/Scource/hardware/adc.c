@@ -30,6 +30,11 @@ void AD_Init()
 int16 SampleChannel(Uint16* SampleValueX,Uint16* SampleValueY)	//进行采样通道电源等的设置
 {     
     uint16 buf = 0;
+#if (GMI_EN == 0)
+    *SampleValueX =0;
+    *SampleValueY =0;
+    return 0;
+#endif
     HAL_PLU_SET;
     delay_1ms();
     //Uint16 *ram_ptr;
@@ -83,6 +88,9 @@ void AD_cal()
     uint16 ADvalueX=0,ADvalueY=0,ADvalueZ = 0;
     uint16 GMI_ADvalueX=0,GMI_ADvalueY=0;
     uint32 intensity = 0;
+#if (NET_TEST==1)
+    return;
+#endif
     
     halLedSetAll();
     delay_ms(2000);

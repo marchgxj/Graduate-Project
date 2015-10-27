@@ -71,7 +71,7 @@ void uart_init(){
 
   GPIO_InitStructure.GPIO_Pin = GPIO_Pin_10;            //IO口的第2脚
   GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;     //IO口速度
-  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;//IO口悬空输入
+  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU;//IO口悬空输入
   GPIO_Init(GPIOA, &GPIO_InitStructure);               //初始化串口2输入IO
 	
 	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);
@@ -110,8 +110,9 @@ uint8 Usart_Data[4] = 0;
 void USART1_IRQHandler(void)
 {
 	uint8 buf;
-	if (USART_GetFlagStatus(USART1, USART_FLAG_ORE) == SET) 
+	if (USART_GetFlagStatus(USART1, USART_FLAG_ORE) != RESET) 
 	{
+			buf = USART_ReceiveData(USART1);	
 			USART_ClearFlag(USART1 , USART_FLAG_ORE);
 			DebugMsg("Usart ORE");		
 	}
@@ -119,7 +120,7 @@ void USART1_IRQHandler(void)
 	if(USART_GetITStatus(USART1, USART_IT_RXNE) != RESET)//接收中断
 	{
 			USART_ClearFlag(USART1 , USART_FLAG_RXNE);
-		  
+		  LED5_REV();
 
 		  buf = USART_ReceiveData(USART1);
 			if(buf == 'o')
@@ -140,7 +141,6 @@ void USART1_IRQHandler(void)
 							Cmd_Address = Usart_Data[1];
 							Cmd_Command = Usart_Data[2];
 							Usart1_PutChar(0xAA);
-							LED5_REV();
 					}
 			}
 			

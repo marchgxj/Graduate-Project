@@ -1,7 +1,7 @@
 #include "common.h"
 
 BeaconPacketStruct BeaconPacket;
-uint8 BeaconPacketFIFO[BEACON_PACK_LENGTH];
+uint8 BeaconPacketBuf[MAX_PACK_LENGTH];
 
 uint8 CreatBeacon()
 {
@@ -17,26 +17,44 @@ uint8 CreatBeacon()
 		//BeaconPacket.power = LOW_POWER;
 		BeaconPacket.power = Power_Mode;
 	
-		DataSendBuffer[0] = BeaconPacket.length ;
-    DataSendBuffer[1] = BeaconPacket.pack_type<<2|BeaconPacket.ack_en<<1|BeaconPacket.power;
-    DataSendBuffer[2] = BeaconPacket.des_cluster_id;
-    DataSendBuffer[3] = BeaconPacket.des_cluster_innernum;
-    DataSendBuffer[4] = BeaconPacket.cluster_id;
-    DataSendBuffer[5] = BeaconPacket.cluster_innernum;
-    DataSendBuffer[6] = BeaconPacket.free_num;
+		BeaconPacketBuf[0] = BeaconPacket.length ;
+    BeaconPacketBuf[1] = BeaconPacket.pack_type<<2|BeaconPacket.ack_en<<1|BeaconPacket.power;
+    BeaconPacketBuf[2] = BeaconPacket.des_cluster_id;
+    BeaconPacketBuf[3] = BeaconPacket.des_cluster_innernum;
+    BeaconPacketBuf[4] = BeaconPacket.cluster_id;
+    BeaconPacketBuf[5] = BeaconPacket.cluster_innernum;
+    BeaconPacketBuf[6] = BeaconPacket.free_num;
+	  BeaconPacketBuf[7] = 0;
+		BeaconPacketBuf[8] = 0;
+		BeaconPacketBuf[9] = 0;
+		BeaconPacketBuf[10] = 0;
+		BeaconPacketBuf[11] = 0;
 		
 		return 1;
 }
 uint8 PostBeacon(void)
 {
-		CreatBeacon();
-		return PostTask(DataSendBuffer,EVENT_BEACON_SEND);
+		uint8 buf;
+	  CreatBeacon();
+		buf = PostTask(BeaconPacketBuf,EVENT_BEACON_SEND);
+	 return buf;
 }
-
+uint8 errorbuf[12];
 void SendBeacon(u8* buf)
 {
-		TIME2_HIGH;
+		uint8 i=0;
+	  if(Unpack(buf)!=BEACON_TYPE)
+    {
+        DebugMsg("Beacon DataRecvBuffer Changed");
+			  for (i=0;i<12;i++)
+			  {
+						errorbuf[i] = *buf++;
+				}
+				i=0;
+				return;
+    }
 		
+		TIME2_HIGH;
 	  SendPack(buf);
 		LED1_REV();
 		RXMode();

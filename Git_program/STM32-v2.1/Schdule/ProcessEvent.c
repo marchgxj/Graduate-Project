@@ -5,37 +5,48 @@ unsigned int last_tsk;
 /**
 * 初始化任务队列
 */
+TQStruct emptytask;
 void Init_TQ(void)
 {
     int i;
     for (i=0; i<MAX_TASK_NUM; i++)
     {
         TQ[i].event = 0;
+
     }
     current_tsk = 0;
     last_tsk = 0;
+		for(i=0;i<MAX_PACK_LENGTH;i++)
+		{
+				emptytask.data[i] = 0;
+		}
+		emptytask.event = 0;
 }
 
 /**
 * 任务进队
 */
+uint8 harderr = 0;
 uint8 PostTask(uint8 *data,uint8 event)
 {
     uint8 i=0;
+	  DisableInterrupt();
 		if (TQ[last_tsk].event == 0)
     {
         TQ[last_tsk].event = event;
 				for(i=0;i<MAX_PACK_LENGTH;i++)
 				{
-						TQ[last_tsk].data[i] = *data++;
+						TQ[last_tsk].data[i] = *data++;		
 				}
         last_tsk = (last_tsk + 1) % MAX_TASK_NUM;
+				EnableInterrupt();
         return TQ_SUCCESS;
     }
     else
     {
         //printf("TQ is FULL!\n");
 				DebugMsg("Task Quene Full");
+			  EnableInterrupt();
         return TQ_FULL;		
     }
 }
@@ -43,26 +54,35 @@ uint8 PostTask(uint8 *data,uint8 event)
 /**
 * 任务出队
 */
-TQStruct Pop_T(void)
+
+uint8 Pop_T(TQStruct* task)
 {
-    TQStruct event;
+	  
+	  DisableInterrupt();
     if (TQ[current_tsk].event != 0)
     {
-        event = TQ[current_tsk];
+        *task = TQ[current_tsk];
         TQ[current_tsk].event = 0;
-        current_tsk = (current_tsk + 1) % MAX_TASK_NUM;
-        return event;
+			  current_tsk = (current_tsk + 1) % MAX_TASK_NUM;
+			  EnableInterrupt();
+        return TQ_SUCCESS;
     }
     else
     {
         //printf("TQ is EMPTY!\n");
-        return event;
+			  EnableInterrupt();
+			  *task = emptytask;
+			  return TQ_FULL;
     }
+		
+		
+		
 }
+TQStruct current_event;
 uint8 Process_Event()
 {
-    TQStruct current_event;
-    current_event = Pop_T();
+    
+    Pop_T(&current_event);
 
     switch(current_event.event)
     {

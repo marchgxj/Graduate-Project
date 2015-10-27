@@ -9,7 +9,7 @@ typedef struct{
 }TQStruct;
 
 
-#define    MAX_TASK_NUM    5
+#define    MAX_TASK_NUM    20
 #define    TQ_SUCCESS      0
 #define    TQ_FULL         1
 #define    TQ_EMPTY        2
@@ -44,4 +44,5 @@ extern void Init_TQ(void);
 extern uint8 PostTask(uint8 *data,uint8 event);
 extern uint8 Process_Event(void);
 
+extern TQStruct TQ[MAX_TASK_NUM];
 #endif

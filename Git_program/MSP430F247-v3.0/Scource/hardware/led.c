@@ -28,10 +28,10 @@ void halLedSet(uint8 id)
 }
 void halLedSetAll()
 {
-    HAL_LED_SET_1; 
+    /*HAL_LED_SET_1; 
     HAL_LED_SET_2; 
     HAL_LED_SET_3; 
-    HAL_LED_SET_4; 
+    HAL_LED_SET_4; */
 }
 
 //----------------------------------------------------------------------------------
@@ -83,6 +83,35 @@ void halLedToggleAll()
     HAL_LED_TGL_2;
     HAL_LED_TGL_3;
     HAL_LED_TGL_4;
+    
+}
+void halLedFlow()
+{
+    halLedClearAll();
+    HAL_LED_SET_1;
+    delay_ms(100);
+    HAL_LED_CLR_1;
+    HAL_LED_SET_2;
+    delay_ms(100);
+    HAL_LED_CLR_2;
+    HAL_LED_SET_3;
+    delay_ms(100);
+    HAL_LED_CLR_3;
+    HAL_LED_SET_4;
+    delay_ms(100);
+    HAL_LED_CLR_4;
+    HAL_LED_SET_1;
+    delay_ms(100);
+    HAL_LED_CLR_1;
+    HAL_LED_SET_2;
+    delay_ms(100);
+    HAL_LED_CLR_2;
+    HAL_LED_SET_3;
+    delay_ms(100);
+    HAL_LED_CLR_3;
+    HAL_LED_SET_4;
+    delay_ms(100);
+    HAL_LED_CLR_4;
     
 }
 

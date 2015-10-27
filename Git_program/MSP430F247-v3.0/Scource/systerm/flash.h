@@ -2,6 +2,10 @@
 #define _FLASH_h_
 
 #define PHY_ADDRESS_SEGMENT  0x01000
+#define REBOOT_FLAG_SEGMENT  0x01002
+#define XMIDDLE_SEGMENT      0x01004
+#define YMIDDLE_SEGMENT      0x01006
+#define ZMIDDLE_SEGMENT      0x01008
 
 extern void FLASHInit(void);
 extern void FLASH_Writew(unsigned int *Address,unsigned int nValue);

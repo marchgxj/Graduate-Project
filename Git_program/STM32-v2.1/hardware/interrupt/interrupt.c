@@ -3,6 +3,8 @@ uint16 time_out = 0;
 uint8 TIM3_Count = 0;
 uint16 KeepAliveCheck_Count = 0;
 uint32 KeepAliveCount = 0;
+uint8 DataPool[MAX_PACK_LENGTH * 20];
+uint16 Data_Current = 0;
 
 /*******************************************************************************
 * Function Name  : Interrupt_Init
@@ -27,7 +29,7 @@ void Interrupt_Init(void)
   	EXTI_Init(&EXTI_InitStructure);																	//根据EXTI_InitStruct中指定的参数初始化外设EXTI寄存器
 
   	NVIC_InitStructure.NVIC_IRQChannel = EXTI9_5_IRQn;						//使能按键KEY1,KEY0所在的外部中断通道
-  	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;		//抢占优先级2 
+  	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;		//抢占优先级2 
   	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;						//子优先级1 
   	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;									//使能外部中断通道
   	NVIC_Init(&NVIC_InitStructure);  	  														//根据NVIC_InitStruct中指定的参数初始化外设NVIC寄存器
@@ -38,7 +40,7 @@ void Interrupt_Init(void)
 		delay_us(2);
 		
 		
-		//GPIOA.0 中断线以及中断初始化配置 上升沿触发 PA0  WK_UP
+		/*//GPIOA.0 中断线以及中断初始化配置 上升沿触发 PA0  WK_UP
 		GPIO_EXTILineConfig(GPIO_PortSourceGPIOC,GPIO_PinSource3); 
 		EXTI_InitStructure.EXTI_Line=EXTI_Line3;
 		EXTI_InitStructure.EXTI_Mode = EXTI_Mode_Interrupt;	
@@ -47,10 +49,10 @@ void Interrupt_Init(void)
   	EXTI_Init(&EXTI_InitStructure);																	//根据EXTI_InitStruct中指定的参数初始化外设EXTI寄存器
 
   	NVIC_InitStructure.NVIC_IRQChannel = EXTI3_IRQn;						//使能按键KEY1,KEY0所在的外部中断通道
-  	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 3;		//抢占优先级2 
+  	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;		//抢占优先级2 
   	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;						//子优先级1 
   	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;									//使能外部中断通道
-  	NVIC_Init(&NVIC_InitStructure); 
+  	NVIC_Init(&NVIC_InitStructure); */
 		
 
 }
@@ -70,7 +72,7 @@ void TIM3_IRQHandler(void)   //500ms
 		if(TIM3_Count<5)
 		{	
 #if (SEND_REJOIN_EN == 1)
-					PostTask(NULL,EVENT_REJOIN_SEND);
+					PostTask(EmptyBuffer,EVENT_REJOIN_SEND);
 #endif
 		}
 		else
@@ -89,7 +91,7 @@ void TIM3_IRQHandler(void)   //500ms
 			}
 			
 #if (UPLOAD_DATA_EN == 1)
-				PostTask(NULL,EVENT_UPLOAD_DATA);
+				PostTask(EmptyBuffer,EVENT_UPLOAD_DATA);
 #endif
 		}
 		
@@ -97,7 +99,7 @@ void TIM3_IRQHandler(void)   //500ms
 		if(KeepAliveCheck_Count == KEEPALIBEPERIOD)
 		{
 				KeepAliveCheck_Count = 0;
-				PostTask(NULL,EVENT_KEEPALIVE_CHECK);
+				PostTask(EmptyBuffer,EVENT_KEEPALIVE_CHECK);
 		}
 		
 		Frame_Time = 0;
@@ -189,5 +191,8 @@ void DisableInterrupt()
 }
 void EnableInterrupt()
 {
+		TIM_ClearITPendingBit(TIM3, TIM_IT_Update);
+		USART_ClearFlag(USART1 , USART_FLAG_RXNE);
+		EXTI->PR |= EXTI_Line6;
 		__enable_irq(); 
 }

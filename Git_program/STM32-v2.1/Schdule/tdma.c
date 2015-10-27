@@ -4,6 +4,7 @@ uint16 Draw_DataX = 0;
 uint16 Draw_DataY = 0;
 uint16 Cmd_Address = 0;
 uint8 Cmd_Command = 0;
+uint8 DataAckBuf[MAX_PACK_LENGTH];
 
 
 void CreateDataACK(uint8 src_cluster_id,uint8 src_cluster_innernum,uint8 rejoin,uint16 phy_address)
@@ -24,30 +25,31 @@ void CreateDataACK(uint8 src_cluster_id,uint8 src_cluster_innernum,uint8 rejoin,
 				Cmd_Command = 0;
 		}
 	
-		DataSendBuffer[0] = DataACKPacket.pack_length;
-		DataSendBuffer[1] = DataACKPacket.pack_type<<2|DataACKPacket.ack_en<<1|DataACKPacket.rejoin;
-		DataSendBuffer[2] = DataACKPacket.des_cluster_id;
-		DataSendBuffer[3] = DataACKPacket.des_cluster_innernum;
-		DataSendBuffer[4] = DataACKPacket.src_cluster_id;
-		DataSendBuffer[5] = DataACKPacket.src_cluster_innernum;
-		DataSendBuffer[6] = DataACKPacket.time_stamp>>8;
-		DataSendBuffer[7] = DataACKPacket.time_stamp;
-		DataSendBuffer[8] = DataACKPacket.cmd;
-		DataSendBuffer[9] = 0;
-		DataSendBuffer[10] = 0;
-		DataSendBuffer[11] = 0;
+		DataAckBuf[0] = DataACKPacket.pack_length;
+		DataAckBuf[1] = DataACKPacket.pack_type<<2|DataACKPacket.ack_en<<1|DataACKPacket.rejoin;
+		DataAckBuf[2] = DataACKPacket.des_cluster_id;
+		DataAckBuf[3] = DataACKPacket.des_cluster_innernum;
+		DataAckBuf[4] = DataACKPacket.src_cluster_id;
+		DataAckBuf[5] = DataACKPacket.src_cluster_innernum;
+		DataAckBuf[6] = DataACKPacket.time_stamp>>8;
+		DataAckBuf[7] = DataACKPacket.time_stamp;
+		DataAckBuf[8] = DataACKPacket.cmd;
+		DataAckBuf[9] = 0;
+		DataAckBuf[10] = 0;
+		DataAckBuf[11] = 0;
 		DataACKPacket.cmd = 0;
 		
 
 }
-UartDataStruct bufnode;
-void DataHandler(u8 buf[])
+
+void DataHandler(u8* buf)
 {
 		uint8 inner_num = 0;
 		uint8 ab_slot_num = 0;
 		uint8 src_cluster_id = 0;
 	  uint8 src_cluster_innernum = 0;
 		uint8 rejoin = 0;
+		UartDataStruct bufnode;
 	
 		if(Unpack(buf)!=DATA_TYPE)
     {
@@ -55,10 +57,10 @@ void DataHandler(u8 buf[])
 				return;
     }
 
-	  src_cluster_id = buf[4];
-	  src_cluster_innernum = buf[5];
-	  ab_slot_num = buf[6]<<8|buf[7];
-		inner_num = buf[5];
+	  src_cluster_id = *(buf+4);
+	  src_cluster_innernum = *(buf+5);
+	  ab_slot_num = *(buf+6)<<8|*(buf+7);
+		inner_num = *(buf+5);
 		if((RootDevice.endpoint_device[inner_num].pyh_address==0)||
 			 (abs(ab_slot_num-RootDevice.endpoint_device[inner_num].ab_slot_num)>10)
 			)
@@ -73,19 +75,28 @@ void DataHandler(u8 buf[])
 				{
 						RootDevice.endpoint_device[inner_num].ab_slot_num = 0;
 				}
-				RootDevice.endpoint_device[inner_num].data = buf[8];
+				RootDevice.endpoint_device[inner_num].data = *(buf+8);
 				RootDevice.endpoint_device[inner_num].keep_alive = KeepAliveCount;
 				bufnode.address = RootDevice.endpoint_device[inner_num].pyh_address;
 				bufnode.data = RootDevice.endpoint_device[inner_num].data;
 #if (UPLOAD_DATA_EN == 1)
-				PostUploadNode(&bufnode);
+				UploadTQ[Node_Inwaiting].address = bufnode.address;
+				UploadTQ[Node_Inwaiting].data = bufnode.data;
+				Node_Inwaiting++;
+				if(Node_Inwaiting>UPLOAD_NODE_NUM)
+				{
+						Node_Inwaiting = 0;
+				}
+				//PostUploadNode(bufnode);
 #endif
 				TIME2_HIGH;
 		}
 				CreateDataACK(src_cluster_id,src_cluster_innernum,rejoin,RootDevice.endpoint_device[inner_num].pyh_address);
 				__NOP();__NOP();__NOP();__NOP();__NOP();__NOP();__NOP();__NOP();__NOP();__NOP();
-				SendPack(DataSendBuffer);
+				TIME1_HIGH;
+				SendPack(DataAckBuf);
 				RXMode();
+				TIME1_LOW;
 				TIME2_LOW;
 }
 
@@ -100,7 +111,14 @@ void KeepAliveCheck(void)
 				{
 						bufnode.address = RootDevice.endpoint_device[i].pyh_address;
 						bufnode.data = NET_LOST;
-					  PostUploadNode(&bufnode);
+					  //PostUploadNode(bufnode);
+						UploadTQ[Node_Inwaiting].address = bufnode.address;
+						UploadTQ[Node_Inwaiting].data = bufnode.data;
+						Node_Inwaiting++;
+						if(Node_Inwaiting>UPLOAD_NODE_NUM)
+						{
+								Node_Inwaiting = 0;
+						}
 				}
 		}
 

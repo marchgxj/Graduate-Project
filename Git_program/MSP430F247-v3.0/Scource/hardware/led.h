@@ -23,6 +23,7 @@ void halLedToggle(uint8 led_id);
 extern void halLedClearAll();
 extern void halLedToggleAll();
 extern void halLedSetAll();
+extern void halLedFlow();
 
 
 #ifdef  __cplusplus

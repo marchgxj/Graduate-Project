@@ -10,4 +10,5 @@ extern void EnableInterrupt(void);
 
 extern u8 BeaconSendFlag;
 extern uint32 KeepAliveCount;
+
 #endif

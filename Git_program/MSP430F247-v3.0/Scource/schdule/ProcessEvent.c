@@ -30,6 +30,11 @@ uint8 PostTask(uint8 event)
     else
     {
         //printf("TQ is FULL!\n");
+        
+        ReJoinFlag = 1;
+        Exit_Sleep = 1;
+        Init_TQ();
+        
         return TQ_FULL;		
     }
 }
@@ -50,6 +55,7 @@ uint8 Pop_T(void)
     else
     {
         //printf("TQ is EMPTY!\n");
+        current_tsk = (current_tsk + 1) % MAX_TASK_NUM;
         return TQ_EMPTY;
     }
 }

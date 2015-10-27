@@ -61,4 +61,5 @@ extern uint8 Power_Mode;
 
 extern uint8 Unpack(uint8 *type);
 extern int abs(int x);
+extern uint8 EmptyBuffer[MAX_PACK_LENGTH];
 #endif 
