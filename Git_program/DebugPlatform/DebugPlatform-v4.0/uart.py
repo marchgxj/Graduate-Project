@@ -124,7 +124,7 @@ class UartRoot(tk.Tk):
         self.statusrec = self.uartstatus.create_rectangle(0, 0, 20, 20, fill='red')      
         self.uartstatus.grid(row=6, column=0)
         self.IsOpen(0)
-        self.txtfilname = "sniffer-"+time.strftime('%Y-%m-%d_%H-%M-%S', time.localtime(time.time())) + '.txt'
+        self.txtfilname = "..\Sniffer\\"+time.strftime('%Y-%m-%d_%H-%M-%S', time.localtime(time.time())) + '.txt'
         self.txtidentifyfilname = '..\Data\\'+time.strftime('%Y-%m-%d_%H-%M-%S', time.localtime(time.time())) + '.txt'
         self.buttonstatus = 0
         self.datamode = 0

@@ -58,7 +58,7 @@ class CarStopRoot(tk.Tk):
         self.datamodecbox['value']=("串口数据","网络数据")
         self.datamodecbox.set(self.menu.datamodecboxbuf)
         ttk.Button(self, text="确认", command=self.carstopconfirm).grid(row=5, column=0, columnspan=2)
-    
+
     def showupdata(self):
         '''
         Parameter：

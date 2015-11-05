@@ -2,6 +2,7 @@
 import time
 import threading
 import serial
+import datetime
 import os 
 class myThread (threading.Thread):   
     def __init__(self, threadID, name, port, baud,rootframe,filename):
@@ -263,7 +264,9 @@ class myThread (threading.Thread):
 #                                         except:
 #                                             print "update error"
                                         self.dataintext = self.unpack()
-                                        self.dataintextbuf=str(self.count)+"--"+self.dataintext+"\n"+self.dataintextbuf
+                                        format = '%-3d'
+                                        localtime = time.strftime('%H:%M:%S', time.localtime(time.time())) + "::" +(format % (datetime.datetime.now().microsecond/1000))  #str('%3f' % datetime.datetime.now().microsecond/1000)
+                                        self.dataintextbuf=localtime+"--"+self.dataintext+"\n"+self.dataintextbuf
 #                                         print str(self.count)+"--"+self.dataintext
                                         self.file.write(self.dataintext+"\n")
                                         self.file.write('RX:%s Count:%s\n' % (self.data,self.count))
@@ -291,11 +294,3 @@ class myThread (threading.Thread):
                 self.showdata.appFrame.updatetext(self.dataintextbuf,self.datatype)
                 self.dataintextbuf=""
             time.sleep(0.5)
-                            
-                            
-                            
-                            
-
-                
-        
-        
