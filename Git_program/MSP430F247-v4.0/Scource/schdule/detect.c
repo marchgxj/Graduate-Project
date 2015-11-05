@@ -472,6 +472,7 @@ void IdentifyCar()
         if(EndPointDevice.parking_state_m!=EndPointDevice.parking_state)
         {
             Exit_Sleep  = 1;
+            Data_Send_Waiting_Flag = 1;
             A7139_Deep_Wake();
             halLedSet(3);
             Int_Enable_Flag = 1;

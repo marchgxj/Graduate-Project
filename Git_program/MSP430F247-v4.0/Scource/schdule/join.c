@@ -23,7 +23,7 @@ uint8 Scan_Channel(uint8 startch,uint8 endch)
     for(i=startch;i<endch;i++)   //循环16次
     {
         A7139_SetFreq(ChannelList[i]);
-        //A7139_SetFreq(480.001f);
+        //A7139_SetFreq(475.001f);
         delay_us(1);
         A7139_Cal();                    //更改完频率后校准
         delay_us(1);
@@ -177,7 +177,9 @@ void JoinRequestACKHandler()
 {
     uint8 accept = 0;
     uint8 ackok = 0;
-    if(Unpack(DataRecvBuffer)!=JOINREQUESTACK_TYPE)
+    uint8 type = 0;
+    type = Unpack(DataRecvBuffer);
+    if(type!=JOINREQUESTACK_TYPE)
     {
         return;
     }
@@ -186,6 +188,7 @@ void JoinRequestACKHandler()
     
     EndPointDevice.cluster_id = DataRecvBuffer[6];
     EndPointDevice.cluster_innernum = DataRecvBuffer[7];
+    //EndPointDevice.cluster_innernum = 2;
     EndPointDevice.connected = 1;
     halLedClearAll();
     //CreatJoinRequestACKOK();

@@ -53,9 +53,9 @@ int16 SampleChannel(Uint16* SampleValueX,Uint16* SampleValueY)	//½øÐÐ²ÉÑùÍ¨µÀµçÔ
     ADC12CTL0 &= ~ (ENC+ADC12SC);
     HAL_PLU_CLR;
     
-    TIME1_HIGH;
-    delay_1ms();
-    TIME1_LOW;
+//    TIME1_HIGH;
+//    delay_1ms();
+//    TIME1_LOW;
     
     return (*SampleValueX-*SampleValueY);
 }

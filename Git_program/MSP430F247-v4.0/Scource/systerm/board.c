@@ -34,7 +34,7 @@ void halBoardInit(void)
     SPI3_Init();
     FLASHInit();
     AD_Init();
-    //A7139_SetDataRate(10);
+    
     Interrupt_Init();
     Init_TQ();
     Init_5983();

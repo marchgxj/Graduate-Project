@@ -23,8 +23,8 @@ extern const float ChannelList[];
 
 
 
-#define    SCAN_TIME_OUT     700  //扫描超时时间  单位ms
-#define    SCAN_PERIOD   3000  //扫描信道周期，在第一次扫描失败时使用 单位：ms
+#define    SCAN_TIME_OUT     3000  //扫描超时时间  单位ms
+#define    SCAN_PERIOD   10000  //扫描信道周期，在第一次扫描失败时使用 单位：ms
 
 typedef struct {
     uint8 channel_num;     // 信道编号

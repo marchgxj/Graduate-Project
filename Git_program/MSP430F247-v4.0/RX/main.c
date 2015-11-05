@@ -10,10 +10,11 @@ int main(void)
     uint8 i=0;
     __disable_interrupt();
 
-    halBoardInit();    
+    halBoardInit(); 
+    A7139_Init(475.001f);
     A7139_SetPackLen(MAX_PACK_LENGTH);
     delay_us(1);
-    A7139_SetFreq(470.001f);
+    A7139_SetFreq(475.001f);
     delay_us(1);
     A7139_Cal();                    //更改完频率后校准
     delay_us(1);

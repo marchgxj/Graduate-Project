@@ -5,6 +5,8 @@ uint32 send_time = 0;
 uint32 resend_count = 0;
 uint16 DataAck_Lost = 0;
 uint8 Int_Enable_Flag = 0;
+uint16 BeaconComing_Count = 0;
+uint8 Data_Send_Waiting_Flag = 0;
 uint8 RecvDataACK()
 {
     send_time = 0;
@@ -90,7 +92,7 @@ void DataSend(void)
     uint8 ack_flag = 0;
     uint32 a,b,c;             //防止第一个节点为负
     uint32 before_slot_wake = WAKE_TIME;
-    uint16 timeout = 0;
+    uint32 timeout = 0;
     //before_slot_wake = (((EndPointDevice.cluster_innernum-1)*SLOT_LENGTH)-WAKE_TIME)+5000;
     //为什么写一起就不对！！！
     a = (EndPointDevice.cluster_innernum-1);
@@ -101,10 +103,11 @@ void DataSend(void)
     halLedClear(3);
     Int_Enable_Flag = 0;
     DIS_INT;
+    TIME1_HIGH;
     
     while(Frame_Time<=before_slot_wake)
     {
-        if(timeout>6000)
+        if(timeout>(uint32)WHILE_TIMEOUT)
         {
             ReJoinFlag = 1;
             Exit_Sleep = 1;
@@ -118,12 +121,14 @@ void DataSend(void)
     TIME2_HIGH;
     EndPointDevice.data_ack = 0;
     
-
+    TIME1_LOW;
     A7139_Wake();
     
     CreatSendData();
+    TIME1_HIGH;
     SendPack();
     RXMode();
+    TIME1_LOW;
 
     ack_flag = RecvDataACK();
     if(ack_flag == 1)
@@ -134,6 +139,7 @@ void DataSend(void)
             DIS_TIMER1;
             DIS_INT;
             A7139_DeepSleep();
+            TIME1_HIGH;
         }
         else
         {
@@ -156,6 +162,7 @@ void DataSend(void)
         Int_Enable_Flag = 1;
         EN_INT; 
     }
+    TIME1_LOW;
 
 }
 
@@ -201,6 +208,7 @@ void CSMADataResend()
 
 void KeepAliveSend()
 {
+    Data_Send_Waiting_Flag = 1;
     A7139_Deep_Wake();
     halLedSet(3);
     Int_Enable_Flag = 1;

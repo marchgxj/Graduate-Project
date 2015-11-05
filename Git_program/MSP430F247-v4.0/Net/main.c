@@ -10,7 +10,7 @@ uint16 ADvalueX,ADvalueY,ADvalueZ;
     
     halBoardInit();
 ReJoin:
-    A7139_Init(470.001f);
+    A7139_Init(475.001f);
     EndPointDevice.pyh_address = GetPhyAddress();
     EndPointDevice.device_type = DEVICE;
 
@@ -40,8 +40,9 @@ ReJoin:
     LPM3;*/
 
     halLedSetAll();
+    
 #if NET_TEST == 1
-    ChannelSelection(CHANNEL_7,CHANNEL_9);
+    ChannelSelection(CHANNEL_2,CHANNEL_4);
 #else
     ChannelSelection(CHANNEL_4,CHANNEL_6);
 #endif

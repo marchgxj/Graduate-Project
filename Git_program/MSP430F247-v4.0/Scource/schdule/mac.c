@@ -49,27 +49,29 @@ void CSMABackOff()
     
 uint8 SendByCSMA(u8 *buff,uint8 length)
 {
-    uint16 timeout = 0;
+    uint32 timeout = 0;
     //wait_time = ((MAX_DEVICE_NUM - EndPointDevice.free_node)*SLOT_LENGTH)/10;
     q=MAX_DEVICE_NUM - EndPointDevice.free_node;
     w=q*SLOT_LENGTH;
     wait_time=w/100;
     
-    
+    EN_TIMER1;
     while(Frame_Time<=wait_time)     //等待到达CSMA时隙 超帧内时间<=负载数*时隙长度
     {
-        if(timeout>6000)
+        if(timeout>(uint32)WHILE_TIMEOUT)
         {
             
             ReJoinFlag = 1;
             Exit_Sleep = 1;
             Init_TQ();
+            DIS_TIMER1;
             return CSMA_FAIL;
         }
         
         timeout++;
         delay_100us();
     }
+    DIS_TIMER1;
     CSMABackOff();
     cca_value = (A7139_GetRSSI()+A7139_GetRSSI())/2;
             

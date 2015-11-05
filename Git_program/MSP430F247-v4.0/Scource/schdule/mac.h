@@ -2,18 +2,18 @@
 #define _DEVICE_h_
 #include "common.h"
 /****************更改beacon周期需要重新调的参数*************/
-#define    BEACON_PERIOD     5000
+#define    BEACON_PERIOD     10000   //单位  100us
 #define    BEFOR_BEACON_WAKE BEACON_PERIOD-300   //在beacon前1.5ms时唤醒芯片
 
-#define    KEEP_ALIVE_PERIOD   200  //单位50 ms  
-
+#define    KEEP_ALIVE_PERIOD   80  //单位50 ms  
+#define    WHILE_TIMEOUT BEACON_PERIOD*12
 /**********************************************************/
-#define    SLOT_LENGTH     20000     //单位us
+#define    SLOT_LENGTH     60000     //单位us
 #define    BACKOFF_DIV     10
 #define    BACKOFF_PERIOD  SLOT_LENGTH/BACKOFF_DIV
 #define    WAKE_TIME         4000    //SLEEP唤醒需要2ms
 
-#define    DATAACK_TIMEOUT 300      //ack接收超时，决定是否进入csma重发阶段
+#define    DATAACK_TIMEOUT 3000      //ack接收超时，决定是否进入csma重发阶段
 
 #define    SLEEP_EN        1 
 

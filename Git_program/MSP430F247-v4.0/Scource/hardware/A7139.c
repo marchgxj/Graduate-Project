@@ -216,7 +216,7 @@ uint8 A7139_Init(float rfFreq)
     delay_ms(10);
     A7139_Cal();
     delay_ms(10);
-    Correct_State();	
+    Correct_State();
     A7139_StrobeCmd(CMD_STBY);
     
     return 1;		  //IF and VCO calibration
@@ -268,7 +268,7 @@ uint8 A7139_SetDataRate(uint8 datRate)
             //CSC[2:0]=[001],Fcsck=6.4MHz
             //IFBW[3:2]=[01],100kHz
             //SDR[15:9]=0x04,DCK=10Kps,Fdev = 37.5kHz
-            A7139_WriteReg(SYSTEMCLOCK_REG,0x01221);			 		
+            A7139_WriteReg(SYSTEMCLOCK_REG,0x1221);			 		
             A7139_WriteReg(RX1_REG,0x18D4);
             A7139_WritePageA(TX1_PAGEA,0xF706);
         }
@@ -730,7 +730,7 @@ void SendPack()
     A7139_StrobeCmd(CMD_TX);
     while(GIO1)
     {
-        if(timeout++>10)
+        if(timeout++>100)
         {
             break;
         }

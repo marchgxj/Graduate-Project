@@ -19,6 +19,8 @@ extern DataPacketStruct DataPacket;
 extern uint16 Draw_DataX;          
 extern uint16 Draw_DataY;
 extern uint8 Int_Enable_Flag;
+extern uint16 BeaconComing_Count;
+extern uint8 Data_Send_Waiting_Flag;
 
 extern void DataSend(void);
 extern void DataACKHandler();

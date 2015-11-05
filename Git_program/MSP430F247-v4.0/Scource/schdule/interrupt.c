@@ -46,6 +46,7 @@ __interrupt void port1_ISR(void)
             {
               case BEACON_TYPE:
                 Frame_Time = 0;
+                BeaconComing_Count = 0;
                 EN_TIMER1;
                 //TBCCTL0 = CCIE;
                 PostTask(EVENT_BEACON_HANDLER);
@@ -220,7 +221,7 @@ __interrupt void Timer_A0(void)
         if(Int_Enable_Flag == 1)
         {
             Int_Enable_Count++;
-            if(Int_Enable_Count > 100)
+            if(Int_Enable_Count > 200)
             {
                 Int_Enable_Count = 0;
                 LPM3_EXIT;
@@ -235,7 +236,7 @@ __interrupt void Timer_A0(void)
         if(Send_Error_Flag == 1)
         {
             Send_Error_Count++;
-            if(Send_Error_Count > 100)
+            if(Send_Error_Count > 200)
             {
                 Send_Error_Count = 0;
                 LPM3_EXIT;
@@ -253,9 +254,26 @@ __interrupt void Timer_A0(void)
     else if(EndPointDevice.power == 1)                  
     {
         //PostTask(EVENT_IDENTIFY_CAR);
+//        BeaconComing_Count++;
+//        if(BeaconComing_Count>=BEACON_PERIOD/50)
+//        {
+//            BeaconComing_Count = 0;
+//        }
+//        if(Data_Send_Waiting_Flag == 1)
+//        {
+//            if(BeaconComing_Count >= (BEACON_PERIOD/50)-5)
+//            {
+//                Data_Send_Waiting_Flag = 0;
+//                A7139_Deep_Wake();
+//                halLedSet(3);
+//                Int_Enable_Flag = 1;
+//                EN_INT;
+//            }
+//            
+//        }
         Keep_Alive_Count++;
 #if NET_TEST == 1
-        if(Keep_Alive_Count > 20)
+        if(Keep_Alive_Count > 100)
 #else
         if(Keep_Alive_Count > KEEP_ALIVE_PERIOD)
 #endif
@@ -270,7 +288,7 @@ __interrupt void Timer_A0(void)
         if(Int_Enable_Flag == 1)
         {
             Int_Enable_Count++;
-            if(Int_Enable_Count > 100)
+            if(Int_Enable_Count > 400)
             {
                 Int_Enable_Count = 0;
                 __disable_interrupt();
@@ -278,12 +296,6 @@ __interrupt void Timer_A0(void)
                 ReJoinFlag = 1;
                 Init_TQ();
                 PostTask(EVENT_A7139_RESET);
-                TIME1_HIGH;
-                TIME1_LOW;
-                TIME1_HIGH;
-                TIME1_LOW;
-                TIME1_HIGH;
-                TIME1_LOW;
                 
             }
         }
@@ -294,7 +306,7 @@ __interrupt void Timer_A0(void)
         if(Send_Error_Flag == 1)
         {
             Send_Error_Count++;
-            if(Send_Error_Count > 100)
+            if(Send_Error_Count > 400)
             {
                 Send_Error_Count = 0;
                 __disable_interrupt();
@@ -302,10 +314,7 @@ __interrupt void Timer_A0(void)
                 ReJoinFlag = 1;
                 Init_TQ();
                 PostTask(EVENT_A7139_RESET);
-                TIME1_HIGH;
-                TIME1_LOW;
-                TIME1_HIGH;
-                TIME1_LOW;
+
             }
         }
         else
