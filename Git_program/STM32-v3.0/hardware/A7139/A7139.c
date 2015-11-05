@@ -291,7 +291,7 @@ u8 A7139_SetDataRate(u8 datRate)
 					//CSC[2:0]=[001],Fcsck=6.4MHz
 					//IFBW[3:2]=[01],100kHz
 					//SDR[15:9]=0x04,DCK=10Kps,Fdev = 37.5kHz
-		 	A7139_WriteReg(SYSTEMCLOCK_REG,0x01221);			 		
+		 	A7139_WriteReg(SYSTEMCLOCK_REG,0x1221);			 		
 			A7139_WriteReg(RX1_REG,0x18D4);
 			A7139_WritePageA(TX1_PAGEA,0xF706);
 		}
@@ -781,7 +781,7 @@ void SendPack(u8 *buf)
     while(GIO1)
 		{
 				timeout++;
-				if(timeout>15)
+				if(timeout>150)
 				{
 						
 						DebugMsg("A7139 GIO1 Timeout");

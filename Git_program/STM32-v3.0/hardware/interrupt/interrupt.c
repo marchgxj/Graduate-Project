@@ -77,7 +77,7 @@ void TIM3_IRQHandler(void)   //500ms
 		}
 		else
 		{
-				TIM3_Count = 10;
+			TIM3_Count = 10;
 			if(PostBeacon()!=TQ_SUCCESS)
 			{
 					DebugMsg("Post Beacon Fail");
@@ -102,7 +102,6 @@ void TIM3_IRQHandler(void)   //500ms
 				PostTask(EmptyBuffer,EVENT_KEEPALIVE_CHECK);
 		}
 		
-		Frame_Time = 0;
 		//BeaconSendFlag = 1;
 		Receive_Timeout++;
 		if(Receive_Timeout > TIMEOUT)
@@ -122,7 +121,6 @@ void TIM3_IRQHandler(void)   //500ms
 void TIM4_IRQHandler(void)   //100us
 {
     TIM_ClearITPendingBit(TIM4, TIM_IT_Update  );  //清除TIMx更新中断标志 
-	  Frame_Time++;
 }
 /*******************************************************************************
 * Function Name  : EXTI9_5_IRQHandler

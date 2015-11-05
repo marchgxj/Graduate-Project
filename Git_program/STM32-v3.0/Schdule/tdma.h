@@ -20,7 +20,7 @@ extern DataACKPacketStruct DataACKPacket;
 #define SEND_TEST        1
 #define RECAL            2
 
-#define KEEPALIBEPERIOD  240    //单位：500ms
+#define KEEPALIBEPERIOD  120    //单位：2.5s
 
 extern void DataHandler(u8 buf[]);
 extern void KeepAliveCheck(void);

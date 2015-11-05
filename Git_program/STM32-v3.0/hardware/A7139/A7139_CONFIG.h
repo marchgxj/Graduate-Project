@@ -3,7 +3,7 @@
 #define __A7139_CONGFIG_H__
 #include "common.h"
 /*********************************************/
-#define CONFIG_DATA_RATE 100
+#define CONFIG_DATA_RATE 10
 
 /*********************************************/
 #define DATA

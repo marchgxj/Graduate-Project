@@ -2,7 +2,7 @@
 #define _BEACON_h_
 
 
-#define    BECAON_PERIOD 500     //单位：ms
+#define    BECAON_PERIOD 1000     //单位：ms
 
 typedef struct {
     uint8 length;     							// 包长度
