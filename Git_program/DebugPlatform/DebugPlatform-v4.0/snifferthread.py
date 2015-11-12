@@ -79,6 +79,7 @@ class myThread (threading.Thread):
             '  簇ID:'+str(self.data[4]) + \
             '  编号；'+str(self.data[5]) + \
             '  空闲负载:'+str(self.data[6])+\
+            '  校验:'+str(self.data[7])+\
             "  RSSI:"+str(self.data[12])
             
     def JoinRequest(self):
@@ -93,7 +94,8 @@ class myThread (threading.Thread):
         return "JoinRQ: 应答:" + str((self.data[1]&0x02)>>1)+\
              "  目的簇ID:" + str(self.data[2]) + \
              "  目的编号:" + str(self.data[3]) + \
-             "  物理地址:" + str(self.data[4]) + str(self.data[5])
+             "  物理地址:" + str(self.data[4]) + str(self.data[5])+\
+             '  校验:'+str(self.data[6])
            
     def JoinRequestACK(self):
         '''
@@ -110,7 +112,8 @@ class myThread (threading.Thread):
             "  源簇ID:"+str(self.data[4])+\
             "  源编号:"+str(self.data[5])+\
             "  分配簇ID:"+str(self.data[6])+\
-            "  分配编号:" + str(self.data[7])
+            "  分配编号:" + str(self.data[7])+\
+            '  校验:'+str(self.data[8])
     
     def JoinRequestACKOK(self):
         '''
@@ -142,7 +145,10 @@ class myThread (threading.Thread):
             "  源簇ID:" + str(self.data[4])+\
             "  源编号:"+str(self.data[5])+\
             "  绝对时隙号:"+str(self.data[6]<<8|self.data[7])+\
-            "  数据:"+str(self.data[8])
+            "  数据:"+str(self.data[8])+\
+            '  校验:'+str(self.data[9])+\
+            '  ACK丢失数量:'+str(self.data[10]<<8|self.data[11])
+
             
     def DataACK(self):
         '''
@@ -160,7 +166,8 @@ class myThread (threading.Thread):
             "  源簇ID:" + str(self.data[4])+\
             "  源编号:"+str(self.data[5])+\
             "  时间戳:"+str(self.data[6]<<8|self.data[7])+\
-            "  控制命令:"+str(self.data[8])
+            "  控制命令:"+str(self.data[8])+\
+            '  校验:'+str(self.data[9])
             
     def ReJoin(self):
         return "ReJoin: 应答:" + str((self.data[1]&0x02)>>1)+\
@@ -168,7 +175,8 @@ class myThread (threading.Thread):
             "  目的编号:"+str(self.data[3])+\
             "  源簇ID:" + str(self.data[4])+\
             "  源编号:"+str(self.data[5])+\
-            "  目的物理地址:"+str(self.data[6]<<8|self.data[7])
+            "  目的物理地址:"+str(self.data[6]<<8|self.data[7])+\
+            '  校验:'+str(self.data[8])
 
     def unpack(self):
         '''

@@ -1,20 +1,22 @@
 # coding=utf-8
+__author__ = 'xiaoxiami'
 import Tkinter as tk
 import ttk
-import uart
-import tkMessageBox as tkmes
+import ctypes
+import platform
 import os
+import tkMessageBox as tkmes
 import tkFont
-import carstop
 import time
 import tkFileDialog
+
 import matplot
 import matplotold
 import matplotoldanimate
-import ctypes
-import platform
 
-__author__ = 'xiaoxiami'
+import uart
+import carstop
+
 
 
 class MainRoot(tk.Tk):
@@ -1432,6 +1434,14 @@ class Application(ttk.Notebook):
         rowandcloumn+=1
         self.PacketSend_CountString.set(0)
 
+        self.PacketReceive_CountString = tk.StringVar()
+        tk.Label(self.tab6, text="中继接收包数量:",font=txtfont).grid(row=rowandcloumn/10, column=rowandcloumn%10)
+        rowandcloumn+=1
+        self.PacketReceive_CountLabel = tk.Label(self.tab6, text="0",textvariable=self.PacketReceive_CountString,width=5,font=txtfont)
+        self.PacketReceive_CountLabel.grid(row=rowandcloumn/10, column=rowandcloumn%10)
+        rowandcloumn+=1
+        self.PacketReceive_CountString.set(0)
+
         self.AckLost_CountString = tk.StringVar()
         tk.Label(self.tab6, text="ACK丢失数量:",font=txtfont).grid(row=rowandcloumn/10, column=rowandcloumn%10)
         rowandcloumn+=1
@@ -1460,6 +1470,7 @@ class Application(ttk.Notebook):
         self.PacketSend_CountString.set(self.menu.uartform.linktestthread.value[0])
         self.AckLost_CountString.set(self.menu.uartform.linktestthread.value[1])
         self.Lost_PersentString.set(self.menu.uartform.linktestthread.value[2])
+        self.PacketReceive_CountString.set(self.menu.uartform.linktestthread.value[3])
         self.PacketSend_CountLabel.after(50,self.QOSUpdateLabel)
 
 

@@ -51,9 +51,12 @@ class myThread(threading.Thread):
                             buf += self.uart.read(20)
                             self.value[0] = (ord(buf[14]) << 8 | ord(buf[15]))
                             self.value[1] = (ord(buf[16]) << 8 | ord(buf[17]))
+                            self.value[3] = (ord(buf[12]) << 8 | ord(buf[13]))
                             if(float(self.value[0]!=0)):
-                                self.value[2] = float(self.value[1])/float(self.value[0])*100
+                                self.value[2] = 100-float(self.value[3])/float(self.value[0])*100
                                 self.value[2] = "%.2f" % self.value[2]
+
+
                             self.root.status.setdata('RX:%s ', self.value)
 
             # if (self.thread_stop == True and self.uart.isOpen() == True):
