@@ -2,7 +2,7 @@
 #define _DETECT_h_
 #include "common.h"
 #define MCU_SLEEP_ENABLE 1
-#define NET_TEST  0
+#define NET_TEST  1
 
 
 #define COLLECT_EN   0          //是否开启数据采集

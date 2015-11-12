@@ -21,6 +21,37 @@ void halMcuInit(void)
 
     /* disable watchdog timer */
      WDTCTL = WDTPW | WDTHOLD;
+//     BCSCTL1 = 
+//     BCSCTL3 |= LFXT1S_0;                // LFXT1 = 32768Hz 晶振
+//     while(IFG1 & OFIFG) 
+//     { 
+//         IFG1 &= ~OFIFG;                   // 清除 OSCFault 标志 
+//         delay_us(100000);             // 为可见的标志延时 
+//     }
+//     __bis_SR_register(SCG1 + SCG0);     // 关闭 DCO 
+//     BCSCTL2 |= SELM_3 + DIVM_3;      // MCLK = 32768/8 
+//     GPIO_Init();
+//     while(1)
+//     {
+//        halLedToggle(1);
+//        delay_us(100); 
+//     }
+
+         
+         
+         
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
 
      //Wait for xtal to stabilize
 //    while (IFG1 & OFIFG)

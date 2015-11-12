@@ -207,6 +207,7 @@ __interrupt void Timer_A0(void)
     {
         if(isEmpty()==1)
         {
+            Start_Sleep_Flag = 0;
             PostTask(EVENT_MCUSLEEP_ENABLE);
         }
     }
@@ -272,8 +273,8 @@ __interrupt void Timer_A0(void)
 //            
 //        }
         Keep_Alive_Count++;
-#if NET_TEST == 1
-        if(Keep_Alive_Count > 100)
+#if NET_TEST == 1 || QOS_TEST==1
+        if(Keep_Alive_Count > 40)
 #else
         if(Keep_Alive_Count > KEEP_ALIVE_PERIOD)
 #endif
@@ -281,6 +282,9 @@ __interrupt void Timer_A0(void)
         {
             Keep_Alive_Count = 0;
             Exit_Sleep  = 1;
+#if QOS_TEST == 1
+            DataPacket.ab_slot_num++;
+#endif
             
             PostTask(EVENT_KEEPALIVE_SEND);
         }

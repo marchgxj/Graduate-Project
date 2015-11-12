@@ -318,7 +318,7 @@ void Multi_Read_HMC(uint16* XValue,uint16* YValue,uint16* ZValue)
     int yvalue = 0;
     int zvalue = 0;
     uint8 buffer[6];
-#if (NET_TEST==1)
+#if (NET_TEST==1 || QOS_TEST==1)
     *XValue = 0;
     *YValue = 0;
     *ZValue = 0;
@@ -415,10 +415,11 @@ void Init_HMC(uint8* buffer)
 void Init_5983()
 {
     uint8 buffer[6];
-#if (NET_TEST==1)
+#if (NET_TEST==1 || QOS_TEST==1)
     return;
 #endif
     IRD_HIGH;
+    delay_ms(10000);
     delay_ms(1000);
     Init_HMC(buffer);
     if((buffer[0]!=HMC_Config[0])||(buffer[1]!=HMC_Config[1])||buffer[2]!=HMC_Config[2])

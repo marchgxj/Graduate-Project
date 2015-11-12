@@ -41,8 +41,9 @@ ReJoin:
 
     halLedSetAll();
     
-#if NET_TEST == 1
+#if NET_TEST == 1 || QOS_TEST==1
     ChannelSelection(CHANNEL_2,CHANNEL_4);
+    //ChannelSelection(CHANNEL_4,CHANNEL_6);
 #else
     ChannelSelection(CHANNEL_4,CHANNEL_6);
 #endif

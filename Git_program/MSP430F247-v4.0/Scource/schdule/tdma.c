@@ -80,10 +80,11 @@ void CreatSendData()
     else
     {
         DataSendBuffer[8] = DataPacket.data;
-        DataSendBuffer[9] = 0;
-        DataSendBuffer[10] = 0;
+        DataSendBuffer[9] = DataPacket.acklost_count>>8;
+        DataSendBuffer[10] = DataPacket.acklost_count;
         DataSendBuffer[11] = GetCheck(DataSendBuffer);
     }
+
 
 }
 
@@ -147,6 +148,12 @@ void DataSend(void)
         }       
         TIME2_LOW;      
     }
+#if QOS_TEST == 1
+    else
+    {
+        DataPacket.acklost_count++;
+    }
+#else
     else
     {
         TIME2_LOW;
@@ -162,6 +169,7 @@ void DataSend(void)
         Int_Enable_Flag = 1;
         EN_INT; 
     }
+#endif
     TIME1_LOW;
 
 }
@@ -176,7 +184,9 @@ void DataACKHandler()
     EndPointDevice.time_stamp = DataRecvBuffer[6]<<8|DataRecvBuffer[7];
     EndPointDevice.data_ack = 1;
     EndPointDevice.cmd = DataRecvBuffer[8];
+#if QOS_TEST == 0
     DataPacket.ab_slot_num++;
+#endif
     rejoin_flag = DataRecvBuffer[1]&0x01;
     if(rejoin_flag == 1)
     {

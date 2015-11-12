@@ -88,7 +88,7 @@ void AD_cal()
     uint16 ADvalueX=0,ADvalueY=0,ADvalueZ = 0;
     uint16 GMI_ADvalueX=0,GMI_ADvalueY=0;
     uint32 intensity = 0;
-#if (NET_TEST==1)
+#if (NET_TEST==1 || QOS_TEST==1)
     return;
 #endif
     

@@ -34,7 +34,6 @@ void halBoardInit(void)
     SPI3_Init();
     FLASHInit();
     AD_Init();
-    
     Interrupt_Init();
     Init_TQ();
     Init_5983();

@@ -1,7 +1,7 @@
 #ifndef _DEVICE_h_
 #define _DEVICE_h_
 
-#define    CHANNEL  480.001f
+#define    CHANNEL  475.001f
 
 #define    ROOT     1
 #define    BROADCAST    0xFF

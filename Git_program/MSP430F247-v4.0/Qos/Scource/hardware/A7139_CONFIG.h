@@ -4,7 +4,7 @@
 
 #include "types.h"
 /*********************************************/
-#define CONFIG_DATA_RATE 100
+#define CONFIG_DATA_RATE 10
 
 /*********************************************/
 #define DATA
