@@ -1,5 +1,6 @@
 # Graduate-Project
-Develop a communicate system for monitor traffic conditions by use of MSP430 and A7139.
+Develop a communicate system for road side parking by use of MSP430 and A7139.
+Project include communicate system and identify system by use of HMC5983.
 
 #Logic
 This folder saved Logic analysis data which is collected in different conditions.These data can be open with Logic1.1.15. It shows communicate timing for Write FIFO, Send, Receive, and read FIFO.Black is sender's SDIO,brown is sender's GIO1(send finished signal),green is receiver's GIO1,blue is receiver's GIO2(changed when received a valid packet),purple is receiver's SDIO.
