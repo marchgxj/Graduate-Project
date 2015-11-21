@@ -4,6 +4,7 @@
 #define    MAX_PACK_LENGTH      12
 #define    MAX_DEVICE_NUM       16
 
+#include "../configure.h"
 #include "types.h"
 #include "A7139.h"
 #include "A7139_CONFIG.h"
@@ -32,6 +33,7 @@
 #include "flash.h"
 #include "detect.h"
 #include "HMC5983.h"
+
 
 
 

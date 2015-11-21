@@ -9,11 +9,14 @@ uint16 ADvalueX,ADvalueY,ADvalueZ;
     __disable_interrupt();
     
     halBoardInit();
-ReJoin:
+//    __enable_interrupt();
+//    while(1)
+//    {
+//      
+//    }
     A7139_Init(475.001f);
     EndPointDevice.pyh_address = GetPhyAddress();
     EndPointDevice.device_type = DEVICE;
-
     //    ´«¸ÐÆ÷²âÊÔ
 //    A7139_SetPackLen(TEST_LENGTH);
 //    delay_us(1);
@@ -38,16 +41,17 @@ ReJoin:
     delay_ms(2000);
     halLedClear(1);
     LPM3;*/
-
     halLedSetAll();
-    
 #if NET_TEST == 1 || QOS_TEST==1
-    ChannelSelection(CHANNEL_2,CHANNEL_4);
-    //ChannelSelection(CHANNEL_4,CHANNEL_6);
+    ChannelSelection(CHANNEL_5,CHANNEL_6);
 #else
-    ChannelSelection(CHANNEL_4,CHANNEL_6);
+    ChannelSelection(CHANNEL_7,CHANNEL_8);
+    
 #endif
-
+ReJoin:
+    EndPointDevice.pyh_address = GetPhyAddress();
+    EndPointDevice.device_type = DEVICE;
+    ChannelSelectionOnce(RejoinChannel,RejoinChannel+1);
     halLedClear(4);
     TA0CCTL0 &= ~CCIFG;
     TBCCTL0 &= ~CCIFG;

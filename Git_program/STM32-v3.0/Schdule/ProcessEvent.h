@@ -2,7 +2,7 @@
 #define _TASKQ_h_
 
 #include "common.h"
-
+#define    MAX_PACK_LENGTH   12
 typedef struct{
     uint8  data[MAX_PACK_LENGTH];		
     uint8  event;						

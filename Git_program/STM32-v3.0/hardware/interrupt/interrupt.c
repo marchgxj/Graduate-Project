@@ -90,7 +90,7 @@ void TIM3_IRQHandler(void)   //500ms
 					LED6_ON();
 			}
 			
-#if (UPLOAD_DATA_EN == 1)
+#if (UPLOAD_DATA_EN == 1 && QOS_TEST==0)
 				PostTask(EmptyBuffer,EVENT_UPLOAD_DATA);
 #endif
 		}

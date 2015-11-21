@@ -75,7 +75,6 @@ __interrupt void Timer_A (void)
     Frame_Time++;
     if(EndPointDevice.power == 0)
     {
-        
         if(Frame_Time==BEFOR_BEACON_WAKE)//在接收beacon前使能中断
         {
             PostTask(EVENT_WAKE_A7139);
@@ -83,22 +82,6 @@ __interrupt void Timer_A (void)
             Int_Enable_Flag = 1;
             EN_INT;
         }
-#if (COLLECT_EN)                                //开启数据采集
-        if(Start_Collect)
-        {
-            Collect_Time++;
-            if(Collect_Time == COLLECT_PERIOD)              //0.5s采集一次
-            {
-                Collect_Time = 0;
-                PostTask(EVENT_COLLECT_DATA);
-                //  halLedToggle(2);
-            } 
-        }
-#endif
-    }
-    else
-    {
-        
     }
 }
 uint8 DataSendDraw[TEST_LENGTH];
@@ -195,7 +178,8 @@ void TestSend()
 __interrupt void Timer_A0(void)
 {
     TA0CCTL0 &= ~CCIFG;
-
+//    halLedToggle(2);
+//    return ;
 #if (MCU_SLEEP_ENABLE == 1)
     if(Exit_Sleep == 1)
     {
@@ -212,7 +196,7 @@ __interrupt void Timer_A0(void)
         }
     }
 #endif
-    
+    EndPointDevice.power = 1;
     //halLedToggle(2);
     if(EndPointDevice.power == 0)
     //每个超帧都要发送时，Beacon接收超时则复位A7139

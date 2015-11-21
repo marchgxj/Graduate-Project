@@ -2,8 +2,6 @@
 #define _TDMA_h_
 #include "common.h"
 
-#define QOS_TEST  0
-
 typedef struct{
     uint8  pack_length;                  //包长度
     uint8  pack_type:6;                 //包类型

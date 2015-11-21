@@ -9,12 +9,12 @@ JoinRequestPacketStruct JoinRequestPacket;
 JoinRequestACKOKPacketStruct JoinRequestACKOKPacket;
 uint8 ReJoinFlag = 0;
 uint8 scandata[MAX_PACK_LENGTH];  
-uint8 how = 0;
+uint8 RejoinChannel = 0;
 uint8 Scan_Channel(uint8 startch,uint8 endch)
 {
     uint8 i;
     int16 timeout = SCAN_TIME_OUT;
-    how = endch;
+
        
     if(endch > CHANNEL_NUM)
     {
@@ -210,6 +210,25 @@ void ChannelSelection(uint8 start,uint8 end)
     SortChannel(start,end);
     
     A7139_SetFreq(ChannelList[EndPointDevice.channel]);
+    RejoinChannel = EndPointDevice.channel;
+    delay_us(1);
+    A7139_Cal();                    
+    delay_us(1);
+    RXMode();
+}
+
+void ChannelSelectionOnce(uint8 start,uint8 end)
+{
+    Scan_Channel(start,end);
+    bubble(ScanChannel,CHANNEL_NUM);
+    EndPointDevice.channel = ScanChannel[0].channel_num;
+    EndPointDevice.backup_channel = ScanChannel[1].channel_num;
+    EndPointDevice.cluster_id = ScanChannel[0].cluster_id;
+    EndPointDevice.des_cluster_id = ScanChannel[0].cluster_id;
+    EndPointDevice.des_cluster_innernum = 0;
+    EndPointDevice.free_node = ScanChannel[0].channel_free;
+    
+    A7139_SetFreq(ChannelList[EndPointDevice.channel]);
     delay_us(1);
     A7139_Cal();                    
     delay_us(1);
@@ -232,7 +251,7 @@ void ReJoinHandler()
     EndPointDevice.des_cluster_innernum = 0;
     EndPointDevice.device_type = 0;
     EndPointDevice.free_node = 0;
-    EndPointDevice.power = 0;
+    EndPointDevice.power = 1;
     EndPointDevice.pyh_address = 0;
     EndPointDevice.state = 0;
     EndPointDevice.time_stamp = 0;

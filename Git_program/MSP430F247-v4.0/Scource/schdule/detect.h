@@ -1,19 +1,6 @@
 #ifndef _DETECT_h_
 #define _DETECT_h_
 #include "common.h"
-#define MCU_SLEEP_ENABLE 1
-#define NET_TEST  1
-
-
-#define COLLECT_EN   0          //是否开启数据采集
-#define COLLECT_PERIOD  1000   //采集周期  单位：100us
-#define COLLECT_PERIOD_L  1    //低功耗模式，采集周期  单位：1s
-#define COLLECT_WIDTH   5       //采集个数
-#define SLOP_THRESHLOD  10      //斜率阈值
-
-#define OFFSET          3      //跳变检测距离
-#define THRESHOLD       100
-#define IDENTIFY_WIDTH  10
 
 //传感器监测状态
 #define NOCAR      0            //没有停车
@@ -26,18 +13,9 @@
 #define LOWPOWER   252            //电量低
 #define TEMPOVER   251            //温度异常
 
-#define CAL_PERIOD  6000          //10分钟校准一次
-
-#define VAR_THRESHOLD  50             //方差判断阈值
-#define EXT_THRESHOLD  40               //两轴差值判断阈值
-#define INT_THRESHOLD  60
-
 #define TEST_LENGTH 46
 #define FILTER_LENGTH 20
 #define SLOP_LENGTH 3
-
-
-#define LOWPOWER_THRESHOLD 600
 
 #define TEMP_THRESHOLD_HIGH     3500
 #define TEMP_THRESHOLD_LOW      1000

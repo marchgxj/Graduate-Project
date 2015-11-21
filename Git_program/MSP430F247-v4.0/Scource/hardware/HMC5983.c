@@ -282,9 +282,9 @@ void Single_Read_HMC(uint16* XValue,uint16* YValue,uint16* ZValue)
     xvalue = (buffer[0]<<8)|buffer[1];
     zvalue = (buffer[2]<<8)|buffer[3];
     yvalue = (buffer[4]<<8)|buffer[5];
-    if(xvalue!=-4096)
+    if(zvalue!=-4096)
     {
-        *XValue = xvalue + 2048;
+        *XValue = zvalue + 2048;
     }
     else
     {
@@ -298,9 +298,9 @@ void Single_Read_HMC(uint16* XValue,uint16* YValue,uint16* ZValue)
     {
         *YValue = 0;
     }
-    if(zvalue!=-4096)
+    if(xvalue!=-4096)
     {
-        *ZValue = zvalue + 2048;
+        *ZValue = xvalue + 2048;
     }
     else
     {
@@ -419,7 +419,7 @@ void Init_5983()
     return;
 #endif
     IRD_HIGH;
-    delay_ms(10000);
+    //delay_ms(10000);
     delay_ms(1000);
     Init_HMC(buffer);
     if((buffer[0]!=HMC_Config[0])||(buffer[1]!=HMC_Config[1])||buffer[2]!=HMC_Config[2])

@@ -1,8 +1,6 @@
 #ifndef __COMMON_H
 #define __COMMON_H
 
-#define    MAX_PACK_LENGTH    12
-
 #include "led.h"
 #include "delay.h"
 #include "key.h"
@@ -26,6 +24,7 @@
 #include "tdma.h"
 #include "flash.h"
 #include "upload.h"
+#include "configure.h"
 
 
 

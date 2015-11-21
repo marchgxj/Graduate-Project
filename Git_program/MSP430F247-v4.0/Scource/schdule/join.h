@@ -61,6 +61,7 @@ extern uint8 EndChannel;
 extern ChannelTable SortedChannel[CHANNEL_NUM];
 extern ChannelTable ScanChannel[CHANNEL_NUM];
 extern uint8 ReJoinFlag;
+extern uint8 RejoinChannel;
 
 extern uint8 Scan_Channel(uint8 startch,uint8 endch);
 extern void SortChannel(uint8 startch,uint8 endch);
@@ -69,5 +70,6 @@ extern void JoinRequestACKHandler();
 extern void SendJoinRequest();
 extern void ChannelSelection(uint8 start,uint8 end);
 extern void ReJoinHandler();
+extern void ChannelSelectionOnce(uint8 start,uint8 end);
 
 #endif

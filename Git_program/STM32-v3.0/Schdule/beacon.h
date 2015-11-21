@@ -1,9 +1,6 @@
 #ifndef _BEACON_h_
 #define _BEACON_h_
 
-
-#define    BECAON_PERIOD 1000     //单位：ms
-
 typedef struct {
     uint8 length;     							// 包长度
 		uint8 pack_type:6;							//包类型

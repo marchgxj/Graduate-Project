@@ -1,7 +1,7 @@
 #ifndef _UPLOAD_h_
 #define _UPLOAD_h_
 #include "common.h"
-#define UPLOAD_DATA_EN 1
+
 #define UPLOAD_NODE_NUM  MAX_NODE_NUM
 typedef struct{
 		uint16	address;

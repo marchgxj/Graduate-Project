@@ -25,7 +25,7 @@ if not "%1" == "" goto debugFile
 
 @echo on 
 
-"E:\Program Files (x86)\IAR Systems\Embedded Workbench MSP430 7.2\common\bin\cspybat" -f "F:\Graduate\Git_program\MSP430F247-v3.0\Led\settings\Led.Release.general.xcl" --backend -f "F:\Graduate\Git_program\MSP430F247-v3.0\Led\settings\Led.Release.driver.xcl" 
+"E:\Program Files (x86)\IAR Systems\Embedded Workbench MSP430 7.2\common\bin\cspybat" -f "F:\Graduate\Git_program\MSP430F247-v4.0\Led\settings\Led.Release.general.xcl" --backend -f "F:\Graduate\Git_program\MSP430F247-v4.0\Led\settings\Led.Release.driver.xcl" 
 
 @echo off 
 goto end 
@@ -34,7 +34,7 @@ goto end
 
 @echo on 
 
-"E:\Program Files (x86)\IAR Systems\Embedded Workbench MSP430 7.2\common\bin\cspybat" -f "F:\Graduate\Git_program\MSP430F247-v3.0\Led\settings\Led.Release.general.xcl" "--debug_file=%1" --backend -f "F:\Graduate\Git_program\MSP430F247-v3.0\Led\settings\Led.Release.driver.xcl" 
+"E:\Program Files (x86)\IAR Systems\Embedded Workbench MSP430 7.2\common\bin\cspybat" -f "F:\Graduate\Git_program\MSP430F247-v4.0\Led\settings\Led.Release.general.xcl" "--debug_file=%1" --backend -f "F:\Graduate\Git_program\MSP430F247-v4.0\Led\settings\Led.Release.driver.xcl" 
 
 @echo off 
 :end
