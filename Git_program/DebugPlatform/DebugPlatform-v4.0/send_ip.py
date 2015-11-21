@@ -7,6 +7,7 @@ import urllib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.mime.image import MIMEImage
+import re,urllib2
 
 def sendEmail(smtpserver,username,password,sender,receiver,subject,msghtml):
     msgRoot = MIMEMultipart('related')
@@ -40,9 +41,30 @@ def get_ip_address():
     s.close()
     return ipaddr
 
+def visit(url):
+         opener = urllib2.urlopen(url)
+         if url == opener.geturl():
+             str = opener.read()
+         return re.search('\d+\.\d+\.\d+\.\d+',str).group(0)
+
+def get_public_ip_address():
+    try:
+        myip = visit("http://www.ip138.com/ip2city.asp")
+    except:
+        try:
+            myip = visit("http://www.whereismyip.com/")
+        except:
+            myip = "So sorry!!!"
+    return myip
+
+
+
+
+
 if __name__ == '__main__':
     check_network()
-    ipaddr=get_ip_address()
-    sendEmail('smtp.qq.com','443555619@qq.com','!@#344747','443555619@qq.com',['443555619@qq.com'],'IP Address Of Raspberry Pi',ipaddr)
+    inerip=get_ip_address()
+    pubip = get_public_ip_address()
+    sendEmail('smtp.qq.com','443555619@qq.com','!@#344747','443555619@qq.com',['443555619@qq.com'],'IP Address Of Raspberry Pi',"Public IP:" + pubip +"<br>Local IP:" + inerip)
     print "IP address send"
 

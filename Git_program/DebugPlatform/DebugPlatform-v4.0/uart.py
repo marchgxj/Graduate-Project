@@ -72,7 +72,8 @@ class UartRoot(tk.Tk):
         self.parent = frame
         self.parent_menu = self.parent.rootmenu
         self.title("串口配置")
-        self.geometry('250x400')
+        tmpcnf = '%dx%d+%d+%d' % (250, 300, 0, 0)
+        self.geometry(tmpcnf)
         ttk.Label(self, text="串口号:", padding=5).grid(row=0)
         self.comnumbox = ttk.Combobox(self, width=10, exportselection=0)
         self.comnumbox.bind("<<ComboboxSelected>>", self.IsOpen)

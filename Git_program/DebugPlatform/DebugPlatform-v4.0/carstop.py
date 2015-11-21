@@ -24,7 +24,8 @@ class CarStopRoot(tk.Tk):
         tk.Tk.__init__(self, *args, **kwargs)
         self.locat = ""
         self.title("停车设置")
-#         self.geometry('400x400')
+        tmpcnf = '%dx%d+%d+%d' % (100, 100, 0, 0)
+        self.geometry(tmpcnf)
         self.columnconfigure(0, weight=1)
         self.columnconfigure(1, weight=1)
         self.rowconfigure(0, weight=1) 

@@ -33,10 +33,15 @@ class MainRoot(tk.Tk):
         # 居中显示
         curWidth = self.winfo_screenwidth()  # get current width
         curHeight = self.winfo_screenheight()  # get current height
-        scnWidth = (curWidth - 1330) / 2
-        scnHeight = (curHeight - 660) / 2  # get screen width and height
-        # now generate configuration information
-        tmpcnf = '%dx%d+%d+%d' % (1330, 660, scnWidth, scnHeight)
+        self.resolution = curWidth * curHeight
+
+        if self.resolution <= 153600:
+            tmpcnf = '%dx%d+%d+%d' % (480, 230, 0, 0)
+        else:
+            scnWidth = (curWidth - 1330) / 2
+            scnHeight = (curHeight - 660) / 2  # get screen width and height
+            # now generate configuration information
+            tmpcnf = '%dx%d+%d+%d' % (1330, 660, scnWidth, scnHeight)
 
         self.geometry(tmpcnf)
         self.appcanvas = tk.Canvas(self)
@@ -222,15 +227,23 @@ class Application(ttk.Notebook):
         self.topline = []
         self.bottomline = []
         self.carnum = 0
-        self.width = 1320
-        self.height = 600
+
         self.carmove = []
         self.stoptext = []
         self.loacname = []
-        self.front = tkFont.Font(size=50, family="黑体")
+
 
         self.root = root
         self.menu = root.rootmenu
+
+        if self.root.resolution <= 153600:
+            self.front = tkFont.Font(size=10, family="黑体")
+            self.width = 470
+            self.height = 190
+        else:
+            self.width = 1320
+            self.height = 600
+            self.front = tkFont.Font(size=50, family="黑体")
 
         self.admiddleflag = 0
 
@@ -363,68 +376,9 @@ class Application(ttk.Notebook):
             bottomwidth = self.width / ((self.carnum - 1) / 2)
             topnum = (self.carnum + 1) / 2
 
-    def stopcar(self, move):
-        '''
-        Parameter：
-            move：传入的数据包格式如下： 1,0|2,1|3,0|4,0
-        Function：
-                                更新停车界面
-        Autor:xiaoxiami 2015.5.29
-        Others：
-        '''
-        count = 0
-        try:
-            if len(self.stoptext) > 0:
-                for text in self.stoptext:
-                    self.canvas.delete(text)
-        except:
-            print "5"
-        # for i in range(self.carnum):
-        #             self.stoptext.append(self.canvas.create_text(0,0))
-        if self.carnum > 20:
-            self.front.configure(size=10)
-        elif self.carnum > 14:
-            self.front.configure(size=20)
-        elif self.carnum > 8:
-            self.front.configure(size=32)
-
-        if self.carnum % 2 == 0:
-            topwidth = self.width / (self.carnum / 2)
-            bottomwidth = topwidth
-            topnum = self.carnum / 2
-        # bottomnum = topnum
-        else:
-            topwidth = self.width / ((self.carnum + 1) / 2)
-            bottomwidth = self.width / ((self.carnum - 1) / 2)
-            topnum = (self.carnum + 1) / 2
-        # bottomnum = (self.carnum - 1) / 2
-        buf = move.split(",")
-        self.carmove = []
-        for i in buf:
-            self.carmove.append(i.split("|"))
-        for num, act in self.carmove:
-            if count < topnum:
-                if act == '1':
-                    self.stoptext.append(
-                        self.canvas.create_text(count * topwidth + topwidth / 2, self.height / 6, text=num + ":\n已停车",
-                                                font=self.front, fill='red'))
-
-                else:
-                    self.stoptext.append(
-                        self.canvas.create_text(count * topwidth + topwidth / 2, self.height / 6, text=num + ":\n未停车",
-                                                font=self.front, fil='green'))
-            else:
-                if act == '1':
-                    self.stoptext.append(self.canvas.create_text((count - topnum) * bottomwidth + bottomwidth / 2,
-                                                                 self.height - self.height / 6, text=num + ":\n已停车",
-                                                                 font=self.front, fill='red'))
-                else:
-                    self.stoptext.append(self.canvas.create_text((count - topnum) * bottomwidth + bottomwidth / 2,
-                                                                 self.height - self.height / 6, text=num + ":\n未停车",
-                                                                 font=self.front, fill='green'))
-            count = count + 1
-
     def stopcaronce(self, move):
+        if self.root.resolution <= 153600:
+            self.front = tkFont.Font(size=10, family="黑体")
         count = 0
         if self.stopedcarnum > self.carnum:
             self.statusbar.setstatus('车辆数：%s，车位数：%s，无法继续停车', str(self.stopedcarnum), str(self.carnum))
@@ -444,20 +398,19 @@ class Application(ttk.Notebook):
         self.carmove = []
         for i in buf:
             self.carmove.append(i.split("|"))
-
         for num, act in self.carmove:
             # 如果该节点编号已经显示过，则只更新显示
             if num in self.carnumbind:
                 if act == "1":
-                    self.canvas.itemconfigure(('text' + str(num)), text=num + ":\n已停车", fill='red')
+                    self.canvas.itemconfigure(('text' + str(num)), text=num + ":\n已停车", fill='red',font=self.front)
                 elif act == '0':
-                    self.canvas.itemconfigure(('text' + str(num)), text=num + ":\n未停车", fill='green')
+                    self.canvas.itemconfigure(('text' + str(num)), text=num + ":\n未停车", fill='green',font=self.front)
                 elif act == '2':
-                    self.canvas.itemconfigure(('text' + str(num)), text=num + ":\n识别中", fill='blue')
+                    self.canvas.itemconfigure(('text' + str(num)), text=num + ":\n识别中", fill='blue',font=self.front)
                 elif act == '253':
-                    self.canvas.itemconfigure(('text' + str(num)), text=num + ":\n掉线", fill='yellow')
+                    self.canvas.itemconfigure(('text' + str(num)), text=num + ":\n掉线", fill='yellow',font=self.front)
                 elif act == '252':
-                    self.canvas.itemconfigure(('text' + str(num)), text=num + ":\n电量低", fill='yellow')
+                    self.canvas.itemconfigure(('text' + str(num)), text=num + ":\n电量低", fill='yellow',font=self.front)
             else:
                 self.carnumbind.append(num)
                 if self.stopedcarnum < topnum:
@@ -521,22 +474,23 @@ class Application(ttk.Notebook):
         Autor:xiaoxiami 2015.5.29
         Others：暂时没有用
         '''
-        canv = tk.Canvas(self.tab2, width=1320, height=600, bg="white")
-        canv.grid()
-
-        canv.create_image(1320 / 2, 50, image=self.rooterimage)
-        canv.create_image(100, 400, image=self.sensorimage)
-        canv.create_line(1320 / 2, 50, 100, 400, fill='green', dash=(100, 80))
-        canv.create_text(100, 480, text="01")
-        canv.create_image(400, 400, image=self.sensorimage)
-        canv.create_line(1320 / 2, 50, 400, 400, fill='green', dash=(100, 80))
-        canv.create_text(400, 480, text="02")
-        canv.create_image(800, 400, image=self.sensorimage)
-        canv.create_line(1320 / 2, 50, 800, 400, fill='green', dash=(100, 80))
-        canv.create_text(800, 480, text="03")
-        canv.create_image(1200, 400, image=self.sensorimage)
-        canv.create_line(1320 / 2, 50, 1200, 400, fill='red', dash=(100, 80))
-        canv.create_text(1200, 480, text="04")
+        pass
+        # canv = tk.Canvas(self.tab2, width=1320, height=600, bg="white")
+        # canv.grid()
+        #
+        # canv.create_image(1320 / 2, 50, image=self.rooterimage)
+        # canv.create_image(100, 400, image=self.sensorimage)
+        # canv.create_line(1320 / 2, 50, 100, 400, fill='green', dash=(100, 80))
+        # canv.create_text(100, 480, text="01")
+        # canv.create_image(400, 400, image=self.sensorimage)
+        # canv.create_line(1320 / 2, 50, 400, 400, fill='green', dash=(100, 80))
+        # canv.create_text(400, 480, text="02")
+        # canv.create_image(800, 400, image=self.sensorimage)
+        # canv.create_line(1320 / 2, 50, 800, 400, fill='green', dash=(100, 80))
+        # canv.create_text(800, 480, text="03")
+        # canv.create_image(1200, 400, image=self.sensorimage)
+        # canv.create_line(1320 / 2, 50, 1200, 400, fill='red', dash=(100, 80))
+        # canv.create_text(1200, 480, text="04")
 
     def ShowData(self):
         '''
@@ -1423,7 +1377,10 @@ class Application(ttk.Notebook):
             self.tab6.rowconfigure(i, weight=1)
         for i in range(10):
             self.tab6.columnconfigure(i, weight=1)
-        txtfont = tkFont.Font(size=20, family="黑体")
+        if self.root.resolution <= 153600:
+            txtfont = tkFont.Font(size=10, family="黑体")
+        else:
+            txtfont = tkFont.Font(size=20, family="黑体")
         rowandcloumn = 0
 
         self.PacketSend_CountString = tk.StringVar()
@@ -1472,7 +1429,6 @@ class Application(ttk.Notebook):
         self.Lost_PersentString.set(self.menu.uartform.linktestthread.value[2])
         self.PacketReceive_CountString.set(self.menu.uartform.linktestthread.value[3])
         self.PacketSend_CountLabel.after(50,self.QOSUpdateLabel)
-
 
     def SendCommand(self):
         '''

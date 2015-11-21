@@ -42,6 +42,10 @@ class myThread(threading.Thread):
         self.cmdaddress = ""
         self.Control_Resend = 0
         self.filename = "..\Log\\" + time.strftime('%Y-%m-%d_%H-%M-%S', time.localtime(time.time())) + '.txt'
+        self.logfile = open(self.filename, "a+")
+        self.logfile.write("Program Start at:" + time.strftime('%Y-%m-%d  %H:%M:%S',time.localtime(time.time())) + "\n")
+        self.logfile.close()
+        self.netdatabuf = ''
 
     def netupdate(self):
         '''
@@ -78,8 +82,8 @@ class myThread(threading.Thread):
         while 1:
             print self.longdata
             time.sleep(1)
-        while (1):
-            if (self.killthread == True):
+        while 1:
+            if self.killthread:
                 break
             start = time.clock()
 
@@ -91,7 +95,6 @@ class myThread(threading.Thread):
             end = time.clock()
             time.sleep(0.5)
             self.statusbar.status.setstatus('网络时延:%s', str(end - start))
-
 
     def run(self):
         '''
@@ -105,16 +108,16 @@ class myThread(threading.Thread):
         a = 0
         count = 0
         debug_count = 0
-        data={}
+        data = {}
         data["relay_id"] = "0086-110108-00022105-01"
         data["park_id"] = "22105"
-        data["data"]=""
-        uploaddatacut=""
+        data["data"] = ""
+        uploaddatacut = ""
         self.datatoshow = ''
         while (1):
             if self.showdata.appFrame.tab == 0 or self.showdata.appFrame.tab == 4:
                 ordbuf = self.uart.read(1)
-                if(ordbuf!=""):
+                if ordbuf != "":
                     if ord(ordbuf) == 0x7D:
                         ordbuf = ord(self.uart.read(1))
                         if ordbuf == 0x7E:
@@ -122,12 +125,12 @@ class myThread(threading.Thread):
                             length = ord(self.uart.read(1))  # 读出这一包要发的节点个数
                             print length
                             self.notedata = []
-                            data["data"]=""
+                            data["data"] = ""
                             for i in range(length):
                                 try:
                                     num = ord(self.uart.read(1)) << 8 | ord(self.uart.read(1))
                                     self.notedata.append(num)  # 偶数位为地址
-                                    data["data"] = data["data"]+"0086-110108-00022105-" + str(num).zfill(4) + "|"
+                                    data["data"] = data["data"] + "0086-110108-00022105-" + str(num).zfill(4) + "|"
                                     self.datatoshow = self.datatoshow + str(num).zfill(4) + "|"
                                     status = ord(self.uart.read(1))
                                     self.notedata.append(status)  # 奇数位为数据
@@ -144,7 +147,7 @@ class myThread(threading.Thread):
                             uploaddatacut = data["data"]
                             data["data"] = uploaddatacut[:-1]
                             if self.showdata.appFrame.tab == 0:
-                                self.statusbar.status.setdata('串口数据:%s 计数:%s',data["data"] , count)
+                                self.statusbar.status.setdata('串口数据:%s 计数:%s', data["data"], count)
                             if self.stopcar.appFrame.carnum == 0:
                                 self.statusbar.status.setstatus('%s', "未配置停车个数")
                             else:
@@ -156,12 +159,14 @@ class myThread(threading.Thread):
                                     '''上传全部数据'''
                                     post_data = urllib.urlencode(data)
                                     data["data"] = ""
-                                    response = urllib2.urlopen("http://123.57.37.66:8080/sensor/post/status", post_data,timeout=1)
-                                    serverresponse =  response.read()
+                                    response = urllib2.urlopen("http://123.57.37.66:8080/sensor/post/status", post_data,
+                                                               timeout=1)
+                                    serverresponse = response.read()
                                     serverresponsedic = eval(serverresponse)
                                     end = time.clock()
 
-                                    self.statusbar.status.setstatus('网络延时:%s'+"  "+serverresponsedic["err_msg"], str(end - start))
+                                    self.statusbar.status.setstatus('网络延时:%s' + "  " + serverresponsedic["err_msg"],
+                                                                    str(end - start))
                                     ''''''
                                 except:
                                     self.statusbar.status.setstatus('%s', "网络连接超时，请检查网络或关闭数据上传下载功能")
@@ -175,8 +180,7 @@ class myThread(threading.Thread):
                                 try:
                                     if comtent['err_code'] == 0:
                                         for items in comtent['data']:
-                                            self.netdatabuf = self.netdatabuf + str(
-                                                items['name'] + '|' + items['value'] + ',')
+                                            self.netdatabuf = self.netdatabuf + str(items['name'] + '|' + items['value'] + ',')
                                         self.stopcar.appFrame.stopcaronce(self.netdatabuf[:-1])
                                         self.statusbar.status.setstatus('%s', "网络数据:" + self.netdatabuf[:-1])
                                     else:
@@ -184,17 +188,20 @@ class myThread(threading.Thread):
                                 except:
                                     print "relaythread.py line 198 error"
                         elif (ordbuf) == 0x7F:
-                            debug_count+=1
+                            debug_count += 1
                             err_msg = self.uart.readline()
                             err_msg = err_msg[:-1]
-                            self.statusbar.status.setdata('Debug Msg:  %s   %s',err_msg,debug_count)
-                            self.file = open(self.filename, "a+")
-                            self.file.write(time.strftime('%Y-%m-%d  %H:%M:%S', time.localtime(time.time())) + ":  " + err_msg + "," + str(debug_count)+"\n")
+                            self.statusbar.status.setdata('Debug Msg:  %s   %s', err_msg, debug_count)
+                            self.logfile = open(self.filename, "a+")
+                            self.logfile.write(time.strftime('%Y-%m-%d  %H:%M:%S',time.localtime(time.time())) + ":  "+\
+                                               err_msg + "," + \
+                                               str(debug_count) + "\n")
+                            self.logfile.close()
             if (self.showdata.appFrame.tab == 4):
                 # self.statusbar.status.setstatus("节点控制")
-                if(self.cmdaddress!=""):
-                    if(self.cmdaddress!="0"):
-                        if(int(self.cmdaddress)>255):
+                if (self.cmdaddress != ""):
+                    if (self.cmdaddress != "0"):
+                        if (int(self.cmdaddress) > 255):
                             self.statusbar.status.setdata("地址超出范围！")
                         else:
                             cmd_address = (chr(int(self.cmdaddress)))
@@ -204,27 +211,25 @@ class myThread(threading.Thread):
                             self.uart.write(cmd_cmd)
                             self.uart.write("\xBB")
                             buf1 = self.uart.read(1)
-                            if(buf1!=""):
-                                if(ord(buf1)==0xAA):   #收ack
-                                    self.statusbar.status.setdata('%s', "发送命令：" + str(self.cmdaddress) + "," + str(self.cmd))
+                            if (buf1 != ""):
+                                if (ord(buf1) == 0xAA):  # 收ack
+                                    self.statusbar.status.setdata('%s',
+                                                                  "发送命令：" + str(self.cmdaddress) + "," + str(self.cmd))
                                     self.cmdaddress = "0"
                                 else:
-                                    self.Control_Resend+=1
-                                    self.statusbar.status.setdata('%s',"重试：" + str(self.Control_Resend))
-                                    if(self.Control_Resend==20):
+                                    self.Control_Resend += 1
+                                    self.statusbar.status.setdata('%s', "重试：" + str(self.Control_Resend))
+                                    if (self.Control_Resend == 20):
                                         self.Control_Resend = 0
                                         self.statusbar.status.setdata("发送失败！")
                                         self.cmdaddress = "0"
                                         time.sleep(0.05)
-
-
-
 
     def Createuart(self):
         self.uart = serial.Serial(timeout=2)
         self.uart.port = self.port
         self.uart.baudrate = self.baud
 
-    def SendCmd(self,address,cmd):
+    def SendCmd(self, address, cmd):
         self.cmdaddress = address
         self.cmd = cmd
