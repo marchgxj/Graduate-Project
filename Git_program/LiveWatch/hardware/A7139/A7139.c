@@ -21,7 +21,8 @@ u8  PN9_Tab[]=
 
 static void A7139_WriteReg(u8 regAddr, u16 regVal)
 {
-    SCS = 0;
+
+		SCS = 0;
     regAddr |= CMD_Reg_W;
 	
     SPIx_WriteByte(regAddr);
@@ -29,11 +30,13 @@ static void A7139_WriteReg(u8 regAddr, u16 regVal)
     SPIx_WriteWord(regVal);
 	  delay_us(10);
     SCS = 1;
+
 }
 
 static u16 A7139_ReadReg(u8 regAddr)
 {
     u16 regVal;
+
     SCS = 0;
     regAddr |= CMD_Reg_R;
     SPIx_WriteByte(regAddr);
@@ -41,6 +44,7 @@ static u16 A7139_ReadReg(u8 regAddr)
     regVal=SPIx_ReadWord();
 	  delay_us(10);
     SCS = 1;
+
     return regVal;
 }
 
@@ -95,7 +99,6 @@ static void A7139_Config(void)
 
 void Err_State(void)
 {
-	int i=0;	
 	while(1)
 		{
 			LED1_REV();
@@ -213,9 +216,11 @@ static u8 A7139_RCOSC_Cal(void)
 
 void A7139_StrobeCmd(u8 cmd)
 {
-    SCS = 0;
+    
+		SCS = 0;
     SPIx_WriteByte(cmd);
     SCS = 1;
+		
 }
 
 u8 A7139_Init(float rfFreq)
@@ -286,7 +291,7 @@ u8 A7139_SetDataRate(u8 datRate)
 					//CSC[2:0]=[001],Fcsck=6.4MHz
 					//IFBW[3:2]=[01],100kHz
 					//SDR[15:9]=0x04,DCK=10Kps,Fdev = 37.5kHz
-		 	A7139_WriteReg(SYSTEMCLOCK_REG,0x01221);			 		
+		 	A7139_WriteReg(SYSTEMCLOCK_REG,0x1221);			 		
 			A7139_WriteReg(RX1_REG,0x18D4);
 			A7139_WritePageA(TX1_PAGEA,0xF706);
 		}
@@ -742,9 +747,21 @@ uint8 A7139_SetPowerLevel(uint8 pwrLev)
 }
 void RXMode()
 {
-    A7139_StrobeCmd(CMD_PLL);
-    delay_us(1);
+    /*A7139_StrobeCmd(CMD_PLL);
+    delay_us(5);
     A7139_StrobeCmd(CMD_RX);
-    delay_us(1);
+    delay_us(5);
+	  A7139_StrobeCmd(CMD_PLL);
+    delay_us(5);
+    A7139_StrobeCmd(CMD_RX);
+    delay_us(5);*/
+		A7139_StrobeCmd(CMD_STBY);
+		delay_us(100);
+		A7139_StrobeCmd(CMD_PLL);
+		delay_us(100);
+		A7139_StrobeCmd(CMD_RX);
+		delay_us(100);
 }
+
+
 
