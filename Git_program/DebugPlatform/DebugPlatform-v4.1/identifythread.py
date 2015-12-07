@@ -11,15 +11,17 @@ class myThread(threading.Thread):
         self.threadID = threadID
         self.root = rootframe
         self.app = self.root.appFrame
+        self.statusbar = rootframe
         self.currenttab = 0
         self.thread_stop = True
         self.magneticdata = 0
         self.carstatus = 0
         self.port = port
         self.baud = baud
-        self.value = []
-        for i in range(26):
-            self.value.append(0)
+        self.VALUE_LENGTH = 46
+        self.VALUE_NUM = 26
+        self.value = [0 for n in range(self.VALUE_NUM)]
+
         self.readenable = 0
 
         self.filename = filename
@@ -49,18 +51,25 @@ class myThread(threading.Thread):
             while (self.thread_stop == False and self.uart.isOpen() == True):
                 self.currenttab = self.app.tab
                 if self.currenttab == 3:
-                    buf = self.uart.read(1)
+                    try:
+                        buf = self.uart.read(1)
+                    except serial.SerialException:
+                        self.statusbar.status.setdata("串口被拔出,插入后请重新打开")
+                        self.thread_stop = True
+                        break
                     if len(buf) != 0:
                         if ord(buf) == 0x7D:
                             buf = []
                             # 加变量需要修改
-                            buf += self.uart.read(46)
+                            try:
+                                buf += self.uart.read(self.VALUE_LENGTH)
+                            except serial.SerialException:
+                                self.statusbar.status.setdata("串口被拔出,插入后请重新打开")
+                                self.thread_stop = True
+                                break
 
                             self.file = open(self.filename, "a+")
                             self.file.write("|" + str(time.time()) + "|")
-                            # for v in buf:
-                            # self.file.write(time.time())
-                            # self.file.write(binascii.b2a_hex(v)+" ")
 
                             # 加变量需要修改
                             self.value[0] = (ord(buf[0]) << 8 | ord(buf[1]))
@@ -90,38 +99,19 @@ class myThread(threading.Thread):
                             self.value[24] = (ord(buf[44]))
                             self.value[25] = (ord(buf[45]))
 
-                            # 加变量需要修改
-                            self.file.write(str(self.value[0]) + " ")
-                            self.file.write(str(self.value[1]) + " ")
-                            self.file.write(str(self.value[2]) + " ")
-                            self.file.write(str(self.value[3]) + " ")
-                            self.file.write(str(self.value[4]) + " ")
-                            self.file.write(str(self.value[5]) + " ")
-                            self.file.write(str(self.value[6]) + " ")
-                            self.file.write(str(self.value[7]) + " ")
-                            self.file.write(str(self.value[8]) + " ")
-                            self.file.write(str(self.value[9]) + " ")
-                            self.file.write(str(self.value[10]) + " ")
-                            self.file.write(str(self.value[11]) + " ")
-                            self.file.write(str(self.value[12]) + " ")
-                            self.file.write(str(self.value[13]) + " ")
-                            self.file.write(str(self.value[14]) + " ")
-                            self.file.write(str(self.value[15]) + " ")
-                            self.file.write(str(self.value[16]) + " ")
-                            self.file.write(str(self.value[17]) + " ")
-                            self.file.write(str(self.value[18]) + " ")
-                            self.file.write(str(self.value[19]) + " ")
-                            self.file.write(str(self.value[20]) + " ")
-                            self.file.write(str(self.value[21]) + " ")
-                            self.file.write(str(self.value[22]) + " ")
-                            self.file.write(str(self.value[23]) + " ")
-                            self.file.write(str(self.value[24]) + " ")
-                            self.file.write(str(self.value[25]) + " ")
+                            for i in range(self.VALUE_NUM):
+                                self.file.write(str(self.value[i]) + " ")
                             self.file.write("\n")
 
                             self.file.close()
-                            self.uart.read(self.uart.inWaiting())
+                            try:
+                                self.uart.read(self.uart.inWaiting())
+                            except serial.SerialException:
+                                self.statusbar.status.setdata("串口被拔出,插入后请重新打开")
+                                self.thread_stop = True
+                                break
                             self.framecount += 1
+
                         #                     time.sleep(0.5)
 
     def update(self):
