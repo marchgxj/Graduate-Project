@@ -26,7 +26,7 @@ class MainRoot(tk.Tk):
         # initialize menu
         self.rootmenu = MenuBar(self)
         self.config(menu=self.rootmenu)
-        self.title("小虾米")
+        self.title("天海科")
 
         # 居中显示
         curWidth = self.winfo_screenwidth()  # get current width
@@ -92,7 +92,7 @@ class MenuBar(tk.Menu):
 
     def __init__(self, parent):
         tk.Menu.__init__(self, parent)
-        self.carlocatecboxbuf = '方兴大厦'
+        self.carlocatecboxbuf = '测试'
         self.updatamodecboxbuf = '开启'
         self.datamodecboxbuf = "串口数据"
         self.root = parent
@@ -295,9 +295,15 @@ class Application(ttk.Notebook):
         '''
         self.tab = self.index('current')
         if self.tab == 5:
-            self.QOSUpdateLabel()
+            try:
+                self.QOSUpdateLabel()
+            except AttributeError:
+                print "Uart didn't open as Linktest.(mainform.py line 301)"
         elif self.tab == 6:
-            self.updateTempLabel()
+            try:
+                self.updateTempLabel()
+            except AttributeError:
+                print "Uart didn't open as Tempearturetest.(mainform.py line 306)"
             # self.menu.uartform.snifferthread.currenttab = self.index('current')
             # self.menu.uartform.identifythread.currenttab = self.index('current')
             # try:
@@ -1439,11 +1445,13 @@ class Application(ttk.Notebook):
         Autor:xiaoxiami 2015.10.17
         Others：
         '''
+
         self.PacketSend_CountString.set(self.menu.uartform.linktestthread.value[0])
         self.AckLost_CountString.set(self.menu.uartform.linktestthread.value[1])
         self.Lost_PersentString.set(self.menu.uartform.linktestthread.value[2])
         self.PacketReceive_CountString.set(self.menu.uartform.linktestthread.value[3])
         self.PacketSend_CountLabel.after(50, self.QOSUpdateLabel)
+
 
     def SendCommand(self):
         '''
@@ -1457,7 +1465,6 @@ class Application(ttk.Notebook):
 
         def cmdtext(cmd):
             address = cmdinput.get()
-
             try:
                 self.menu.uartform.relaythread.SendCmd(address, cmd)
             except:
@@ -1488,8 +1495,15 @@ class Application(ttk.Notebook):
         Autor:xiaoxiami 2015.11.29
         Others：
         '''
+        def buttonCallback():
+            tempearture = "0"
+            if temperatureinput.get():
+                tempearture = temperatureinput.get()
+            self.temp_starttime_String.set(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time())))
+            self.menu.uartform.temperaturethread.filepath, self.menu.uartform.temperaturethread.file = \
+                self.menu.uartform.temperaturethread.createFileandPath(tempearture)
 
-        for i in range(8):
+        for i in range(9):
             self.tab7.rowconfigure(i, weight=1)
         for i in range(14):
             self.tab7.columnconfigure(i, weight=1)
@@ -1499,10 +1513,21 @@ class Application(ttk.Notebook):
         else:
             txtfont = tkFont.Font(size=20, family="黑体")
 
+        tk.Label(self.tab7, text="测试温度:", font=txtfont).grid(row=8, column=0, columnspan=5)
+        temperatureinput = tk.Entry(self.tab7, width=10)
+        temperatureinput.grid(row=8, column=2, sticky=tk.W, columnspan=5)
+        tk.Label(self.tab7, text="℃", font=txtfont).grid(row=8, column=2,columnspan=5)
+        cmdbutton1 = tk.Button(self.tab7, text="记录当前时间",font=txtfont,command=buttonCallback)
+        cmdbutton1.grid(row=8, column=0,columnspan=14)
+        self.temp_starttime_String = tk.StringVar()
+        tk.Label(self.tab7, textvariable=self.temp_starttime_String, width=20, font=txtfont).grid(row=8, column=4,columnspan=13)
+        self.temp_starttime_String.set("")
+
+
         self.node1_num_String = tk.StringVar()
         tk.Label(self.tab7, text="节点编号:", font=txtfont).grid(row=0, column=0, sticky=tk.W)
         self.node1_num_Label = tk.Label(self.tab7, text="0", textvariable=self.node1_num_String, width=8, font=txtfont)
-        self.node1_num_Label.grid(row=0, column=1, sticky=tk.E)
+        self.node1_num_Label.grid(row=0, column=1, sticky=tk.W)
         self.node1_num_String.set(0)
 
         self.node1_Xmiddle_String = tk.StringVar()
@@ -1545,7 +1570,7 @@ class Application(ttk.Notebook):
 
         self.node1_time_String = tk.StringVar()
         tk.Label(self.tab7, text="测试时间:", font=txtfont).grid(row=3, column=0, sticky=tk.W)
-        self.node1_time_Label = tk.Label(self.tab7, text="0", textvariable=self.node1_time_String, width=8,
+        self.node1_time_Label = tk.Label(self.tab7, text="0", textvariable=self.node1_time_String, width=16,
                                          font=txtfont)
         self.node1_time_Label.grid(row=3, column=1, sticky=tk.W)
         self.node1_time_String.set(0)
@@ -1596,7 +1621,7 @@ class Application(ttk.Notebook):
 
         self.node2_time_String = tk.StringVar()
         tk.Label(self.tab7, text="测试时间:", font=txtfont).grid(row=3, column=7, sticky=tk.W)
-        self.node2_time_Label = tk.Label(self.tab7, text="0", textvariable=self.node2_time_String, width=8,
+        self.node2_time_Label = tk.Label(self.tab7, text="0", textvariable=self.node2_time_String, width=16,
                                          font=txtfont)
         self.node2_time_Label.grid(row=3, column=8, sticky=tk.W)
         self.node2_time_String.set(0)
@@ -1647,7 +1672,7 @@ class Application(ttk.Notebook):
 
         self.node3_time_String = tk.StringVar()
         tk.Label(self.tab7, text="测试时间:", font=txtfont).grid(row=7, column=0, sticky=tk.W)
-        self.node3_time_Label = tk.Label(self.tab7, text="0", textvariable=self.node3_time_String, width=8,
+        self.node3_time_Label = tk.Label(self.tab7, text="0", textvariable=self.node3_time_String, width=16,
                                          font=txtfont)
         self.node3_time_Label.grid(row=7, column=1, sticky=tk.W)
         self.node3_time_String.set(0)
@@ -1698,7 +1723,7 @@ class Application(ttk.Notebook):
 
         self.node4_time_String = tk.StringVar()
         tk.Label(self.tab7, text="测试时间:", font=txtfont).grid(row=7, column=7, sticky=tk.W)
-        self.node4_time_Label = tk.Label(self.tab7, text="0", textvariable=self.node4_time_String, width=8,
+        self.node4_time_Label = tk.Label(self.tab7, text="0", textvariable=self.node4_time_String, width=16,
                                          font=txtfont)
         self.node4_time_Label.grid(row=7, column=8, sticky=tk.W)
         self.node4_time_String.set(0)
@@ -1782,11 +1807,17 @@ class Application(ttk.Notebook):
         elif seconds < 3600:
             return str(seconds / 60) + " 分 " + str(seconds % 60) + " 秒"
         elif seconds < 86400:
-            day = seconds / 86400
-            seconds /= 86400
-            return str(day) + " 天 " + str(seconds / 60) + " 分 " + str(seconds % 60) + " 秒"
+            hour = seconds / 3600
+            seconds %= 3600
+            minutes = seconds/60
+            return str(hour) + " 小时 " + str(minutes / 60) + " 分 " + str(seconds % 60) + " 秒"
         else:
-            return "不用测那么久吧....."
+            days = seconds / 86400
+            seconds %= 86400
+            hours = seconds / 3600
+            seconds %= 3600
+            minutes = seconds / 60
+            return str(days) + " 天 " + str(hours) + " 小时 " + str(minutes / 60) + " 分 " + str(seconds % 60) + " 秒"
 
 
 class StatusBar(ttk.Frame):

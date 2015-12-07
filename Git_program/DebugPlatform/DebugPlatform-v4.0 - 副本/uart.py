@@ -112,6 +112,7 @@ class UartRoot(tk.Tk):
         self.datasourcecbox['value'] = ("中继","抓包","识别","链路","温度")
         self.datasourcecbox.set(self.parent_menu.datasourcecboxbuf)
         self.datasourcecbox.grid(row=4, column=1)
+        self.datasourcecbox.bind("<<ComboboxSelected>>", self.IsOpen)
 
         tk.Label(self, text="数据上传:").grid(row=5, column=0)
         self.updatamodecbox = ttk.Combobox(self,width=10)
@@ -175,12 +176,14 @@ class UartRoot(tk.Tk):
                 self.relaythread.Createuart()
                 self.relaythread.uart.open()
                 self.relaythread.start()
+                self.parent_menu .opened_thread = self.relaythread
 #             sniffer   
             elif self.datasourcecbox.current() == 1:
                 self.snifferthread = snifferthread.myThread(rootframe=self.parent,threadID=1, name='sniffer', port=self.comnumbox.get(), baud=self.bordratecbox.get(),filename = self.txtfilname)
                 self.parent_menu.snifferthread = self.snifferthread
                 self.snifferthread.setDaemon(True)
                 self.snifferthread.start()
+                self.parent_menu .opened_thread = self.snifferthread
                 # self.updatethread = threading.Thread(target=self.snifferthread.updatetext)
                 # self.updatethread.setDaemon(True)
                 # self.updatethread.start()
@@ -191,6 +194,7 @@ class UartRoot(tk.Tk):
                 self.identifythread.Creatuart()
                 self.identifythread.uart.open()
                 self.identifythread.start()
+                self.parent_menu .opened_thread = self.identifythread
                 # 识别
             elif self.datasourcecbox.current() == 3:
                 self.linktestthread = linkthread.myThread(rootframe=self.parent,threadID=1, name='link',port=self.comnumbox.get(), baud=self.bordratecbox.get(),filename = self.txtidentifyfilname)
@@ -198,6 +202,7 @@ class UartRoot(tk.Tk):
                 self.linktestthread.Creatuart()
                 self.linktestthread.uart.open()
                 self.linktestthread.start()
+                self.parent_menu .opened_thread = self.linktestthread
                 # 温度
             elif self.datasourcecbox.current() == 4:
                 self.temperaturethread = temperaturethread.myThread(rootframe=self.parent,threadID=1, name='temperature',port=self.comnumbox.get(), baud=self.bordratecbox.get())
@@ -205,12 +210,14 @@ class UartRoot(tk.Tk):
                 self.temperaturethread.Creatuart()
                 self.temperaturethread.uart.open()
                 self.temperaturethread.start()
+                self.parent_menu .opened_thread = self.temperaturethread
             self.parent_menu.opened_uart.append(self.comnumbox.get())
             self.IsOpen(0)
             self.parent.status.setstatus('%s', self.comnumbox.get() + '已打开')
             self.parent_menu.bordratecboxbuf = self.bordratecbox.get()
             self.parent_menu.datasourcecboxbuf = self.datasourcecbox.get()
             self.parent_menu.datasourcecboxvalue = self.datasourcecbox.current()
+
             
         except serial.SerialException, error:
             self.errtext = str(error)
@@ -231,32 +238,24 @@ class UartRoot(tk.Tk):
             self.parent_menu.opened_uart.remove(self.comnumbox.get())
         self.IsOpen()
         if self.datasourcecbox.current() == 0:
+            self.relaythread = self.parent_menu.opened_thread
             self.relaythread.uart.close()
-            self.relaythread.killthread=True
+            self.relaythread.killthread = True
         elif self.datasourcecbox.current() == 1:
             self.parent_menu.snifferthread.thread_stop = True
             self.parent_menu.snifferthread.uart.close()
         elif self.datasourcecbox.current() == 2:
+            self.identifythread = self.parent_menu.opened_thread
             self.identifythread.uart.close()
             self.identifythread.thread_stop = True
+        elif self.datasourcecbox.current() == 3:
+            self.linktestthread.uart.close()
+            self.linktestthread = self.parent_menu.opened_thread
+            self.linktestthread.thread_stop = True
+        elif self.datasourcecbox.current() == 4:
+            self.temperaturethread = self.parent_menu.opened_thread
+            self.temperaturethread.uart.close()
         self.parent.status.setstatus('%s', self.comnumbox.get() + '已关闭')
-        return
-        try:
-            if self.comnumbox.get() in self.parent_menu.opened_uart:
-                self.parent_menu.opened_uart.remove(self.comnumbox.get())
-            self.IsOpen(0)
-            if self.datasourcecbox.current() == 0:
-                self.relaythread.uart.close()
-                self.relaythread.killthread=True
-            elif self.datasourcecbox.current() == 1:
-                self.parent_menu.snifferthread.thread_stop = True
-                self.parent_menu.snifferthread.uart.close()
-            elif self.datasourcecbox.current() == 2:
-                self.identifythread.uart.close()
-                self.identifythread.thread_stop = True
-            self.parent.status.setstatus('%s', self.comnumbox.get() + '已关闭')
-        except NameError:
-            self.parent.status.setstatus('%s', '串口未打开')
 
     def IsOpen(self, *event):
         '''
@@ -269,10 +268,26 @@ class UartRoot(tk.Tk):
         '''
         comnunm = self.comnumbox.get()
         if comnunm in self.parent_menu.opened_uart:
+            open = 1
+        else:
+            open = 0
+        if open:
+            self.datasourcecbox.state(['disabled'])
+            self.comnumbox.state(['disabled'])
+            self.bordratecbox.state(['disabled'])
+            self.databitcbox.state(['disabled'])
+            self.stopbitcbox.state(['disabled'])
+            self.updatamodecbox.state(['disabled'])
             self.uartstatus.itemconfig(self.statusrec, fill='green')
             self.uartopenbutton.configure(text = "关闭串口")
             self.buttonstatus = 1
         else:
+            self.datasourcecbox.state(['!disabled'])
+            self.comnumbox.state(['!disabled'])
+            self.bordratecbox.state(['!disabled'])
+            self.databitcbox.state(['!disabled'])
+            self.stopbitcbox.state(['!disabled'])
+            self.updatamodecbox.state(['!disabled'])
             self.uartstatus.itemconfig(self.statusrec, fill='red')
             self.uartopenbutton.configure(text = "打开串口")
             self.buttonstatus = 0
