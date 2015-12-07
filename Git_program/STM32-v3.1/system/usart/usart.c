@@ -56,8 +56,9 @@ void uart_init(){
   
   USART_Init(USART1, &USART_InitStructure);  
   USART_Cmd(USART1, ENABLE);  
-
+#if UART_INT_ENABLE
 	USART_ITConfig(USART1 , USART_IT_RXNE, ENABLE);
+#endif
 //******************************************************************************
 //  串口1所使用管脚输出输入定义
 //******************************************************************************
@@ -74,12 +75,14 @@ void uart_init(){
   GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU;//IO口悬空输入
   GPIO_Init(GPIOA, &GPIO_InitStructure);               //初始化串口2输入IO
 	
+#if UART_INT_ENABLE
 	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);
   NVIC_InitStructure.NVIC_IRQChannel	=	USART1_IRQn;
   NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority	=	3;
   NVIC_InitStructure.NVIC_IRQChannelSubPriority	=	0;
   NVIC_InitStructure.NVIC_IRQChannelCmd	=	ENABLE;
   NVIC_Init(&NVIC_InitStructure);
+#endif
 
 }
 void Usart1_PutChar(uint8_t ch)

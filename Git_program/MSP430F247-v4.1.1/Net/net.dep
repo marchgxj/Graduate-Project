@@ -1,0 +1,782 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<project>
+  <fileVersion>2</fileVersion>
+  <fileChecksum>535318962</fileChecksum>
+  <configuration>
+    <name>Debug</name>
+    <outputs>
+      <file>$PROJ_DIR$\..\Scource\hardware\A7139_CONFIG.h</file>
+      <file>$PROJ_DIR$\..\Scource\hardware\A7139_CONFIG.c</file>
+      <file>$PROJ_DIR$\..\Scource\hardware\A7139.c</file>
+      <file>$PROJ_DIR$\..\Scource\hardware\A7139.h</file>
+      <file>$PROJ_DIR$\..\Scource\hardware\adc.h</file>
+      <file>$PROJ_DIR$\..\Scource\schdule\detect.c</file>
+      <file>$PROJ_DIR$\..\Scource\hardware\led.h</file>
+      <file>$PROJ_DIR$\..\Scource\hardware\HMC5983.h</file>
+      <file>$PROJ_DIR$\..\Scource\schdule\interrupt.c</file>
+      <file>$PROJ_DIR$\..\Scource\hardware\digio.h</file>
+      <file>$PROJ_DIR$\..\Scource\hardware\spi.c</file>
+      <file>$PROJ_DIR$\..\Scource\hardware\spi.h</file>
+      <file>$PROJ_DIR$\..\Scource\hardware\digio.c</file>
+      <file>$PROJ_DIR$\..\Scource\hardware\adc.c</file>
+      <file>$PROJ_DIR$\..\Scource\hardware\HMC5983.c</file>
+      <file>$PROJ_DIR$\..\Scource\hardware\led.c</file>
+      <file>$PROJ_DIR$\..\Scource\schdule\interrupt.h</file>
+      <file>$PROJ_DIR$\..\Scource\schdule\detect.h</file>
+      <file>$PROJ_DIR$\..\Scource\schdule\join.c</file>
+      <file>$PROJ_DIR$\Debug\Obj\tdma.__cstat.et</file>
+      <file>$TOOLKIT_DIR$\config\linker\lnk430f247.xcl</file>
+      <file>$PROJ_DIR$\Debug\Obj\HMC5983.__cstat.et</file>
+      <file>$PROJ_DIR$\Debug\Obj\adc.pbi</file>
+      <file>$TOOLKIT_DIR$\inc\dlib\c\DLib_Threads.h</file>
+      <file>$PROJ_DIR$\Debug\Obj\sys.pbi</file>
+      <file>$PROJ_DIR$\Debug\Obj\uart.pbi</file>
+      <file>$PROJ_DIR$\Debug\Obj\spi.r43</file>
+      <file>$PROJ_DIR$\Debug\Obj\A7139_CONFIG.__cstat.et</file>
+      <file>$PROJ_DIR$\Debug\Obj\mcu.r43</file>
+      <file>$PROJ_DIR$\Debug\Obj\A7139.pbi</file>
+      <file>$PROJ_DIR$\Debug\Obj\mac.r43</file>
+      <file>$PROJ_DIR$\Debug\Obj\timer.__cstat.et</file>
+      <file>$PROJ_DIR$\Debug\Obj\detect.r43</file>
+      <file>$PROJ_DIR$\Debug\Obj\main.r43</file>
+      <file>$PROJ_DIR$\Debug\Obj\uart.r43</file>
+      <file>$PROJ_DIR$\Debug\Obj\HMC5983.pbi</file>
+      <file>$PROJ_DIR$\Debug\Obj\spi.__cstat.et</file>
+      <file>$PROJ_DIR$\Debug\Obj\detect.__cstat.et</file>
+      <file>$PROJ_DIR$\Debug\Obj\int.r43</file>
+      <file>$TOOLKIT_DIR$\inc\dlib\c\stdio.h</file>
+      <file>$PROJ_DIR$\Debug\Obj\digio.__cstat.et</file>
+      <file>$TOOLKIT_DIR$\inc\in430.h</file>
+      <file>$PROJ_DIR$\Debug\Obj\led.r43</file>
+      <file>$PROJ_DIR$\Debug\Obj\int.__cstat.et</file>
+      <file>$PROJ_DIR$\Debug\Obj\led.pbi</file>
+      <file>$PROJ_DIR$\Debug\Obj\delay.__cstat.et</file>
+      <file>$PROJ_DIR$\Debug\Obj\interrupt.__cstat.et</file>
+      <file>$TOOLKIT_DIR$\inc\dlib\c\ycheck.h</file>
+      <file>$PROJ_DIR$\Debug\Obj\tdma.r43</file>
+      <file>$PROJ_DIR$\Debug\Obj\spi.pbi</file>
+      <file>$TOOLKIT_DIR$\inc\dlib\c\DLib_Product.h</file>
+      <file>$PROJ_DIR$\Debug\Obj\int.pbi</file>
+      <file>$PROJ_DIR$\Debug\Obj\interrupt.pbi</file>
+      <file>$PROJ_DIR$\Debug\Obj\flash.pbi</file>
+      <file>$PROJ_DIR$\Debug\Obj\uart.__cstat.et</file>
+      <file>$PROJ_DIR$\Debug\Obj\join.r43</file>
+      <file>$PROJ_DIR$\Debug\Obj\digio.r43</file>
+      <file>$PROJ_DIR$\Debug\Obj\delay.pbi</file>
+      <file>$PROJ_DIR$\Debug\Obj\A7139.r43</file>
+      <file>$PROJ_DIR$\Debug\Obj\flash.__cstat.et</file>
+      <file>$TOOLKIT_DIR$\inc\dlib\c\DLib_Defaults.h</file>
+      <file>$PROJ_DIR$\Debug\Obj\board.r43</file>
+      <file>$PROJ_DIR$\Debug\Obj\mcu.__cstat.et</file>
+      <file>$TOOLKIT_DIR$\inc\dlib\c\ysizet.h</file>
+      <file>$TOOLKIT_DIR$\inc\dlib\c\ystdio.h</file>
+      <file>$PROJ_DIR$\Debug\Obj\A7139.__cstat.et</file>
+      <file>$PROJ_DIR$\Debug\Obj\digio.pbi</file>
+      <file>$TOOLKIT_DIR$\inc\dlib\c\string.h</file>
+      <file>$TOOLKIT_DIR$\config\linker\multiplier.xcl</file>
+      <file>$TOOLKIT_DIR$\inc\dlib\c\stdlib.h</file>
+      <file>$TOOLKIT_DIR$\lib\dlib\dl430fn.h</file>
+      <file>$PROJ_DIR$\Debug\Obj\main.__cstat.et</file>
+      <file>$PROJ_DIR$\Debug\Obj\timer.r43</file>
+      <file>$TOOLKIT_DIR$\lib\dlib\dl430fn.r43</file>
+      <file>$PROJ_DIR$\Debug\Obj\ProcessEvent.pbi</file>
+      <file>$PROJ_DIR$\Debug\Exe\net.d43</file>
+      <file>$PROJ_DIR$\Debug\Obj\board.pbi</file>
+      <file>$PROJ_DIR$\Debug\Obj\HMC5983.r43</file>
+      <file>$PROJ_DIR$\Debug\Obj\tdma.pbi</file>
+      <file>$PROJ_DIR$\Debug\Obj\flash.r43</file>
+      <file>$PROJ_DIR$\Debug\Obj\A7139_CONFIG.r43</file>
+      <file>$PROJ_DIR$\Debug\Obj\ProcessEvent.r43</file>
+      <file>$TOOLKIT_DIR$\inc\intrinsics.h</file>
+      <file>$PROJ_DIR$\main.c</file>
+      <file>$PROJ_DIR$\Debug\Obj\led.__cstat.et</file>
+      <file>$PROJ_DIR$\Debug\Obj\sys.__cstat.et</file>
+      <file>$PROJ_DIR$\Debug\Obj\interrupt.r43</file>
+      <file>$PROJ_DIR$\Debug\Obj\sys.r43</file>
+      <file>$PROJ_DIR$\..\Scource\systerm\timer.c</file>
+      <file>$PROJ_DIR$\..\Scource\systerm\uart.h</file>
+      <file>$PROJ_DIR$\..\Scource\systerm\timer.h</file>
+      <file>$PROJ_DIR$\..\Scource\systerm\uart.c</file>
+      <file>$PROJ_DIR$\Debug\Obj\A7139_CONFIG.pbi</file>
+      <file>$PROJ_DIR$\..\Scource\systerm\types.h</file>
+      <file>$PROJ_DIR$\..\Scource\configure.h</file>
+      <file>$PROJ_DIR$\Debug\Obj\ProcessEvent.__cstat.et</file>
+      <file>$TOOLKIT_DIR$\inc\dlib\c\yvals.h</file>
+      <file>$PROJ_DIR$\Debug\Obj\adc.__cstat.et</file>
+      <file>$PROJ_DIR$\Debug\Obj\timer.pbi</file>
+      <file>$PROJ_DIR$\Debug\Obj\join.pbi</file>
+      <file>$PROJ_DIR$\Debug\Exe\net.ulp</file>
+      <file>$TOOLKIT_DIR$\inc\dlib\c\xencoding_limits.h</file>
+      <file>$PROJ_DIR$\Debug\Obj\detect.pbi</file>
+      <file>$PROJ_DIR$\Debug\Obj\main.pbi</file>
+      <file>$PROJ_DIR$\Debug\Obj\adc.r43</file>
+      <file>$PROJ_DIR$\Debug\List\net.map</file>
+      <file>$TOOLKIT_DIR$\inc\msp430.h</file>
+      <file>$PROJ_DIR$\Debug\Obj\mcu.pbi</file>
+      <file>$PROJ_DIR$\Debug\Obj\delay.r43</file>
+      <file>$PROJ_DIR$\Debug\Obj\board.__cstat.et</file>
+      <file>$PROJ_DIR$\Debug\Obj\mac.__cstat.et</file>
+      <file>$PROJ_DIR$\Debug\Obj\join.__cstat.et</file>
+      <file>$TOOLKIT_DIR$\inc\msp430f247.h</file>
+      <file>$PROJ_DIR$\..\Scource\schdule\join.h</file>
+      <file>$PROJ_DIR$\..\Scource\schdule\tdma.c</file>
+      <file>$PROJ_DIR$\..\Scource\schdule\tdma.h</file>
+      <file>$PROJ_DIR$\..\Scource\schdule\mac.c</file>
+      <file>$PROJ_DIR$\..\Scource\systerm\common.h</file>
+      <file>$PROJ_DIR$\..\Scource\systerm\delay.c</file>
+      <file>$PROJ_DIR$\..\Scource\systerm\delay.h</file>
+      <file>$PROJ_DIR$\..\Scource\systerm\board.h</file>
+      <file>$PROJ_DIR$\..\Scource\systerm\board.c</file>
+      <file>$PROJ_DIR$\..\Scource\schdule\ProcessEvent.c</file>
+      <file>$PROJ_DIR$\..\Scource\systerm\defs.h</file>
+      <file>$PROJ_DIR$\..\Scource\schdule\mac.h</file>
+      <file>$PROJ_DIR$\..\Scource\schdule\ProcessEvent.h</file>
+      <file>$PROJ_DIR$\..\Scource\systerm\mcu.h</file>
+      <file>$PROJ_DIR$\..\Scource\systerm\int.h</file>
+      <file>$PROJ_DIR$\..\Scource\systerm\sys.h</file>
+      <file>$PROJ_DIR$\..\Scource\systerm\mcu.c</file>
+      <file>$PROJ_DIR$\Debug\Obj\mac.pbi</file>
+      <file>$PROJ_DIR$\..\Scource\systerm\sys.c</file>
+      <file>$PROJ_DIR$\..\Scource\systerm\flash.c</file>
+      <file>$PROJ_DIR$\..\Scource\systerm\flash.h</file>
+      <file>$PROJ_DIR$\..\Scource\systerm\int.c</file>
+      <file>$PROJ_DIR$\Debug\Obj\net.pbd</file>
+    </outputs>
+    <file>
+      <name>$PROJ_DIR$\..\Scource\hardware\A7139_CONFIG.c</name>
+      <outputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 92</file>
+        </tool>
+        <tool>
+          <name>ICC430</name>
+          <file> 80</file>
+        </tool>
+        <tool>
+          <name>__cstat</name>
+          <file> 27</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 39 9 128 47 96 93 6 4 115 106 117 23 0 127 11 89 125 124 17 82 60 70 94 3 120 123 119 126 90 41 113 16 67 69 133 7 112 63 50 101 64</file>
+        </tool>
+        <tool>
+          <name>ICC430</name>
+          <file> 0 93 117 94 3 120 9 106 112 41 82 123 127 119 6 11 128 126 90 89 4 113 125 16 39 47 96 60 70 50 101 23 63 64 67 124 69 115 133 17 7</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\Scource\hardware\A7139.c</name>
+      <outputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 29</file>
+        </tool>
+        <tool>
+          <name>ICC430</name>
+          <file> 58</file>
+        </tool>
+        <tool>
+          <name>__cstat</name>
+          <file> 65</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 96 133 47 106 93 3 113 128 117 23 123 90 67 82 60 70 94 120 119 126 41 16 69 7 112 63 50 101 0 9 127 6 11 89 4 125 39 124 115 17 64</file>
+        </tool>
+        <tool>
+          <name>ICC430</name>
+          <file> 117 94 93 3 0 120 9 106 112 41 82 123 127 119 6 11 128 126 90 89 4 113 125 16 39 47 96 60 70 50 101 23 63 64 67 124 69 115 133 17 7</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\Scource\schdule\detect.c</name>
+      <outputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 102</file>
+        </tool>
+        <tool>
+          <name>ICC430</name>
+          <file> 32</file>
+        </tool>
+        <tool>
+          <name>__cstat</name>
+          <file> 37</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 106 93 133 47 96 3 113 128 117 23 123 90 67 82 60 70 94 120 119 126 41 16 69 7 112 63 50 101 0 9 127 6 11 89 4 125 39 124 115 17 64</file>
+        </tool>
+        <tool>
+          <name>ICC430</name>
+          <file> 117 94 93 3 0 120 9 106 112 41 82 123 127 119 6 11 128 126 90 89 4 113 125 16 39 47 96 60 70 50 101 23 63 64 67 124 69 115 133 17 7</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\Scource\schdule\interrupt.c</name>
+      <outputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 52</file>
+        </tool>
+        <tool>
+          <name>ICC430</name>
+          <file> 86</file>
+        </tool>
+        <tool>
+          <name>__cstat</name>
+          <file> 46</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 96 67 60 117 123 82 90 70 3 106 113 133 93 128 47 23 94 120 119 126 41 16 69 7 112 63 50 101 0 9 127 6 11 89 4 125 39 124 115 17 64</file>
+        </tool>
+        <tool>
+          <name>ICC430</name>
+          <file> 117 94 93 3 0 120 9 106 112 41 82 123 127 119 6 11 128 126 90 89 4 113 125 16 39 47 96 60 70 50 101 23 63 64 67 124 69 115 133 17 7</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\Scource\hardware\spi.c</name>
+      <outputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 49</file>
+        </tool>
+        <tool>
+          <name>ICC430</name>
+          <file> 26</file>
+        </tool>
+        <tool>
+          <name>__cstat</name>
+          <file> 36</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 17 93 11 82 47 96 106 41 0 125 117 23 127 89 124 60 70 128 112 9 6 4 39 115 63 50 101 94 3 120 123 119 126 90 113 16 67 69 133 7 64</file>
+        </tool>
+        <tool>
+          <name>ICC430</name>
+          <file> 11 106 112 41 82 128 93 117 94 3 0 120 9 123 127 119 6 126 90 89 4 113 125 16 39 47 96 60 70 50 101 23 63 64 67 124 69 115 133 17 7</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\Scource\hardware\digio.c</name>
+      <outputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 66</file>
+        </tool>
+        <tool>
+          <name>ICC430</name>
+          <file> 56</file>
+        </tool>
+        <tool>
+          <name>__cstat</name>
+          <file> 40</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 6 115 93 47 96 9 4 106 128 117 23 39 82 60 70 0 127 11 89 125 124 17 112 41 63 50 101 94 3 120 123 119 126 90 113 16 67 69 133 7 64</file>
+        </tool>
+        <tool>
+          <name>ICC430</name>
+          <file> 9 93 117 94 3 0 120 106 112 41 82 123 127 119 6 11 128 126 90 89 4 113 125 16 39 47 96 60 70 50 101 23 63 64 67 124 69 115 133 17 7</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\Scource\hardware\adc.c</name>
+      <outputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 22</file>
+        </tool>
+        <tool>
+          <name>ICC430</name>
+          <file> 104</file>
+        </tool>
+        <tool>
+          <name>__cstat</name>
+          <file> 97</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 93 69 119 117 47 96 101 94 41 128 106 120 126 16 7 112 63 50 3 123 90 113 67 133 82 60 23 70 0 9 127 6 11 89 4 125 39 124 115 17 64</file>
+        </tool>
+        <tool>
+          <name>ICC430</name>
+          <file> 4 117 94 93 3 0 120 9 106 112 41 82 123 127 119 6 11 128 126 90 89 113 125 16 39 47 96 60 70 50 101 23 63 64 67 124 69 115 133 17 7</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\Scource\hardware\HMC5983.c</name>
+      <outputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 35</file>
+        </tool>
+        <tool>
+          <name>ICC430</name>
+          <file> 77</file>
+        </tool>
+        <tool>
+          <name>__cstat</name>
+          <file> 21</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 125 0 93 11 17 47 96 127 89 124 106 128 117 23 9 6 4 39 115 82 60 70 94 3 120 123 119 126 90 41 113 16 67 69 133 7 112 63 50 101 64</file>
+        </tool>
+        <tool>
+          <name>ICC430</name>
+          <file> 117 94 93 3 0 120 9 106 112 41 82 123 127 119 6 11 128 126 90 89 4 113 125 16 39 47 96 60 70 50 101 23 63 64 67 124 69 115 133 17 7</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\Scource\hardware\led.c</name>
+      <outputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 44</file>
+        </tool>
+        <tool>
+          <name>ICC430</name>
+          <file> 42</file>
+        </tool>
+        <tool>
+          <name>__cstat</name>
+          <file> 84</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 106 133 0 47 96 3 113 128 93 117 23 123 90 67 82 60 70 94 120 119 126 41 16 69 7 9 63 50 101 6 127 11 89 4 125 39 124 115 17 112 64</file>
+        </tool>
+        <tool>
+          <name>ICC430</name>
+          <file> 6 93 117 94 3 0 120 9 106 112 41 82 123 127 119 11 128 126 90 89 4 113 125 16 39 47 96 60 70 50 101 23 63 64 67 124 69 115 133 17 7</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>[ROOT_NODE]</name>
+      <outputs>
+        <tool>
+          <name>XLINK</name>
+          <file> 75 105</file>
+        </tool>
+        <tool>
+          <name>ULP430</name>
+          <file> 100</file>
+        </tool>
+      </outputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\Scource\schdule\join.c</name>
+      <outputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 99</file>
+        </tool>
+        <tool>
+          <name>ICC430</name>
+          <file> 55</file>
+        </tool>
+        <tool>
+          <name>__cstat</name>
+          <file> 111</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 89 93 127 124 47 96 0 11 125 17 106 128 117 23 9 6 4 39 115 82 60 70 113 94 3 120 123 119 126 90 41 16 67 69 133 7 112 63 50 101 64</file>
+        </tool>
+        <tool>
+          <name>ICC430</name>
+          <file> 117 94 93 3 0 120 9 106 112 41 82 123 127 119 6 11 128 126 90 89 4 113 125 16 39 47 96 60 70 50 101 23 63 64 67 124 69 115 133 17 7</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\Debug\Exe\net.d43</name>
+      <outputs>
+        <tool>
+          <name>XLINK</name>
+          <file> 105</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>XLINK</name>
+          <file> 20 68 58 80 104 61 108 32 56 79 77 38 86 55 42 30 33 28 81 26 87 48 72 34 73</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\main.c</name>
+      <outputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 103</file>
+        </tool>
+        <tool>
+          <name>ICC430</name>
+          <file> 33</file>
+        </tool>
+        <tool>
+          <name>__cstat</name>
+          <file> 71</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 41 94 119 69 47 96 120 126 16 7 106 128 93 117 23 3 123 90 113 67 133 82 60 70 0 9 127 6 11 89 4 125 39 124 115 17 112 63 50 101 64</file>
+        </tool>
+        <tool>
+          <name>ICC430</name>
+          <file> 117 94 93 3 0 120 9 106 112 41 82 123 127 119 6 11 128 126 90 89 4 113 125 16 39 47 96 60 70 50 101 23 63 64 67 124 69 115 133 17 7</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\Scource\systerm\timer.c</name>
+      <outputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 98</file>
+        </tool>
+        <tool>
+          <name>ICC430</name>
+          <file> 72</file>
+        </tool>
+        <tool>
+          <name>__cstat</name>
+          <file> 31</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 112 9 41 120 90 93 106 82 6 126</file>
+        </tool>
+        <tool>
+          <name>ICC430</name>
+          <file> 93 90 120 9 106 112 41 82 6 126</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\Scource\systerm\uart.c</name>
+      <outputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 25</file>
+        </tool>
+        <tool>
+          <name>ICC430</name>
+          <file> 34</file>
+        </tool>
+        <tool>
+          <name>__cstat</name>
+          <file> 54</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 67 123 90 117 47 96 3 106 113 133 93 128 23 94 120 119 126 41 16 69 7 82 60 70 0 9 127 6 11 89 4 125 39 124 115 17 112 63 50 101 64</file>
+        </tool>
+        <tool>
+          <name>ICC430</name>
+          <file> 117 94 93 3 0 120 9 106 112 41 82 123 127 119 6 11 128 126 90 89 4 113 125 16 39 47 96 60 70 50 101 23 63 64 67 124 69 115 133 17 7</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\Scource\schdule\tdma.c</name>
+      <outputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 78</file>
+        </tool>
+        <tool>
+          <name>ICC430</name>
+          <file> 48</file>
+        </tool>
+        <tool>
+          <name>__cstat</name>
+          <file> 19</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 124 127 93 89 47 96 0 11 125 17 106 128 117 23 9 6 4 39 115 82 60 70 94 3 120 123 119 126 90 41 113 16 67 69 133 7 112 63 50 101 64</file>
+        </tool>
+        <tool>
+          <name>ICC430</name>
+          <file> 117 94 93 3 0 120 9 106 112 41 82 123 127 119 6 11 128 126 90 89 4 113 125 16 39 47 96 60 70 50 101 23 63 64 67 124 69 115 133 17 7</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\Scource\schdule\mac.c</name>
+      <outputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 130</file>
+        </tool>
+        <tool>
+          <name>ICC430</name>
+          <file> 30</file>
+        </tool>
+        <tool>
+          <name>__cstat</name>
+          <file> 110</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 3 113 106 133 93 47 96 123 90 67 117 128 23 94 120 119 126 41 16 69 7 82 60 70 0 9 127 6 11 89 4 125 39 124 115 17 112 63 50 101 64</file>
+        </tool>
+        <tool>
+          <name>ICC430</name>
+          <file> 117 94 93 3 0 120 9 106 112 41 82 123 127 119 6 11 128 126 90 89 4 113 125 16 39 47 96 60 70 50 101 23 63 64 67 124 69 115 133 17 7</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\Scource\systerm\delay.c</name>
+      <outputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 57</file>
+        </tool>
+        <tool>
+          <name>ICC430</name>
+          <file> 108</file>
+        </tool>
+        <tool>
+          <name>__cstat</name>
+          <file> 45</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 6 101 115 47 93 4 9 117 128 39 64 0 127 11 89 125 124 17 82 106 96 63 94 3 120 123 119 126 90 41 113 16 67 69 133 7 112 60 23 70 50</file>
+        </tool>
+        <tool>
+          <name>ICC430</name>
+          <file> 117 94 93 3 0 120 9 106 112 41 82 123 127 119 6 11 128 126 90 89 4 113 125 16 39 47 96 60 70 50 101 23 63 64 67 124 69 115 133 17 7</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\Scource\systerm\board.c</name>
+      <outputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 76</file>
+        </tool>
+        <tool>
+          <name>ICC430</name>
+          <file> 61</file>
+        </tool>
+        <tool>
+          <name>__cstat</name>
+          <file> 109</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 133 106 93 3 113 47 96 123 90 67 117 128 23 94 120 119 126 41 16 69 7 82 60 70 0 9 127 6 11 89 4 125 39 124 115 17 112 63 50 101 64</file>
+        </tool>
+        <tool>
+          <name>ICC430</name>
+          <file> 117 94 93 3 0 120 9 106 112 41 82 123 127 119 6 11 128 126 90 89 4 113 125 16 39 47 96 60 70 50 101 23 63 64 67 124 69 115 133 17 7</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\Scource\schdule\ProcessEvent.c</name>
+      <outputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 74</file>
+        </tool>
+        <tool>
+          <name>ICC430</name>
+          <file> 81</file>
+        </tool>
+        <tool>
+          <name>__cstat</name>
+          <file> 95</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 89 127 124 47 96 0 11 125 17 106 128 93 117 23 9 6 4 39 115 82 60 70 94 3 120 123 119 126 90 41 113 16 67 69 133 7 112 63 50 101 64</file>
+        </tool>
+        <tool>
+          <name>ICC430</name>
+          <file> 117 94 93 3 0 120 9 106 112 41 82 123 127 119 6 11 128 126 90 89 4 113 125 16 39 47 96 60 70 50 101 23 63 64 67 124 69 115 133 17 7</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\Scource\systerm\mcu.c</name>
+      <outputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 107</file>
+        </tool>
+        <tool>
+          <name>ICC430</name>
+          <file> 28</file>
+        </tool>
+        <tool>
+          <name>__cstat</name>
+          <file> 62</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 16 120 126 7 47 96 94 119 41 69 106 128 93 117 23 3 123 90 113 67 133 82 60 70 0 9 127 6 11 89 4 125 39 124 115 17 112 63 50 101 64</file>
+        </tool>
+        <tool>
+          <name>ICC430</name>
+          <file> 117 94 93 3 0 120 9 106 112 41 82 123 127 119 6 11 128 126 90 89 4 113 125 16 39 47 96 60 70 50 101 23 63 64 67 124 69 115 133 17 7</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\Scource\systerm\sys.c</name>
+      <outputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 24</file>
+        </tool>
+        <tool>
+          <name>ICC430</name>
+          <file> 87</file>
+        </tool>
+        <tool>
+          <name>__cstat</name>
+          <file> 85</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 17 11 0 125 47 96 127 89 124 106 128 93 117 23 9 6 4 39 115 82 60 70 94 3 120 123 119 126 90 41 113 16 67 69 133 7 112 63 50 101 64</file>
+        </tool>
+        <tool>
+          <name>ICC430</name>
+          <file> 117 94 93 3 0 120 9 106 112 41 82 123 127 119 6 11 128 126 90 89 4 113 125 16 39 47 96 60 70 50 101 23 63 64 67 124 69 115 133 17 7</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\Scource\systerm\flash.c</name>
+      <outputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 53</file>
+        </tool>
+        <tool>
+          <name>ICC430</name>
+          <file> 79</file>
+        </tool>
+        <tool>
+          <name>__cstat</name>
+          <file> 59</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 124 127 93 89 47 96 0 11 125 17 106 128 117 23 9 6 4 39 115 82 60 70 94 3 120 123 119 126 90 41 113 16 67 69 133 7 112 63 50 101 64</file>
+        </tool>
+        <tool>
+          <name>ICC430</name>
+          <file> 117 94 93 3 0 120 9 106 112 41 82 123 127 119 6 11 128 126 90 89 4 113 125 16 39 47 96 60 70 50 101 23 63 64 67 124 69 115 133 17 7</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\Scource\systerm\int.c</name>
+      <outputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 51</file>
+        </tool>
+        <tool>
+          <name>ICC430</name>
+          <file> 38</file>
+        </tool>
+        <tool>
+          <name>__cstat</name>
+          <file> 43</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 124 127 89 47 96 0 11 125 17 106 128 93 117 23 9 6 4 39 115 82 60 70 94 3 120 123 119 126 90 41 113 16 67 69 133 7 112 63 50 101 64</file>
+        </tool>
+        <tool>
+          <name>ICC430</name>
+          <file> 117 94 93 3 0 120 9 106 112 41 82 123 127 119 6 11 128 126 90 89 4 113 125 16 39 47 96 60 70 50 101 23 63 64 67 124 69 115 133 17 7</file>
+        </tool>
+      </inputs>
+    </file>
+  </configuration>
+  <configuration>
+    <name>Release</name>
+    <outputs/>
+    <forcedrebuild>
+      <name>[MULTI_TOOL]</name>
+      <tool>XLINK</tool>
+    </forcedrebuild>
+    <forcedrebuild>
+      <name>[REBUILD_ALL]</name>
+    </forcedrebuild>
+  </configuration>
+</project>
+
+

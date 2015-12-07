@@ -91,10 +91,7 @@ uint8 rec;
 void Upload_Data()
 {
     uint16 time_out = 0;
-		uint8 current_memory = current_upload_tsk;
-		uint8 last_memory = last_upload_tsk;
 		uint16 i=0;
-		UartDataStruct node;
 	
 		if(Node_Inwaiting == 0)		//没有要发送的节点
 		{
@@ -110,6 +107,7 @@ void Upload_Data()
         Usart1_PutChar(UploadTQ[i].address);
         Usart1_PutChar(UploadTQ[i].data);
 		}
+#if UART_INT_ENABLE
 		while (Upload_Ack == 0)
 		{
 				if (time_out++ > 150)
@@ -123,6 +121,23 @@ void Upload_Data()
 				}
 				delay_ms(1);
 		}
+#else
+		Receive_Upload_Ack_Fail = 0;
+		while (USART_GetFlagStatus(USART1, USART_FLAG_RXNE) == RESET)
+		{
+				if (time_out++ > 15000)
+				{
+						Receive_Upload_Ack_Fail = 1;				//如果没有收到确认，发送指针置头，重新发送
+						break;
+				}
+				delay_us(10);
+		}
+		if(USART1_Getchar()!='o')					//确认数据位'o'
+		{
+				Receive_Upload_Ack_Fail = 1;				//如果没有收到确认，发送指针置头，重新发送
+		}
+				
+#endif
 		Upload_Ack = 0;
 		if(Receive_Upload_Ack_Fail == 1)
 		{
@@ -132,67 +147,6 @@ void Upload_Data()
 		}
 		Node_Inwaiting = 0;
 		return;
-	
-    
-		
-    Usart1_PutChar(0x00);//发送这个数时接收不到
-		Usart1_PutChar(0x7D);
-    Usart1_PutChar(0x7E);								//包头
-		Usart1_PutChar(Node_Inwaiting);			//本次要发送的节点个数
-    node = PopUploadNode();
-		Pop_Count = 0;
-		//发送队列内存在的全部节点
-    while (!Empty_Node(&node))
-    {
-        Usart1_PutChar(node.address >> 8);
-        Usart1_PutChar(node.address);
-        Usart1_PutChar(node.data);
-        node = PopUploadNode();
-			  Pop_Count++;
-				if(Pop_Count>UPLOAD_NODE_NUM)
-				{
-						//队列已经满了，还没有发出去
-						//加printf输出信息
-						DebugMsg("Pop_Count Overload");
-					  Node_Inwaiting = 0;
-						return;
-				}
-    }
-		//Usart1_PutChar(0x7E);
-		//Usart1_PutChar(0x7D);
-		//DIS_USARTINT;
-		if(Power_Mode == 1)			//只发送一次时要求确认
-		{
-				
-			//	while (USART_GetFlagStatus(USART1, USART_FLAG_RXNE) == RESET)
-				while (Upload_Ack == 0)
-				{
-						if (time_out++ > 150)
-						{
-								delay_ms(1);
-								current_upload_tsk = 0;				//如果没有收到确认，发送指针置头，重新发送
-								Receive_Upload_Ack_Fail = 1;
-							  /*Usart1_PutChar(0x7D);
-								Usart1_PutChar(0x7F);								//包头
-							  printf("upload no ack");*/
-								//return;
-							break;
-						}
-				}
-				Upload_Ack = 0;
-				if(Receive_Upload_Ack_Fail == 1)
-				{
-						Receive_Upload_Ack_Fail = 0;
-						DebugMsg("upload no ack");
-						return;
-				}
-		}
-		//EN_USARTINT;
-		//若发送成功，清空队列中节点信息，插入和发送指针置头
-		Clear_Buffer(current_memory,last_memory);
-		current_upload_tsk = 0;
-		last_upload_tsk = 0;
-		Node_Inwaiting = 0;
 }
 
 void UploadDrawData()

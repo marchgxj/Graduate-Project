@@ -3,15 +3,17 @@ int main(void)
 {	 
  		DisableInterrupt();
 		sys_init();
-//		delay_ms(1000);delay_ms(1000);delay_ms(1000);delay_ms(1000);delay_ms(1000);
-//		delay_ms(1000);delay_ms(1000);delay_ms(1000);delay_ms(1000);delay_ms(1000);
-//		delay_ms(1000);delay_ms(1000);delay_ms(1000);delay_ms(1000);delay_ms(1000);
+		delay_ms(1000);delay_ms(1000);delay_ms(1000);delay_ms(1000);delay_ms(1000);
+		delay_ms(1000);delay_ms(1000);delay_ms(1000);delay_ms(1000);delay_ms(1000);
+		delay_ms(1000);delay_ms(1000);delay_ms(1000);delay_ms(1000);delay_ms(1000);
 		RootDevice.pyh_address = 0xFFFF;
 		RootDevice.cluster_id = ROOT;
 		RootDevice.cluster_innernum = 0;
 		RootDevice.free_node = MAX_NODE_NUM;
 		EnableInterrupt();
+#if UART_INT_ENABLE
 		EN_USARTINT;
+#endif
 		//DIS_USARTINT;
 #if (SEND_REJOIN_EN == 1)
 		PostTask(EVENT_REJOIN_SEND);
