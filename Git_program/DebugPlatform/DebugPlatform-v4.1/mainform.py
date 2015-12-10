@@ -9,12 +9,15 @@ import tkMessageBox as tkmes
 import tkFont
 import time
 
+
 import tkFileDialog
-import matplot
-import matplotold
-import matplotoldanimate
+if platform.system() != "Linux":
+    import matplot
+    import matplotold
+    import matplotoldanimate
 import uart
 import carstop
+
 
 
 class MainRoot(tk.Tk):
@@ -110,7 +113,7 @@ class MenuBar(tk.Menu):
         filemenu = tk.Menu(self, tearoff=False)
         self.add_cascade(label="选项", underline=0, menu=filemenu)
         filemenu.add_command(label="串口设置...", command=self.Uartettings)
-        filemenu.add_command(label="网络设置...", command=self.netsettings)
+        filemenu.add_command(label="数据导出...", command=self.dataToExcel)
         filemenu.add_command(label="停车设置...", command=self.carstopsettings)
         filemenu.add_command(label="退出", underline=1, command=self.quit)
         helpmenu = tk.Menu(self, tearoff=False)
@@ -165,8 +168,30 @@ class MenuBar(tk.Menu):
         '''删掉了mainloop'''
         self.uartform.mainloop()
 
-    def netsettings(self):
-        pass
+    def dataToExcel(self):
+        import re
+        dirpath = tkFileDialog.askdirectory(initialdir='..\Data')
+        dir=os.listdir(dirpath)
+        datapath = []
+        path = ["" for i in range(12)]
+
+        for d in dir:
+            current_dirpath = os.path.join(dirpath,d)
+            if os.path.isdir(current_dirpath):
+                for txt in os.listdir(current_dirpath):
+                    current_txtpath = os.path.join(current_dirpath,txt)
+                    datapath.append(current_txtpath)
+
+        for filename in datapath:
+            with open(filename) as file:
+                print file.readlines()
+
+
+        # with open(datapath) as file:
+
+
+
+
 
     def carstopsettings(self):
         '''
@@ -395,7 +420,7 @@ class Application(ttk.Notebook):
 
     def stopcaronce(self, move):
         if self.root.resolution <= 153600:
-            self.front = tkFont.Font(size=10, family="黑体")
+            self.front = tkFont.Font(size=13, family="黑体")
         count = 0
         if self.stopedcarnum > self.carnum:
             self.statusbar.setstatus('车辆数：%s，车位数：%s，无法继续停车', str(self.stopedcarnum), str(self.carnum))
@@ -697,10 +722,15 @@ class Application(ttk.Notebook):
         self.datapathbutton = ttk.Button(self.tab4, text="选择文件", command=self.Selectdata)
         self.datapathbutton.grid(row=1, column=1, sticky=tk.W)
 
-        self.dataRPbutton = tk.Button(self.tab4, command=self.MatplotlibDrawing, background="red", text="显示图像")
-        self.dataRPbutton.grid(row=1, column=3, sticky=tk.E)
-        self.dataclearbutton = tk.Button(self.tab4, text="清屏", command=self.Cleardata)
-        self.dataclearbutton.grid(row=1, column=3, padx=20, sticky=tk.W, )
+        if platform.system() != "Linux":
+            self.dataRPbutton = tk.Button(self.tab4, command=self.MatplotlibDrawing, background="red", text="显示2D图像")
+            self.dataRPbutton.grid(row=1, column=3)
+            self.datashow3dbutton = tk.Button(self.tab4, command=self.drawing3D, background="red", text="显示3D图像")
+            self.datashow3dbutton.grid(row=1, column=3, sticky=tk.E)
+            self.datashow3dclearbutton = tk.Button(self.tab4, command=self.Clear3DLine, text="清屏")
+            self.datashow3dclearbutton.grid(row=1, column=4, sticky=tk.W)
+            self.dataclearbutton = tk.Button(self.tab4, text="清屏", command=self.Cleardata)
+            self.dataclearbutton.grid(row=1, column=3, padx=20, sticky=tk.W, )
 
         self.newtext = tk.Button(self.tab4, command=self.newtext, text="新文件")
         self.newtext.grid(row=1, column=4)
@@ -964,6 +994,13 @@ class Application(ttk.Notebook):
         # inputsb.config(command=self.datatext.yview)
         # self.datatext.config(yscrollcommand=inputsb.set)
 
+    def Clear3DLine(self):
+        try:
+            self.scope.clearLine()
+        except:
+            pass
+
+
     def Cleardata(self):
         '''
         Parameter：
@@ -1037,10 +1074,10 @@ class Application(ttk.Notebook):
             self.updatelabel()
             if self.identifythread.thread_stop == False:
                 self.identifythread.thread_stop = True
-                self.dataRPbutton.configure(background="red", text="显示图像")
+                self.dataRPbutton.configure(background="red", text="显示2D图像")
             else:
                 self.identifythread.thread_stop = False
-                self.dataRPbutton.configure(background="green", text="显示图像")
+                self.dataRPbutton.configure(background="green", text="显示2D图像")
                 self.scope = matplot.Scope(thread=self.menu.uartform.identifythread)
                 self.scope.start()
         else:
@@ -1048,6 +1085,37 @@ class Application(ttk.Notebook):
             self.matplotanimate = matplotoldanimate.Scope(data=self.filedata, thread=self)
             self.matplotanimate.start()
             # self.DrawOldDataByMatplot(data=self.filedata)
+
+
+    def drawing3D(self):
+        '''
+        Parameter：
+
+        Function：
+                              用matplotlib 绘图
+        Autor:xiaoxiami 2015.8.30
+        Others：
+        '''
+
+        if (self.datapath == ""):
+            if (self.identifyuartopen == 0):
+                tkmes.showerror("错误！", "串口没有打开！\n请手动载入数据或打开串口！")
+                return
+            self.identifythread = self.menu.uartform.identifythread
+            self.updatelabel()
+            if self.identifythread.thread_stop == False:
+                self.identifythread.thread_stop = True
+                self.datashow3dbutton.configure(background="red", text="显示3D图像")
+            else:
+                self.identifythread.thread_stop = False
+                self.datashow3dbutton.configure(background="green", text="显示3D图像")
+                self.scope = matplot.Scope3D(thread=self.menu.uartform.identifythread)
+                self.scope.start()
+        # else:
+        #
+        #     self.matplotanimate = matplotoldanimate.Scope3D(data=self.filedata, thread=self)
+        #     self.matplotanimate.start()
+        #     # self.DrawOldDataByMatplot(data=self.filedata)
 
     def Selectdata(self):
         '''
@@ -1522,6 +1590,8 @@ class Application(ttk.Notebook):
         self.temp_starttime_String = tk.StringVar()
         tk.Label(self.tab7, textvariable=self.temp_starttime_String, width=20, font=txtfont).grid(row=8, column=4,columnspan=13)
         self.temp_starttime_String.set("")
+
+
 
 
         self.node1_num_String = tk.StringVar()

@@ -10,7 +10,7 @@ import time
 from matplotlib.figure import Figure
 import matplotlib.dates as mdates
 import datetime
-
+import mpl_toolkits.mplot3d.axes3d as p3
 
 class Scope:
     def __init__(self, data, thread):
@@ -88,7 +88,6 @@ class Scope:
                 self.ResultLinedata.append(11)
             else:
                 self.ResultLinedata.append(9)
-
 
     def init(self):
         for i in range(len(self.XValueLinedata)):

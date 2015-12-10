@@ -1,14 +1,10 @@
 # coding=utf-8
-import numpy as np
-from matplotlib.lines import Line2D
+
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
+import mpl_toolkits.mplot3d.axes3d as p3
 
-import matplotlib.axes as axes
-import time
-from matplotlib.figure import Figure
-import matplotlib.dates as mdates
-import datetime
+import Tkinter as Tk
 
 
 class Scope:
@@ -149,6 +145,92 @@ class Scope:
     def closeing(self):
         plt.close()
 
+
+class Scope3D:
+    def __init__(self, thread):
+        self.thread  = thread
+        self.fig = plt.figure()
+        self.ax3d = p3.Axes3D(self.fig)
+        self.ValueLine, = self.ax3d.plot([], [], "b", lw=2)
+
+        self.ax3d.set_xlim3d([0, 4096])
+        self.ax3d.set_xlabel('X')
+
+        self.ax3d.set_ylim3d([0, 4096])
+        self.ax3d.set_ylabel('Y')
+
+        self.ax3d.set_zlim3d([0, 4096])
+        self.ax3d.set_zlabel('Z')
+
+        self.ax3d.set_title('xiaoxiami')
+
+        self.xvalue = []
+        self.yvalue = []
+        self.zvalue = []
+        self.xmax = 2000
+        self.ymax = 2000
+        self.zmax = 2000
+        self.xmin = 1000
+        self.ymin = 1000
+        self.zmin = 1000
+
+
+
+
+    def update_lines(self,i):
+        if self.thread.value[0] * self.thread.value[1] * self.thread.value[16] != 0 and self.thread.value[16] < 4096 and \
+                        self.thread.value[0] < 4096 and self.thread.value[1] < 4096:
+            self.xmax = max(self.thread.value[0],self.xmax)
+            self.ymax = max(self.thread.value[1],self.ymax)
+            self.zmax = max(self.thread.value[16],self.zmax)
+            self.xmin = min(self.thread.value[0],self.xmin)
+            self.ymin = min(self.thread.value[1],self.ymin)
+            self.zmin = min(self.thread.value[16],self.zmin)
+            self.ax3d.set_xlim3d([self.xmin, self.xmax])
+            self.ax3d.set_ylim3d([self.ymin, self.ymax])
+            self.ax3d.set_zlim3d([self.zmin, self.zmax])
+
+            self.xvalue.append(self.thread.value[0])
+            self.yvalue.append(self.thread.value[1])
+            self.zvalue.append(self.thread.value[16])
+            self.ValueLine.set_data(self.xvalue,self.yvalue)
+            self.ValueLine.set_3d_properties(self.zvalue)
+
+        return self.ValueLine
+
+    def start(self):
+
+        line_ani = animation.FuncAnimation(self.fig, self.update_lines, 25,
+                                   interval=50, blit=False)
+        plt.show()
+        # import matplotlib
+        # matplotlib.use('TkAgg')
+        #
+        # from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2TkAgg
+        #
+        # root = Tk.Tk()
+        # root.wm_title("Embedding in TK")
+        # canvas = FigureCanvasTkAgg(self.fig, master=root)
+        # canvas.show()
+        # canvas.get_tk_widget().pack(side=Tk.TOP, fill=Tk.BOTH, expand=1)
+        # toolbar = NavigationToolbar2TkAgg(canvas, root)
+        # toolbar.update()
+        # canvas._tkcanvas.pack(side=Tk.TOP, fill=Tk.BOTH, expand=1)
+        # def _quit():
+        #     root.quit()     # stops mainloop
+        #     root.destroy()  # this is necessary on Windows to prevent
+        #             # Fatal Python Error: PyEval_RestoreThread: NULL tstate
+        #
+        # button = Tk.Button(master=root, text='Quit', command=_quit)
+        # button.pack(side=Tk.BOTTOM)
+        # Tk.mainloop()
+
+
+
+    def clearLine(self):
+        self.xvalue = []
+        self.yvalue = []
+        self.zvalue = []
 
 if __name__ == '__main__':
     scope = Scope()

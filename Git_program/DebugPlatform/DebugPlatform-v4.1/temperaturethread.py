@@ -24,7 +24,7 @@ class myThread(threading.Thread):
         self.update = threading.Thread(target=self.update)
         self.update.setDaemon(True)
 
-        self.update.start()
+        #self.update.start()
 
     def run(self):
         '''
@@ -62,28 +62,29 @@ class myThread(threading.Thread):
                             nodeaddress = (ord(buf[0]) << 8 | ord(buf[1]))
                             acix_type = ord(buf[2])
                             value = (ord(buf[3]) << 8 | ord(buf[4]))
-                            self.sensordata = [nodeaddress, acix_type, value]
-                            if added_node_num < 4 and not address_dic.has_key(nodeaddress):
-                                address_dic[nodeaddress] = added_node_num
-                                added_node_num += 1
-                            if nodeaddress in range(1, 13):
-                                self.value_buf_infile[nodeaddress - 1][acix_type] = value
-                                try:
-                                    nodenum = address_dic[nodeaddress]
-                                except KeyError:
-                                    pass
+                            if nodeaddress < 13 and acix_type < 4 and value < 4096:
+                                self.sensordata = [nodeaddress, acix_type, value]
+                                if added_node_num < 4 and not address_dic.has_key(nodeaddress):
+                                    address_dic[nodeaddress] = added_node_num
+                                    added_node_num += 1
+                                if nodeaddress in range(1, 13):
+                                    self.value_buf_infile[nodeaddress - 1][acix_type] = value
+                                    try:
+                                        nodenum = address_dic[nodeaddress]
+                                    except KeyError:
+                                        pass
 
-                                if nodenum in range(4) and acix_type in range(3) and address_dic.has_key(nodeaddress):
-                                    self.value_buf[nodenum][acix_type] = value
-                                    self.value_buf[nodenum][3] = nodeaddress
-                                if acix_type == 2:
-                                    self.file[nodeaddress - 1] = open(self.filepath[nodeaddress - 1], "a+")
-                                    timenow = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
-                                    self.file[nodeaddress - 1].write(
-                                        timenow + "|" + str(self.value_buf_infile[nodeaddress - 1][0]) + "," +
-                                        str(self.value_buf_infile[nodeaddress - 1][1]) + "," +
-                                        str(self.value_buf_infile[nodeaddress - 1][2]) + "\n")
-                                    self.file[nodeaddress - 1].close()
+                                    if nodenum in range(4) and acix_type in range(3) and address_dic.has_key(nodeaddress):
+                                        self.value_buf[nodenum][acix_type] = value
+                                        self.value_buf[nodenum][3] = nodeaddress
+                                    if acix_type == 2:
+                                        self.file[nodeaddress - 1] = open(self.filepath[nodeaddress - 1], "a+")
+                                        timenow = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
+                                        self.file[nodeaddress - 1].write(
+                                            timenow + "|" + str(self.value_buf_infile[nodeaddress - 1][0]) + "," +
+                                            str(self.value_buf_infile[nodeaddress - 1][1]) + "," +
+                                            str(self.value_buf_infile[nodeaddress - 1][2]) + "\n")
+                                        self.file[nodeaddress - 1].close()
                             self.uart.read(self.uart.inWaiting())
 
     def update(self):
@@ -176,3 +177,6 @@ class myThread(threading.Thread):
         self.uart = serial.Serial()
         self.uart.port = self.port
         self.uart.baudrate = self.baud
+
+    def dataToExcel(self):
+        pass

@@ -46,7 +46,11 @@ class myThread(threading.Thread):
         self.app.identifyuartopen = 1
         while (1):
             if (self.thread_stop == True and self.uart.isOpen() == True):
-                self.uart.read(self.uart.inWaiting())
+                try:
+                    self.uart.read(self.uart.inWaiting())
+                except serial.SerialException:
+                    self.statusbar.status.setdata("串口被拔出,插入后请重新打开")
+                    break
                 time.sleep(0.5)
             while (self.thread_stop == False and self.uart.isOpen() == True):
                 self.currenttab = self.app.tab
