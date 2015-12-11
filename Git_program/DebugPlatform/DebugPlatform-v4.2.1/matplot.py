@@ -152,6 +152,7 @@ class Scope3D:
         self.fig = plt.figure()
         self.ax3d = p3.Axes3D(self.fig)
         self.ValueLine, = self.ax3d.plot([], [], "b", lw=2)
+        self.MiddleValueLine, = self.ax3d.plot([], [], "r", lw=2)
 
         self.ax3d.set_xlim3d([0, 4096])
         self.ax3d.set_xlabel('X')
@@ -167,6 +168,9 @@ class Scope3D:
         self.xvalue = []
         self.yvalue = []
         self.zvalue = []
+        self.xvalue_middle = []
+        self.yvalue_middle = []
+        self.zvalue_middle = []
         self.xmax = 2000
         self.ymax = 2000
         self.zmax = 2000
@@ -193,10 +197,16 @@ class Scope3D:
             self.xvalue.append(self.thread.value[0])
             self.yvalue.append(self.thread.value[1])
             self.zvalue.append(self.thread.value[16])
+            self.xvalue_middle.append(self.thread.value[7])
+            self.yvalue_middle.append(self.thread.value[8])
+            self.zvalue_middle.append(self.thread.value[23])
             self.ValueLine.set_data(self.xvalue,self.yvalue)
             self.ValueLine.set_3d_properties(self.zvalue)
+            self.MiddleValueLine.set_data(self.xvalue_middle,self.yvalue_middle)
+            self.MiddleValueLine.set_3d_properties(self.zvalue_middle)
 
-        return self.ValueLine
+
+        return self.ValueLine,self.MiddleValueLine
 
     def start(self):
 

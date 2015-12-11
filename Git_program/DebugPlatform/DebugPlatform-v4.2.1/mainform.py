@@ -9,15 +9,15 @@ import tkMessageBox as tkmes
 import tkFont
 import time
 
-
 import tkFileDialog
+
 if platform.system() != "Linux":
     import matplot
     import matplotold
     import matplotoldanimate
+
 import uart
 import carstop
-
 
 
 class MainRoot(tk.Tk):
@@ -29,7 +29,7 @@ class MainRoot(tk.Tk):
         # initialize menu
         self.rootmenu = MenuBar(self)
         self.config(menu=self.rootmenu)
-        self.title("天海科")
+        self.title("小虾米 v4.2.1")
 
         # 居中显示
         curWidth = self.winfo_screenwidth()  # get current width
@@ -95,7 +95,7 @@ class MenuBar(tk.Menu):
 
     def __init__(self, parent):
         tk.Menu.__init__(self, parent)
-        self.carlocatecboxbuf = '测试'
+        self.carlocatecboxbuf = '方兴大厦'
         self.updatamodecboxbuf = '开启'
         self.datamodecboxbuf = "串口数据"
         self.root = parent
@@ -113,7 +113,8 @@ class MenuBar(tk.Menu):
         filemenu = tk.Menu(self, tearoff=False)
         self.add_cascade(label="选项", underline=0, menu=filemenu)
         filemenu.add_command(label="串口设置...", command=self.Uartettings)
-        filemenu.add_command(label="数据导出...", command=self.dataToExcel)
+        if platform.system() != "Linux":
+            filemenu.add_command(label="数据导出...", command=self.dataToExcel)
         filemenu.add_command(label="停车设置...", command=self.carstopsettings)
         filemenu.add_command(label="退出", underline=1, command=self.quit)
         helpmenu = tk.Menu(self, tearoff=False)
@@ -169,29 +170,67 @@ class MenuBar(tk.Menu):
         self.uartform.mainloop()
 
     def dataToExcel(self):
-        import re
-        dirpath = tkFileDialog.askdirectory(initialdir='..\Data')
-        dir=os.listdir(dirpath)
+        '''
+        Parameter：
+            none
+        Function：
+                                将温度测试数据导出为excel
+        Autor:xiaoxiami 2015.12.11
+        Others：
+        '''
+        import xlwt
+        dirpath = tkFileDialog.askdirectory(initialdir='..\Data\Temperature', title='请选择温度数据所在文件夹')
+        dir = os.listdir(dirpath)
         datapath = []
-        path = ["" for i in range(12)]
+        nodedata = []
+        row = [0 for i in range(12)]
+
 
         for d in dir:
-            current_dirpath = os.path.join(dirpath,d)
+            current_dirpath = os.path.join(dirpath, d)
             if os.path.isdir(current_dirpath):
-                for txt in os.listdir(current_dirpath):
-                    current_txtpath = os.path.join(current_dirpath,txt)
-                    datapath.append(current_txtpath)
+                datapath.append(current_dirpath)
 
-        for filename in datapath:
-            with open(filename) as file:
-                print file.readlines()
+        excel = xlwt.Workbook(encoding='ascii')
+        worksheet = excel.add_sheet('Temperature')
+        excelname = "..\Data\Temperature\Temperature.xls"
+        style = xlwt.XFStyle()
+        style.num_format_str = "Y-m-d H:M:S"
+
+        for i in range(12):
+            worksheet.write(row[i], i * 6, label="Node_" + str(i + 1))
+            worksheet.write(row[i], i * 6 + 4, label="Temp")
+        for d in datapath:
+            tmp = d.split("\\")[-1]
+            temp = tmp.split("_")[-1]
+
+            for i in range(12):
+                filename = "/Node_" + str(i + 1) + ".txt"
+                with open(d + filename) as file:
+                    for line in file:
+                        nodedata = line.split(",")
+                        if len(nodedata) == 4 and int(nodedata[1])*int(nodedata[2])*int(nodedata[3])!=0:
+                            row[i] += 1
+                            worksheet.write(row[i], i * 6, label=nodedata[0],style=style)
+                            worksheet.col(i * 6).width = 0x0d00 + 2000
+                            worksheet.write(row[i], i * 6 + 1, label=int(nodedata[1]))
+                            worksheet.write(row[i], i * 6 + 2, label=int(nodedata[2]))
+                            worksheet.write(row[i], i * 6 + 3, label=int(nodedata[3]))
+                            worksheet.write(row[i], i * 6 + 4, label=int(temp))
+        excel.save(excelname)
+        os.startfile(excelname)
 
 
-        # with open(datapath) as file:
 
 
 
 
+                    # for filename in datapath:
+                    #     with open(filename) as file:
+                    #         print file.readlines()
+
+
+                    # with open(datapath) as file:
 
     def carstopsettings(self):
         '''
@@ -329,16 +368,7 @@ class Application(ttk.Notebook):
                 self.updateTempLabel()
             except AttributeError:
                 print "Uart didn't open as Tempearturetest.(mainform.py line 306)"
-            # self.menu.uartform.snifferthread.currenttab = self.index('current')
-            # self.menu.uartform.identifythread.currenttab = self.index('current')
-            # try:
-            #     self.menu.uartform.snifferthread.currenttab = self.index('current')
-            # except:
-            #     print "7"
-            # try:
-            #     self.menu.uartform.identifythread.currenttab = self.index('current')
-            # except:
-            #     print "7"
+
 
     def StopStatus(self):
         '''
@@ -1000,7 +1030,6 @@ class Application(ttk.Notebook):
         except:
             pass
 
-
     def Cleardata(self):
         '''
         Parameter：
@@ -1086,7 +1115,6 @@ class Application(ttk.Notebook):
             self.matplotanimate.start()
             # self.DrawOldDataByMatplot(data=self.filedata)
 
-
     def drawing3D(self):
         '''
         Parameter：
@@ -1111,11 +1139,11 @@ class Application(ttk.Notebook):
                 self.datashow3dbutton.configure(background="green", text="显示3D图像")
                 self.scope = matplot.Scope3D(thread=self.menu.uartform.identifythread)
                 self.scope.start()
-        # else:
-        #
-        #     self.matplotanimate = matplotoldanimate.Scope3D(data=self.filedata, thread=self)
-        #     self.matplotanimate.start()
-        #     # self.DrawOldDataByMatplot(data=self.filedata)
+                # else:
+                #
+                #     self.matplotanimate = matplotoldanimate.Scope3D(data=self.filedata, thread=self)
+                #     self.matplotanimate.start()
+                #     # self.DrawOldDataByMatplot(data=self.filedata)
 
     def Selectdata(self):
         '''
@@ -1373,20 +1401,6 @@ class Application(ttk.Notebook):
             self.Side_ParkingString.set(0)
 
         self.XValueLabel.after(50, self.updatelabel)
-        # self.XValueString.set(value[0])
-        # self.YValueString.set(value[1])
-        # self.VarianceMLabel.config(text=str(value[2]))
-        # self.AD_middle_valueXLabel.config(text=str(value[7]))
-        # self.AD_middle_valueYLabel.config(text=str(value[8]))
-        # self.ExtremumValueLabel.config(text=str(value[4]))
-        # self.ExtremumValueMiddleLabel.config(text=str(value[3]))
-        # self.IntensityLabel.config(text=str(value[9]))
-        # self.IntensityMiddleLabel.config(text=str(value[10]))
-        # self.IntStateLabel.config(text=str(value[11]))
-        # self.ResultLabel.config(text=str(value[12]))
-        # self.IntensityMinus.config(text=str(abs(int(value[9]) - int(value[10]))))
-        # self.XAve_SlopLabel.config(text=str(value[13]))
-        # self.YAve_SlopLabel.config(text=str(value[14]))
 
     def Showdetaildata(self, event):
         '''
@@ -1520,7 +1534,6 @@ class Application(ttk.Notebook):
         self.PacketReceive_CountString.set(self.menu.uartform.linktestthread.value[3])
         self.PacketSend_CountLabel.after(50, self.QOSUpdateLabel)
 
-
     def SendCommand(self):
         '''
         Parameter：
@@ -1563,13 +1576,30 @@ class Application(ttk.Notebook):
         Autor:xiaoxiami 2015.11.29
         Others：
         '''
+
         def buttonCallback():
-            tempearture = "0"
+            successflag = 1
             if temperatureinput.get():
                 tempearture = temperatureinput.get()
-            self.temp_starttime_String.set(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time())))
-            self.menu.uartform.temperaturethread.filepath, self.menu.uartform.temperaturethread.file = \
-                self.menu.uartform.temperaturethread.createFileandPath(tempearture)
+                try:
+                    if int(tempearture) > 90 or int(tempearture) < -50:
+                        successflag = 0
+                        self.temp_starttime_String.set("测试温度输入有误")
+                except:
+                    successflag = 0
+                    self.temp_starttime_String.set("测试温度输入有误")
+                if successflag:
+                    self.temp_starttime_String.set("测试开始：" + time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time())))
+                    try:
+                        self.menu.uartform.temperaturethread.filepath, self.menu.uartform.temperaturethread.file = \
+                            self.menu.uartform.temperaturethread.createFileandPath(tempearture)
+                        self.menu.uartform.temperaturethread.started = True
+                    except AttributeError, err:
+                        successflag = 0
+                        self.temp_starttime_String.set("请配置串口")
+                        print err
+            else:
+                self.temp_starttime_String.set("请输入测试温度")
 
         for i in range(9):
             self.tab7.rowconfigure(i, weight=1)
@@ -1584,15 +1614,13 @@ class Application(ttk.Notebook):
         tk.Label(self.tab7, text="测试温度:", font=txtfont).grid(row=8, column=0, columnspan=5)
         temperatureinput = tk.Entry(self.tab7, width=10)
         temperatureinput.grid(row=8, column=2, sticky=tk.W, columnspan=5)
-        tk.Label(self.tab7, text="℃", font=txtfont).grid(row=8, column=2,columnspan=5)
-        cmdbutton1 = tk.Button(self.tab7, text="记录当前时间",font=txtfont,command=buttonCallback)
-        cmdbutton1.grid(row=8, column=0,columnspan=14)
+        tk.Label(self.tab7, text="℃", font=txtfont).grid(row=8, column=2, columnspan=5)
+        cmdbutton1 = tk.Button(self.tab7, text="开始测试", font=txtfont, command=buttonCallback)
+        cmdbutton1.grid(row=8, column=0, columnspan=14)
         self.temp_starttime_String = tk.StringVar()
-        tk.Label(self.tab7, textvariable=self.temp_starttime_String, width=20, font=txtfont).grid(row=8, column=4,columnspan=13)
+        tk.Label(self.tab7, textvariable=self.temp_starttime_String, width=30, font=txtfont).grid(row=8, column=4,
+                                                                                                  columnspan=13)
         self.temp_starttime_String.set("")
-
-
-
 
         self.node1_num_String = tk.StringVar()
         tk.Label(self.tab7, text="节点编号:", font=txtfont).grid(row=0, column=0, sticky=tk.W)
@@ -1640,7 +1668,7 @@ class Application(ttk.Notebook):
 
         self.node1_time_String = tk.StringVar()
         tk.Label(self.tab7, text="测试时间:", font=txtfont).grid(row=3, column=0, sticky=tk.W)
-        self.node1_time_Label = tk.Label(self.tab7, text="0", textvariable=self.node1_time_String, width=16,
+        self.node1_time_Label = tk.Label(self.tab7, text="0", textvariable=self.node1_time_String, width=26,
                                          font=txtfont)
         self.node1_time_Label.grid(row=3, column=1, sticky=tk.W)
         self.node1_time_String.set(0)
@@ -1691,7 +1719,7 @@ class Application(ttk.Notebook):
 
         self.node2_time_String = tk.StringVar()
         tk.Label(self.tab7, text="测试时间:", font=txtfont).grid(row=3, column=7, sticky=tk.W)
-        self.node2_time_Label = tk.Label(self.tab7, text="0", textvariable=self.node2_time_String, width=16,
+        self.node2_time_Label = tk.Label(self.tab7, text="0", textvariable=self.node2_time_String, width=26,
                                          font=txtfont)
         self.node2_time_Label.grid(row=3, column=8, sticky=tk.W)
         self.node2_time_String.set(0)
@@ -1742,7 +1770,7 @@ class Application(ttk.Notebook):
 
         self.node3_time_String = tk.StringVar()
         tk.Label(self.tab7, text="测试时间:", font=txtfont).grid(row=7, column=0, sticky=tk.W)
-        self.node3_time_Label = tk.Label(self.tab7, text="0", textvariable=self.node3_time_String, width=16,
+        self.node3_time_Label = tk.Label(self.tab7, text="0", textvariable=self.node3_time_String, width=26,
                                          font=txtfont)
         self.node3_time_Label.grid(row=7, column=1, sticky=tk.W)
         self.node3_time_String.set(0)
@@ -1793,7 +1821,7 @@ class Application(ttk.Notebook):
 
         self.node4_time_String = tk.StringVar()
         tk.Label(self.tab7, text="测试时间:", font=txtfont).grid(row=7, column=7, sticky=tk.W)
-        self.node4_time_Label = tk.Label(self.tab7, text="0", textvariable=self.node4_time_String, width=16,
+        self.node4_time_Label = tk.Label(self.tab7, text="0", textvariable=self.node4_time_String, width=26,
                                          font=txtfont)
         self.node4_time_Label.grid(row=7, column=8, sticky=tk.W)
         self.node4_time_String.set(0)
@@ -1879,15 +1907,15 @@ class Application(ttk.Notebook):
         elif seconds < 86400:
             hour = seconds / 3600
             seconds %= 3600
-            minutes = seconds/60
-            return str(hour) + " 小时 " + str(minutes / 60) + " 分 " + str(seconds % 60) + " 秒"
+            minutes = seconds / 60
+            return str(hour) + " 小时 " + str(minutes) + " 分 " + str(seconds % 60) + " 秒"
         else:
             days = seconds / 86400
             seconds %= 86400
             hours = seconds / 3600
             seconds %= 3600
             minutes = seconds / 60
-            return str(days) + " 天 " + str(hours) + " 小时 " + str(minutes / 60) + " 分 " + str(seconds % 60) + " 秒"
+            return str(days) + " 天 " + str(hours) + " 小时 " + str(minutes) + " 分 " + str(seconds % 60) + " 秒"
 
 
 class StatusBar(ttk.Frame):

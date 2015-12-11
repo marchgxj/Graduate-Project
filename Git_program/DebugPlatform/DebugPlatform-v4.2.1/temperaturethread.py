@@ -23,6 +23,7 @@ class myThread(threading.Thread):
         self.sensordata = []
         self.update = threading.Thread(target=self.update)
         self.update.setDaemon(True)
+        self.started = False
 
         #self.update.start()
 
@@ -50,7 +51,7 @@ class myThread(threading.Thread):
         while True:
             while self.uart.isOpen():
                 self.currenttab = self.app.tab
-                if self.currenttab == 6:
+                if self.currenttab == 6 and self.started:
                     error = 0
                     buf = self.uart.read(1)
                     if len(buf) != 0:
@@ -81,7 +82,7 @@ class myThread(threading.Thread):
                                         self.file[nodeaddress - 1] = open(self.filepath[nodeaddress - 1], "a+")
                                         timenow = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
                                         self.file[nodeaddress - 1].write(
-                                            timenow + "|" + str(self.value_buf_infile[nodeaddress - 1][0]) + "," +
+                                            timenow + "," + str(self.value_buf_infile[nodeaddress - 1][0]) + "," +
                                             str(self.value_buf_infile[nodeaddress - 1][1]) + "," +
                                             str(self.value_buf_infile[nodeaddress - 1][2]) + "\n")
                                         self.file[nodeaddress - 1].close()
@@ -105,59 +106,59 @@ class myThread(threading.Thread):
         return:filepath[]:4个文件路径列表
                file[]:4个打开文件指针
         '''
-        timenow = time.strftime('%Y-%m-%d_%H-%M-%S', time.localtime(time.time()))
+        timenow = time.strftime('%Y-%m-%d_%H-%M-%S', time.localtime(time.time())) + '_'
         if platform.system() == "Linux":
-            os.makedirs(r'../Data/' + timenow)
-            filepath = ['../Data/' + timenow + '/Node1_' + temp + '.txt',
-                        '../Data/' + timenow + '/Node2_' + temp + '.txt',
-                        '../Data/' + timenow + '/Node3_' + temp + '.txt',
-                        '../Data/' + timenow + '/Node4_' + temp + '.txt',
-                        '../Data/' + timenow + '/Node5_' + temp + '.txt',
-                        '../Data/' + timenow + '/Node6_' + temp + '.txt',
-                        '../Data/' + timenow + '/Node7_' + temp + '.txt',
-                        '../Data/' + timenow + '/Node8_' + temp + '.txt',
-                        '../Data/' + timenow + '/Node9_' + temp + '.txt',
-                        '../Data/' + timenow + '/Node10_' + temp + '.txt',
-                        '../Data/' + timenow + '/Node11_' + temp + '.txt',
-                        '../Data/' + timenow + '/Node12_' + temp + '.txt']
-            file1 = open('../Data/' + timenow + '/Node1_' + temp + '.txt', "a+")
-            file2 = open('../Data/' + timenow + '/Node2_' + temp + '.txt', "a+")
-            file3 = open('../Data/' + timenow + '/Node3_' + temp + '.txt', "a+")
-            file4 = open('../Data/' + timenow + '/Node4_' + temp + '.txt', "a+")
-            file5 = open('../Data/' + timenow + '/Node5_' + temp + '.txt', "a+")
-            file6 = open('../Data/' + timenow + '/Node6_' + temp + '.txt', "a+")
-            file7 = open('../Data/' + timenow + '/Node7_' + temp + '.txt', "a+")
-            file8 = open('../Data/' + timenow + '/Node8_' + temp + '.txt', "a+")
-            file9 = open('../Data/' + timenow + '/Node9_' + temp + '.txt', "a+")
-            file10 = open('../Data/' + timenow + '/Node10_' + temp + '.txt', "a+")
-            file11 = open('../Data/' + timenow + '/Node11_' + temp + '.txt', "a+")
-            file12 = open('../Data/' + timenow + '/Node12_' + temp + '.txt', "a+")
+            os.makedirs(r'../Data/Temperature/' + timenow + temp)
+            filepath = ['../Data/Temperature/' + timenow + temp + '/Node_1' + '.txt',
+                        '../Data/Temperature/' + timenow + temp + '/Node_2' + '.txt',
+                        '../Data/Temperature/' + timenow + temp + '/Node_3' + '.txt',
+                        '../Data/Temperature/' + timenow + temp + '/Node_4' + '.txt',
+                        '../Data/Temperature/' + timenow + temp + '/Node_5' + '.txt',
+                        '../Data/Temperature/' + timenow + temp + '/Node_6' + '.txt',
+                        '../Data/Temperature/' + timenow + temp + '/Node_7' + '.txt',
+                        '../Data/Temperature/' + timenow + temp + '/Node_8' + '.txt',
+                        '../Data/Temperature/' + timenow + temp + '/Node_9' + '.txt',
+                        '../Data/Temperature/' + timenow + temp + '/Node_10' + '.txt',
+                        '../Data/Temperature/' + timenow + temp + '/Node_11' + '.txt',
+                        '../Data/Temperature/' + timenow + temp + '/Node_12' + '.txt']
+            file1 = open('../Data/Temperature/' + timenow + temp + '/Node_1' + '.txt', "a+")
+            file2 = open('../Data/Temperature/' + timenow + temp + '/Node_2' + '.txt', "a+")
+            file3 = open('../Data/Temperature/' + timenow + temp + '/Node_3' + '.txt', "a+")
+            file4 = open('../Data/Temperature/' + timenow + temp + '/Node_4' + '.txt', "a+")
+            file5 = open('../Data/Temperature/' + timenow + temp + '/Node_5' + '.txt', "a+")
+            file6 = open('../Data/Temperature/' + timenow + temp + '/Node_6' + '.txt', "a+")
+            file7 = open('../Data/Temperature/' + timenow + temp + '/Node_7' + '.txt', "a+")
+            file8 = open('../Data/Temperature/' + timenow + temp + '/Node_8' + '.txt', "a+")
+            file9 = open('../Data/Temperature/' + timenow + temp + '/Node_9' + '.txt', "a+")
+            file10 = open('../Data/Temperature/' + timenow + temp + '/Node_10' + '.txt', "a+")
+            file11 = open('../Data/Temperature/' + timenow + temp + '/Node_11' + '.txt', "a+")
+            file12 = open('../Data/Temperature/' + timenow + temp + '/Node_12' + '.txt', "a+")
         else:
-            os.makedirs(r'..\Data\\' + timenow)
-            filepath = ['..\Data\\' + timenow + '\Node1_' + temp + '.txt',
-                        '..\Data\\' + timenow + '\Node2_' + temp + '.txt',
-                        '..\Data\\' + timenow + '\Node3_' + temp + '.txt',
-                        '..\Data\\' + timenow + '\Node4_' + temp + '.txt',
-                        '..\Data\\' + timenow + '\Node5_' + temp + '.txt',
-                        '..\Data\\' + timenow + '\Node6_' + temp + '.txt',
-                        '..\Data\\' + timenow + '\Node7_' + temp + '.txt',
-                        '..\Data\\' + timenow + '\Node8_' + temp + '.txt',
-                        '..\Data\\' + timenow + '\Node9_' + temp + '.txt',
-                        '..\Data\\' + timenow + '\Node10_' + temp + '.txt',
-                        '..\Data\\' + timenow + '\Node11_' + temp + '.txt',
-                        '..\Data\\' + timenow + '\Node12_' + temp + '.txt']
-            file1 = open('..\Data\\' + timenow + '\Node1_' + temp + '.txt', "a+")
-            file2 = open('..\Data\\' + timenow + '\Node2_' + temp + '.txt', "a+")
-            file3 = open('..\Data\\' + timenow + '\Node3_' + temp + '.txt', "a+")
-            file4 = open('..\Data\\' + timenow + '\Node4_' + temp + '.txt', "a+")
-            file5 = open('..\Data\\' + timenow + '\Node5_' + temp + '.txt', "a+")
-            file6 = open('..\Data\\' + timenow + '\Node6_' + temp + '.txt', "a+")
-            file7 = open('..\Data\\' + timenow + '\Node7_' + temp + '.txt', "a+")
-            file8 = open('..\Data\\' + timenow + '\Node8_' + temp + '.txt', "a+")
-            file9 = open('..\Data\\' + timenow + '\Node9_' + temp + '.txt', "a+")
-            file10 = open('..\Data\\' + timenow + '\Node10_' + temp + '.txt', "a+")
-            file11 = open('..\Data\\' + timenow + '\Node11_' + temp + '.txt', "a+")
-            file12 = open('..\Data\\' + timenow + '\Node12_' + temp + '.txt', "a+")
+            os.makedirs(r'..\Data\Temperature\\' + timenow + temp)
+            filepath = ['..\Data\Temperature\\' + timenow + temp + '\Node_1' + '.txt',
+                        '..\Data\Temperature\\' + timenow + temp + '\Node_2' + '.txt',
+                        '..\Data\Temperature\\' + timenow + temp + '\Node_3' + '.txt',
+                        '..\Data\Temperature\\' + timenow + temp + '\Node_4' + '.txt',
+                        '..\Data\Temperature\\' + timenow + temp + '\Node_5' + '.txt',
+                        '..\Data\Temperature\\' + timenow + temp + '\Node_6' + '.txt',
+                        '..\Data\Temperature\\' + timenow + temp + '\Node_7' + '.txt',
+                        '..\Data\Temperature\\' + timenow + temp + '\Node_8' + '.txt',
+                        '..\Data\Temperature\\' + timenow + temp + '\Node_9' + '.txt',
+                        '..\Data\Temperature\\' + timenow + temp + '\Node_10' + '.txt',
+                        '..\Data\Temperature\\' + timenow + temp + '\Node_11' + '.txt',
+                        '..\Data\Temperature\\' + timenow + temp + '\Node_12' + '.txt']
+            file1 = open('..\Data\Temperature\\' + timenow + temp + '\Node_1' + '.txt', "a+")
+            file2 = open('..\Data\Temperature\\' + timenow + temp + '\Node_2' + '.txt', "a+")
+            file3 = open('..\Data\Temperature\\' + timenow + temp + '\Node_3' + '.txt', "a+")
+            file4 = open('..\Data\Temperature\\' + timenow + temp + '\Node_4' + '.txt', "a+")
+            file5 = open('..\Data\Temperature\\' + timenow + temp + '\Node_5' + '.txt', "a+")
+            file6 = open('..\Data\Temperature\\' + timenow + temp + '\Node_6' + '.txt', "a+")
+            file7 = open('..\Data\Temperature\\' + timenow + temp + '\Node_7' + '.txt', "a+")
+            file8 = open('..\Data\Temperature\\' + timenow + temp + '\Node_8' + '.txt', "a+")
+            file9 = open('..\Data\Temperature\\' + timenow + temp + '\Node_9' + '.txt', "a+")
+            file10 = open('..\Data\Temperature\\' + timenow + temp + '\Node_10' + '.txt', "a+")
+            file11 = open('..\Data\Temperature\\' + timenow + temp + '\Node_11' + '.txt', "a+")
+            file12 = open('..\Data\Temperature\\' + timenow + temp + '\Node_12' + '.txt', "a+")
         file = []
         file.append(file1)
         file.append(file2)
