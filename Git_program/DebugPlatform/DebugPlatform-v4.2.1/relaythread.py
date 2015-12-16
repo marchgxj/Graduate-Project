@@ -4,7 +4,7 @@ import threading
 import urllib2
 import urllib
 import serial
-import tkMessageBox as tkmes
+import os
 from collections import deque
 
 
@@ -39,7 +39,9 @@ class myThread(threading.Thread):
         self.longdatastr = ""
         self.cmdaddress = ""
         self.Control_Resend = 0
-        self.filename = "..\Log\\" + time.strftime('%Y-%m-%d_%H-%M-%S', time.localtime(time.time())) + '.txt'
+        if not os.path.exists("../Log"):
+            os.makedirs('../Log')
+        self.filename = "../Log/" + time.strftime('%Y-%m-%d_%H-%M-%S', time.localtime(time.time())) + '.txt'
         self.logfile = open(self.filename, "a+")
         self.logfile.write("Program Start at:" + time.strftime('%Y-%m-%d  %H:%M:%S',time.localtime(time.time())) + "\n")
         self.logfile.close()
@@ -91,8 +93,6 @@ class myThread(threading.Thread):
         data["data"] = ""
         uploaddatacut = ""
         self.datatoshow = ''
-        # if self.uartroot.datamode == 0:
-        #     self.netuploadthread.start()
         while (1):
             if self.showdata.appFrame.tab == 0 or self.showdata.appFrame.tab == 4:
                 try:

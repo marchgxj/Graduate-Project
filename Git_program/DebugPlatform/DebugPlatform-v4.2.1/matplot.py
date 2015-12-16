@@ -242,6 +242,44 @@ class Scope3D:
         self.yvalue = []
         self.zvalue = []
 
+class ScopeOld3D:
+    def __init__(self,data):
+        self.fig = plt.figure()
+        self.ax3d = p3.Axes3D(self.fig)
+        self.ValueLine, = self.ax3d.plot([], [], "b", lw=2)
+        self.MiddleValueLine, = self.ax3d.plot([], [], "r", lw=2)
+        self.xvalue = []
+        self.yvalue = []
+        self.zvalue = []
+
+        for item in data[1:]:
+            self.xvalue.append(int(item[0]))
+            self.yvalue.append(int(item[1]))
+            self.zvalue.append(int(item[16]))
+
+        xmax = int(sorted(self.xvalue)[0])
+        ymax = int(sorted(self.yvalue)[0])
+        zmax = int(sorted(self.zvalue)[0])
+        xmin = int(sorted(self.xvalue)[-1])
+        ymin = int(sorted(self.yvalue)[-1])
+        zmin = int(sorted(self.zvalue)[-1])
+
+        # print xmin,xmax
+        # self.ax3d.set_xli3d([886, 1010])
+        # self.ax3d.set_xlabel('X')
+        #
+        # self.ax3d.set_ylim3d([ymin, ymax])
+        # self.ax3d.set_ylabel('Y')
+        #
+        # self.ax3d.set_zlim3d([zmin, zmax])
+        # self.ax3d.set_zlabel('Z')
+
+        self.ax3d.set_title('xiaoxiami')
+
+        self.ax3d.plot(xs=self.xvalue,ys=self.yvalue,zs=self.zvalue,label='car')
+        self.ax3d.legend()
+        plt.show()
+
 if __name__ == '__main__':
     scope = Scope()
     scope.start()

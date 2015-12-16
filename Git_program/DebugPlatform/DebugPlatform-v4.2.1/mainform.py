@@ -180,57 +180,52 @@ class MenuBar(tk.Menu):
         '''
         import xlwt
         dirpath = tkFileDialog.askdirectory(initialdir='..\Data\Temperature', title='请选择温度数据所在文件夹')
-        dir = os.listdir(dirpath)
-        datapath = []
-        nodedata = []
-        row = [0 for i in range(12)]
+        if "Temperature" in dirpath:
+            dir = os.listdir(dirpath)
+            datapath = []
+            nodedata = []
+            row = [0 for i in range(12)]
 
+            for d in dir:
+                current_dirpath = os.path.join(dirpath, d)
+                if os.path.isdir(current_dirpath):
+                    datapath.append(current_dirpath)
 
-        for d in dir:
-            current_dirpath = os.path.join(dirpath, d)
-            if os.path.isdir(current_dirpath):
-                datapath.append(current_dirpath)
-
-        excel = xlwt.Workbook(encoding='ascii')
-        worksheet = excel.add_sheet('Temperature')
-        excelname = "..\Data\Temperature\Temperature.xls"
-        style = xlwt.XFStyle()
-        style.num_format_str = "Y-m-d H:M:S"
-
-        for i in range(12):
-            worksheet.write(row[i], i * 6, label="Node_" + str(i + 1))
-            worksheet.write(row[i], i * 6 + 4, label="Temp")
-        for d in datapath:
-            tmp = d.split("\\")[-1]
-            temp = tmp.split("_")[-1]
+            excel = xlwt.Workbook(encoding='ascii')
+            worksheet = excel.add_sheet('Temperature')
+            excelname = "..\Data\Temperature\Temperature.xls"
+            style = xlwt.XFStyle()
+            style.num_format_str = "Y-m-d H:M:S"
 
             for i in range(12):
-                filename = "/Node_" + str(i + 1) + ".txt"
-                with open(d + filename) as file:
-                    for line in file:
-                        nodedata = line.split(",")
-                        if len(nodedata) == 4 and int(nodedata[1])*int(nodedata[2])*int(nodedata[3])!=0:
-                            row[i] += 1
-                            worksheet.write(row[i], i * 6, label=nodedata[0],style=style)
-                            worksheet.col(i * 6).width = 0x0d00 + 2000
-                            worksheet.write(row[i], i * 6 + 1, label=int(nodedata[1]))
-                            worksheet.write(row[i], i * 6 + 2, label=int(nodedata[2]))
-                            worksheet.write(row[i], i * 6 + 3, label=int(nodedata[3]))
-                            worksheet.write(row[i], i * 6 + 4, label=int(temp))
-        excel.save(excelname)
-        os.startfile(excelname)
+                worksheet.write(row[i], i * 6, label="Node_" + str(i + 1))
+                worksheet.write(row[i], i * 6 + 1, label="X" + str(i + 1))
+                worksheet.write(row[i], i * 6 + 2, label="Y" + str(i + 1))
+                worksheet.write(row[i], i * 6 + 3, label="Z" + str(i + 1))
+                worksheet.write(row[i], i * 6 + 4, label="Temp")
+            for d in datapath:
+                tmp = d.split("\\")[-1]
+                temp = tmp.split("_")[-1]
 
+                for i in range(12):
+                    filename = "/Node_" + str(i + 1) + ".txt"
+                    with open(d + filename) as file:
+                        for line in file:
+                            nodedata = line.split(",")
+                            if len(nodedata) == 4 and int(nodedata[1])*int(nodedata[2])*int(nodedata[3])!=0:
+                                row[i] += 1
+                                worksheet.write(row[i], i * 6, label=nodedata[0],style=style)
+                                worksheet.col(i * 6).width = 0x0d00 + 2000
+                                worksheet.write(row[i], i * 6 + 1, label=int(nodedata[1]))
+                                worksheet.write(row[i], i * 6 + 2, label=int(nodedata[2]))
+                                worksheet.write(row[i], i * 6 + 3, label=int(nodedata[3]))
+                                worksheet.write(row[i], i * 6 + 4, label=int(temp))
 
+            excel.save(excelname)
+            os.startfile(excelname)
+        else:
+            tkmes.showerror("路径选择错误！", "没有找到温度数据！")
 
-
-
-
-                    # for filename in datapath:
-                    #     with open(filename) as file:
-                    #         print file.readlines()
-
-
-                    # with open(datapath) as file:
 
     def carstopsettings(self):
         '''
@@ -368,7 +363,6 @@ class Application(ttk.Notebook):
                 self.updateTempLabel()
             except AttributeError:
                 print "Uart didn't open as Tempearturetest.(mainform.py line 306)"
-
 
     def StopStatus(self):
         '''
@@ -832,13 +826,13 @@ class Application(ttk.Notebook):
         rowandcloumn += 1
         self.YMiddleString.set(0)
 
-        self.ZvalueString = tk.StringVar()
+        self.ZValueString = tk.StringVar()
         tk.Label(readgroup, text="ZValue:").grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
         rowandcloumn += 1
-        self.ZvalueLabel = tk.Label(readgroup, text="0", textvariable=self.ZvalueString, width=4)
+        self.ZvalueLabel = tk.Label(readgroup, text="0", textvariable=self.ZValueString, width=4)
         self.ZvalueLabel.grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
         rowandcloumn += 1
-        self.ZvalueString.set(0)
+        self.ZValueString.set(0)
 
         self.ZMiddleString = tk.StringVar()
         tk.Label(readgroup, text="ZMiddle:").grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
@@ -1110,10 +1104,9 @@ class Application(ttk.Notebook):
                 self.scope = matplot.Scope(thread=self.menu.uartform.identifythread)
                 self.scope.start()
         else:
-
             self.matplotanimate = matplotoldanimate.Scope(data=self.filedata, thread=self)
             self.matplotanimate.start()
-            # self.DrawOldDataByMatplot(data=self.filedata)
+
 
     def drawing3D(self):
         '''
@@ -1139,11 +1132,9 @@ class Application(ttk.Notebook):
                 self.datashow3dbutton.configure(background="green", text="显示3D图像")
                 self.scope = matplot.Scope3D(thread=self.menu.uartform.identifythread)
                 self.scope.start()
-                # else:
-                #
-                #     self.matplotanimate = matplotoldanimate.Scope3D(data=self.filedata, thread=self)
-                #     self.matplotanimate.start()
-                #     # self.DrawOldDataByMatplot(data=self.filedata)
+        else:
+            matplot.ScopeOld3D(data=self.filedata)
+
 
     def Selectdata(self):
         '''
@@ -1155,7 +1146,7 @@ class Application(ttk.Notebook):
         Others：默认打开目录为 F:\Graduate\Git_program\DebugPlatform-v3.0\Data
         '''
 
-        self.datapath = tkFileDialog.askopenfilename(initialdir='..\Data')
+        self.datapath = tkFileDialog.askopenfilename(initialdir='../Data/Identify')
         self.datapathentry.delete(0, tk.END)
         self.datapathentry.insert(1, self.datapath)
         self.zoomenable = 1
@@ -1188,20 +1179,7 @@ class Application(ttk.Notebook):
             j += 1
         self.filedata = data
         self.Opendata(self.filedata)
-        # self.DrawOldDataByMatplot()
 
-    def DrawOldDataByMatplot(self, data):
-        '''
-        Parameter：
-
-        Function：
-                              根据历史数据绘制图像
-        Autor:xiaoxiami 2015.8.30
-        Others：
-        '''
-        self.matplotoldopen = True
-        self.DrawOldData = matplotold.ScopeOld(data)
-        self.DrawOldData.show()
 
     def Opendata(self, data):
         '''
@@ -1235,7 +1213,7 @@ class Application(ttk.Notebook):
 
         # 加变量需要修改
         # if(len(data) == 10):
-        for v in data:
+        for v in data[1:]:
             self.XValue.append(v[0])
             self.YValue.append(v[1])
             self.ZValue.append(v[16])
@@ -1352,6 +1330,7 @@ class Application(ttk.Notebook):
         try:
             #             防止没有datascalelabel
             self.datascalelabel.config(text=str(self.datascalevalue))
+            self.matplotanimate.setScalueTo()
         except:
             pass
         if (self.zoomenable == 0):
@@ -1412,45 +1391,50 @@ class Application(ttk.Notebook):
         Others：
         '''
         x1 = 0
+
         self.statusbar = self.root.status
-        offset = int(self.datascale.get())
+        self.offset = int(self.datascale.get())
+
+
         try:
-            x1 = event.x + int(self.cancassbx.get()[0] * len(self.ExtState) * offset)
+            # self.DrawOldData.datascalelabel.config(text=str(x1 / self.offset))
+            x1 = event.x + int(self.cancassbx.get()[0] * len(self.ExtState) * self.offset)
             self.x1 = x1
+            self.matplotanimate.setScaleValue()
         except:
-            x1 = self.x1
-        self.xlim = x1 / offset
-        if (x1 >= 0 and x1 <= len(self.ExtState) * offset):
+            x1 = event + int(self.cancassbx.get()[0] * len(self.ExtState) * self.offset)
+        self.xlim = x1 / self.offset
+        if (x1 >= 0 and x1 <= len(self.ExtState) * self.offset):
             for v in self.cavasverticalline:
                 self.datacavas.delete(v)
             self.cavasverticalline = []
             self.cavasverticalline.append(self.datacavas.create_line(x1, 0, x1, 512, fill="purple"))
-            self.statusbar.setdata("%s", "Count:" + str(x1 / offset))
-            # self.statusbar.setdata("%s","方差:" + str(self.VarState[x1 / offset]) + ",极值:" + str(self.ExtState[x1 / offset]))
+            self.statusbar.setdata("%s", "Count:" + str(x1 / self.offset))
+            # self.statusbar.setdata("%s","方差:" + str(self.VarState[x1 / self.offset]) + ",极值:" + str(self.ExtState[x1 / self.offset]))
 
-            self.XValueString.set(self.XValue[x1 / offset])
-            self.YValueString.set(self.YValue[x1 / offset])
-            self.ZValueString.set(self.ZValue[x1 / offset])
-            self.GMI_XvalueString.set(self.GMI_XValue[x1 / offset])
-            self.GMI_YvalueString.set(self.GMI_YValue[x1 / offset])
-            self.GMI_XvalueMiddleString.set(self.GMI_XValueM[x1 / offset])
-            self.GMI_YvalueMiddleString.set(self.GMI_YValueM[x1 / offset])
-            self.VarianceString.set(self.VarianceM[x1 / offset])
+            self.XValueString.set(self.XValue[x1 / self.offset])
+            self.YValueString.set(self.YValue[x1 / self.offset])
+            self.ZValueString.set(self.ZValue[x1 / self.offset])
+            self.GMI_XvalueString.set(self.GMI_XValue[x1 / self.offset])
+            self.GMI_YvalueString.set(self.GMI_YValue[x1 / self.offset])
+            self.GMI_XvalueMiddleString.set(self.GMI_XValueM[x1 / self.offset])
+            self.GMI_YvalueMiddleString.set(self.GMI_YValueM[x1 / self.offset])
+            self.VarianceString.set(self.VarianceM[x1 / self.offset])
 
-            self.XMiddleString.set(self.AD_middle_valueX[x1 / offset])
-            self.YMiddleString.set(self.AD_middle_valueY[x1 / offset])
-            self.ExtremumString.set(self.ExtremumValue[x1 / offset])
-            self.Ext_MiddleString.set(self.ExtremumValueMiddle[x1 / offset])
-            self.IntensityeString.set(self.Intensity[x1 / offset])
-            self.Int_MiddleString.set(self.IntensityMiddle[x1 / offset])
-            self.IntStateString.set(self.IntState[x1 / offset])
-            self.ResultString.set(self.Result[x1 / offset])
+            self.XMiddleString.set(self.AD_middle_valueX[x1 / self.offset])
+            self.YMiddleString.set(self.AD_middle_valueY[x1 / self.offset])
+            self.ExtremumString.set(self.ExtremumValue[x1 / self.offset])
+            self.Ext_MiddleString.set(self.ExtremumValueMiddle[x1 / self.offset])
+            self.IntensityeString.set(self.Intensity[x1 / self.offset])
+            self.Int_MiddleString.set(self.IntensityMiddle[x1 / self.offset])
+            self.IntStateString.set(self.IntState[x1 / self.offset])
+            self.ResultString.set(self.Result[x1 / self.offset])
             self.IntensityMinusString.set(
-                abs(int(self.Intensity[x1 / offset]) - int(self.IntensityMiddle[x1 / offset])))
-            self.XAve_SlopString.set(ctypes.c_int16(int(self.XAve_Slop[x1 / offset])))
-            self.YAve_SlopString.set(ctypes.c_int16(int(self.YAve_Slop[x1 / offset])))
-            if (abs(int(self.XValue[x1 / offset]) - int(self.AD_middle_valueX[x1 / offset])) > 100 and (
-                    int(self.VarianceM[x1 / offset])) < 60):
+                abs(int(self.Intensity[x1 / self.offset]) - int(self.IntensityMiddle[x1 / self.offset])))
+            self.XAve_SlopString.set(ctypes.c_int16(int(self.XAve_Slop[x1 / self.offset])))
+            self.YAve_SlopString.set(ctypes.c_int16(int(self.YAve_Slop[x1 / self.offset])))
+            if (abs(int(self.XValue[x1 / self.offset]) - int(self.AD_middle_valueX[x1 / self.offset])) > 100 and (
+                    int(self.VarianceM[x1 / self.offset])) < 60):
                 self.Side_ParkingString.set(1)
                 # else:
                 self.Side_ParkingString.set(0)
@@ -1461,7 +1445,7 @@ class Application(ttk.Notebook):
                 #         self.animateopen = 1
                 #         self.matplotanimate = matplotoldanimate.Scope(data = self.filedata,thread = self)
                 #         self.matplotanimate.start()
-                # self.DrawOldData.set_xlim(x1/offset)
+                # self.DrawOldData.set_xlim(x1/self.offset)
 
     def QOS(self):
         '''
@@ -1611,12 +1595,12 @@ class Application(ttk.Notebook):
         else:
             txtfont = tkFont.Font(size=20, family="黑体")
 
-        tk.Label(self.tab7, text="测试温度:", font=txtfont).grid(row=8, column=0, columnspan=5)
+        tk.Label(self.tab7, text="测试温度:", font=txtfont).grid(row=8, column=0, columnspan=6)
         temperatureinput = tk.Entry(self.tab7, width=10)
-        temperatureinput.grid(row=8, column=2, sticky=tk.W, columnspan=5)
-        tk.Label(self.tab7, text="℃", font=txtfont).grid(row=8, column=2, columnspan=5)
+        temperatureinput.grid(row=8, column=3, sticky=tk.W, columnspan=3)
+        tk.Label(self.tab7, text="℃", font=txtfont).grid(row=8, column=3, columnspan=2)
         cmdbutton1 = tk.Button(self.tab7, text="开始测试", font=txtfont, command=buttonCallback)
-        cmdbutton1.grid(row=8, column=0, columnspan=14)
+        cmdbutton1.grid(row=8, column=0, columnspan=12)
         self.temp_starttime_String = tk.StringVar()
         tk.Label(self.tab7, textvariable=self.temp_starttime_String, width=30, font=txtfont).grid(row=8, column=4,
                                                                                                   columnspan=13)
@@ -1670,7 +1654,7 @@ class Application(ttk.Notebook):
         tk.Label(self.tab7, text="测试时间:", font=txtfont).grid(row=3, column=0, sticky=tk.W)
         self.node1_time_Label = tk.Label(self.tab7, text="0", textvariable=self.node1_time_String, width=26,
                                          font=txtfont)
-        self.node1_time_Label.grid(row=3, column=1, sticky=tk.W)
+        self.node1_time_Label.grid(row=3, column=1, sticky=tk.W, columnspan=3)
         self.node1_time_String.set(0)
 
         self.node2_num_String = tk.StringVar()
@@ -1721,7 +1705,7 @@ class Application(ttk.Notebook):
         tk.Label(self.tab7, text="测试时间:", font=txtfont).grid(row=3, column=7, sticky=tk.W)
         self.node2_time_Label = tk.Label(self.tab7, text="0", textvariable=self.node2_time_String, width=26,
                                          font=txtfont)
-        self.node2_time_Label.grid(row=3, column=8, sticky=tk.W)
+        self.node2_time_Label.grid(row=3, column=8, sticky=tk.W, columnspan=3)
         self.node2_time_String.set(0)
 
         self.node3_num_String = tk.StringVar()
@@ -1772,7 +1756,7 @@ class Application(ttk.Notebook):
         tk.Label(self.tab7, text="测试时间:", font=txtfont).grid(row=7, column=0, sticky=tk.W)
         self.node3_time_Label = tk.Label(self.tab7, text="0", textvariable=self.node3_time_String, width=26,
                                          font=txtfont)
-        self.node3_time_Label.grid(row=7, column=1, sticky=tk.W)
+        self.node3_time_Label.grid(row=7, column=1, sticky=tk.W, columnspan=3)
         self.node3_time_String.set(0)
 
         self.node4_num_String = tk.StringVar()
@@ -1823,7 +1807,7 @@ class Application(ttk.Notebook):
         tk.Label(self.tab7, text="测试时间:", font=txtfont).grid(row=7, column=7, sticky=tk.W)
         self.node4_time_Label = tk.Label(self.tab7, text="0", textvariable=self.node4_time_String, width=26,
                                          font=txtfont)
-        self.node4_time_Label.grid(row=7, column=8, sticky=tk.W)
+        self.node4_time_Label.grid(row=7, column=8, sticky=tk.W, columnspan=3)
         self.node4_time_String.set(0)
 
     def updateTempLabel(self):
@@ -1900,6 +1884,15 @@ class Application(ttk.Notebook):
         self.node1_num_Label.after(1000, self.updateTempLabel)
 
     def timeFormat(self, seconds):
+        '''
+        Parameter：
+
+        Function：
+                               格式化时间
+        :type self:
+        Autor:xiaoxiami 2015.11.29
+        Others：
+        '''
         if seconds < 60:
             return str(seconds) + " 秒"
         elif seconds < 3600:

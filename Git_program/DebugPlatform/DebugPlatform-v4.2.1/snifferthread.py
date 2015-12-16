@@ -22,8 +22,11 @@ class myThread (threading.Thread):
         self.carstoproot = self.menu.carstoproot
         self.data=[]
         self.datatoshow=''
+        if not os.path.exists("../Sniffer"):
+            os.makedirs('../Sniffer')
         self.filename = filename
-        self.file = open(self.filename,'w')
+        with open(filename, 'w') as file:
+            file.write("Sniffer Start at:" + time.strftime('%Y-%m-%d  %H:%M:%S',time.localtime(time.time())) + "\n")
         self.radiovalue = self.app.radiovalue.get()
         self.currenttab = 0
         self.dataintext = ""

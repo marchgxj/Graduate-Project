@@ -2,7 +2,7 @@
 import threading
 import serial
 import time
-import binascii
+import os
 
 
 class myThread(threading.Thread):
@@ -23,8 +23,12 @@ class myThread(threading.Thread):
         self.value = [0 for n in range(self.VALUE_NUM)]
 
         self.readenable = 0
-
+        if not os.path.exists("../Data/Identify"):
+            os.makedirs('../Data/Identify')
         self.filename = filename
+        with open(filename, 'w') as file:
+            file.write("Identify Start at:" + time.strftime('%Y-%m-%d  %H:%M:%S',time.localtime(time.time())) + "\n")
+
         self.sensordata = []
         self.framecount = 0
         self.update = threading.Thread(target=self.update)

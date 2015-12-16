@@ -1,19 +1,19 @@
 __author__ = 'Changxiaodong'
 # coding=utf-8
-import numpy as np
-from matplotlib.lines import Line2D
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
+import Tkinter as Tk
+import matplotlib
+matplotlib.use('TkAgg')
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2TkAgg
+from matplotlib.backend_bases import key_press_handler
+import ttk
 
-import matplotlib.axes as axes
-import time
-from matplotlib.figure import Figure
-import matplotlib.dates as mdates
-import datetime
-import mpl_toolkits.mplot3d.axes3d as p3
 
 class Scope:
     def __init__(self, data, thread):
+        self.root = Tk.Tk()
+        self.root.wm_title("2D Image")
         self.fig = plt.figure(figsize=(12, 6), dpi=100)
         self.sensorax = self.fig.add_subplot(3, 2, 1, xlim=(0, 10), ylim=(0, 4096))
         self.Varianceax = self.fig.add_subplot(3, 2, 3, xlim=(0, 10), ylim=(0, 3000))
@@ -56,7 +56,7 @@ class Scope:
 
         self.count = 0
 
-        for v in data:
+        for v in data[1:]:
             self.XValueLinedata.append(v[0])
             self.YValueLinedata.append(v[1])
             self.ZValueLinedata.append(v[16])
@@ -110,18 +110,74 @@ class Scope:
 
     def update(self, i):
         self.xlim = self.therad.xlim
+        xlim_l = self.xlim - (self.therad.datascalevalue * -20 + 220)
+        xlim_r = self.xlim + (self.therad.datascalevalue * -20 + 220)
+
+        self.sensorax.set_xlim(xlim_l,xlim_r )
+        self.Varianceax.set_xlim(xlim_l, xlim_r)
+        self.Extremumax.set_xlim(xlim_l, xlim_r)
+        self.Stateax.set_xlim(xlim_l, xlim_r)
+        self.Intensityax.set_xlim(xlim_l, xlim_r)
+        self.GMIsensorax.set_xlim(xlim_l, xlim_r)
+        return
+        # return self.XValueLine, self.YValueLine, self.VarValueLine, self.ExtValueLine, self.VarStateLine, self.ExtStateLine, self.IntensityLine, self.IntensityMiddleLine, self.IntStateLine,self.ResultLine
+
+    def setScaleValue(self):
+        self.datascale.set(self.therad.x1/self.therad.datascalevalue)
+        self.datascalelabel.config(text=str(self.datascale.get()))
+
+    def setScalueTo(self):
+        self.datascale.config(to=len(self.XValueLinedata)*self.therad.datascalevalue)
+
+    def start(self):
+
+        canvas = FigureCanvasTkAgg(self.fig, master=self.root)
+        canvas.show()
+        canvas.get_tk_widget().pack(side=Tk.TOP, fill=Tk.BOTH, expand=1)
+
+
+        ani = animation.FuncAnimation(self.fig, self.update, init_func=self.init, frames=50, interval=200)
+        # plt.show()
+
+        toolbar = NavigationToolbar2TkAgg(canvas, self.root)
+        toolbar.update()
+        canvas._tkcanvas.pack(side=Tk.TOP, fill=Tk.BOTH, expand=1)
+
+
+        def _quit():
+            self.root.quit()     # stops mainloop
+            self.root.destroy()  # this is necessary on Windows to prevent
+                            # Fatal Python Error: PyEval_RestoreThread: NULL tstate
+
+        self.datascale = ttk.Scale(self.root, orient=Tk.HORIZONTAL, from_=1, to=len(self.XValueLinedata)*self.therad.datascalevalue,command=self.scaleCallback)
+        self.datascale.pack(fil=Tk.X)
+        self.datascalevalue = 5
+        self.datascale.set(self.datascalevalue/self.therad.datascalevalue)
+        self.datascalelabel = ttk.Label(self.root, text="5")
+        self.datascalelabel.pack()
+
+        button = Tk.Button(master=self.root, text='Quit', command=_quit)
+        button.pack(side=Tk.BOTTOM)
+
+        Tk.mainloop()
+
+    def scaleCallback(self,event):
+
+        datascalevalue = int(self.datascale.get())
+        try:
+            self.datascalelabel.config(text=str(datascalevalue/self.therad.datascalevalue))
+        except:
+            pass
+
+        self.therad.Showdetaildata(datascalevalue)
+        self.xlim = datascalevalue
+
         self.sensorax.set_xlim(self.xlim - 50, self.xlim + 50)
         self.Varianceax.set_xlim(self.xlim - 50, self.xlim + 50)
         self.Extremumax.set_xlim(self.xlim - 50, self.xlim + 50)
         self.Stateax.set_xlim(self.xlim - 50, self.xlim + 50)
         self.Intensityax.set_xlim(self.xlim - 50, self.xlim + 50)
         self.GMIsensorax.set_xlim(self.xlim - 50, self.xlim + 50)
-        return
-        # return self.XValueLine, self.YValueLine, self.VarValueLine, self.ExtValueLine, self.VarStateLine, self.ExtStateLine, self.IntensityLine, self.IntensityMiddleLine, self.IntStateLine,self.ResultLine
-
-    def start(self):
-        ani = animation.FuncAnimation(self.fig, self.update, init_func=self.init, frames=50, interval=200)
-        plt.show()
 
 
     def closeing(self):

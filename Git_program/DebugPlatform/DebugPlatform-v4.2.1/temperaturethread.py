@@ -178,6 +178,3 @@ class myThread(threading.Thread):
         self.uart = serial.Serial()
         self.uart.port = self.port
         self.uart.baudrate = self.baud
-
-    def dataToExcel(self):
-        pass
