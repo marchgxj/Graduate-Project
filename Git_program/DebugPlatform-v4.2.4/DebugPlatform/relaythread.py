@@ -43,13 +43,13 @@ class myThread(threading.Thread):
             os.makedirs('../Log')
         self.filename = "../Log/" + time.strftime('%Y-%m-%d_%H-%M-%S', time.localtime(time.time())) + '.txt'
         self.logfile = open(self.filename, "a+")
-        self.logfile.write("Program Start at:" + time.strftime('%Y-%m-%d  %H:%M:%S',time.localtime(time.time())) + "\n")
+        self.logfile.write(
+            "Program Start at:" + time.strftime('%Y-%m-%d  %H:%M:%S', time.localtime(time.time())) + "\n")
         self.logfile.close()
         self.netdatabuf = ''
         self.upload_databuf = deque()
         self.netuploadthread = threading.Thread(target=self.dataUpload)
         self.netuploadthread.setDaemon(True)
-
 
     def dataUpload(self):
         '''
@@ -75,6 +75,77 @@ class myThread(threading.Thread):
                 except:
                     self.statusbar.status.setstatus('%s', "网络连接超时，请检查网络或关闭数据上传下载功能")
 
+    def sendCommand(self, add, cmd):
+        '''
+        Parameter：add:address of node
+                   cmd:command num
+
+        Function：
+                              向节点发送控制信息
+        Autor:xiaoxiami 2015.12.26
+        Others：控制信息可以由上位机输入，或从服务器上获取
+        '''
+        cmd_address = (chr(int(add)))
+        cmd_cmd = (chr(int(cmd)))
+        self.uart.write("\xAA")
+        self.uart.write(cmd_address)
+        self.uart.write(cmd_cmd)
+        self.uart.write("\xBB")
+        ack = self.uart.read(1)
+        if (ack != ""):
+            if (ord(ack) == 0xAA):  # 收ack
+                return 1
+            else:
+                return 0
+
+    def sendCommandfromUI(self):
+        '''
+        Parameter：
+
+        Function：
+                              从上位机界面获取控制命令，发送给中继
+        Autor:xiaoxiami 2015.12.26
+        Others：
+        '''
+        # self.statusbar.status.setstatus("节点控制")
+        if (self.cmdaddress != ""):
+            if (self.cmdaddress != "0"):
+                if (int(self.cmdaddress) > 255):
+                    self.statusbar.status.setdata("地址超出范围！")
+                else:
+                    if self.sendCommand(self.cmdaddress, self.cmd):
+                        self.statusbar.status.setdata('%s',
+                                                      "发送命令：" + str(self.cmdaddress) + "," + str(self.cmd)
+                                                      )
+                        self.cmdaddress = "0"
+                    else:
+                        self.Control_Resend += 1
+                        self.statusbar.status.setdata('%s', "重试：" + str(self.Control_Resend))
+                        if (self.Control_Resend == 20):
+                            self.Control_Resend = 0
+                            self.statusbar.status.setdata("发送失败！")
+                            self.cmdaddress = "0"
+                            time.sleep(0.05)
+
+    def sendCommandfromServer(self, feedback):
+        '''
+        Parameter：
+
+        Function：
+                              从服务器获取控制命令，发送给中继
+        Autor:xiaoxiami 2015.12.26
+        Others：
+        '''
+        for key, value in feedback.items():
+            if key != "Status":
+                add = int(str(key).split("-")[-1])
+                for i in range(10):
+                    if self.sendCommand(add, value):
+                        self.statusbar.status.setdata('%s',
+                            "发送命令：" + str(add) + "," + str(value)
+                            )
+                        break
+
     def run(self):
         '''
         Parameter：
@@ -93,11 +164,12 @@ class myThread(threading.Thread):
         data["data"] = ""
         uploaddatacut = ""
         self.datatoshow = ''
+        command_buf=[]
         while (1):
             if self.showdata.appFrame.tab == 0 or self.showdata.appFrame.tab == 4:
                 try:
                     ordbuf = self.uart.read(1)
-                except  serial.SerialException ,err:
+                except  serial.SerialException, err:
                     print err
                     self.statusbar.status.setdata("串口被拔出,插入后请重新打开")
                     break
@@ -105,7 +177,7 @@ class myThread(threading.Thread):
                     if ord(ordbuf) == 0x7D:
                         try:
                             ordbuf = ord(self.uart.read(1))
-                        except serial.SerialException,err:
+                        except serial.SerialException, err:
                             self.statusbar.status.setdata("串口被拔出,插入后请重新打开")
                             print err
                             break
@@ -113,7 +185,7 @@ class myThread(threading.Thread):
                             count += 1
                             try:
                                 length = ord(self.uart.read(1))  # 读出这一包要发的节点个数
-                            except serial.SerialException ,err:
+                            except serial.SerialException, err:
                                 self.statusbar.status.setdata("串口被拔出,插入后请重新打开")
                                 print err
                                 break
@@ -124,15 +196,15 @@ class myThread(threading.Thread):
                                     try:
                                         num = ord(self.uart.read(1)) << 8 | ord(self.uart.read(1))
                                         status = ord(self.uart.read(1))
-                                    except serial.SerialException,err:
+                                    except serial.SerialException, err:
                                         self.statusbar.status.setdata("串口被拔出,插入后请重新打开")
                                         print err
                                         break
 
                                     self.notedata.append(num)  # 偶数位为地址
                                     self.notedata.append(status)  # 奇数位为数据
-                                    data["data"] = data["data"] + "0086-110108-00022105-" + str(num).zfill(4) + "|"\
-                                           + str(status) + ','
+                                    data["data"] = data["data"] + "0086-110108-00022105-" + str(num).zfill(4) + "|" \
+                                                   + str(status) + ','
                                     self.datatoshow = self.datatoshow + str(num).zfill(4) + "|"
                                     self.datatoshow = self.datatoshow + str(status) + ","
                                 except:
@@ -143,10 +215,10 @@ class myThread(threading.Thread):
                                 print "uart data error"
                                 try:
                                     self.uart.read(self.uart.inWaiting())  # 清空串口缓冲区内容
-                                except serial.SerialException,err:
-                                        self.statusbar.status.setdata("串口被拔出,插入后请重新打开")
-                                        print err
-                                        break
+                                except serial.SerialException, err:
+                                    self.statusbar.status.setdata("串口被拔出,插入后请重新打开")
+                                    print err
+                                    break
 
                             uploaddatacut = data["data"]
                             data["data"] = uploaddatacut[:-1]
@@ -163,12 +235,22 @@ class myThread(threading.Thread):
                             start = time.clock()
                             try:
                                 '''上传全部数据'''
-                                response = urllib2.urlopen("http://123.57.37.66:8080/sensor/post/status", post_data, timeout=1)
-                                serverresponse = response.read()
-                                serverresponsedic = eval(serverresponse)
+                                # response = urllib2.urlopen("http://123.57.37.66:8080/sensor/post/status", post_data,
+                                #                            timeout=1)
+                                # serverresponse = response.read()
+                                # serverresponsedic = eval(serverresponse)
+                                # end = time.clock()
+                                # self.statusbar.status.setstatus('网络延时:%s' + "  " + serverresponsedic["err_msg"],
+                                #                                 str(end - start))
+
+
+                                response = urllib2.urlopen("http://www.xiaoxiami.space/info/post/", post_data)
                                 end = time.clock()
-                                self.statusbar.status.setstatus('网络延时:%s' + "  " + serverresponsedic["err_msg"],
-                                                                str(end - start))
+                                feedback = eval(response.read())
+                                self.statusbar.status.setstatus(
+                                    '网络延时:%s' + "  " + feedback["Status"],
+                                    str(end - start))
+                                self.sendCommandfromServer(feedback)
                             except:
                                 self.statusbar.status.setstatus('%s', "网络连接超时，请检查网络或关闭数据上传下载功能")
                     elif (ordbuf) == 0x7F:
@@ -177,37 +259,14 @@ class myThread(threading.Thread):
                         err_msg = err_msg[:-1]
                         self.statusbar.status.setdata('Debug Msg:  %s   %s', err_msg, debug_count)
                         self.logfile = open(self.filename, "a+")
-                        self.logfile.write(time.strftime('%Y-%m-%d  %H:%M:%S',time.localtime(time.time())) + ":  "+\
+                        self.logfile.write(time.strftime('%Y-%m-%d  %H:%M:%S', time.localtime(time.time())) + ":  " + \
                                            err_msg + "," + \
                                            str(debug_count) + "\n")
                         self.logfile.close()
-            if (self.showdata.appFrame.tab == 4):
-                # self.statusbar.status.setstatus("节点控制")
-                if (self.cmdaddress != ""):
-                    if (self.cmdaddress != "0"):
-                        if (int(self.cmdaddress) > 255):
-                            self.statusbar.status.setdata("地址超出范围！")
-                        else:
-                            cmd_address = (chr(int(self.cmdaddress)))
-                            cmd_cmd = (chr(int(self.cmd)))
-                            self.uart.write("\xAA")
-                            self.uart.write(cmd_address)
-                            self.uart.write(cmd_cmd)
-                            self.uart.write("\xBB")
-                            buf1 = self.uart.read(1)
-                            if (buf1 != ""):
-                                if (ord(buf1) == 0xAA):  # 收ack
-                                    self.statusbar.status.setdata('%s',
-                                                                  "发送命令：" + str(self.cmdaddress) + "," + str(self.cmd))
-                                    self.cmdaddress = "0"
-                                else:
-                                    self.Control_Resend += 1
-                                    self.statusbar.status.setdata('%s', "重试：" + str(self.Control_Resend))
-                                    if (self.Control_Resend == 20):
-                                        self.Control_Resend = 0
-                                        self.statusbar.status.setdata("发送失败！")
-                                        self.cmdaddress = "0"
-                                        time.sleep(0.05)
+            # Send Control Command from UI
+            if self.showdata.appFrame.tab == 4:
+                self.sendCommandfromUI()
+
         if self.port in self.menu.opened_uart:
             self.menu.opened_uart.remove(self.port)
 

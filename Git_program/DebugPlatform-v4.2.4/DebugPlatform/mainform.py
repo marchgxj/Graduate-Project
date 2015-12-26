@@ -829,8 +829,8 @@ class Application(ttk.Notebook):
             self.dataclearbutton = tk.Button(self.tab4, text="清屏", command=self.Cleardata)
             self.dataclearbutton.grid(row=1, column=3, padx=20, sticky=tk.W, )
 
-        self.newtext = tk.Button(self.tab4, command=self.newtext, text="新文件")
-        self.newtext.grid(row=1, column=4)
+        self.newtextbutton = tk.Button(self.tab4, command=self.newtext, text="新文件")
+        self.newtextbutton.grid(row=1, column=4)
 
         self.datascale = ttk.Scale(self.tab4, orient=tk.HORIZONTAL, from_=1, to=10, command=self.Zoomcallback)
         self.datascale.grid(row=1, column=2, sticky=tk.W)
@@ -1131,7 +1131,10 @@ class Application(ttk.Notebook):
         Others：
         '''
         self.filenameadd = self.entry.get()
-        self.filenameinput.quit()
+        # self.filenameinput.quit()
+        self.root.status.setstatus('../Data/Identify/' + self.filenameadd + '.txt')
+        self.menu.uartform.identifythread.filename = '../Data/Identify/' + self.filenameadd + '.txt'
+
 
     def newtext(self):
         '''
@@ -1142,15 +1145,16 @@ class Application(ttk.Notebook):
         Autor:xiaoxiami 2015.9.05
         Others：
         '''
+
         if (self.identifyuartopen != 0):
             self.filenameinput = tk.Tk()
             self.entry = tk.Entry(self.filenameinput)
             enter = tk.Button(self.filenameinput, text="确定", command=self.confirm)
             self.entry.pack()
             enter.pack()
-            self.filenameinput.mainloop()
-            self.menu.uartform.identifythread.filename = '../Data/Identify/' + self.filenameadd + time.strftime(
-                '%Y-%m-%d_%H-%M-%S', time.localtime(time.time())) + '.txt'
+            # self.filenameinput.mainloop()
+
+
 
     def MatplotlibDrawing(self):
         '''
@@ -1165,20 +1169,18 @@ class Application(ttk.Notebook):
             if (self.identifyuartopen == 0):
                 tkmes.showerror("错误！", "串口没有打开！\n请手动载入数据或打开串口！")
                 return
-            if isinstance(self.XValue[0],str):
-                self.identifythread = self.menu.uartform.identifythread
-                self.updatelabel()
-                if self.identifythread.thread_stop == False:
-                    self.identifythread.thread_stop = True
-                    self.dataRPbutton.configure(background="red", text="显示2D图像")
-                else:
-                    self.identifythread.thread_stop = False
-                    self.dataRPbutton.configure(background="green", text="显示2D图像")
-                    self.scope = matplot.Scope(thread=self.menu.uartform.identifythread)
-                    self.scope.start()
+            self.identifythread = self.menu.uartform.identifythread
+            self.updatelabel()
+            if self.identifythread.thread_stop == False:
+                self.identifythread.thread_stop = True
+                self.dataRPbutton.configure(background="red", text="显示图像")
             else:
-                tkmes.showerror("选择文件过多", "绘制2D图像只能选择一个文件！ ")
+                self.identifythread.thread_stop = False
+                self.dataRPbutton.configure(background="green", text="显示图像")
+                self.scope = matplot.Scope(thread=self.menu.uartform.identifythread)
+                self.scope.start()
         else:
+
             self.matplotanimate = matplotoldanimate.Scope(data=self.filedata, thread=self)
             self.matplotanimate.start()
 
