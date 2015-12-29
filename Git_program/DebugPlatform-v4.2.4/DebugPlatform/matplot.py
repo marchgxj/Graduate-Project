@@ -292,6 +292,32 @@ class ScopeOld3D:
         self.ax3d.legend()
         plt.show()
 
+class ScopeOld2D:
+    def __init__(self,data):
+        x=[]
+        y=[]
+        firstx=data[0][0][0]
+        firsty=data[0][0][1]
+        for i in range(len(data)):
+            line = data[i]
+
+            for j in range(len(line)):
+                dot = line[j]
+                if j==0 and i!=0:
+                    offsetx = firstx - dot[0]
+                    offsety = firsty - dot[1]
+                if i!=0:
+                    x.append(dot[0] + offsetx)
+                    y.append(dot[1] + offsety)
+                else:
+                    x.append(dot[0])
+                    y.append(dot[1])
+            plt.plot(x, y,label=1)
+            x=[]
+            y=[]
+
+        plt.show()
+
 if __name__ == '__main__':
     scope = Scope()
     scope.start()

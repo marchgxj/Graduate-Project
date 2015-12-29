@@ -12,6 +12,7 @@ import identifythread
 import tkMessageBox as tkmes
 import linkthread
 import temperaturethread
+import platform
 
 class GetSerialPorts(object):
     # list contains all port device info
@@ -84,6 +85,8 @@ class UartRoot(tk.Tk):
             self.comnumbox.set(comnum[0])
         else:
             self.comnumbox.set('未发现串口')
+        if platform.system() == "Linux":
+            self.comnumbox.set("/dev/ttyAMA0")
         self.comnumbox.grid(row=0, column=1)
         
         ttk.Label(self, text="波特率:", padding=5).grid(row=1)
@@ -109,7 +112,7 @@ class UartRoot(tk.Tk):
         
         ttk.Label(self, text="数据源类型:", padding=5).grid(row=4)
         self.datasourcecbox = ttk.Combobox(self, width=10)
-        self.datasourcecbox['value'] = ("中继","抓包","识别","链路","温度")
+        self.datasourcecbox['value'] = ("中继","抓包","绘图","链路","温度")
         self.datasourcecbox.set(self.parent_menu.datasourcecboxbuf)
         self.datasourcecbox.grid(row=4, column=1)
         self.datasourcecbox.bind("<<ComboboxSelected>>", self.IsOpen)

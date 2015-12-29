@@ -1,5 +1,5 @@
-__author__ = 'Changxiaodong'
 # coding=utf-8
+__author__ = 'Changxiaodong'
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 import Tkinter as Tk
@@ -8,6 +8,7 @@ matplotlib.use('TkAgg')
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2TkAgg
 from matplotlib.backend_bases import key_press_handler
 import ttk
+import tkMessageBox as tkmes
 
 
 class Scope:
@@ -64,6 +65,7 @@ class Scope:
             self.GMI_YValueLinedata.append(v[18])
             self.VarValueLinedata.append(v[2])
             self.ExtValueLinedata.append(v[4])
+
             if(int(v[5])==2):
                 self.VarStateLinedata.append(1)
             elif(int(v[5])==1):
@@ -76,6 +78,7 @@ class Scope:
                 self.ExtStateLinedata.append(5)
             else:
                 self.ExtStateLinedata.append(3)
+
             self.IntensityLinedata.append(v[9])
             self.IntensityMiddleLinedata.append(v[10])
             if(int(v[11])==2):

@@ -9,6 +9,7 @@ import tkMessageBox as tkmes
 import tkFont
 import time
 
+
 import tkFileDialog
 
 if platform.system() != "Linux":
@@ -85,6 +86,10 @@ class MainRoot(tk.Tk):
     def Identify(self):
         if self.resolution > 153600:
             self.appFrame.Identify()
+
+    def algorithm(self):
+        if platform.system()!="Linux":
+            self.appFrame.algorithm()
 
     def tempTest(self):
         self.appFrame.initTempLabel()
@@ -283,9 +288,9 @@ class MenuBar(tk.Menu):
                 timenow = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(float(item[0])))
                 worksheet.write(row_count, 0, label=timenow)
                 worksheet.col(0).width = 0x0d00 + 2000
-                worksheet.write(row_count, 1, label=item[1])
-                worksheet.write(row_count, 2, label=item[2])
-                worksheet.write(row_count, 3, label=item[3])
+                worksheet.write(row_count, 1, label=int(item[1]))
+                worksheet.write(row_count, 2, label=int(item[2]))
+                worksheet.write(row_count, 3, label=int(item[3]))
                 row_count += 1
 
             try:
@@ -354,14 +359,16 @@ class Application(ttk.Notebook):
         self.tab5 = ttk.Frame(self)
         self.tab6 = ttk.Frame(self)
         self.tab7 = ttk.Frame(self)
+        self.tab8 = ttk.Frame(self)
 
         self.add(self.tab1, text="停车状态")
         self.add(self.tab2, text="网络拓扑")
         self.add(self.tab3, text="网络抓包")
-        self.add(self.tab4, text="数据识别")
+        self.add(self.tab4, text="绘制图像")
         self.add(self.tab5, text="控制命令")
         self.add(self.tab6, text="链路测试")
         self.add(self.tab7, text="温度测试")
+        self.add(self.tab8, text="算法测试")
         self.topline = []
         self.bottomline = []
         self.carnum = 0
@@ -404,6 +411,7 @@ class Application(ttk.Notebook):
         self.carnumbind = []
         self.stopedcarnum = 0
         self.tab = 0
+        self.algorithm_start = False
         self.matplotopen = False
         self.datapath = ""
         self.matplotoldopen = False
@@ -797,6 +805,321 @@ class Application(ttk.Notebook):
         print self.menu.uartform.txtfilname
         os.startfile(self.menu.uartform.txtfilname)
 
+    def algorithmStart(self):
+        '''
+        Parameter：
+
+        Function：
+                              切换开始运行按钮状态
+        Autor:xiaoxiami 2015.12.27
+        Others：
+        '''
+        if self.algorithm_start:
+            self.algorithm_start_button.configure(background="red", text="开始运行")
+            self.root.status.setstatus("算法运行停止")
+            self.root.status.setdata("")
+            self.algorithm_start = False
+        else:
+            self.algorithm_start_button.configure(background="green", text="停止运行")
+            self.algorithm_start = True
+        return self.algorithm_start
+
+    def identifydataToAxis(self,dir,name):
+        axis_values = []
+        values=[]
+        filealldatabuf=[]
+        fileaxisdatabuf=[]
+        for filename in name:
+            filepath = dir+filename
+            with open(filepath) as file:
+                for lines in file:
+                    buf = lines.split("|")[-1].split(" ")[:-1]
+                    try:
+                        filealldatabuf.append(buf)
+                        fileaxisdatabuf.append([int(buf[0]),int(buf[1]),int(buf[16])])
+                    except ValueError,err:
+                        print err
+            axis_values.append(fileaxisdatabuf)
+            values.append(filealldatabuf)
+            fileaxisdatabuf=[]
+            filealldatabuf=[]
+        return axis_values, values
+
+    def algorithm(self):
+        '''
+        Parameter：
+
+        Function：
+                               绘制算法测试界面
+        Autor:xiaoxiami 2015.12.26
+        Others：
+        '''
+        self.algorithm_dirpath = ""
+        self.filenames = ""
+        def _opendata():
+            global datapath
+            datapath = tkFileDialog.askopenfilenames(initialdir='../Data/Identify',filetypes=[("text file", "*.txt")])
+            if datapath:
+                for filename in datapath:
+                    buf = str(filename).split("/")[-1]
+                    inputtext.insert(tk.END,buf.encode("UTF-8")+";\n")
+                self.algorithm_dirpath=""
+                for i in str(datapath[0]).split("/")[:-1]:
+                    self.algorithm_dirpath += i+"/"
+
+        def _start():
+            settings={}
+            if not self.algorithm_dirpath:
+                tkmes.showerror("无法开始","没有指定数据文件！")
+                return
+            # if self.algorithmStart():
+            import algorithm
+            self.filenames = str(inputtext.get(0.0,tk.END).decode("GB2312")).replace("\n","").split(";")[:-1]
+            settings["dir"] = self.algorithm_dirpath
+            settings["file"] = self.filenames
+            settings["method"] = algorithm_method_combobox.current()
+            settings["period"] = periodspinbox.get()
+            settings["data"]= self.identifydataToAxis(self.algorithm_dirpath,self.filenames)[0]
+            settings["display"] = dot_check.get()
+            settings["source"] = [sourcex.get(),sourcey.get(),sourcez.get()]
+            algorithm_object = algorithm.Algotithm(settings,self)
+            self.root.status.setstatus("开始运行%s算法",algorithm_method_combobox.get().decode("GB2312").encode("UTF-8"))
+
+
+        def _draw():
+            self.filenames = str(inputtext.get(0.0,tk.END).decode("GB2312")).replace("\n","").split(";")[:-1]
+            if x_check.get()=='1' and y_check.get()=='1' and z_check.get()=='1':
+                data = self.identifydataToAxis(self.algorithm_dirpath, self.filenames)[1]
+                matplot.ScopeOld3D(data=data, singlefile=False)
+            elif x_check.get()=='0' and y_check.get()=='0' and z_check.get()=='0':
+                tkmes.showinfo("无法绘图","没有选择要绘制的坐标轴")
+            else:
+                buf = self.identifydataToAxis(self.algorithm_dirpath, self.filenames)[0]
+                a=[]
+                data=[]
+                #将两个轴的坐标抽取出来
+                if x_check.get() == "1" and y_check.get() == "1":
+                    for i in buf:
+                        for j in i:
+                            a.append([j[0],j[1]])
+                        data.append(a)
+                        a=[]
+                if y_check.get() == "1" and z_check.get() == "1":
+                    for i in buf:
+                        for j in i:
+                            a.append([j[1],j[2]])
+                        data.append(a)
+                        a=[]
+                if z_check.get() == "1" and x_check.get() == "1":
+                    for i in buf:
+                        for j in i:
+                            a.append([j[0],j[2]])
+                        data.append(a)
+                        a=[]
+                matplot.ScopeOld2D(data)
+
+
+
+        for i in range(12):
+            self.tab8.columnconfigure(i, weight=1)
+
+
+        #运行配置
+        settings_frame = tk.LabelFrame(self.tab8, text="运行配置")
+        settings_frame.grid(row=0,column=10, columnspan=5, sticky=tk.S+tk.N+tk.E+tk.W)
+        settings_frame.columnconfigure(0, weight=1)
+        settings_frame.columnconfigure(1, weight=1)
+
+        self.periodString = tk.StringVar()
+        tk.Label(settings_frame, text="采集周期(ms)：").grid(row=0, column=0,sticky=tk.E)
+        periodspinbox = tk.Spinbox(settings_frame,from_=50,to=1000,increment=100, textvariable=self.periodString)
+        self.periodString.set("50")
+        periodspinbox.grid(row=0,column=1,sticky=tk.W)
+        tk.Label(settings_frame, text="运行算法：").grid(row=1, column=0,sticky=tk.E)
+        algorithm_method_combobox = ttk.Combobox(settings_frame)
+        algorithm_method_combobox.grid(row=1,column=1,sticky=tk.W)
+        # algorithm_method.bind("<<ComboboxSelected>>", self.IsOpen)
+        algorithm_method_combobox['value'] = ["切线坐标"]
+        algorithm_method_combobox.set("切线坐标")
+
+
+        datapathbutton = ttk.Button(settings_frame, text="选择数据文件", command=_opendata)
+        datapathbutton.grid(row=3,column=0,rowspan=4, sticky=tk.E)
+        inputtext = tk.Text(settings_frame)
+        inputtext.grid(row=3, column=1, rowspan=4,sticky=tk.N + tk.S + tk.E + tk.W)
+        inputsb = tk.Scrollbar(inputtext)
+        inputsb.pack(side=tk.RIGHT, fill=tk.Y)
+        inputsb.config(command=inputtext.yview)
+        inputtext.config(yscrollcommand=inputsb.set)
+
+        tk.Label(settings_frame, text="结果显示方式:").grid(row=7, column=0,sticky=tk.E)
+        dot_check = tk.StringVar()
+        dot_checkbutton = tk.Checkbutton(
+            settings_frame,
+            text="动态散点图",
+            variable=dot_check,
+            onvalue="dot_animate"
+        )
+        dot_checkbutton.grid(row=7,column=1,sticky=tk.W)
+        dot_checkbutton.select()
+
+        tk.Checkbutton(
+            settings_frame,
+            text="静态散点图",
+            variable=dot_check,
+            onvalue="dot_static"
+        ).grid(row=8,column=1,sticky=tk.W)
+
+        tk.Label(settings_frame, text="数据源:").grid(row=9, column=0,sticky=tk.E)
+        sourcex = tk.StringVar()
+        sourcex_check = tk.Checkbutton(
+            settings_frame,
+            text="X",
+            variable=sourcex,
+        )
+        sourcex_check.deselect()
+        sourcex_check.grid(row=9,column=1,sticky=tk.W)
+        sourcey = tk.StringVar()
+        sourcey_check = tk.Checkbutton(
+            settings_frame,
+            text="Y",
+            variable=sourcey,
+        )
+        sourcey_check.deselect()
+        sourcey_check.grid(row=10,column=1,sticky=tk.W)
+        sourcez = tk.StringVar()
+        sourcez_check = tk.Checkbutton(
+            settings_frame,
+            text="Z",
+            variable=sourcez,
+        )
+        sourcez_check.deselect()
+        sourcez_check.grid(row=11,column=1,sticky=tk.W)
+
+
+        self.algorithm_start_button = ttk.Button(settings_frame, text="运行", command=_start)
+        self.algorithm_start_button.grid(row=12,columnspan=2)
+
+        #分析工具
+        analysis_frame = tk.LabelFrame(self.tab8, text="分析工具")
+        analysis_frame.grid(row=1,column=10, columnspan=2, sticky=tk.S+tk.N+tk.E+tk.W)
+
+        # for i in range(4):
+        #     analysis_frame.columnconfigure(i, weight=1)
+
+        x_check = tk.StringVar()
+        xcheckbutton = tk.Checkbutton(analysis_frame, text="X", variable=x_check)
+        xcheckbutton.grid(row=3,column=0)
+        xcheckbutton.deselect()
+        y_check = tk.StringVar()
+        ycheckbutton = tk.Checkbutton(analysis_frame, text="Y", variable=y_check)
+        ycheckbutton.grid(row=3,column=1)
+        ycheckbutton.deselect()
+        z_check = tk.StringVar()
+        zcheckbutton = tk.Checkbutton(analysis_frame, text="Z", variable=z_check)
+        zcheckbutton.grid(row=3,column=2,sticky=tk.E)
+        zcheckbutton.deselect()
+        draw3dbutton = ttk.Button(analysis_frame, text="绘制图像", command=_draw)
+        draw3dbutton.grid(row=3,column=3)
+
+        #变量显示
+        variable_show_frame = tk.LabelFrame(self.tab8, text="变量显示")
+        variable_show_frame.grid(row=0,column=0,rowspan=2,columnspan=10, sticky=tk.S+tk.N+tk.E+tk.W)
+        for i in range(10):
+            variable_show_frame.columnconfigure(i, weight=1)
+        rowandcloumn = 0
+        self.v00Label = tk.StringVar()
+        tk.Label(variable_show_frame, textvariable=self.v00Label).grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
+        rowandcloumn += 1
+        self.v00String = tk.StringVar()
+        tk.Label(variable_show_frame,
+                 text="0", textvariable=self.v00String,
+                 width=4
+                 ).grid(
+            row=rowandcloumn / 10,
+            column=rowandcloumn % 10
+        )
+        rowandcloumn += 1
+        self.v00String.set(0)
+        self.v00Label.set("Label00:")
+
+        self.v01Label = tk.StringVar()
+        tk.Label(variable_show_frame, textvariable=self.v01Label).grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
+        rowandcloumn += 1
+        self.v01String = tk.StringVar()
+        tk.Label(variable_show_frame,
+                 text="0", textvariable=self.v01String,
+                 width=4
+                 ).grid(
+            row=rowandcloumn / 10,
+            column=rowandcloumn % 10
+        )
+        rowandcloumn += 1
+        self.v01String.set(0)
+        self.v01Label.set("Label01:")
+
+        self.v02Label = tk.StringVar()
+        tk.Label(variable_show_frame, textvariable=self.v02Label).grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
+        rowandcloumn += 1
+        self.v02String = tk.StringVar()
+        tk.Label(variable_show_frame,
+                 text="0", textvariable=self.v02String,
+                 width=4
+                 ).grid(
+            row=rowandcloumn / 10,
+            column=rowandcloumn % 10
+        )
+        rowandcloumn += 1
+        self.v02String.set(0)
+        self.v02Label.set("Label02:")
+
+        self.v03Label = tk.StringVar()
+        tk.Label(variable_show_frame, textvariable=self.v03Label).grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
+        rowandcloumn += 1
+        self.v03String = tk.StringVar()
+        tk.Label(variable_show_frame,
+                 text="0", textvariable=self.v03String,
+                 width=4
+                 ).grid(
+            row=rowandcloumn / 10,
+            column=rowandcloumn % 10
+        )
+        rowandcloumn += 1
+        self.v03String.set(0)
+        self.v03Label.set("Label03:")
+
+        self.v04Label = tk.StringVar()
+        tk.Label(variable_show_frame, textvariable=self.v04Label).grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
+        rowandcloumn += 1
+        self.v04String = tk.StringVar()
+        tk.Label(variable_show_frame,
+                 text="0", textvariable=self.v04String,
+                 width=4
+                 ).grid(
+            row=rowandcloumn / 10,
+            column=rowandcloumn % 10
+        )
+        rowandcloumn += 1
+        self.v04String.set(0)
+        self.v04Label.set("Label04:")
+
+        self.v10Label = tk.StringVar()
+        tk.Label(variable_show_frame, textvariable=self.v10Label).grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
+        rowandcloumn += 1
+        self.v10String = tk.StringVar()
+        tk.Label(variable_show_frame,
+                 text="0", textvariable=self.v10String,
+                 width=4
+                 ).grid(
+            row=rowandcloumn / 10,
+            column=rowandcloumn % 10
+        )
+        rowandcloumn += 1
+        self.v10String.set(0)
+        self.v10Label.set("Label10:")
+        #Lavel init end
+
+
     def Identify(self):
         '''
         Parameter：
@@ -865,6 +1188,7 @@ class Application(ttk.Notebook):
         for i in range(10):
             readgroup.columnconfigure(i, weight=1)
 
+        #init Label
         rowandcloumn = 0
 
         self.XValueString = tk.StringVar()
@@ -1135,7 +1459,6 @@ class Application(ttk.Notebook):
         self.root.status.setstatus('../Data/Identify/' + self.filenameadd + '.txt')
         self.menu.uartform.identifythread.filename = '../Data/Identify/' + self.filenameadd + '.txt'
 
-
     def newtext(self):
         '''
         Parameter：
@@ -1153,8 +1476,6 @@ class Application(ttk.Notebook):
             self.entry.pack()
             enter.pack()
             # self.filenameinput.mainloop()
-
-
 
     def MatplotlibDrawing(self):
         '''
@@ -1211,6 +1532,7 @@ class Application(ttk.Notebook):
                     self.scope.start()
 
         else:
+            print self.filedata
             if isinstance(self.filedata[0][0],str):
                 matplot.ScopeOld3D(data=self.filedata, singlefile=True)
             else:
@@ -2073,6 +2395,7 @@ if __name__ == '__main__':
     root.SysStatus()  # 状态栏
     root.Command()  # 命令
     root.QOSTest()  # 链路测试
-    root.Identify()
-    root.tempTest()
+    root.Identify() #绘图
+    root.tempTest() #温度测试
+    root.algorithm() #算法测试
     root.mainloop()

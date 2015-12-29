@@ -145,6 +145,10 @@ class myThread(threading.Thread):
                             "发送命令：" + str(add) + "," + str(value)
                             )
                         break
+                    else:
+                        self.statusbar.status.setdata('重试：%s' % str(i))
+
+
 
     def run(self):
         '''

@@ -26,8 +26,8 @@ class myThread(threading.Thread):
         if not os.path.exists("../Data/Identify"):
             os.makedirs('../Data/Identify')
         self.filename = filename
-        with open(filename, 'w') as file:
-            file.write("Identify Start at:" + time.strftime('%Y-%m-%d  %H:%M:%S',time.localtime(time.time())) + "\n")
+        # with open(filename, 'w') as file:
+        #     file.write("Identify Start at:" + time.strftime('%Y-%m-%d  %H:%M:%S',time.localtime(time.time())) + "\n")
 
         self.sensordata = []
         self.framecount = 0
