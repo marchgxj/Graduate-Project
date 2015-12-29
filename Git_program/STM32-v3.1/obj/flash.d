@@ -4,7 +4,7 @@
 ..\obj\flash.o: ..\SYSTEM\sys\sys.h
 ..\obj\flash.o: ..\USER\stm32f10x.h
 ..\obj\flash.o: ..\CORE\core_cm3.h
-..\obj\flash.o: E:\Program Files (x86)\Keil\ARM\ARMCC\bin\..\include\stdint.h
+..\obj\flash.o: d:\Keil\ARM\ARMCC\bin\..\include\stdint.h
 ..\obj\flash.o: ..\USER\system_stm32f10x.h
 ..\obj\flash.o: ..\USER\stm32f10x_conf.h
 ..\obj\flash.o: ..\STM32F10x_FWLib\inc\stm32f10x_fsmc.h
@@ -18,7 +18,7 @@
 ..\obj\flash.o: ..\SYSTEM\delay\delay.h
 ..\obj\flash.o: ..\HARDWARE\KEY\key.h
 ..\obj\flash.o: ..\SYSTEM\usart\usart.h
-..\obj\flash.o: E:\Program Files (x86)\Keil\ARM\ARMCC\bin\..\include\stdio.h
+..\obj\flash.o: d:\Keil\ARM\ARMCC\bin\..\include\stdio.h
 ..\obj\flash.o: ..\HARDWARE\SPI\spi.h
 ..\obj\flash.o: ..\HARDWARE\A7139\A7139.h
 ..\obj\flash.o: ..\HARDWARE\common.h

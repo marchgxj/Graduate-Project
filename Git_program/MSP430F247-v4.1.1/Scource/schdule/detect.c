@@ -451,6 +451,24 @@ void GMI_Identify()
         }
     }
 }
+
+uint8 isEnviroment()
+{
+    if((abs(MagneticUnit.XValue - MagneticUnit.XMiddleMF)<15)&&(abs(MagneticUnit.YValue - MagneticUnit.YMiddleMF)<15)&&(abs(MagneticUnit.ZValue - MagneticUnit.ZMiddleMF)<15))
+    {
+        MagneticUnit.XMiddle = MagneticUnit.XValue;
+        MagneticUnit.YMiddle = MagneticUnit.YValue;
+        MagneticUnit.ZMiddle = MagneticUnit.ZValue;
+        MagneticUnit.Ext_Middle = abs(MagneticUnit.XMiddle-MagneticUnit.YMiddle);
+        MagneticUnit.Int_Middle = sqrt_16((((uint32)MagneticUnit.XMiddle*(uint32)MagneticUnit.XMiddle)+((uint32)MagneticUnit.YMiddle*(uint32)MagneticUnit.YMiddle))+((uint32)MagneticUnit.ZMiddle*(uint32)MagneticUnit.ZMiddle));
+        return 1;
+    }
+    else
+    {
+        return 0;
+    }
+} 
+
 void GetVoltage()
 {
     SampleVoltage(&EndPointDevice.vlotage,&EndPointDevice.temperature);
@@ -527,39 +545,6 @@ void IdentifyCar()
 
 void TotalJudge()
 {
-//    if(HMC_Identify_Fail==0)
-//    {
-//        if(abs(MagneticUnit.XValue - MagneticUnit.XMiddle)>100)
-//        {
-//            XValue_Parking = 1;
-//        }
-//        else if(abs(MagneticUnit.XValue - MagneticUnit.XMiddle)<130)
-//        {
-//            XValue_Parking = 2;
-//        }
-//        else
-//        {
-//            XValue_Parking = 0;
-//        }
-//        if(abs(MagneticUnit.YValue - MagneticUnit.YMiddle)>80)
-//        {
-//            YValue_Parking = 1;
-//        }
-//        else if(abs(MagneticUnit.YValue - MagneticUnit.YMiddle)<130)
-//        {
-//            YValue_Parking = 2;
-//        }
-//        else
-//        {
-//            YValue_Parking = 0;
-//        }
-//    }
-//    else
-//    {
-//        GMI_Identify();
-//    }
-
-    
     if((MagneticUnit.ExtState==CAR)||(MagneticUnit.IntState==CAR)||(MagneticUnit.VarState==CAR))
     {
         if(CarStableCount<65534)
@@ -574,7 +559,7 @@ void TotalJudge()
                 
                 if(Cmd_CarCal_Flag == 0)
                 {
-                    if(CarCalibration()==0)
+                    if(isEnviroment()==0)
                     {
                         EndPointDevice.parking_state = CAR;
                     }
@@ -601,7 +586,7 @@ void TotalJudge()
                 //halLedSet(4);
                 if(Cmd_CarCal_Flag == 0)
                 {
-                    if(CarCalibration()==0)
+                    if(isEnviroment()==0)
                     {
                         EndPointDevice.parking_state = CAR;
                     }
@@ -670,17 +655,21 @@ void TotalJudge()
     {
         NoCarStableCount = 0;
     }
+	if(Quick_CollectM != Quick_CollectM)
+    {
+        NoCarStableCount = 0;
+    }
     
     if(On_Test == 0)
     {
         if(Quick_Collect == 1)
         {
-            if((NoCarStableCount >400))//||(After_Drift_Cal>60))
-            {
-                NoCarStableCount = 0;
-                //After_Drift_Cal = 0;
-                NoCarCalibration();
-            }
+//           if((NoCarStableCount >400))//||(After_Drift_Cal>60))
+//            {
+//               NoCarStableCount = 0;
+//                //After_Drift_Cal = 0;
+//                NoCarCalibration();
+//            }
         }
         else
         {
@@ -694,7 +683,7 @@ void TotalJudge()
     }
     
 }
-  
+
 uint8 CarCalibration()
 {
     uint16 ADX[4];
@@ -712,7 +701,6 @@ uint8 CarCalibration()
     uint16 zave = 0;
     for(i=0;i<4;i++)
     {
-        delay_ms(5);
         Multi_Read_HMC(&ADvalueX,&ADvalueY,&ADvalueZ);
         ADX[i] = ADvalueX;
         ADY[i] = ADvalueY;
@@ -722,9 +710,9 @@ uint8 CarCalibration()
         zave += ADvalueZ;
         
     }
-    xave /= 4;
-    yave /= 4;
-    zave /= 4;
+    xave = xave >> 2;
+    yave = yave >> 2;
+    zave = zave >> 2;
     xvariance = getVariance(ADX,4);
     yvariance = getVariance(ADY,4);
     zvariance = getVariance(ADZ,4);
@@ -752,23 +740,29 @@ uint8 CarCalibration()
 
 void NoCarCalibration()
 {
-    uint8 count = 0;
-    uint8 count1 = 0;
+    uint8  count = 0;
+    uint8  count1 = 0;
     uint16 ADvalueX=0;
     uint16 ADvalueY=0;
     uint16 ADvalueZ=0;
     uint16 GMI_ADvalueX=0;
     uint16 GMI_ADvalueY=0;
-    uint16 ADX = 0;
-    uint16 ADY = 0;
-    uint16 ADZ = 0;
+    uint16 ADX[4];
+    uint16 ADY[4];
+    uint16 ADZ[4];
+    uint16 xsum = 0;
+    uint16 ysum = 0;
+    uint16 zsum = 0;
+    uint16 xmiddle = 0;
+    uint16 ymiddle = 0;
+    uint16 zmiddle = 0;
+    uint16 xvariance = 0;
+    uint16 yvariance = 0;
+    uint16 zvariance = 0;
     uint16 GMI_ADX = 0;
     uint16 GMI_ADY = 0;
     uint32 intensity = 0;
-    uint32 intensity_now = 0;
-    uint8 i=0;
-    uint32 variance = 0;
-    uint32 minus = 0;
+    uint8  i=0;
     int xdrift = 0;
     int ydrift = 0;
     int zdrift = 0;
@@ -789,33 +783,39 @@ void NoCarCalibration()
             GMI_ADY += GMI_ADvalueY;
         }
         Multi_Read_HMC(&ADvalueX,&ADvalueY,&ADvalueZ);
-        if((abs(ADvalueX-MagneticUnit.XMiddleM)<100)&&(abs(ADvalueY-MagneticUnit.YMiddleM)<100)&&abs(ADvalueZ-MagneticUnit.ZMiddleM)<100)
-        {
-            count++;
-            ADX += ADvalueX;
-            ADY += ADvalueY;
-            ADZ += ADvalueZ;
-        }
+        ADX[i] = ADvalueX;
+        ADY[i] = ADvalueY;
+        ADZ[i] = ADvalueZ;
+        xsum += ADvalueX;
+        ysum += ADvalueY;
+        zsum += ADvalueZ;
+        
     }
-    if(count!=0)
+    xvariance = getVariance(ADX,4);
+    yvariance = getVariance(ADY,4);
+    zvariance = getVariance(ADZ,4);
+    if((xvariance<5)&&(yvariance<5)&&(zvariance<5))
     {
-        ADX = ADX/count;
-        ADY = ADY/count;
-        ADZ = ADZ/count;
+        xmiddle = xsum >> 2;
+        ymiddle = ysum >> 2;
+        zmiddle = zsum >> 2;
     }
+    else
+    {
+        return ;
+    }
+    
+    
     if(count1!=0)
     {
         GMI_ADX = GMI_ADX/count1;
         GMI_ADY = GMI_ADY/count1;
     }
     
-    xdrift = ADX - MagneticUnit.XMiddleMF;
-    ydrift = ADY - MagneticUnit.YMiddleMF;
-    zdrift = ADZ - MagneticUnit.ZMiddleMF;
-    
-    
-    
-    
+    xdrift = (int)(xmiddle - MagneticUnit.XMiddleMF);
+    ydrift = (int)(ymiddle - MagneticUnit.YMiddleMF);
+    zdrift = (int)(zmiddle - MagneticUnit.ZMiddleMF);
+
     if(abs(xdrift) < 5)
     {
     }
@@ -869,11 +869,9 @@ void NoCarCalibration()
         Int_Threshold = INT_THRESHOLD + 5;
     }
     
-    MagneticUnit.XMiddle += xdrift;
-    MagneticUnit.YMiddle += ydrift;
-    MagneticUnit.ZMiddle += zdrift;
-    
-    
+    MagneticUnit.XMiddle = (uint16)(MagneticUnit.XMiddle + xdrift);
+    MagneticUnit.YMiddle = (uint16)(MagneticUnit.YMiddle + ydrift);
+    MagneticUnit.ZMiddle = (uint16)(MagneticUnit.ZMiddle + zdrift);
     
     if(abs(GMI_ADX - MagneticUnit.GMI_XMiddleM)<100)
     {
@@ -958,6 +956,9 @@ void CmdCalibration()
     MagneticUnit.XMiddle = ADX;
     MagneticUnit.YMiddle = ADY;
     MagneticUnit.ZMiddle = ADZ;
+    MagneticUnit.XValue = ADX;
+    MagneticUnit.YValue = ADY;
+    MagneticUnit.ZValue = ADZ;
     MagneticUnit.GMI_XMiddle = GMI_ADX;
     MagneticUnit.GMI_YMiddle = GMI_ADY;
 
@@ -966,8 +967,14 @@ void CmdCalibration()
     MagneticUnit.YMiddleM = MagneticUnit.YMiddle;
     MagneticUnit.ZMiddleM = MagneticUnit.ZMiddle;
     
+    MagneticUnit.XMiddleMF = MagneticUnit.XMiddleM;
+    MagneticUnit.YMiddleMF = MagneticUnit.YMiddleM;
+    MagneticUnit.ZMiddleMF = MagneticUnit.ZMiddleM;
+    
     MagneticUnit.GMI_XMiddleM = MagneticUnit.GMI_XMiddle;
     MagneticUnit.GMI_YMiddleM = MagneticUnit.GMI_YMiddle;
+    
+    
     
     intensity = sqrt_16((((uint32)MagneticUnit.XMiddle*(uint32)MagneticUnit.XMiddle)+((uint32)MagneticUnit.YMiddle*(uint32)MagneticUnit.YMiddle))+((uint32)MagneticUnit.ZMiddle*(uint32)MagneticUnit.ZMiddle));
     MagneticUnit.Int_Middle = intensity;
@@ -1055,3 +1062,4 @@ void CmdHandler()
       
     halLedToggle(1);
 }
+

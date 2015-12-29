@@ -139,6 +139,10 @@ void USART1_IRQHandler(void)
 							Usart_Count = 0;
 					}
 					Usart_Data[Usart_Count++] = buf;
+					if(Usart_Count==4)
+					{
+							Usart_Count = 0;
+					}
 					if(buf==0xBB)
 					{
 							Usart_Count = 0;

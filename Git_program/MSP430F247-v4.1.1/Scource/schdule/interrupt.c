@@ -8,6 +8,7 @@ uint16 Int_Enable_Count = 0;
 uint8 Send_Error_Flag = 0;
 uint16 Send_Error_Count = 0;
 uint8 Start_Sleep_Flag = 0;
+uint16 Reset5983_Count = 0;
 void Interrupt_Init(void)
 {
     P1DIR &=~ pinGIO2.pin_bm;
@@ -177,6 +178,7 @@ void TestSend()
 #pragma vector=TIMERA0_VECTOR
 __interrupt void Timer_A0(void)
 {
+    uint8 buffer[6];
     TA0CCTL0 &= ~CCIFG;
 //    halLedToggle(2);
 //    return ;
@@ -256,6 +258,15 @@ __interrupt void Timer_A0(void)
 //            }
 //            
 //        }
+        Reset5983_Count++;
+        if(Reset5983_Count == 1200)
+        {
+            Reset5983_Count = 0;
+            PostTask(EVENT_5983_RESET);
+        
+        }
+        
+        
         Keep_Alive_Count++;
 #if NET_TEST == 1 || QOS_TEST == 1 || TEMP_TEST != 0
         if(Keep_Alive_Count > 40)
@@ -332,10 +343,10 @@ __interrupt void Timer_A0(void)
                 Quick_Collect = 0;
             }
         }
-        if(HMC_Changed == 1)
-        {
-            OpenGMI_Count++;
-        }
+//        if(HMC_Changed == 1)
+//        {
+//            OpenGMI_Count++;
+//        }
         
     }
 }

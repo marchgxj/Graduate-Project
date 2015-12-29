@@ -83,6 +83,7 @@ uint8 Pop_T(void)
 uint8 Process_Event()
 {
     uint8 current_event;
+    uint8 buffer[6];
     current_event = Pop_T();
     switch(current_event)
     {
@@ -136,6 +137,9 @@ uint8 Process_Event()
         break;
       case EVENT_CMD_HANDLER:
         CmdHandler();
+        break;
+      case EVENT_5983_RESET:
+        Init_HMC(buffer);
         break;
 
         

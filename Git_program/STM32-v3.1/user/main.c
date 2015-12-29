@@ -3,9 +3,6 @@ int main(void)
 {	 
  		DisableInterrupt();
 		sys_init();
-		delay_ms(1000);delay_ms(1000);delay_ms(1000);delay_ms(1000);delay_ms(1000);
-		delay_ms(1000);delay_ms(1000);delay_ms(1000);delay_ms(1000);delay_ms(1000);
-		delay_ms(1000);delay_ms(1000);delay_ms(1000);delay_ms(1000);delay_ms(1000);
 		RootDevice.pyh_address = 0xFFFF;
 		RootDevice.cluster_id = ROOT;
 		RootDevice.cluster_innernum = 0;

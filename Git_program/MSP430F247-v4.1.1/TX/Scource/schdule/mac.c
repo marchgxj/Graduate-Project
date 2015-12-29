@@ -80,8 +80,8 @@ void BeaconHandler(uint8 beacon[])
     TIME2_HIGH;
     EndPointDevice.free_node = beacon[6];
     EndPointDevice.csma_length = (MAX_DEVICE_NUM - EndPointDevice.free_node)/3+1;
-    EndPointDevice.power =  beacon[1]&0x01;   
-    //EndPointDevice.power = 1;
+//    EndPointDevice.power =  beacon[1]&0x01;   
+    EndPointDevice.power = 1;
     if(EndPointDevice.power)
     {
         halLedSet(3);

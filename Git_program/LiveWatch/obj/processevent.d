@@ -4,7 +4,7 @@
 ..\obj\processevent.o: ..\SYSTEM\sys\sys.h
 ..\obj\processevent.o: ..\USER\stm32f10x.h
 ..\obj\processevent.o: ..\CORE\core_cm3.h
-..\obj\processevent.o: E:\Program Files (x86)\Keil\ARM\ARMCC\bin\..\include\stdint.h
+..\obj\processevent.o: d:\Keil\ARM\ARMCC\bin\..\include\stdint.h
 ..\obj\processevent.o: ..\USER\system_stm32f10x.h
 ..\obj\processevent.o: ..\USER\stm32f10x_conf.h
 ..\obj\processevent.o: ..\STM32F10x_FWLib\inc\stm32f10x_fsmc.h
@@ -18,7 +18,7 @@
 ..\obj\processevent.o: ..\SYSTEM\delay\delay.h
 ..\obj\processevent.o: ..\HARDWARE\KEY\key.h
 ..\obj\processevent.o: ..\SYSTEM\usart\usart.h
-..\obj\processevent.o: E:\Program Files (x86)\Keil\ARM\ARMCC\bin\..\include\stdio.h
+..\obj\processevent.o: d:\Keil\ARM\ARMCC\bin\..\include\stdio.h
 ..\obj\processevent.o: ..\HARDWARE\SPI\spi.h
 ..\obj\processevent.o: ..\HARDWARE\A7139\A7139.h
 ..\obj\processevent.o: ..\HARDWARE\common.h

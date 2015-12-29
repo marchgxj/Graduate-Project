@@ -1,9 +1,9 @@
 Dependencies for Project 'SPI', Target 'Target 1': (DO NOT MODIFY !)
-F (.\stm32f10x_it.c)(0x5629FE45)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork -I..\HARDWARE\LED -I..\SYSTEM\delay -I..\SYSTEM\sys -I..\SYSTEM\usart -I..\USER -I..\STM32F10x_FWLib\inc -I..\CORE -I..\HARDWARE\KEY -I..\HARDWARE\LCD -I..\HARDWARE\RTC -I..\HARDWARE\RTC -I..\HARDWARE\WKUP -I..\HARDWARE\ADC -I..\HARDWARE\DAC -I..\HARDWARE\DMA -I..\HARDWARE\IIC -I..\HARDWARE\24CXX -I..\HARDWARE\SPI -I..\HARDWARE\FLASH -I..\HARDWARE -I..\HARDWARE\A7139 -I..\HARDWARE\TIMER -I..\STM32F10x_FWLib\inc -I..\HARDWARE\interrupt -I..\trsdata -I..\Schdule -I..\hardware\Flash-I "E:\Program Files (x86)\Keil\ARM\RV31\INC"-I "E:\Program Files (x86)\Keil\ARM\CMSIS\Include"-I "E:\Program Files (x86)\Keil\ARM\Inc\ST\STM32F10x"-DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER-o ..\obj\stm32f10x_it.o --omf_browse ..\obj\stm32f10x_it.crf --depend ..\obj\stm32f10x_it.d)
+F (.\stm32f10x_it.c)(0x5629FE45)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork -I..\HARDWARE\LED -I..\SYSTEM\delay -I..\SYSTEM\sys -I..\SYSTEM\usart -I..\USER -I..\STM32F10x_FWLib\inc -I..\CORE -I..\HARDWARE\KEY -I..\HARDWARE\LCD -I..\HARDWARE\RTC -I..\HARDWARE\RTC -I..\HARDWARE\WKUP -I..\HARDWARE\ADC -I..\HARDWARE\DAC -I..\HARDWARE\DMA -I..\HARDWARE\IIC -I..\HARDWARE\24CXX -I..\HARDWARE\SPI -I..\HARDWARE\FLASH -I..\HARDWARE -I..\HARDWARE\A7139 -I..\HARDWARE\TIMER -I..\STM32F10x_FWLib\inc -I..\HARDWARE\interrupt -I..\trsdata -I..\Schdule -I..\hardware\Flash-I d:\Keil\ARM\RV31\INC-I d:\Keil\ARM\CMSIS\Include-I d:\Keil\ARM\Inc\ST\STM32F10x-DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER-o ..\obj\stm32f10x_it.o --omf_browse ..\obj\stm32f10x_it.crf --depend ..\obj\stm32f10x_it.d)
 I (stm32f10x_it.h)(0x554858B6)
 I (stm32f10x.h)(0x554858B6)
 I (..\CORE\core_cm3.h)(0x554858B5)
-I (E:\Program Files (x86)\Keil\ARM\ARMCC\include\stdint.h)(0x51C7C554)
+I (d:\Keil\ARM\ARMCC\include\stdint.h)(0x51C7C554)
 I (system_stm32f10x.h)(0x554858B6)
 I (stm32f10x_conf.h)(0x554858B6)
 I (..\STM32F10x_FWLib\inc\stm32f10x_fsmc.h)(0x554858B5)
@@ -14,10 +14,10 @@ I (..\STM32F10x_FWLib\inc\stm32f10x_spi.h)(0x554858B5)
 I (..\STM32F10x_FWLib\inc\stm32f10x_tim.h)(0x554858B5)
 I (..\STM32F10x_FWLib\inc\stm32f10x_usart.h)(0x554858B5)
 I (..\STM32F10x_FWLib\inc\misc.h)(0x554858B5)
-F (.\system_stm32f10x.c)(0x554858B6)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork -I..\HARDWARE\LED -I..\SYSTEM\delay -I..\SYSTEM\sys -I..\SYSTEM\usart -I..\USER -I..\STM32F10x_FWLib\inc -I..\CORE -I..\HARDWARE\KEY -I..\HARDWARE\LCD -I..\HARDWARE\RTC -I..\HARDWARE\RTC -I..\HARDWARE\WKUP -I..\HARDWARE\ADC -I..\HARDWARE\DAC -I..\HARDWARE\DMA -I..\HARDWARE\IIC -I..\HARDWARE\24CXX -I..\HARDWARE\SPI -I..\HARDWARE\FLASH -I..\HARDWARE -I..\HARDWARE\A7139 -I..\HARDWARE\TIMER -I..\STM32F10x_FWLib\inc -I..\HARDWARE\interrupt -I..\trsdata -I..\Schdule -I..\hardware\Flash-I "E:\Program Files (x86)\Keil\ARM\RV31\INC"-I "E:\Program Files (x86)\Keil\ARM\CMSIS\Include"-I "E:\Program Files (x86)\Keil\ARM\Inc\ST\STM32F10x"-DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER-o ..\obj\system_stm32f10x.o --omf_browse ..\obj\system_stm32f10x.crf --depend ..\obj\system_stm32f10x.d)
+F (.\system_stm32f10x.c)(0x554858B6)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork -I..\HARDWARE\LED -I..\SYSTEM\delay -I..\SYSTEM\sys -I..\SYSTEM\usart -I..\USER -I..\STM32F10x_FWLib\inc -I..\CORE -I..\HARDWARE\KEY -I..\HARDWARE\LCD -I..\HARDWARE\RTC -I..\HARDWARE\RTC -I..\HARDWARE\WKUP -I..\HARDWARE\ADC -I..\HARDWARE\DAC -I..\HARDWARE\DMA -I..\HARDWARE\IIC -I..\HARDWARE\24CXX -I..\HARDWARE\SPI -I..\HARDWARE\FLASH -I..\HARDWARE -I..\HARDWARE\A7139 -I..\HARDWARE\TIMER -I..\STM32F10x_FWLib\inc -I..\HARDWARE\interrupt -I..\trsdata -I..\Schdule -I..\hardware\Flash-I d:\Keil\ARM\RV31\INC-I d:\Keil\ARM\CMSIS\Include-I d:\Keil\ARM\Inc\ST\STM32F10x-DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER-o ..\obj\system_stm32f10x.o --omf_browse ..\obj\system_stm32f10x.crf --depend ..\obj\system_stm32f10x.d)
 I (stm32f10x.h)(0x554858B6)
 I (..\CORE\core_cm3.h)(0x554858B5)
-I (E:\Program Files (x86)\Keil\ARM\ARMCC\include\stdint.h)(0x51C7C554)
+I (d:\Keil\ARM\ARMCC\include\stdint.h)(0x51C7C554)
 I (system_stm32f10x.h)(0x554858B6)
 I (stm32f10x_conf.h)(0x554858B6)
 I (..\STM32F10x_FWLib\inc\stm32f10x_fsmc.h)(0x554858B5)
@@ -28,12 +28,12 @@ I (..\STM32F10x_FWLib\inc\stm32f10x_spi.h)(0x554858B5)
 I (..\STM32F10x_FWLib\inc\stm32f10x_tim.h)(0x554858B5)
 I (..\STM32F10x_FWLib\inc\stm32f10x_usart.h)(0x554858B5)
 I (..\STM32F10x_FWLib\inc\misc.h)(0x554858B5)
-F (..\HARDWARE\TIMER\timer.c)(0x5631DEC2)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork -I..\HARDWARE\LED -I..\SYSTEM\delay -I..\SYSTEM\sys -I..\SYSTEM\usart -I..\USER -I..\STM32F10x_FWLib\inc -I..\CORE -I..\HARDWARE\KEY -I..\HARDWARE\LCD -I..\HARDWARE\RTC -I..\HARDWARE\RTC -I..\HARDWARE\WKUP -I..\HARDWARE\ADC -I..\HARDWARE\DAC -I..\HARDWARE\DMA -I..\HARDWARE\IIC -I..\HARDWARE\24CXX -I..\HARDWARE\SPI -I..\HARDWARE\FLASH -I..\HARDWARE -I..\HARDWARE\A7139 -I..\HARDWARE\TIMER -I..\STM32F10x_FWLib\inc -I..\HARDWARE\interrupt -I..\trsdata -I..\Schdule -I..\hardware\Flash-I "E:\Program Files (x86)\Keil\ARM\RV31\INC"-I "E:\Program Files (x86)\Keil\ARM\CMSIS\Include"-I "E:\Program Files (x86)\Keil\ARM\Inc\ST\STM32F10x"-DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER-o ..\obj\timer.o --omf_browse ..\obj\timer.crf --depend ..\obj\timer.d)
+F (..\HARDWARE\TIMER\timer.c)(0x5631DEC2)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork -I..\HARDWARE\LED -I..\SYSTEM\delay -I..\SYSTEM\sys -I..\SYSTEM\usart -I..\USER -I..\STM32F10x_FWLib\inc -I..\CORE -I..\HARDWARE\KEY -I..\HARDWARE\LCD -I..\HARDWARE\RTC -I..\HARDWARE\RTC -I..\HARDWARE\WKUP -I..\HARDWARE\ADC -I..\HARDWARE\DAC -I..\HARDWARE\DMA -I..\HARDWARE\IIC -I..\HARDWARE\24CXX -I..\HARDWARE\SPI -I..\HARDWARE\FLASH -I..\HARDWARE -I..\HARDWARE\A7139 -I..\HARDWARE\TIMER -I..\STM32F10x_FWLib\inc -I..\HARDWARE\interrupt -I..\trsdata -I..\Schdule -I..\hardware\Flash-I d:\Keil\ARM\RV31\INC-I d:\Keil\ARM\CMSIS\Include-I d:\Keil\ARM\Inc\ST\STM32F10x-DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER-o ..\obj\timer.o --omf_browse ..\obj\timer.crf --depend ..\obj\timer.d)
 I (..\HARDWARE\TIMER\timer.h)(0x5639781F)
 I (..\SYSTEM\sys\sys.h)(0x554858B6)
 I (..\USER\stm32f10x.h)(0x554858B6)
 I (..\CORE\core_cm3.h)(0x554858B5)
-I (E:\Program Files (x86)\Keil\ARM\ARMCC\include\stdint.h)(0x51C7C554)
+I (d:\Keil\ARM\ARMCC\include\stdint.h)(0x51C7C554)
 I (..\USER\system_stm32f10x.h)(0x554858B6)
 I (..\USER\stm32f10x_conf.h)(0x554858B6)
 I (..\STM32F10x_FWLib\inc\stm32f10x_fsmc.h)(0x554858B5)
@@ -44,13 +44,13 @@ I (..\STM32F10x_FWLib\inc\stm32f10x_tim.h)(0x554858B5)
 I (..\STM32F10x_FWLib\inc\stm32f10x_usart.h)(0x554858B5)
 I (..\STM32F10x_FWLib\inc\misc.h)(0x554858B5)
 I (..\HARDWARE\LED\led.h)(0x562CDC0F)
-F (..\HARDWARE\LED\led.c)(0x562CDFA7)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork -I..\HARDWARE\LED -I..\SYSTEM\delay -I..\SYSTEM\sys -I..\SYSTEM\usart -I..\USER -I..\STM32F10x_FWLib\inc -I..\CORE -I..\HARDWARE\KEY -I..\HARDWARE\LCD -I..\HARDWARE\RTC -I..\HARDWARE\RTC -I..\HARDWARE\WKUP -I..\HARDWARE\ADC -I..\HARDWARE\DAC -I..\HARDWARE\DMA -I..\HARDWARE\IIC -I..\HARDWARE\24CXX -I..\HARDWARE\SPI -I..\HARDWARE\FLASH -I..\HARDWARE -I..\HARDWARE\A7139 -I..\HARDWARE\TIMER -I..\STM32F10x_FWLib\inc -I..\HARDWARE\interrupt -I..\trsdata -I..\Schdule -I..\hardware\Flash-I "E:\Program Files (x86)\Keil\ARM\RV31\INC"-I "E:\Program Files (x86)\Keil\ARM\CMSIS\Include"-I "E:\Program Files (x86)\Keil\ARM\Inc\ST\STM32F10x"-DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER-o ..\obj\led.o --omf_browse ..\obj\led.crf --depend ..\obj\led.d)
+F (..\HARDWARE\LED\led.c)(0x562CDFA7)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork -I..\HARDWARE\LED -I..\SYSTEM\delay -I..\SYSTEM\sys -I..\SYSTEM\usart -I..\USER -I..\STM32F10x_FWLib\inc -I..\CORE -I..\HARDWARE\KEY -I..\HARDWARE\LCD -I..\HARDWARE\RTC -I..\HARDWARE\RTC -I..\HARDWARE\WKUP -I..\HARDWARE\ADC -I..\HARDWARE\DAC -I..\HARDWARE\DMA -I..\HARDWARE\IIC -I..\HARDWARE\24CXX -I..\HARDWARE\SPI -I..\HARDWARE\FLASH -I..\HARDWARE -I..\HARDWARE\A7139 -I..\HARDWARE\TIMER -I..\STM32F10x_FWLib\inc -I..\HARDWARE\interrupt -I..\trsdata -I..\Schdule -I..\hardware\Flash-I d:\Keil\ARM\RV31\INC-I d:\Keil\ARM\CMSIS\Include-I d:\Keil\ARM\Inc\ST\STM32F10x-DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER-o ..\obj\led.o --omf_browse ..\obj\led.crf --depend ..\obj\led.d)
 I (..\HARDWARE\common.h)(0x5646C36E)
 I (..\HARDWARE\LED\led.h)(0x562CDC0F)
 I (..\SYSTEM\sys\sys.h)(0x554858B6)
 I (..\USER\stm32f10x.h)(0x554858B6)
 I (..\CORE\core_cm3.h)(0x554858B5)
-I (E:\Program Files (x86)\Keil\ARM\ARMCC\include\stdint.h)(0x51C7C554)
+I (d:\Keil\ARM\ARMCC\include\stdint.h)(0x51C7C554)
 I (..\USER\system_stm32f10x.h)(0x554858B6)
 I (..\USER\stm32f10x_conf.h)(0x554858B6)
 I (..\STM32F10x_FWLib\inc\stm32f10x_fsmc.h)(0x554858B5)
@@ -63,7 +63,7 @@ I (..\STM32F10x_FWLib\inc\misc.h)(0x554858B5)
 I (..\SYSTEM\delay\delay.h)(0x554858B6)
 I (..\HARDWARE\KEY\key.h)(0x554858B5)
 I (..\SYSTEM\usart\usart.h)(0x5631CF2F)
-I (E:\Program Files (x86)\Keil\ARM\ARMCC\include\stdio.h)(0x51C7C554)
+I (d:\Keil\ARM\ARMCC\include\stdio.h)(0x51C7C554)
 I (..\HARDWARE\SPI\spi.h)(0x554ACA1C)
 I (..\HARDWARE\A7139\A7139.h)(0x5631CEA7)
 I (..\HARDWARE\TIMER\timer.h)(0x5639781F)
@@ -77,13 +77,13 @@ I (..\Schdule\device.h)(0x5646C36E)
 I (..\Schdule\tdma.h)(0x5646C36E)
 I (..\HARDWARE\FLASH\flash.h)(0x555577D0)
 I (..\Schdule\upload.h)(0x564ABC75)
-I (..\Schdule\configure.h)(0x565EE20C)
-F (..\HARDWARE\KEY\key.c)(0x562CDF58)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork -I..\HARDWARE\LED -I..\SYSTEM\delay -I..\SYSTEM\sys -I..\SYSTEM\usart -I..\USER -I..\STM32F10x_FWLib\inc -I..\CORE -I..\HARDWARE\KEY -I..\HARDWARE\LCD -I..\HARDWARE\RTC -I..\HARDWARE\RTC -I..\HARDWARE\WKUP -I..\HARDWARE\ADC -I..\HARDWARE\DAC -I..\HARDWARE\DMA -I..\HARDWARE\IIC -I..\HARDWARE\24CXX -I..\HARDWARE\SPI -I..\HARDWARE\FLASH -I..\HARDWARE -I..\HARDWARE\A7139 -I..\HARDWARE\TIMER -I..\STM32F10x_FWLib\inc -I..\HARDWARE\interrupt -I..\trsdata -I..\Schdule -I..\hardware\Flash-I "E:\Program Files (x86)\Keil\ARM\RV31\INC"-I "E:\Program Files (x86)\Keil\ARM\CMSIS\Include"-I "E:\Program Files (x86)\Keil\ARM\Inc\ST\STM32F10x"-DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER-o ..\obj\key.o --omf_browse ..\obj\key.crf --depend ..\obj\key.d)
+I (..\Schdule\configure.h)(0x567930CA)
+F (..\HARDWARE\KEY\key.c)(0x562CDF58)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork -I..\HARDWARE\LED -I..\SYSTEM\delay -I..\SYSTEM\sys -I..\SYSTEM\usart -I..\USER -I..\STM32F10x_FWLib\inc -I..\CORE -I..\HARDWARE\KEY -I..\HARDWARE\LCD -I..\HARDWARE\RTC -I..\HARDWARE\RTC -I..\HARDWARE\WKUP -I..\HARDWARE\ADC -I..\HARDWARE\DAC -I..\HARDWARE\DMA -I..\HARDWARE\IIC -I..\HARDWARE\24CXX -I..\HARDWARE\SPI -I..\HARDWARE\FLASH -I..\HARDWARE -I..\HARDWARE\A7139 -I..\HARDWARE\TIMER -I..\STM32F10x_FWLib\inc -I..\HARDWARE\interrupt -I..\trsdata -I..\Schdule -I..\hardware\Flash-I d:\Keil\ARM\RV31\INC-I d:\Keil\ARM\CMSIS\Include-I d:\Keil\ARM\Inc\ST\STM32F10x-DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER-o ..\obj\key.o --omf_browse ..\obj\key.crf --depend ..\obj\key.d)
 I (..\HARDWARE\KEY\key.h)(0x554858B5)
 I (..\SYSTEM\sys\sys.h)(0x554858B6)
 I (..\USER\stm32f10x.h)(0x554858B6)
 I (..\CORE\core_cm3.h)(0x554858B5)
-I (E:\Program Files (x86)\Keil\ARM\ARMCC\include\stdint.h)(0x51C7C554)
+I (d:\Keil\ARM\ARMCC\include\stdint.h)(0x51C7C554)
 I (..\USER\system_stm32f10x.h)(0x554858B6)
 I (..\USER\stm32f10x_conf.h)(0x554858B6)
 I (..\STM32F10x_FWLib\inc\stm32f10x_fsmc.h)(0x554858B5)
@@ -97,7 +97,7 @@ I (..\HARDWARE\common.h)(0x5646C36E)
 I (..\HARDWARE\LED\led.h)(0x562CDC0F)
 I (..\SYSTEM\delay\delay.h)(0x554858B6)
 I (..\SYSTEM\usart\usart.h)(0x5631CF2F)
-I (E:\Program Files (x86)\Keil\ARM\ARMCC\include\stdio.h)(0x51C7C554)
+I (d:\Keil\ARM\ARMCC\include\stdio.h)(0x51C7C554)
 I (..\HARDWARE\SPI\spi.h)(0x554ACA1C)
 I (..\HARDWARE\A7139\A7139.h)(0x5631CEA7)
 I (..\HARDWARE\TIMER\timer.h)(0x5639781F)
@@ -111,13 +111,13 @@ I (..\Schdule\device.h)(0x5646C36E)
 I (..\Schdule\tdma.h)(0x5646C36E)
 I (..\HARDWARE\FLASH\flash.h)(0x555577D0)
 I (..\Schdule\upload.h)(0x564ABC75)
-I (..\Schdule\configure.h)(0x565EE20C)
-F (..\HARDWARE\SPI\spi.c)(0x554858B5)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork -I..\HARDWARE\LED -I..\SYSTEM\delay -I..\SYSTEM\sys -I..\SYSTEM\usart -I..\USER -I..\STM32F10x_FWLib\inc -I..\CORE -I..\HARDWARE\KEY -I..\HARDWARE\LCD -I..\HARDWARE\RTC -I..\HARDWARE\RTC -I..\HARDWARE\WKUP -I..\HARDWARE\ADC -I..\HARDWARE\DAC -I..\HARDWARE\DMA -I..\HARDWARE\IIC -I..\HARDWARE\24CXX -I..\HARDWARE\SPI -I..\HARDWARE\FLASH -I..\HARDWARE -I..\HARDWARE\A7139 -I..\HARDWARE\TIMER -I..\STM32F10x_FWLib\inc -I..\HARDWARE\interrupt -I..\trsdata -I..\Schdule -I..\hardware\Flash-I "E:\Program Files (x86)\Keil\ARM\RV31\INC"-I "E:\Program Files (x86)\Keil\ARM\CMSIS\Include"-I "E:\Program Files (x86)\Keil\ARM\Inc\ST\STM32F10x"-DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER-o ..\obj\spi.o --omf_browse ..\obj\spi.crf --depend ..\obj\spi.d)
+I (..\Schdule\configure.h)(0x567930CA)
+F (..\HARDWARE\SPI\spi.c)(0x554858B5)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork -I..\HARDWARE\LED -I..\SYSTEM\delay -I..\SYSTEM\sys -I..\SYSTEM\usart -I..\USER -I..\STM32F10x_FWLib\inc -I..\CORE -I..\HARDWARE\KEY -I..\HARDWARE\LCD -I..\HARDWARE\RTC -I..\HARDWARE\RTC -I..\HARDWARE\WKUP -I..\HARDWARE\ADC -I..\HARDWARE\DAC -I..\HARDWARE\DMA -I..\HARDWARE\IIC -I..\HARDWARE\24CXX -I..\HARDWARE\SPI -I..\HARDWARE\FLASH -I..\HARDWARE -I..\HARDWARE\A7139 -I..\HARDWARE\TIMER -I..\STM32F10x_FWLib\inc -I..\HARDWARE\interrupt -I..\trsdata -I..\Schdule -I..\hardware\Flash-I d:\Keil\ARM\RV31\INC-I d:\Keil\ARM\CMSIS\Include-I d:\Keil\ARM\Inc\ST\STM32F10x-DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER-o ..\obj\spi.o --omf_browse ..\obj\spi.crf --depend ..\obj\spi.d)
 I (..\HARDWARE\SPI\spi.h)(0x554ACA1C)
 I (..\SYSTEM\sys\sys.h)(0x554858B6)
 I (..\USER\stm32f10x.h)(0x554858B6)
 I (..\CORE\core_cm3.h)(0x554858B5)
-I (E:\Program Files (x86)\Keil\ARM\ARMCC\include\stdint.h)(0x51C7C554)
+I (d:\Keil\ARM\ARMCC\include\stdint.h)(0x51C7C554)
 I (..\USER\system_stm32f10x.h)(0x554858B6)
 I (..\USER\stm32f10x_conf.h)(0x554858B6)
 I (..\STM32F10x_FWLib\inc\stm32f10x_fsmc.h)(0x554858B5)
@@ -132,7 +132,7 @@ I (..\HARDWARE\LED\led.h)(0x562CDC0F)
 I (..\SYSTEM\delay\delay.h)(0x554858B6)
 I (..\HARDWARE\KEY\key.h)(0x554858B5)
 I (..\SYSTEM\usart\usart.h)(0x5631CF2F)
-I (E:\Program Files (x86)\Keil\ARM\ARMCC\include\stdio.h)(0x51C7C554)
+I (d:\Keil\ARM\ARMCC\include\stdio.h)(0x51C7C554)
 I (..\HARDWARE\A7139\A7139.h)(0x5631CEA7)
 I (..\HARDWARE\TIMER\timer.h)(0x5639781F)
 I (..\HARDWARE\A7139\A7139_CONFIG.h)(0x56397C35)
@@ -145,18 +145,18 @@ I (..\Schdule\device.h)(0x5646C36E)
 I (..\Schdule\tdma.h)(0x5646C36E)
 I (..\HARDWARE\FLASH\flash.h)(0x555577D0)
 I (..\Schdule\upload.h)(0x564ABC75)
-I (..\Schdule\configure.h)(0x565EE20C)
+I (..\Schdule\configure.h)(0x567930CA)
 F (..\HARDWARE\KEY\key.h)(0x554858B5)()
 F (..\HARDWARE\LED\led.h)(0x562CDC0F)()
 F (..\HARDWARE\SPI\spi.h)(0x554ACA1C)()
 F (..\HARDWARE\TIMER\timer.h)(0x5639781F)()
-F (..\hardware\A7139\A7139.c)(0x56383E0B)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork -I..\HARDWARE\LED -I..\SYSTEM\delay -I..\SYSTEM\sys -I..\SYSTEM\usart -I..\USER -I..\STM32F10x_FWLib\inc -I..\CORE -I..\HARDWARE\KEY -I..\HARDWARE\LCD -I..\HARDWARE\RTC -I..\HARDWARE\RTC -I..\HARDWARE\WKUP -I..\HARDWARE\ADC -I..\HARDWARE\DAC -I..\HARDWARE\DMA -I..\HARDWARE\IIC -I..\HARDWARE\24CXX -I..\HARDWARE\SPI -I..\HARDWARE\FLASH -I..\HARDWARE -I..\HARDWARE\A7139 -I..\HARDWARE\TIMER -I..\STM32F10x_FWLib\inc -I..\HARDWARE\interrupt -I..\trsdata -I..\Schdule -I..\hardware\Flash-I "E:\Program Files (x86)\Keil\ARM\RV31\INC"-I "E:\Program Files (x86)\Keil\ARM\CMSIS\Include"-I "E:\Program Files (x86)\Keil\ARM\Inc\ST\STM32F10x"-DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER-o ..\obj\a7139.o --omf_browse ..\obj\a7139.crf --depend ..\obj\a7139.d)
+F (..\hardware\A7139\A7139.c)(0x56383E0B)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork -I..\HARDWARE\LED -I..\SYSTEM\delay -I..\SYSTEM\sys -I..\SYSTEM\usart -I..\USER -I..\STM32F10x_FWLib\inc -I..\CORE -I..\HARDWARE\KEY -I..\HARDWARE\LCD -I..\HARDWARE\RTC -I..\HARDWARE\RTC -I..\HARDWARE\WKUP -I..\HARDWARE\ADC -I..\HARDWARE\DAC -I..\HARDWARE\DMA -I..\HARDWARE\IIC -I..\HARDWARE\24CXX -I..\HARDWARE\SPI -I..\HARDWARE\FLASH -I..\HARDWARE -I..\HARDWARE\A7139 -I..\HARDWARE\TIMER -I..\STM32F10x_FWLib\inc -I..\HARDWARE\interrupt -I..\trsdata -I..\Schdule -I..\hardware\Flash-I d:\Keil\ARM\RV31\INC-I d:\Keil\ARM\CMSIS\Include-I d:\Keil\ARM\Inc\ST\STM32F10x-DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER-o ..\obj\a7139.o --omf_browse ..\obj\a7139.crf --depend ..\obj\a7139.d)
 I (..\HARDWARE\common.h)(0x5646C36E)
 I (..\HARDWARE\LED\led.h)(0x562CDC0F)
 I (..\SYSTEM\sys\sys.h)(0x554858B6)
 I (..\USER\stm32f10x.h)(0x554858B6)
 I (..\CORE\core_cm3.h)(0x554858B5)
-I (E:\Program Files (x86)\Keil\ARM\ARMCC\include\stdint.h)(0x51C7C554)
+I (d:\Keil\ARM\ARMCC\include\stdint.h)(0x51C7C554)
 I (..\USER\system_stm32f10x.h)(0x554858B6)
 I (..\USER\stm32f10x_conf.h)(0x554858B6)
 I (..\STM32F10x_FWLib\inc\stm32f10x_fsmc.h)(0x554858B5)
@@ -169,7 +169,7 @@ I (..\STM32F10x_FWLib\inc\misc.h)(0x554858B5)
 I (..\SYSTEM\delay\delay.h)(0x554858B6)
 I (..\HARDWARE\KEY\key.h)(0x554858B5)
 I (..\SYSTEM\usart\usart.h)(0x5631CF2F)
-I (E:\Program Files (x86)\Keil\ARM\ARMCC\include\stdio.h)(0x51C7C554)
+I (d:\Keil\ARM\ARMCC\include\stdio.h)(0x51C7C554)
 I (..\HARDWARE\SPI\spi.h)(0x554ACA1C)
 I (..\HARDWARE\A7139\A7139.h)(0x5631CEA7)
 I (..\HARDWARE\TIMER\timer.h)(0x5639781F)
@@ -183,16 +183,16 @@ I (..\Schdule\device.h)(0x5646C36E)
 I (..\Schdule\tdma.h)(0x5646C36E)
 I (..\HARDWARE\FLASH\flash.h)(0x555577D0)
 I (..\Schdule\upload.h)(0x564ABC75)
-I (..\Schdule\configure.h)(0x565EE20C)
+I (..\Schdule\configure.h)(0x567930CA)
 F (..\hardware\A7139\A7139.h)(0x5631CEA7)()
-F (..\hardware\A7139\A7139_CONFIG.c)(0x563972AA)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork -I..\HARDWARE\LED -I..\SYSTEM\delay -I..\SYSTEM\sys -I..\SYSTEM\usart -I..\USER -I..\STM32F10x_FWLib\inc -I..\CORE -I..\HARDWARE\KEY -I..\HARDWARE\LCD -I..\HARDWARE\RTC -I..\HARDWARE\RTC -I..\HARDWARE\WKUP -I..\HARDWARE\ADC -I..\HARDWARE\DAC -I..\HARDWARE\DMA -I..\HARDWARE\IIC -I..\HARDWARE\24CXX -I..\HARDWARE\SPI -I..\HARDWARE\FLASH -I..\HARDWARE -I..\HARDWARE\A7139 -I..\HARDWARE\TIMER -I..\STM32F10x_FWLib\inc -I..\HARDWARE\interrupt -I..\trsdata -I..\Schdule -I..\hardware\Flash-I "E:\Program Files (x86)\Keil\ARM\RV31\INC"-I "E:\Program Files (x86)\Keil\ARM\CMSIS\Include"-I "E:\Program Files (x86)\Keil\ARM\Inc\ST\STM32F10x"-DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER-o ..\obj\a7139_config.o --omf_browse ..\obj\a7139_config.crf --depend ..\obj\a7139_config.d)
+F (..\hardware\A7139\A7139_CONFIG.c)(0x563972AA)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork -I..\HARDWARE\LED -I..\SYSTEM\delay -I..\SYSTEM\sys -I..\SYSTEM\usart -I..\USER -I..\STM32F10x_FWLib\inc -I..\CORE -I..\HARDWARE\KEY -I..\HARDWARE\LCD -I..\HARDWARE\RTC -I..\HARDWARE\RTC -I..\HARDWARE\WKUP -I..\HARDWARE\ADC -I..\HARDWARE\DAC -I..\HARDWARE\DMA -I..\HARDWARE\IIC -I..\HARDWARE\24CXX -I..\HARDWARE\SPI -I..\HARDWARE\FLASH -I..\HARDWARE -I..\HARDWARE\A7139 -I..\HARDWARE\TIMER -I..\STM32F10x_FWLib\inc -I..\HARDWARE\interrupt -I..\trsdata -I..\Schdule -I..\hardware\Flash-I d:\Keil\ARM\RV31\INC-I d:\Keil\ARM\CMSIS\Include-I d:\Keil\ARM\Inc\ST\STM32F10x-DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER-o ..\obj\a7139_config.o --omf_browse ..\obj\a7139_config.crf --depend ..\obj\a7139_config.d)
 I (..\hardware\A7139\A7139_CONFIG.h)(0x56397C35)
 I (..\HARDWARE\common.h)(0x5646C36E)
 I (..\HARDWARE\LED\led.h)(0x562CDC0F)
 I (..\SYSTEM\sys\sys.h)(0x554858B6)
 I (..\USER\stm32f10x.h)(0x554858B6)
 I (..\CORE\core_cm3.h)(0x554858B5)
-I (E:\Program Files (x86)\Keil\ARM\ARMCC\include\stdint.h)(0x51C7C554)
+I (d:\Keil\ARM\ARMCC\include\stdint.h)(0x51C7C554)
 I (..\USER\system_stm32f10x.h)(0x554858B6)
 I (..\USER\stm32f10x_conf.h)(0x554858B6)
 I (..\STM32F10x_FWLib\inc\stm32f10x_fsmc.h)(0x554858B5)
@@ -205,7 +205,7 @@ I (..\STM32F10x_FWLib\inc\misc.h)(0x554858B5)
 I (..\SYSTEM\delay\delay.h)(0x554858B6)
 I (..\HARDWARE\KEY\key.h)(0x554858B5)
 I (..\SYSTEM\usart\usart.h)(0x5631CF2F)
-I (E:\Program Files (x86)\Keil\ARM\ARMCC\include\stdio.h)(0x51C7C554)
+I (d:\Keil\ARM\ARMCC\include\stdio.h)(0x51C7C554)
 I (..\HARDWARE\SPI\spi.h)(0x554ACA1C)
 I (..\HARDWARE\A7139\A7139.h)(0x5631CEA7)
 I (..\HARDWARE\TIMER\timer.h)(0x5639781F)
@@ -218,15 +218,15 @@ I (..\Schdule\device.h)(0x5646C36E)
 I (..\Schdule\tdma.h)(0x5646C36E)
 I (..\HARDWARE\FLASH\flash.h)(0x555577D0)
 I (..\Schdule\upload.h)(0x564ABC75)
-I (..\Schdule\configure.h)(0x565EE20C)
+I (..\Schdule\configure.h)(0x567930CA)
 F (..\hardware\A7139\A7139_CONFIG.h)(0x56397C35)()
-F (..\hardware\interrupt\interrupt.c)(0x565AA772)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork -I..\HARDWARE\LED -I..\SYSTEM\delay -I..\SYSTEM\sys -I..\SYSTEM\usart -I..\USER -I..\STM32F10x_FWLib\inc -I..\CORE -I..\HARDWARE\KEY -I..\HARDWARE\LCD -I..\HARDWARE\RTC -I..\HARDWARE\RTC -I..\HARDWARE\WKUP -I..\HARDWARE\ADC -I..\HARDWARE\DAC -I..\HARDWARE\DMA -I..\HARDWARE\IIC -I..\HARDWARE\24CXX -I..\HARDWARE\SPI -I..\HARDWARE\FLASH -I..\HARDWARE -I..\HARDWARE\A7139 -I..\HARDWARE\TIMER -I..\STM32F10x_FWLib\inc -I..\HARDWARE\interrupt -I..\trsdata -I..\Schdule -I..\hardware\Flash-I "E:\Program Files (x86)\Keil\ARM\RV31\INC"-I "E:\Program Files (x86)\Keil\ARM\CMSIS\Include"-I "E:\Program Files (x86)\Keil\ARM\Inc\ST\STM32F10x"-DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER-o ..\obj\interrupt.o --omf_browse ..\obj\interrupt.crf --depend ..\obj\interrupt.d)
+F (..\hardware\interrupt\interrupt.c)(0x565AA772)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork -I..\HARDWARE\LED -I..\SYSTEM\delay -I..\SYSTEM\sys -I..\SYSTEM\usart -I..\USER -I..\STM32F10x_FWLib\inc -I..\CORE -I..\HARDWARE\KEY -I..\HARDWARE\LCD -I..\HARDWARE\RTC -I..\HARDWARE\RTC -I..\HARDWARE\WKUP -I..\HARDWARE\ADC -I..\HARDWARE\DAC -I..\HARDWARE\DMA -I..\HARDWARE\IIC -I..\HARDWARE\24CXX -I..\HARDWARE\SPI -I..\HARDWARE\FLASH -I..\HARDWARE -I..\HARDWARE\A7139 -I..\HARDWARE\TIMER -I..\STM32F10x_FWLib\inc -I..\HARDWARE\interrupt -I..\trsdata -I..\Schdule -I..\hardware\Flash-I d:\Keil\ARM\RV31\INC-I d:\Keil\ARM\CMSIS\Include-I d:\Keil\ARM\Inc\ST\STM32F10x-DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER-o ..\obj\interrupt.o --omf_browse ..\obj\interrupt.crf --depend ..\obj\interrupt.d)
 I (..\HARDWARE\common.h)(0x5646C36E)
 I (..\HARDWARE\LED\led.h)(0x562CDC0F)
 I (..\SYSTEM\sys\sys.h)(0x554858B6)
 I (..\USER\stm32f10x.h)(0x554858B6)
 I (..\CORE\core_cm3.h)(0x554858B5)
-I (E:\Program Files (x86)\Keil\ARM\ARMCC\include\stdint.h)(0x51C7C554)
+I (d:\Keil\ARM\ARMCC\include\stdint.h)(0x51C7C554)
 I (..\USER\system_stm32f10x.h)(0x554858B6)
 I (..\USER\stm32f10x_conf.h)(0x554858B6)
 I (..\STM32F10x_FWLib\inc\stm32f10x_fsmc.h)(0x554858B5)
@@ -239,7 +239,7 @@ I (..\STM32F10x_FWLib\inc\misc.h)(0x554858B5)
 I (..\SYSTEM\delay\delay.h)(0x554858B6)
 I (..\HARDWARE\KEY\key.h)(0x554858B5)
 I (..\SYSTEM\usart\usart.h)(0x5631CF2F)
-I (E:\Program Files (x86)\Keil\ARM\ARMCC\include\stdio.h)(0x51C7C554)
+I (d:\Keil\ARM\ARMCC\include\stdio.h)(0x51C7C554)
 I (..\HARDWARE\SPI\spi.h)(0x554ACA1C)
 I (..\HARDWARE\A7139\A7139.h)(0x5631CEA7)
 I (..\HARDWARE\TIMER\timer.h)(0x5639781F)
@@ -253,15 +253,15 @@ I (..\Schdule\device.h)(0x5646C36E)
 I (..\Schdule\tdma.h)(0x5646C36E)
 I (..\HARDWARE\FLASH\flash.h)(0x555577D0)
 I (..\Schdule\upload.h)(0x564ABC75)
-I (..\Schdule\configure.h)(0x565EE20C)
+I (..\Schdule\configure.h)(0x567930CA)
 F (..\hardware\interrupt\interrupt.h)(0x5631CA45)()
-F (..\hardware\Flash\flash.c)(0x55558FB0)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork -I..\HARDWARE\LED -I..\SYSTEM\delay -I..\SYSTEM\sys -I..\SYSTEM\usart -I..\USER -I..\STM32F10x_FWLib\inc -I..\CORE -I..\HARDWARE\KEY -I..\HARDWARE\LCD -I..\HARDWARE\RTC -I..\HARDWARE\RTC -I..\HARDWARE\WKUP -I..\HARDWARE\ADC -I..\HARDWARE\DAC -I..\HARDWARE\DMA -I..\HARDWARE\IIC -I..\HARDWARE\24CXX -I..\HARDWARE\SPI -I..\HARDWARE\FLASH -I..\HARDWARE -I..\HARDWARE\A7139 -I..\HARDWARE\TIMER -I..\STM32F10x_FWLib\inc -I..\HARDWARE\interrupt -I..\trsdata -I..\Schdule -I..\hardware\Flash-I "E:\Program Files (x86)\Keil\ARM\RV31\INC"-I "E:\Program Files (x86)\Keil\ARM\CMSIS\Include"-I "E:\Program Files (x86)\Keil\ARM\Inc\ST\STM32F10x"-DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER-o ..\obj\flash.o --omf_browse ..\obj\flash.crf --depend ..\obj\flash.d)
+F (..\hardware\Flash\flash.c)(0x55558FB0)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork -I..\HARDWARE\LED -I..\SYSTEM\delay -I..\SYSTEM\sys -I..\SYSTEM\usart -I..\USER -I..\STM32F10x_FWLib\inc -I..\CORE -I..\HARDWARE\KEY -I..\HARDWARE\LCD -I..\HARDWARE\RTC -I..\HARDWARE\RTC -I..\HARDWARE\WKUP -I..\HARDWARE\ADC -I..\HARDWARE\DAC -I..\HARDWARE\DMA -I..\HARDWARE\IIC -I..\HARDWARE\24CXX -I..\HARDWARE\SPI -I..\HARDWARE\FLASH -I..\HARDWARE -I..\HARDWARE\A7139 -I..\HARDWARE\TIMER -I..\STM32F10x_FWLib\inc -I..\HARDWARE\interrupt -I..\trsdata -I..\Schdule -I..\hardware\Flash-I d:\Keil\ARM\RV31\INC-I d:\Keil\ARM\CMSIS\Include-I d:\Keil\ARM\Inc\ST\STM32F10x-DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER-o ..\obj\flash.o --omf_browse ..\obj\flash.crf --depend ..\obj\flash.d)
 I (..\HARDWARE\common.h)(0x5646C36E)
 I (..\HARDWARE\LED\led.h)(0x562CDC0F)
 I (..\SYSTEM\sys\sys.h)(0x554858B6)
 I (..\USER\stm32f10x.h)(0x554858B6)
 I (..\CORE\core_cm3.h)(0x554858B5)
-I (E:\Program Files (x86)\Keil\ARM\ARMCC\include\stdint.h)(0x51C7C554)
+I (d:\Keil\ARM\ARMCC\include\stdint.h)(0x51C7C554)
 I (..\USER\system_stm32f10x.h)(0x554858B6)
 I (..\USER\stm32f10x_conf.h)(0x554858B6)
 I (..\STM32F10x_FWLib\inc\stm32f10x_fsmc.h)(0x554858B5)
@@ -274,7 +274,7 @@ I (..\STM32F10x_FWLib\inc\misc.h)(0x554858B5)
 I (..\SYSTEM\delay\delay.h)(0x554858B6)
 I (..\HARDWARE\KEY\key.h)(0x554858B5)
 I (..\SYSTEM\usart\usart.h)(0x5631CF2F)
-I (E:\Program Files (x86)\Keil\ARM\ARMCC\include\stdio.h)(0x51C7C554)
+I (d:\Keil\ARM\ARMCC\include\stdio.h)(0x51C7C554)
 I (..\HARDWARE\SPI\spi.h)(0x554ACA1C)
 I (..\HARDWARE\A7139\A7139.h)(0x5631CEA7)
 I (..\HARDWARE\TIMER\timer.h)(0x5639781F)
@@ -288,14 +288,14 @@ I (..\Schdule\device.h)(0x5646C36E)
 I (..\Schdule\tdma.h)(0x5646C36E)
 I (..\HARDWARE\FLASH\flash.h)(0x555577D0)
 I (..\Schdule\upload.h)(0x564ABC75)
-I (..\Schdule\configure.h)(0x565EE20C)
+I (..\Schdule\configure.h)(0x567930CA)
 F (..\hardware\Flash\flash.h)(0x555577D0)()
-F (..\SYSTEM\delay\delay.c)(0x5629DA71)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork -I..\HARDWARE\LED -I..\SYSTEM\delay -I..\SYSTEM\sys -I..\SYSTEM\usart -I..\USER -I..\STM32F10x_FWLib\inc -I..\CORE -I..\HARDWARE\KEY -I..\HARDWARE\LCD -I..\HARDWARE\RTC -I..\HARDWARE\RTC -I..\HARDWARE\WKUP -I..\HARDWARE\ADC -I..\HARDWARE\DAC -I..\HARDWARE\DMA -I..\HARDWARE\IIC -I..\HARDWARE\24CXX -I..\HARDWARE\SPI -I..\HARDWARE\FLASH -I..\HARDWARE -I..\HARDWARE\A7139 -I..\HARDWARE\TIMER -I..\STM32F10x_FWLib\inc -I..\HARDWARE\interrupt -I..\trsdata -I..\Schdule -I..\hardware\Flash-I "E:\Program Files (x86)\Keil\ARM\RV31\INC"-I "E:\Program Files (x86)\Keil\ARM\CMSIS\Include"-I "E:\Program Files (x86)\Keil\ARM\Inc\ST\STM32F10x"-DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER-o ..\obj\delay.o --omf_browse ..\obj\delay.crf --depend ..\obj\delay.d)
+F (..\SYSTEM\delay\delay.c)(0x5629DA71)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork -I..\HARDWARE\LED -I..\SYSTEM\delay -I..\SYSTEM\sys -I..\SYSTEM\usart -I..\USER -I..\STM32F10x_FWLib\inc -I..\CORE -I..\HARDWARE\KEY -I..\HARDWARE\LCD -I..\HARDWARE\RTC -I..\HARDWARE\RTC -I..\HARDWARE\WKUP -I..\HARDWARE\ADC -I..\HARDWARE\DAC -I..\HARDWARE\DMA -I..\HARDWARE\IIC -I..\HARDWARE\24CXX -I..\HARDWARE\SPI -I..\HARDWARE\FLASH -I..\HARDWARE -I..\HARDWARE\A7139 -I..\HARDWARE\TIMER -I..\STM32F10x_FWLib\inc -I..\HARDWARE\interrupt -I..\trsdata -I..\Schdule -I..\hardware\Flash-I d:\Keil\ARM\RV31\INC-I d:\Keil\ARM\CMSIS\Include-I d:\Keil\ARM\Inc\ST\STM32F10x-DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER-o ..\obj\delay.o --omf_browse ..\obj\delay.crf --depend ..\obj\delay.d)
 I (..\SYSTEM\delay\delay.h)(0x554858B6)
 I (..\SYSTEM\sys\sys.h)(0x554858B6)
 I (..\USER\stm32f10x.h)(0x554858B6)
 I (..\CORE\core_cm3.h)(0x554858B5)
-I (E:\Program Files (x86)\Keil\ARM\ARMCC\include\stdint.h)(0x51C7C554)
+I (d:\Keil\ARM\ARMCC\include\stdint.h)(0x51C7C554)
 I (..\USER\system_stm32f10x.h)(0x554858B6)
 I (..\USER\stm32f10x_conf.h)(0x554858B6)
 I (..\STM32F10x_FWLib\inc\stm32f10x_fsmc.h)(0x554858B5)
@@ -305,11 +305,11 @@ I (..\STM32F10x_FWLib\inc\stm32f10x_spi.h)(0x554858B5)
 I (..\STM32F10x_FWLib\inc\stm32f10x_tim.h)(0x554858B5)
 I (..\STM32F10x_FWLib\inc\stm32f10x_usart.h)(0x554858B5)
 I (..\STM32F10x_FWLib\inc\misc.h)(0x554858B5)
-F (..\SYSTEM\sys\sys.c)(0x56494CE3)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork -I..\HARDWARE\LED -I..\SYSTEM\delay -I..\SYSTEM\sys -I..\SYSTEM\usart -I..\USER -I..\STM32F10x_FWLib\inc -I..\CORE -I..\HARDWARE\KEY -I..\HARDWARE\LCD -I..\HARDWARE\RTC -I..\HARDWARE\RTC -I..\HARDWARE\WKUP -I..\HARDWARE\ADC -I..\HARDWARE\DAC -I..\HARDWARE\DMA -I..\HARDWARE\IIC -I..\HARDWARE\24CXX -I..\HARDWARE\SPI -I..\HARDWARE\FLASH -I..\HARDWARE -I..\HARDWARE\A7139 -I..\HARDWARE\TIMER -I..\STM32F10x_FWLib\inc -I..\HARDWARE\interrupt -I..\trsdata -I..\Schdule -I..\hardware\Flash-I "E:\Program Files (x86)\Keil\ARM\RV31\INC"-I "E:\Program Files (x86)\Keil\ARM\CMSIS\Include"-I "E:\Program Files (x86)\Keil\ARM\Inc\ST\STM32F10x"-DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER-o ..\obj\sys.o --omf_browse ..\obj\sys.crf --depend ..\obj\sys.d)
+F (..\SYSTEM\sys\sys.c)(0x56494CE3)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork -I..\HARDWARE\LED -I..\SYSTEM\delay -I..\SYSTEM\sys -I..\SYSTEM\usart -I..\USER -I..\STM32F10x_FWLib\inc -I..\CORE -I..\HARDWARE\KEY -I..\HARDWARE\LCD -I..\HARDWARE\RTC -I..\HARDWARE\RTC -I..\HARDWARE\WKUP -I..\HARDWARE\ADC -I..\HARDWARE\DAC -I..\HARDWARE\DMA -I..\HARDWARE\IIC -I..\HARDWARE\24CXX -I..\HARDWARE\SPI -I..\HARDWARE\FLASH -I..\HARDWARE -I..\HARDWARE\A7139 -I..\HARDWARE\TIMER -I..\STM32F10x_FWLib\inc -I..\HARDWARE\interrupt -I..\trsdata -I..\Schdule -I..\hardware\Flash-I d:\Keil\ARM\RV31\INC-I d:\Keil\ARM\CMSIS\Include-I d:\Keil\ARM\Inc\ST\STM32F10x-DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER-o ..\obj\sys.o --omf_browse ..\obj\sys.crf --depend ..\obj\sys.d)
 I (..\SYSTEM\sys\sys.h)(0x554858B6)
 I (..\USER\stm32f10x.h)(0x554858B6)
 I (..\CORE\core_cm3.h)(0x554858B5)
-I (E:\Program Files (x86)\Keil\ARM\ARMCC\include\stdint.h)(0x51C7C554)
+I (d:\Keil\ARM\ARMCC\include\stdint.h)(0x51C7C554)
 I (..\USER\system_stm32f10x.h)(0x554858B6)
 I (..\USER\stm32f10x_conf.h)(0x554858B6)
 I (..\STM32F10x_FWLib\inc\stm32f10x_fsmc.h)(0x554858B5)
@@ -324,7 +324,7 @@ I (..\HARDWARE\LED\led.h)(0x562CDC0F)
 I (..\SYSTEM\delay\delay.h)(0x554858B6)
 I (..\HARDWARE\KEY\key.h)(0x554858B5)
 I (..\SYSTEM\usart\usart.h)(0x5631CF2F)
-I (E:\Program Files (x86)\Keil\ARM\ARMCC\include\stdio.h)(0x51C7C554)
+I (d:\Keil\ARM\ARMCC\include\stdio.h)(0x51C7C554)
 I (..\HARDWARE\SPI\spi.h)(0x554ACA1C)
 I (..\HARDWARE\A7139\A7139.h)(0x5631CEA7)
 I (..\HARDWARE\TIMER\timer.h)(0x5639781F)
@@ -338,12 +338,12 @@ I (..\Schdule\device.h)(0x5646C36E)
 I (..\Schdule\tdma.h)(0x5646C36E)
 I (..\HARDWARE\FLASH\flash.h)(0x555577D0)
 I (..\Schdule\upload.h)(0x564ABC75)
-I (..\Schdule\configure.h)(0x565EE20C)
-F (..\SYSTEM\usart\usart.c)(0x565D0B96)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork -I..\HARDWARE\LED -I..\SYSTEM\delay -I..\SYSTEM\sys -I..\SYSTEM\usart -I..\USER -I..\STM32F10x_FWLib\inc -I..\CORE -I..\HARDWARE\KEY -I..\HARDWARE\LCD -I..\HARDWARE\RTC -I..\HARDWARE\RTC -I..\HARDWARE\WKUP -I..\HARDWARE\ADC -I..\HARDWARE\DAC -I..\HARDWARE\DMA -I..\HARDWARE\IIC -I..\HARDWARE\24CXX -I..\HARDWARE\SPI -I..\HARDWARE\FLASH -I..\HARDWARE -I..\HARDWARE\A7139 -I..\HARDWARE\TIMER -I..\STM32F10x_FWLib\inc -I..\HARDWARE\interrupt -I..\trsdata -I..\Schdule -I..\hardware\Flash-I "E:\Program Files (x86)\Keil\ARM\RV31\INC"-I "E:\Program Files (x86)\Keil\ARM\CMSIS\Include"-I "E:\Program Files (x86)\Keil\ARM\Inc\ST\STM32F10x"-DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER-o ..\obj\usart.o --omf_browse ..\obj\usart.crf --depend ..\obj\usart.d)
+I (..\Schdule\configure.h)(0x567930CA)
+F (..\SYSTEM\usart\usart.c)(0x568239E1)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork -I..\HARDWARE\LED -I..\SYSTEM\delay -I..\SYSTEM\sys -I..\SYSTEM\usart -I..\USER -I..\STM32F10x_FWLib\inc -I..\CORE -I..\HARDWARE\KEY -I..\HARDWARE\LCD -I..\HARDWARE\RTC -I..\HARDWARE\RTC -I..\HARDWARE\WKUP -I..\HARDWARE\ADC -I..\HARDWARE\DAC -I..\HARDWARE\DMA -I..\HARDWARE\IIC -I..\HARDWARE\24CXX -I..\HARDWARE\SPI -I..\HARDWARE\FLASH -I..\HARDWARE -I..\HARDWARE\A7139 -I..\HARDWARE\TIMER -I..\STM32F10x_FWLib\inc -I..\HARDWARE\interrupt -I..\trsdata -I..\Schdule -I..\hardware\Flash-I d:\Keil\ARM\RV31\INC-I d:\Keil\ARM\CMSIS\Include-I d:\Keil\ARM\Inc\ST\STM32F10x-DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER-o ..\obj\usart.o --omf_browse ..\obj\usart.crf --depend ..\obj\usart.d)
 I (..\SYSTEM\sys\sys.h)(0x554858B6)
 I (..\USER\stm32f10x.h)(0x554858B6)
 I (..\CORE\core_cm3.h)(0x554858B5)
-I (E:\Program Files (x86)\Keil\ARM\ARMCC\include\stdint.h)(0x51C7C554)
+I (d:\Keil\ARM\ARMCC\include\stdint.h)(0x51C7C554)
 I (..\USER\system_stm32f10x.h)(0x554858B6)
 I (..\USER\stm32f10x_conf.h)(0x554858B6)
 I (..\STM32F10x_FWLib\inc\stm32f10x_fsmc.h)(0x554858B5)
@@ -354,7 +354,7 @@ I (..\STM32F10x_FWLib\inc\stm32f10x_tim.h)(0x554858B5)
 I (..\STM32F10x_FWLib\inc\stm32f10x_usart.h)(0x554858B5)
 I (..\STM32F10x_FWLib\inc\misc.h)(0x554858B5)
 I (..\SYSTEM\usart\usart.h)(0x5631CF2F)
-I (E:\Program Files (x86)\Keil\ARM\ARMCC\include\stdio.h)(0x51C7C554)
+I (d:\Keil\ARM\ARMCC\include\stdio.h)(0x51C7C554)
 I (..\HARDWARE\common.h)(0x5646C36E)
 I (..\HARDWARE\LED\led.h)(0x562CDC0F)
 I (..\SYSTEM\delay\delay.h)(0x554858B6)
@@ -372,12 +372,12 @@ I (..\Schdule\device.h)(0x5646C36E)
 I (..\Schdule\tdma.h)(0x5646C36E)
 I (..\HARDWARE\FLASH\flash.h)(0x555577D0)
 I (..\Schdule\upload.h)(0x564ABC75)
-I (..\Schdule\configure.h)(0x565EE20C)
-F (..\STM32F10x_FWLib\src\stm32f10x_exti.c)(0x554858B5)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork -I..\HARDWARE\LED -I..\SYSTEM\delay -I..\SYSTEM\sys -I..\SYSTEM\usart -I..\USER -I..\STM32F10x_FWLib\inc -I..\CORE -I..\HARDWARE\KEY -I..\HARDWARE\LCD -I..\HARDWARE\RTC -I..\HARDWARE\RTC -I..\HARDWARE\WKUP -I..\HARDWARE\ADC -I..\HARDWARE\DAC -I..\HARDWARE\DMA -I..\HARDWARE\IIC -I..\HARDWARE\24CXX -I..\HARDWARE\SPI -I..\HARDWARE\FLASH -I..\HARDWARE -I..\HARDWARE\A7139 -I..\HARDWARE\TIMER -I..\STM32F10x_FWLib\inc -I..\HARDWARE\interrupt -I..\trsdata -I..\Schdule -I..\hardware\Flash-I "E:\Program Files (x86)\Keil\ARM\RV31\INC"-I "E:\Program Files (x86)\Keil\ARM\CMSIS\Include"-I "E:\Program Files (x86)\Keil\ARM\Inc\ST\STM32F10x"-DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER-o ..\obj\stm32f10x_exti.o --omf_browse ..\obj\stm32f10x_exti.crf --depend ..\obj\stm32f10x_exti.d)
+I (..\Schdule\configure.h)(0x567930CA)
+F (..\STM32F10x_FWLib\src\stm32f10x_exti.c)(0x554858B5)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork -I..\HARDWARE\LED -I..\SYSTEM\delay -I..\SYSTEM\sys -I..\SYSTEM\usart -I..\USER -I..\STM32F10x_FWLib\inc -I..\CORE -I..\HARDWARE\KEY -I..\HARDWARE\LCD -I..\HARDWARE\RTC -I..\HARDWARE\RTC -I..\HARDWARE\WKUP -I..\HARDWARE\ADC -I..\HARDWARE\DAC -I..\HARDWARE\DMA -I..\HARDWARE\IIC -I..\HARDWARE\24CXX -I..\HARDWARE\SPI -I..\HARDWARE\FLASH -I..\HARDWARE -I..\HARDWARE\A7139 -I..\HARDWARE\TIMER -I..\STM32F10x_FWLib\inc -I..\HARDWARE\interrupt -I..\trsdata -I..\Schdule -I..\hardware\Flash-I d:\Keil\ARM\RV31\INC-I d:\Keil\ARM\CMSIS\Include-I d:\Keil\ARM\Inc\ST\STM32F10x-DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER-o ..\obj\stm32f10x_exti.o --omf_browse ..\obj\stm32f10x_exti.crf --depend ..\obj\stm32f10x_exti.d)
 I (..\STM32F10x_FWLib\inc\stm32f10x_exti.h)(0x554858B5)
 I (..\USER\stm32f10x.h)(0x554858B6)
 I (..\CORE\core_cm3.h)(0x554858B5)
-I (E:\Program Files (x86)\Keil\ARM\ARMCC\include\stdint.h)(0x51C7C554)
+I (d:\Keil\ARM\ARMCC\include\stdint.h)(0x51C7C554)
 I (..\USER\system_stm32f10x.h)(0x554858B6)
 I (..\USER\stm32f10x_conf.h)(0x554858B6)
 I (..\STM32F10x_FWLib\inc\stm32f10x_fsmc.h)(0x554858B5)
@@ -387,14 +387,14 @@ I (..\STM32F10x_FWLib\inc\stm32f10x_spi.h)(0x554858B5)
 I (..\STM32F10x_FWLib\inc\stm32f10x_tim.h)(0x554858B5)
 I (..\STM32F10x_FWLib\inc\stm32f10x_usart.h)(0x554858B5)
 I (..\STM32F10x_FWLib\inc\misc.h)(0x554858B5)
-F (..\CORE\core_cm3.c)(0x554858B5)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork -I..\HARDWARE\LED -I..\SYSTEM\delay -I..\SYSTEM\sys -I..\SYSTEM\usart -I..\USER -I..\STM32F10x_FWLib\inc -I..\CORE -I..\HARDWARE\KEY -I..\HARDWARE\LCD -I..\HARDWARE\RTC -I..\HARDWARE\RTC -I..\HARDWARE\WKUP -I..\HARDWARE\ADC -I..\HARDWARE\DAC -I..\HARDWARE\DMA -I..\HARDWARE\IIC -I..\HARDWARE\24CXX -I..\HARDWARE\SPI -I..\HARDWARE\FLASH -I..\HARDWARE -I..\HARDWARE\A7139 -I..\HARDWARE\TIMER -I..\STM32F10x_FWLib\inc -I..\HARDWARE\interrupt -I..\trsdata -I..\Schdule -I..\hardware\Flash-I "E:\Program Files (x86)\Keil\ARM\RV31\INC"-I "E:\Program Files (x86)\Keil\ARM\CMSIS\Include"-I "E:\Program Files (x86)\Keil\ARM\Inc\ST\STM32F10x"-DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER-o ..\obj\core_cm3.o --omf_browse ..\obj\core_cm3.crf --depend ..\obj\core_cm3.d)
-I (E:\Program Files (x86)\Keil\ARM\ARMCC\include\stdint.h)(0x51C7C554)
-F (..\CORE\startup_stm32f10x_hd.s)(0x554858B5)(--cpu Cortex-M3 -g --apcs=interwork -I "E:\Program Files (x86)\Keil\ARM\RV31\INC"-I "E:\Program Files (x86)\Keil\ARM\CMSIS\Include"-I "E:\Program Files (x86)\Keil\ARM\Inc\ST\STM32F10x"--list .\startup_stm32f10x_hd.lst --xref -o ..\obj\startup_stm32f10x_hd.o --depend ..\obj\startup_stm32f10x_hd.d)
-F (..\STM32F10x_FWLib\src\misc.c)(0x554858B5)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork -I..\HARDWARE\LED -I..\SYSTEM\delay -I..\SYSTEM\sys -I..\SYSTEM\usart -I..\USER -I..\STM32F10x_FWLib\inc -I..\CORE -I..\HARDWARE\KEY -I..\HARDWARE\LCD -I..\HARDWARE\RTC -I..\HARDWARE\RTC -I..\HARDWARE\WKUP -I..\HARDWARE\ADC -I..\HARDWARE\DAC -I..\HARDWARE\DMA -I..\HARDWARE\IIC -I..\HARDWARE\24CXX -I..\HARDWARE\SPI -I..\HARDWARE\FLASH -I..\HARDWARE -I..\HARDWARE\A7139 -I..\HARDWARE\TIMER -I..\STM32F10x_FWLib\inc -I..\HARDWARE\interrupt -I..\trsdata -I..\Schdule -I..\hardware\Flash-I "E:\Program Files (x86)\Keil\ARM\RV31\INC"-I "E:\Program Files (x86)\Keil\ARM\CMSIS\Include"-I "E:\Program Files (x86)\Keil\ARM\Inc\ST\STM32F10x"-DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER-o ..\obj\misc.o --omf_browse ..\obj\misc.crf --depend ..\obj\misc.d)
+F (..\CORE\core_cm3.c)(0x554858B5)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork -I..\HARDWARE\LED -I..\SYSTEM\delay -I..\SYSTEM\sys -I..\SYSTEM\usart -I..\USER -I..\STM32F10x_FWLib\inc -I..\CORE -I..\HARDWARE\KEY -I..\HARDWARE\LCD -I..\HARDWARE\RTC -I..\HARDWARE\RTC -I..\HARDWARE\WKUP -I..\HARDWARE\ADC -I..\HARDWARE\DAC -I..\HARDWARE\DMA -I..\HARDWARE\IIC -I..\HARDWARE\24CXX -I..\HARDWARE\SPI -I..\HARDWARE\FLASH -I..\HARDWARE -I..\HARDWARE\A7139 -I..\HARDWARE\TIMER -I..\STM32F10x_FWLib\inc -I..\HARDWARE\interrupt -I..\trsdata -I..\Schdule -I..\hardware\Flash-I d:\Keil\ARM\RV31\INC-I d:\Keil\ARM\CMSIS\Include-I d:\Keil\ARM\Inc\ST\STM32F10x-DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER-o ..\obj\core_cm3.o --omf_browse ..\obj\core_cm3.crf --depend ..\obj\core_cm3.d)
+I (d:\Keil\ARM\ARMCC\include\stdint.h)(0x51C7C554)
+F (..\CORE\startup_stm32f10x_hd.s)(0x554858B5)(--cpu Cortex-M3 -g --apcs=interwork -I d:\Keil\ARM\RV31\INC-I d:\Keil\ARM\CMSIS\Include-I d:\Keil\ARM\Inc\ST\STM32F10x--list .\startup_stm32f10x_hd.lst --xref -o ..\obj\startup_stm32f10x_hd.o --depend ..\obj\startup_stm32f10x_hd.d)
+F (..\STM32F10x_FWLib\src\misc.c)(0x554858B5)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork -I..\HARDWARE\LED -I..\SYSTEM\delay -I..\SYSTEM\sys -I..\SYSTEM\usart -I..\USER -I..\STM32F10x_FWLib\inc -I..\CORE -I..\HARDWARE\KEY -I..\HARDWARE\LCD -I..\HARDWARE\RTC -I..\HARDWARE\RTC -I..\HARDWARE\WKUP -I..\HARDWARE\ADC -I..\HARDWARE\DAC -I..\HARDWARE\DMA -I..\HARDWARE\IIC -I..\HARDWARE\24CXX -I..\HARDWARE\SPI -I..\HARDWARE\FLASH -I..\HARDWARE -I..\HARDWARE\A7139 -I..\HARDWARE\TIMER -I..\STM32F10x_FWLib\inc -I..\HARDWARE\interrupt -I..\trsdata -I..\Schdule -I..\hardware\Flash-I d:\Keil\ARM\RV31\INC-I d:\Keil\ARM\CMSIS\Include-I d:\Keil\ARM\Inc\ST\STM32F10x-DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER-o ..\obj\misc.o --omf_browse ..\obj\misc.crf --depend ..\obj\misc.d)
 I (..\STM32F10x_FWLib\inc\misc.h)(0x554858B5)
 I (..\USER\stm32f10x.h)(0x554858B6)
 I (..\CORE\core_cm3.h)(0x554858B5)
-I (E:\Program Files (x86)\Keil\ARM\ARMCC\include\stdint.h)(0x51C7C554)
+I (d:\Keil\ARM\ARMCC\include\stdint.h)(0x51C7C554)
 I (..\USER\system_stm32f10x.h)(0x554858B6)
 I (..\USER\stm32f10x_conf.h)(0x554858B6)
 I (..\STM32F10x_FWLib\inc\stm32f10x_fsmc.h)(0x554858B5)
@@ -403,11 +403,11 @@ I (..\STM32F10x_FWLib\inc\stm32f10x_rcc.h)(0x554858B5)
 I (..\STM32F10x_FWLib\inc\stm32f10x_spi.h)(0x554858B5)
 I (..\STM32F10x_FWLib\inc\stm32f10x_tim.h)(0x554858B5)
 I (..\STM32F10x_FWLib\inc\stm32f10x_usart.h)(0x554858B5)
-F (..\STM32F10x_FWLib\src\stm32f10x_fsmc.c)(0x554858B5)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork -I..\HARDWARE\LED -I..\SYSTEM\delay -I..\SYSTEM\sys -I..\SYSTEM\usart -I..\USER -I..\STM32F10x_FWLib\inc -I..\CORE -I..\HARDWARE\KEY -I..\HARDWARE\LCD -I..\HARDWARE\RTC -I..\HARDWARE\RTC -I..\HARDWARE\WKUP -I..\HARDWARE\ADC -I..\HARDWARE\DAC -I..\HARDWARE\DMA -I..\HARDWARE\IIC -I..\HARDWARE\24CXX -I..\HARDWARE\SPI -I..\HARDWARE\FLASH -I..\HARDWARE -I..\HARDWARE\A7139 -I..\HARDWARE\TIMER -I..\STM32F10x_FWLib\inc -I..\HARDWARE\interrupt -I..\trsdata -I..\Schdule -I..\hardware\Flash-I "E:\Program Files (x86)\Keil\ARM\RV31\INC"-I "E:\Program Files (x86)\Keil\ARM\CMSIS\Include"-I "E:\Program Files (x86)\Keil\ARM\Inc\ST\STM32F10x"-DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER-o ..\obj\stm32f10x_fsmc.o --omf_browse ..\obj\stm32f10x_fsmc.crf --depend ..\obj\stm32f10x_fsmc.d)
+F (..\STM32F10x_FWLib\src\stm32f10x_fsmc.c)(0x554858B5)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork -I..\HARDWARE\LED -I..\SYSTEM\delay -I..\SYSTEM\sys -I..\SYSTEM\usart -I..\USER -I..\STM32F10x_FWLib\inc -I..\CORE -I..\HARDWARE\KEY -I..\HARDWARE\LCD -I..\HARDWARE\RTC -I..\HARDWARE\RTC -I..\HARDWARE\WKUP -I..\HARDWARE\ADC -I..\HARDWARE\DAC -I..\HARDWARE\DMA -I..\HARDWARE\IIC -I..\HARDWARE\24CXX -I..\HARDWARE\SPI -I..\HARDWARE\FLASH -I..\HARDWARE -I..\HARDWARE\A7139 -I..\HARDWARE\TIMER -I..\STM32F10x_FWLib\inc -I..\HARDWARE\interrupt -I..\trsdata -I..\Schdule -I..\hardware\Flash-I d:\Keil\ARM\RV31\INC-I d:\Keil\ARM\CMSIS\Include-I d:\Keil\ARM\Inc\ST\STM32F10x-DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER-o ..\obj\stm32f10x_fsmc.o --omf_browse ..\obj\stm32f10x_fsmc.crf --depend ..\obj\stm32f10x_fsmc.d)
 I (..\STM32F10x_FWLib\inc\stm32f10x_fsmc.h)(0x554858B5)
 I (..\USER\stm32f10x.h)(0x554858B6)
 I (..\CORE\core_cm3.h)(0x554858B5)
-I (E:\Program Files (x86)\Keil\ARM\ARMCC\include\stdint.h)(0x51C7C554)
+I (d:\Keil\ARM\ARMCC\include\stdint.h)(0x51C7C554)
 I (..\USER\system_stm32f10x.h)(0x554858B6)
 I (..\USER\stm32f10x_conf.h)(0x554858B6)
 I (..\STM32F10x_FWLib\inc\stm32f10x_gpio.h)(0x554858B5)
@@ -416,11 +416,11 @@ I (..\STM32F10x_FWLib\inc\stm32f10x_spi.h)(0x554858B5)
 I (..\STM32F10x_FWLib\inc\stm32f10x_tim.h)(0x554858B5)
 I (..\STM32F10x_FWLib\inc\stm32f10x_usart.h)(0x554858B5)
 I (..\STM32F10x_FWLib\inc\misc.h)(0x554858B5)
-F (..\STM32F10x_FWLib\src\stm32f10x_gpio.c)(0x554858B5)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork -I..\HARDWARE\LED -I..\SYSTEM\delay -I..\SYSTEM\sys -I..\SYSTEM\usart -I..\USER -I..\STM32F10x_FWLib\inc -I..\CORE -I..\HARDWARE\KEY -I..\HARDWARE\LCD -I..\HARDWARE\RTC -I..\HARDWARE\RTC -I..\HARDWARE\WKUP -I..\HARDWARE\ADC -I..\HARDWARE\DAC -I..\HARDWARE\DMA -I..\HARDWARE\IIC -I..\HARDWARE\24CXX -I..\HARDWARE\SPI -I..\HARDWARE\FLASH -I..\HARDWARE -I..\HARDWARE\A7139 -I..\HARDWARE\TIMER -I..\STM32F10x_FWLib\inc -I..\HARDWARE\interrupt -I..\trsdata -I..\Schdule -I..\hardware\Flash-I "E:\Program Files (x86)\Keil\ARM\RV31\INC"-I "E:\Program Files (x86)\Keil\ARM\CMSIS\Include"-I "E:\Program Files (x86)\Keil\ARM\Inc\ST\STM32F10x"-DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER-o ..\obj\stm32f10x_gpio.o --omf_browse ..\obj\stm32f10x_gpio.crf --depend ..\obj\stm32f10x_gpio.d)
+F (..\STM32F10x_FWLib\src\stm32f10x_gpio.c)(0x554858B5)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork -I..\HARDWARE\LED -I..\SYSTEM\delay -I..\SYSTEM\sys -I..\SYSTEM\usart -I..\USER -I..\STM32F10x_FWLib\inc -I..\CORE -I..\HARDWARE\KEY -I..\HARDWARE\LCD -I..\HARDWARE\RTC -I..\HARDWARE\RTC -I..\HARDWARE\WKUP -I..\HARDWARE\ADC -I..\HARDWARE\DAC -I..\HARDWARE\DMA -I..\HARDWARE\IIC -I..\HARDWARE\24CXX -I..\HARDWARE\SPI -I..\HARDWARE\FLASH -I..\HARDWARE -I..\HARDWARE\A7139 -I..\HARDWARE\TIMER -I..\STM32F10x_FWLib\inc -I..\HARDWARE\interrupt -I..\trsdata -I..\Schdule -I..\hardware\Flash-I d:\Keil\ARM\RV31\INC-I d:\Keil\ARM\CMSIS\Include-I d:\Keil\ARM\Inc\ST\STM32F10x-DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER-o ..\obj\stm32f10x_gpio.o --omf_browse ..\obj\stm32f10x_gpio.crf --depend ..\obj\stm32f10x_gpio.d)
 I (..\STM32F10x_FWLib\inc\stm32f10x_gpio.h)(0x554858B5)
 I (..\USER\stm32f10x.h)(0x554858B6)
 I (..\CORE\core_cm3.h)(0x554858B5)
-I (E:\Program Files (x86)\Keil\ARM\ARMCC\include\stdint.h)(0x51C7C554)
+I (d:\Keil\ARM\ARMCC\include\stdint.h)(0x51C7C554)
 I (..\USER\system_stm32f10x.h)(0x554858B6)
 I (..\USER\stm32f10x_conf.h)(0x554858B6)
 I (..\STM32F10x_FWLib\inc\stm32f10x_fsmc.h)(0x554858B5)
@@ -429,11 +429,11 @@ I (..\STM32F10x_FWLib\inc\stm32f10x_spi.h)(0x554858B5)
 I (..\STM32F10x_FWLib\inc\stm32f10x_tim.h)(0x554858B5)
 I (..\STM32F10x_FWLib\inc\stm32f10x_usart.h)(0x554858B5)
 I (..\STM32F10x_FWLib\inc\misc.h)(0x554858B5)
-F (..\STM32F10x_FWLib\src\stm32f10x_rcc.c)(0x554858B5)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork -I..\HARDWARE\LED -I..\SYSTEM\delay -I..\SYSTEM\sys -I..\SYSTEM\usart -I..\USER -I..\STM32F10x_FWLib\inc -I..\CORE -I..\HARDWARE\KEY -I..\HARDWARE\LCD -I..\HARDWARE\RTC -I..\HARDWARE\RTC -I..\HARDWARE\WKUP -I..\HARDWARE\ADC -I..\HARDWARE\DAC -I..\HARDWARE\DMA -I..\HARDWARE\IIC -I..\HARDWARE\24CXX -I..\HARDWARE\SPI -I..\HARDWARE\FLASH -I..\HARDWARE -I..\HARDWARE\A7139 -I..\HARDWARE\TIMER -I..\STM32F10x_FWLib\inc -I..\HARDWARE\interrupt -I..\trsdata -I..\Schdule -I..\hardware\Flash-I "E:\Program Files (x86)\Keil\ARM\RV31\INC"-I "E:\Program Files (x86)\Keil\ARM\CMSIS\Include"-I "E:\Program Files (x86)\Keil\ARM\Inc\ST\STM32F10x"-DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER-o ..\obj\stm32f10x_rcc.o --omf_browse ..\obj\stm32f10x_rcc.crf --depend ..\obj\stm32f10x_rcc.d)
+F (..\STM32F10x_FWLib\src\stm32f10x_rcc.c)(0x554858B5)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork -I..\HARDWARE\LED -I..\SYSTEM\delay -I..\SYSTEM\sys -I..\SYSTEM\usart -I..\USER -I..\STM32F10x_FWLib\inc -I..\CORE -I..\HARDWARE\KEY -I..\HARDWARE\LCD -I..\HARDWARE\RTC -I..\HARDWARE\RTC -I..\HARDWARE\WKUP -I..\HARDWARE\ADC -I..\HARDWARE\DAC -I..\HARDWARE\DMA -I..\HARDWARE\IIC -I..\HARDWARE\24CXX -I..\HARDWARE\SPI -I..\HARDWARE\FLASH -I..\HARDWARE -I..\HARDWARE\A7139 -I..\HARDWARE\TIMER -I..\STM32F10x_FWLib\inc -I..\HARDWARE\interrupt -I..\trsdata -I..\Schdule -I..\hardware\Flash-I d:\Keil\ARM\RV31\INC-I d:\Keil\ARM\CMSIS\Include-I d:\Keil\ARM\Inc\ST\STM32F10x-DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER-o ..\obj\stm32f10x_rcc.o --omf_browse ..\obj\stm32f10x_rcc.crf --depend ..\obj\stm32f10x_rcc.d)
 I (..\STM32F10x_FWLib\inc\stm32f10x_rcc.h)(0x554858B5)
 I (..\USER\stm32f10x.h)(0x554858B6)
 I (..\CORE\core_cm3.h)(0x554858B5)
-I (E:\Program Files (x86)\Keil\ARM\ARMCC\include\stdint.h)(0x51C7C554)
+I (d:\Keil\ARM\ARMCC\include\stdint.h)(0x51C7C554)
 I (..\USER\system_stm32f10x.h)(0x554858B6)
 I (..\USER\stm32f10x_conf.h)(0x554858B6)
 I (..\STM32F10x_FWLib\inc\stm32f10x_fsmc.h)(0x554858B5)
@@ -442,11 +442,11 @@ I (..\STM32F10x_FWLib\inc\stm32f10x_spi.h)(0x554858B5)
 I (..\STM32F10x_FWLib\inc\stm32f10x_tim.h)(0x554858B5)
 I (..\STM32F10x_FWLib\inc\stm32f10x_usart.h)(0x554858B5)
 I (..\STM32F10x_FWLib\inc\misc.h)(0x554858B5)
-F (..\STM32F10x_FWLib\src\stm32f10x_tim.c)(0x554858B5)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork -I..\HARDWARE\LED -I..\SYSTEM\delay -I..\SYSTEM\sys -I..\SYSTEM\usart -I..\USER -I..\STM32F10x_FWLib\inc -I..\CORE -I..\HARDWARE\KEY -I..\HARDWARE\LCD -I..\HARDWARE\RTC -I..\HARDWARE\RTC -I..\HARDWARE\WKUP -I..\HARDWARE\ADC -I..\HARDWARE\DAC -I..\HARDWARE\DMA -I..\HARDWARE\IIC -I..\HARDWARE\24CXX -I..\HARDWARE\SPI -I..\HARDWARE\FLASH -I..\HARDWARE -I..\HARDWARE\A7139 -I..\HARDWARE\TIMER -I..\STM32F10x_FWLib\inc -I..\HARDWARE\interrupt -I..\trsdata -I..\Schdule -I..\hardware\Flash-I "E:\Program Files (x86)\Keil\ARM\RV31\INC"-I "E:\Program Files (x86)\Keil\ARM\CMSIS\Include"-I "E:\Program Files (x86)\Keil\ARM\Inc\ST\STM32F10x"-DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER-o ..\obj\stm32f10x_tim.o --omf_browse ..\obj\stm32f10x_tim.crf --depend ..\obj\stm32f10x_tim.d)
+F (..\STM32F10x_FWLib\src\stm32f10x_tim.c)(0x554858B5)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork -I..\HARDWARE\LED -I..\SYSTEM\delay -I..\SYSTEM\sys -I..\SYSTEM\usart -I..\USER -I..\STM32F10x_FWLib\inc -I..\CORE -I..\HARDWARE\KEY -I..\HARDWARE\LCD -I..\HARDWARE\RTC -I..\HARDWARE\RTC -I..\HARDWARE\WKUP -I..\HARDWARE\ADC -I..\HARDWARE\DAC -I..\HARDWARE\DMA -I..\HARDWARE\IIC -I..\HARDWARE\24CXX -I..\HARDWARE\SPI -I..\HARDWARE\FLASH -I..\HARDWARE -I..\HARDWARE\A7139 -I..\HARDWARE\TIMER -I..\STM32F10x_FWLib\inc -I..\HARDWARE\interrupt -I..\trsdata -I..\Schdule -I..\hardware\Flash-I d:\Keil\ARM\RV31\INC-I d:\Keil\ARM\CMSIS\Include-I d:\Keil\ARM\Inc\ST\STM32F10x-DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER-o ..\obj\stm32f10x_tim.o --omf_browse ..\obj\stm32f10x_tim.crf --depend ..\obj\stm32f10x_tim.d)
 I (..\STM32F10x_FWLib\inc\stm32f10x_tim.h)(0x554858B5)
 I (..\USER\stm32f10x.h)(0x554858B6)
 I (..\CORE\core_cm3.h)(0x554858B5)
-I (E:\Program Files (x86)\Keil\ARM\ARMCC\include\stdint.h)(0x51C7C554)
+I (d:\Keil\ARM\ARMCC\include\stdint.h)(0x51C7C554)
 I (..\USER\system_stm32f10x.h)(0x554858B6)
 I (..\USER\stm32f10x_conf.h)(0x554858B6)
 I (..\STM32F10x_FWLib\inc\stm32f10x_fsmc.h)(0x554858B5)
@@ -455,11 +455,11 @@ I (..\STM32F10x_FWLib\inc\stm32f10x_rcc.h)(0x554858B5)
 I (..\STM32F10x_FWLib\inc\stm32f10x_spi.h)(0x554858B5)
 I (..\STM32F10x_FWLib\inc\stm32f10x_usart.h)(0x554858B5)
 I (..\STM32F10x_FWLib\inc\misc.h)(0x554858B5)
-F (..\STM32F10x_FWLib\src\stm32f10x_usart.c)(0x554858B5)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork -I..\HARDWARE\LED -I..\SYSTEM\delay -I..\SYSTEM\sys -I..\SYSTEM\usart -I..\USER -I..\STM32F10x_FWLib\inc -I..\CORE -I..\HARDWARE\KEY -I..\HARDWARE\LCD -I..\HARDWARE\RTC -I..\HARDWARE\RTC -I..\HARDWARE\WKUP -I..\HARDWARE\ADC -I..\HARDWARE\DAC -I..\HARDWARE\DMA -I..\HARDWARE\IIC -I..\HARDWARE\24CXX -I..\HARDWARE\SPI -I..\HARDWARE\FLASH -I..\HARDWARE -I..\HARDWARE\A7139 -I..\HARDWARE\TIMER -I..\STM32F10x_FWLib\inc -I..\HARDWARE\interrupt -I..\trsdata -I..\Schdule -I..\hardware\Flash-I "E:\Program Files (x86)\Keil\ARM\RV31\INC"-I "E:\Program Files (x86)\Keil\ARM\CMSIS\Include"-I "E:\Program Files (x86)\Keil\ARM\Inc\ST\STM32F10x"-DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER-o ..\obj\stm32f10x_usart.o --omf_browse ..\obj\stm32f10x_usart.crf --depend ..\obj\stm32f10x_usart.d)
+F (..\STM32F10x_FWLib\src\stm32f10x_usart.c)(0x554858B5)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork -I..\HARDWARE\LED -I..\SYSTEM\delay -I..\SYSTEM\sys -I..\SYSTEM\usart -I..\USER -I..\STM32F10x_FWLib\inc -I..\CORE -I..\HARDWARE\KEY -I..\HARDWARE\LCD -I..\HARDWARE\RTC -I..\HARDWARE\RTC -I..\HARDWARE\WKUP -I..\HARDWARE\ADC -I..\HARDWARE\DAC -I..\HARDWARE\DMA -I..\HARDWARE\IIC -I..\HARDWARE\24CXX -I..\HARDWARE\SPI -I..\HARDWARE\FLASH -I..\HARDWARE -I..\HARDWARE\A7139 -I..\HARDWARE\TIMER -I..\STM32F10x_FWLib\inc -I..\HARDWARE\interrupt -I..\trsdata -I..\Schdule -I..\hardware\Flash-I d:\Keil\ARM\RV31\INC-I d:\Keil\ARM\CMSIS\Include-I d:\Keil\ARM\Inc\ST\STM32F10x-DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER-o ..\obj\stm32f10x_usart.o --omf_browse ..\obj\stm32f10x_usart.crf --depend ..\obj\stm32f10x_usart.d)
 I (..\STM32F10x_FWLib\inc\stm32f10x_usart.h)(0x554858B5)
 I (..\USER\stm32f10x.h)(0x554858B6)
 I (..\CORE\core_cm3.h)(0x554858B5)
-I (E:\Program Files (x86)\Keil\ARM\ARMCC\include\stdint.h)(0x51C7C554)
+I (d:\Keil\ARM\ARMCC\include\stdint.h)(0x51C7C554)
 I (..\USER\system_stm32f10x.h)(0x554858B6)
 I (..\USER\stm32f10x_conf.h)(0x554858B6)
 I (..\STM32F10x_FWLib\inc\stm32f10x_fsmc.h)(0x554858B5)
@@ -468,11 +468,11 @@ I (..\STM32F10x_FWLib\inc\stm32f10x_rcc.h)(0x554858B5)
 I (..\STM32F10x_FWLib\inc\stm32f10x_spi.h)(0x554858B5)
 I (..\STM32F10x_FWLib\inc\stm32f10x_tim.h)(0x554858B5)
 I (..\STM32F10x_FWLib\inc\misc.h)(0x554858B5)
-F (..\STM32F10x_FWLib\src\stm32f10x_spi.c)(0x554858B5)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork -I..\HARDWARE\LED -I..\SYSTEM\delay -I..\SYSTEM\sys -I..\SYSTEM\usart -I..\USER -I..\STM32F10x_FWLib\inc -I..\CORE -I..\HARDWARE\KEY -I..\HARDWARE\LCD -I..\HARDWARE\RTC -I..\HARDWARE\RTC -I..\HARDWARE\WKUP -I..\HARDWARE\ADC -I..\HARDWARE\DAC -I..\HARDWARE\DMA -I..\HARDWARE\IIC -I..\HARDWARE\24CXX -I..\HARDWARE\SPI -I..\HARDWARE\FLASH -I..\HARDWARE -I..\HARDWARE\A7139 -I..\HARDWARE\TIMER -I..\STM32F10x_FWLib\inc -I..\HARDWARE\interrupt -I..\trsdata -I..\Schdule -I..\hardware\Flash-I "E:\Program Files (x86)\Keil\ARM\RV31\INC"-I "E:\Program Files (x86)\Keil\ARM\CMSIS\Include"-I "E:\Program Files (x86)\Keil\ARM\Inc\ST\STM32F10x"-DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER-o ..\obj\stm32f10x_spi.o --omf_browse ..\obj\stm32f10x_spi.crf --depend ..\obj\stm32f10x_spi.d)
+F (..\STM32F10x_FWLib\src\stm32f10x_spi.c)(0x554858B5)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork -I..\HARDWARE\LED -I..\SYSTEM\delay -I..\SYSTEM\sys -I..\SYSTEM\usart -I..\USER -I..\STM32F10x_FWLib\inc -I..\CORE -I..\HARDWARE\KEY -I..\HARDWARE\LCD -I..\HARDWARE\RTC -I..\HARDWARE\RTC -I..\HARDWARE\WKUP -I..\HARDWARE\ADC -I..\HARDWARE\DAC -I..\HARDWARE\DMA -I..\HARDWARE\IIC -I..\HARDWARE\24CXX -I..\HARDWARE\SPI -I..\HARDWARE\FLASH -I..\HARDWARE -I..\HARDWARE\A7139 -I..\HARDWARE\TIMER -I..\STM32F10x_FWLib\inc -I..\HARDWARE\interrupt -I..\trsdata -I..\Schdule -I..\hardware\Flash-I d:\Keil\ARM\RV31\INC-I d:\Keil\ARM\CMSIS\Include-I d:\Keil\ARM\Inc\ST\STM32F10x-DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER-o ..\obj\stm32f10x_spi.o --omf_browse ..\obj\stm32f10x_spi.crf --depend ..\obj\stm32f10x_spi.d)
 I (..\STM32F10x_FWLib\inc\stm32f10x_spi.h)(0x554858B5)
 I (..\USER\stm32f10x.h)(0x554858B6)
 I (..\CORE\core_cm3.h)(0x554858B5)
-I (E:\Program Files (x86)\Keil\ARM\ARMCC\include\stdint.h)(0x51C7C554)
+I (d:\Keil\ARM\ARMCC\include\stdint.h)(0x51C7C554)
 I (..\USER\system_stm32f10x.h)(0x554858B6)
 I (..\USER\stm32f10x_conf.h)(0x554858B6)
 I (..\STM32F10x_FWLib\inc\stm32f10x_fsmc.h)(0x554858B5)
@@ -482,13 +482,13 @@ I (..\STM32F10x_FWLib\inc\stm32f10x_tim.h)(0x554858B5)
 I (..\STM32F10x_FWLib\inc\stm32f10x_usart.h)(0x554858B5)
 I (..\STM32F10x_FWLib\inc\misc.h)(0x554858B5)
 F (..\HARDWARE\common.h)(0x5646C36E)()
-F (.\main.c)(0x565DA310)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork -I..\HARDWARE\LED -I..\SYSTEM\delay -I..\SYSTEM\sys -I..\SYSTEM\usart -I..\USER -I..\STM32F10x_FWLib\inc -I..\CORE -I..\HARDWARE\KEY -I..\HARDWARE\LCD -I..\HARDWARE\RTC -I..\HARDWARE\RTC -I..\HARDWARE\WKUP -I..\HARDWARE\ADC -I..\HARDWARE\DAC -I..\HARDWARE\DMA -I..\HARDWARE\IIC -I..\HARDWARE\24CXX -I..\HARDWARE\SPI -I..\HARDWARE\FLASH -I..\HARDWARE -I..\HARDWARE\A7139 -I..\HARDWARE\TIMER -I..\STM32F10x_FWLib\inc -I..\HARDWARE\interrupt -I..\trsdata -I..\Schdule -I..\hardware\Flash-I "E:\Program Files (x86)\Keil\ARM\RV31\INC"-I "E:\Program Files (x86)\Keil\ARM\CMSIS\Include"-I "E:\Program Files (x86)\Keil\ARM\Inc\ST\STM32F10x"-DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER-o ..\obj\main.o --omf_browse ..\obj\main.crf --depend ..\obj\main.d)
+F (.\main.c)(0x5678AE6B)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork -I..\HARDWARE\LED -I..\SYSTEM\delay -I..\SYSTEM\sys -I..\SYSTEM\usart -I..\USER -I..\STM32F10x_FWLib\inc -I..\CORE -I..\HARDWARE\KEY -I..\HARDWARE\LCD -I..\HARDWARE\RTC -I..\HARDWARE\RTC -I..\HARDWARE\WKUP -I..\HARDWARE\ADC -I..\HARDWARE\DAC -I..\HARDWARE\DMA -I..\HARDWARE\IIC -I..\HARDWARE\24CXX -I..\HARDWARE\SPI -I..\HARDWARE\FLASH -I..\HARDWARE -I..\HARDWARE\A7139 -I..\HARDWARE\TIMER -I..\STM32F10x_FWLib\inc -I..\HARDWARE\interrupt -I..\trsdata -I..\Schdule -I..\hardware\Flash-I d:\Keil\ARM\RV31\INC-I d:\Keil\ARM\CMSIS\Include-I d:\Keil\ARM\Inc\ST\STM32F10x-DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER-o ..\obj\main.o --omf_browse ..\obj\main.crf --depend ..\obj\main.d)
 I (..\HARDWARE\common.h)(0x5646C36E)
 I (..\HARDWARE\LED\led.h)(0x562CDC0F)
 I (..\SYSTEM\sys\sys.h)(0x554858B6)
 I (..\USER\stm32f10x.h)(0x554858B6)
 I (..\CORE\core_cm3.h)(0x554858B5)
-I (E:\Program Files (x86)\Keil\ARM\ARMCC\include\stdint.h)(0x51C7C554)
+I (d:\Keil\ARM\ARMCC\include\stdint.h)(0x51C7C554)
 I (..\USER\system_stm32f10x.h)(0x554858B6)
 I (..\USER\stm32f10x_conf.h)(0x554858B6)
 I (..\STM32F10x_FWLib\inc\stm32f10x_fsmc.h)(0x554858B5)
@@ -501,7 +501,7 @@ I (..\STM32F10x_FWLib\inc\misc.h)(0x554858B5)
 I (..\SYSTEM\delay\delay.h)(0x554858B6)
 I (..\HARDWARE\KEY\key.h)(0x554858B5)
 I (..\SYSTEM\usart\usart.h)(0x5631CF2F)
-I (E:\Program Files (x86)\Keil\ARM\ARMCC\include\stdio.h)(0x51C7C554)
+I (d:\Keil\ARM\ARMCC\include\stdio.h)(0x51C7C554)
 I (..\HARDWARE\SPI\spi.h)(0x554ACA1C)
 I (..\HARDWARE\A7139\A7139.h)(0x5631CEA7)
 I (..\HARDWARE\TIMER\timer.h)(0x5639781F)
@@ -515,15 +515,15 @@ I (..\Schdule\device.h)(0x5646C36E)
 I (..\Schdule\tdma.h)(0x5646C36E)
 I (..\HARDWARE\FLASH\flash.h)(0x555577D0)
 I (..\Schdule\upload.h)(0x564ABC75)
-I (..\Schdule\configure.h)(0x565EE20C)
-F (..\Schdule\configure.h)(0x565EE20C)()
-F (..\Schdule\beacon.c)(0x56375E5F)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork -I..\HARDWARE\LED -I..\SYSTEM\delay -I..\SYSTEM\sys -I..\SYSTEM\usart -I..\USER -I..\STM32F10x_FWLib\inc -I..\CORE -I..\HARDWARE\KEY -I..\HARDWARE\LCD -I..\HARDWARE\RTC -I..\HARDWARE\RTC -I..\HARDWARE\WKUP -I..\HARDWARE\ADC -I..\HARDWARE\DAC -I..\HARDWARE\DMA -I..\HARDWARE\IIC -I..\HARDWARE\24CXX -I..\HARDWARE\SPI -I..\HARDWARE\FLASH -I..\HARDWARE -I..\HARDWARE\A7139 -I..\HARDWARE\TIMER -I..\STM32F10x_FWLib\inc -I..\HARDWARE\interrupt -I..\trsdata -I..\Schdule -I..\hardware\Flash-I "E:\Program Files (x86)\Keil\ARM\RV31\INC"-I "E:\Program Files (x86)\Keil\ARM\CMSIS\Include"-I "E:\Program Files (x86)\Keil\ARM\Inc\ST\STM32F10x"-DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER-o ..\obj\beacon.o --omf_browse ..\obj\beacon.crf --depend ..\obj\beacon.d)
+I (..\Schdule\configure.h)(0x567930CA)
+F (..\Schdule\configure.h)(0x567930CA)()
+F (..\Schdule\beacon.c)(0x56375E5F)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork -I..\HARDWARE\LED -I..\SYSTEM\delay -I..\SYSTEM\sys -I..\SYSTEM\usart -I..\USER -I..\STM32F10x_FWLib\inc -I..\CORE -I..\HARDWARE\KEY -I..\HARDWARE\LCD -I..\HARDWARE\RTC -I..\HARDWARE\RTC -I..\HARDWARE\WKUP -I..\HARDWARE\ADC -I..\HARDWARE\DAC -I..\HARDWARE\DMA -I..\HARDWARE\IIC -I..\HARDWARE\24CXX -I..\HARDWARE\SPI -I..\HARDWARE\FLASH -I..\HARDWARE -I..\HARDWARE\A7139 -I..\HARDWARE\TIMER -I..\STM32F10x_FWLib\inc -I..\HARDWARE\interrupt -I..\trsdata -I..\Schdule -I..\hardware\Flash-I d:\Keil\ARM\RV31\INC-I d:\Keil\ARM\CMSIS\Include-I d:\Keil\ARM\Inc\ST\STM32F10x-DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER-o ..\obj\beacon.o --omf_browse ..\obj\beacon.crf --depend ..\obj\beacon.d)
 I (..\HARDWARE\common.h)(0x5646C36E)
 I (..\HARDWARE\LED\led.h)(0x562CDC0F)
 I (..\SYSTEM\sys\sys.h)(0x554858B6)
 I (..\USER\stm32f10x.h)(0x554858B6)
 I (..\CORE\core_cm3.h)(0x554858B5)
-I (E:\Program Files (x86)\Keil\ARM\ARMCC\include\stdint.h)(0x51C7C554)
+I (d:\Keil\ARM\ARMCC\include\stdint.h)(0x51C7C554)
 I (..\USER\system_stm32f10x.h)(0x554858B6)
 I (..\USER\stm32f10x_conf.h)(0x554858B6)
 I (..\STM32F10x_FWLib\inc\stm32f10x_fsmc.h)(0x554858B5)
@@ -536,7 +536,7 @@ I (..\STM32F10x_FWLib\inc\misc.h)(0x554858B5)
 I (..\SYSTEM\delay\delay.h)(0x554858B6)
 I (..\HARDWARE\KEY\key.h)(0x554858B5)
 I (..\SYSTEM\usart\usart.h)(0x5631CF2F)
-I (E:\Program Files (x86)\Keil\ARM\ARMCC\include\stdio.h)(0x51C7C554)
+I (d:\Keil\ARM\ARMCC\include\stdio.h)(0x51C7C554)
 I (..\HARDWARE\SPI\spi.h)(0x554ACA1C)
 I (..\HARDWARE\A7139\A7139.h)(0x5631CEA7)
 I (..\HARDWARE\TIMER\timer.h)(0x5639781F)
@@ -550,15 +550,15 @@ I (..\Schdule\device.h)(0x5646C36E)
 I (..\Schdule\tdma.h)(0x5646C36E)
 I (..\HARDWARE\FLASH\flash.h)(0x555577D0)
 I (..\Schdule\upload.h)(0x564ABC75)
-I (..\Schdule\configure.h)(0x565EE20C)
+I (..\Schdule\configure.h)(0x567930CA)
 F (..\Schdule\beacon.h)(0x5646C36E)()
-F (..\Schdule\ProcessEvent.c)(0x5631DD40)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork -I..\HARDWARE\LED -I..\SYSTEM\delay -I..\SYSTEM\sys -I..\SYSTEM\usart -I..\USER -I..\STM32F10x_FWLib\inc -I..\CORE -I..\HARDWARE\KEY -I..\HARDWARE\LCD -I..\HARDWARE\RTC -I..\HARDWARE\RTC -I..\HARDWARE\WKUP -I..\HARDWARE\ADC -I..\HARDWARE\DAC -I..\HARDWARE\DMA -I..\HARDWARE\IIC -I..\HARDWARE\24CXX -I..\HARDWARE\SPI -I..\HARDWARE\FLASH -I..\HARDWARE -I..\HARDWARE\A7139 -I..\HARDWARE\TIMER -I..\STM32F10x_FWLib\inc -I..\HARDWARE\interrupt -I..\trsdata -I..\Schdule -I..\hardware\Flash-I "E:\Program Files (x86)\Keil\ARM\RV31\INC"-I "E:\Program Files (x86)\Keil\ARM\CMSIS\Include"-I "E:\Program Files (x86)\Keil\ARM\Inc\ST\STM32F10x"-DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER-o ..\obj\processevent.o --omf_browse ..\obj\processevent.crf --depend ..\obj\processevent.d)
+F (..\Schdule\ProcessEvent.c)(0x5631DD40)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork -I..\HARDWARE\LED -I..\SYSTEM\delay -I..\SYSTEM\sys -I..\SYSTEM\usart -I..\USER -I..\STM32F10x_FWLib\inc -I..\CORE -I..\HARDWARE\KEY -I..\HARDWARE\LCD -I..\HARDWARE\RTC -I..\HARDWARE\RTC -I..\HARDWARE\WKUP -I..\HARDWARE\ADC -I..\HARDWARE\DAC -I..\HARDWARE\DMA -I..\HARDWARE\IIC -I..\HARDWARE\24CXX -I..\HARDWARE\SPI -I..\HARDWARE\FLASH -I..\HARDWARE -I..\HARDWARE\A7139 -I..\HARDWARE\TIMER -I..\STM32F10x_FWLib\inc -I..\HARDWARE\interrupt -I..\trsdata -I..\Schdule -I..\hardware\Flash-I d:\Keil\ARM\RV31\INC-I d:\Keil\ARM\CMSIS\Include-I d:\Keil\ARM\Inc\ST\STM32F10x-DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER-o ..\obj\processevent.o --omf_browse ..\obj\processevent.crf --depend ..\obj\processevent.d)
 I (..\HARDWARE\common.h)(0x5646C36E)
 I (..\HARDWARE\LED\led.h)(0x562CDC0F)
 I (..\SYSTEM\sys\sys.h)(0x554858B6)
 I (..\USER\stm32f10x.h)(0x554858B6)
 I (..\CORE\core_cm3.h)(0x554858B5)
-I (E:\Program Files (x86)\Keil\ARM\ARMCC\include\stdint.h)(0x51C7C554)
+I (d:\Keil\ARM\ARMCC\include\stdint.h)(0x51C7C554)
 I (..\USER\system_stm32f10x.h)(0x554858B6)
 I (..\USER\stm32f10x_conf.h)(0x554858B6)
 I (..\STM32F10x_FWLib\inc\stm32f10x_fsmc.h)(0x554858B5)
@@ -571,7 +571,7 @@ I (..\STM32F10x_FWLib\inc\misc.h)(0x554858B5)
 I (..\SYSTEM\delay\delay.h)(0x554858B6)
 I (..\HARDWARE\KEY\key.h)(0x554858B5)
 I (..\SYSTEM\usart\usart.h)(0x5631CF2F)
-I (E:\Program Files (x86)\Keil\ARM\ARMCC\include\stdio.h)(0x51C7C554)
+I (d:\Keil\ARM\ARMCC\include\stdio.h)(0x51C7C554)
 I (..\HARDWARE\SPI\spi.h)(0x554ACA1C)
 I (..\HARDWARE\A7139\A7139.h)(0x5631CEA7)
 I (..\HARDWARE\TIMER\timer.h)(0x5639781F)
@@ -585,15 +585,15 @@ I (..\Schdule\device.h)(0x5646C36E)
 I (..\Schdule\tdma.h)(0x5646C36E)
 I (..\HARDWARE\FLASH\flash.h)(0x555577D0)
 I (..\Schdule\upload.h)(0x564ABC75)
-I (..\Schdule\configure.h)(0x565EE20C)
+I (..\Schdule\configure.h)(0x567930CA)
 F (..\Schdule\ProcessEvent.h)(0x5646C391)()
-F (..\Schdule\join.c)(0x5631B017)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork -I..\HARDWARE\LED -I..\SYSTEM\delay -I..\SYSTEM\sys -I..\SYSTEM\usart -I..\USER -I..\STM32F10x_FWLib\inc -I..\CORE -I..\HARDWARE\KEY -I..\HARDWARE\LCD -I..\HARDWARE\RTC -I..\HARDWARE\RTC -I..\HARDWARE\WKUP -I..\HARDWARE\ADC -I..\HARDWARE\DAC -I..\HARDWARE\DMA -I..\HARDWARE\IIC -I..\HARDWARE\24CXX -I..\HARDWARE\SPI -I..\HARDWARE\FLASH -I..\HARDWARE -I..\HARDWARE\A7139 -I..\HARDWARE\TIMER -I..\STM32F10x_FWLib\inc -I..\HARDWARE\interrupt -I..\trsdata -I..\Schdule -I..\hardware\Flash-I "E:\Program Files (x86)\Keil\ARM\RV31\INC"-I "E:\Program Files (x86)\Keil\ARM\CMSIS\Include"-I "E:\Program Files (x86)\Keil\ARM\Inc\ST\STM32F10x"-DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER-o ..\obj\join.o --omf_browse ..\obj\join.crf --depend ..\obj\join.d)
+F (..\Schdule\join.c)(0x5631B017)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork -I..\HARDWARE\LED -I..\SYSTEM\delay -I..\SYSTEM\sys -I..\SYSTEM\usart -I..\USER -I..\STM32F10x_FWLib\inc -I..\CORE -I..\HARDWARE\KEY -I..\HARDWARE\LCD -I..\HARDWARE\RTC -I..\HARDWARE\RTC -I..\HARDWARE\WKUP -I..\HARDWARE\ADC -I..\HARDWARE\DAC -I..\HARDWARE\DMA -I..\HARDWARE\IIC -I..\HARDWARE\24CXX -I..\HARDWARE\SPI -I..\HARDWARE\FLASH -I..\HARDWARE -I..\HARDWARE\A7139 -I..\HARDWARE\TIMER -I..\STM32F10x_FWLib\inc -I..\HARDWARE\interrupt -I..\trsdata -I..\Schdule -I..\hardware\Flash-I d:\Keil\ARM\RV31\INC-I d:\Keil\ARM\CMSIS\Include-I d:\Keil\ARM\Inc\ST\STM32F10x-DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER-o ..\obj\join.o --omf_browse ..\obj\join.crf --depend ..\obj\join.d)
 I (..\HARDWARE\common.h)(0x5646C36E)
 I (..\HARDWARE\LED\led.h)(0x562CDC0F)
 I (..\SYSTEM\sys\sys.h)(0x554858B6)
 I (..\USER\stm32f10x.h)(0x554858B6)
 I (..\CORE\core_cm3.h)(0x554858B5)
-I (E:\Program Files (x86)\Keil\ARM\ARMCC\include\stdint.h)(0x51C7C554)
+I (d:\Keil\ARM\ARMCC\include\stdint.h)(0x51C7C554)
 I (..\USER\system_stm32f10x.h)(0x554858B6)
 I (..\USER\stm32f10x_conf.h)(0x554858B6)
 I (..\STM32F10x_FWLib\inc\stm32f10x_fsmc.h)(0x554858B5)
@@ -606,7 +606,7 @@ I (..\STM32F10x_FWLib\inc\misc.h)(0x554858B5)
 I (..\SYSTEM\delay\delay.h)(0x554858B6)
 I (..\HARDWARE\KEY\key.h)(0x554858B5)
 I (..\SYSTEM\usart\usart.h)(0x5631CF2F)
-I (E:\Program Files (x86)\Keil\ARM\ARMCC\include\stdio.h)(0x51C7C554)
+I (d:\Keil\ARM\ARMCC\include\stdio.h)(0x51C7C554)
 I (..\HARDWARE\SPI\spi.h)(0x554ACA1C)
 I (..\HARDWARE\A7139\A7139.h)(0x5631CEA7)
 I (..\HARDWARE\TIMER\timer.h)(0x5639781F)
@@ -620,15 +620,15 @@ I (..\Schdule\device.h)(0x5646C36E)
 I (..\Schdule\tdma.h)(0x5646C36E)
 I (..\HARDWARE\FLASH\flash.h)(0x555577D0)
 I (..\Schdule\upload.h)(0x564ABC75)
-I (..\Schdule\configure.h)(0x565EE20C)
+I (..\Schdule\configure.h)(0x567930CA)
 F (..\Schdule\join.h)(0x56275F52)()
-F (..\Schdule\device.c)(0x5631B38E)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork -I..\HARDWARE\LED -I..\SYSTEM\delay -I..\SYSTEM\sys -I..\SYSTEM\usart -I..\USER -I..\STM32F10x_FWLib\inc -I..\CORE -I..\HARDWARE\KEY -I..\HARDWARE\LCD -I..\HARDWARE\RTC -I..\HARDWARE\RTC -I..\HARDWARE\WKUP -I..\HARDWARE\ADC -I..\HARDWARE\DAC -I..\HARDWARE\DMA -I..\HARDWARE\IIC -I..\HARDWARE\24CXX -I..\HARDWARE\SPI -I..\HARDWARE\FLASH -I..\HARDWARE -I..\HARDWARE\A7139 -I..\HARDWARE\TIMER -I..\STM32F10x_FWLib\inc -I..\HARDWARE\interrupt -I..\trsdata -I..\Schdule -I..\hardware\Flash-I "E:\Program Files (x86)\Keil\ARM\RV31\INC"-I "E:\Program Files (x86)\Keil\ARM\CMSIS\Include"-I "E:\Program Files (x86)\Keil\ARM\Inc\ST\STM32F10x"-DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER-o ..\obj\device.o --omf_browse ..\obj\device.crf --depend ..\obj\device.d)
+F (..\Schdule\device.c)(0x5631B38E)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork -I..\HARDWARE\LED -I..\SYSTEM\delay -I..\SYSTEM\sys -I..\SYSTEM\usart -I..\USER -I..\STM32F10x_FWLib\inc -I..\CORE -I..\HARDWARE\KEY -I..\HARDWARE\LCD -I..\HARDWARE\RTC -I..\HARDWARE\RTC -I..\HARDWARE\WKUP -I..\HARDWARE\ADC -I..\HARDWARE\DAC -I..\HARDWARE\DMA -I..\HARDWARE\IIC -I..\HARDWARE\24CXX -I..\HARDWARE\SPI -I..\HARDWARE\FLASH -I..\HARDWARE -I..\HARDWARE\A7139 -I..\HARDWARE\TIMER -I..\STM32F10x_FWLib\inc -I..\HARDWARE\interrupt -I..\trsdata -I..\Schdule -I..\hardware\Flash-I d:\Keil\ARM\RV31\INC-I d:\Keil\ARM\CMSIS\Include-I d:\Keil\ARM\Inc\ST\STM32F10x-DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER-o ..\obj\device.o --omf_browse ..\obj\device.crf --depend ..\obj\device.d)
 I (..\HARDWARE\common.h)(0x5646C36E)
 I (..\HARDWARE\LED\led.h)(0x562CDC0F)
 I (..\SYSTEM\sys\sys.h)(0x554858B6)
 I (..\USER\stm32f10x.h)(0x554858B6)
 I (..\CORE\core_cm3.h)(0x554858B5)
-I (E:\Program Files (x86)\Keil\ARM\ARMCC\include\stdint.h)(0x51C7C554)
+I (d:\Keil\ARM\ARMCC\include\stdint.h)(0x51C7C554)
 I (..\USER\system_stm32f10x.h)(0x554858B6)
 I (..\USER\stm32f10x_conf.h)(0x554858B6)
 I (..\STM32F10x_FWLib\inc\stm32f10x_fsmc.h)(0x554858B5)
@@ -641,7 +641,7 @@ I (..\STM32F10x_FWLib\inc\misc.h)(0x554858B5)
 I (..\SYSTEM\delay\delay.h)(0x554858B6)
 I (..\HARDWARE\KEY\key.h)(0x554858B5)
 I (..\SYSTEM\usart\usart.h)(0x5631CF2F)
-I (E:\Program Files (x86)\Keil\ARM\ARMCC\include\stdio.h)(0x51C7C554)
+I (d:\Keil\ARM\ARMCC\include\stdio.h)(0x51C7C554)
 I (..\HARDWARE\SPI\spi.h)(0x554ACA1C)
 I (..\HARDWARE\A7139\A7139.h)(0x5631CEA7)
 I (..\HARDWARE\TIMER\timer.h)(0x5639781F)
@@ -655,15 +655,15 @@ I (..\Schdule\device.h)(0x5646C36E)
 I (..\Schdule\tdma.h)(0x5646C36E)
 I (..\HARDWARE\FLASH\flash.h)(0x555577D0)
 I (..\Schdule\upload.h)(0x564ABC75)
-I (..\Schdule\configure.h)(0x565EE20C)
+I (..\Schdule\configure.h)(0x567930CA)
 F (..\Schdule\device.h)(0x5646C36E)()
-F (..\Schdule\tdma.c)(0x565D590E)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork -I..\HARDWARE\LED -I..\SYSTEM\delay -I..\SYSTEM\sys -I..\SYSTEM\usart -I..\USER -I..\STM32F10x_FWLib\inc -I..\CORE -I..\HARDWARE\KEY -I..\HARDWARE\LCD -I..\HARDWARE\RTC -I..\HARDWARE\RTC -I..\HARDWARE\WKUP -I..\HARDWARE\ADC -I..\HARDWARE\DAC -I..\HARDWARE\DMA -I..\HARDWARE\IIC -I..\HARDWARE\24CXX -I..\HARDWARE\SPI -I..\HARDWARE\FLASH -I..\HARDWARE -I..\HARDWARE\A7139 -I..\HARDWARE\TIMER -I..\STM32F10x_FWLib\inc -I..\HARDWARE\interrupt -I..\trsdata -I..\Schdule -I..\hardware\Flash-I "E:\Program Files (x86)\Keil\ARM\RV31\INC"-I "E:\Program Files (x86)\Keil\ARM\CMSIS\Include"-I "E:\Program Files (x86)\Keil\ARM\Inc\ST\STM32F10x"-DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER-o ..\obj\tdma.o --omf_browse ..\obj\tdma.crf --depend ..\obj\tdma.d)
+F (..\Schdule\tdma.c)(0x565D590E)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork -I..\HARDWARE\LED -I..\SYSTEM\delay -I..\SYSTEM\sys -I..\SYSTEM\usart -I..\USER -I..\STM32F10x_FWLib\inc -I..\CORE -I..\HARDWARE\KEY -I..\HARDWARE\LCD -I..\HARDWARE\RTC -I..\HARDWARE\RTC -I..\HARDWARE\WKUP -I..\HARDWARE\ADC -I..\HARDWARE\DAC -I..\HARDWARE\DMA -I..\HARDWARE\IIC -I..\HARDWARE\24CXX -I..\HARDWARE\SPI -I..\HARDWARE\FLASH -I..\HARDWARE -I..\HARDWARE\A7139 -I..\HARDWARE\TIMER -I..\STM32F10x_FWLib\inc -I..\HARDWARE\interrupt -I..\trsdata -I..\Schdule -I..\hardware\Flash-I d:\Keil\ARM\RV31\INC-I d:\Keil\ARM\CMSIS\Include-I d:\Keil\ARM\Inc\ST\STM32F10x-DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER-o ..\obj\tdma.o --omf_browse ..\obj\tdma.crf --depend ..\obj\tdma.d)
 I (..\HARDWARE\common.h)(0x5646C36E)
 I (..\HARDWARE\LED\led.h)(0x562CDC0F)
 I (..\SYSTEM\sys\sys.h)(0x554858B6)
 I (..\USER\stm32f10x.h)(0x554858B6)
 I (..\CORE\core_cm3.h)(0x554858B5)
-I (E:\Program Files (x86)\Keil\ARM\ARMCC\include\stdint.h)(0x51C7C554)
+I (d:\Keil\ARM\ARMCC\include\stdint.h)(0x51C7C554)
 I (..\USER\system_stm32f10x.h)(0x554858B6)
 I (..\USER\stm32f10x_conf.h)(0x554858B6)
 I (..\STM32F10x_FWLib\inc\stm32f10x_fsmc.h)(0x554858B5)
@@ -676,7 +676,7 @@ I (..\STM32F10x_FWLib\inc\misc.h)(0x554858B5)
 I (..\SYSTEM\delay\delay.h)(0x554858B6)
 I (..\HARDWARE\KEY\key.h)(0x554858B5)
 I (..\SYSTEM\usart\usart.h)(0x5631CF2F)
-I (E:\Program Files (x86)\Keil\ARM\ARMCC\include\stdio.h)(0x51C7C554)
+I (d:\Keil\ARM\ARMCC\include\stdio.h)(0x51C7C554)
 I (..\HARDWARE\SPI\spi.h)(0x554ACA1C)
 I (..\HARDWARE\A7139\A7139.h)(0x5631CEA7)
 I (..\HARDWARE\TIMER\timer.h)(0x5639781F)
@@ -690,15 +690,15 @@ I (..\Schdule\device.h)(0x5646C36E)
 I (..\Schdule\tdma.h)(0x5646C36E)
 I (..\HARDWARE\FLASH\flash.h)(0x555577D0)
 I (..\Schdule\upload.h)(0x564ABC75)
-I (..\Schdule\configure.h)(0x565EE20C)
+I (..\Schdule\configure.h)(0x567930CA)
 F (..\Schdule\tdma.h)(0x5646C36E)()
-F (..\Schdule\upload.c)(0x565D1CA9)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork -I..\HARDWARE\LED -I..\SYSTEM\delay -I..\SYSTEM\sys -I..\SYSTEM\usart -I..\USER -I..\STM32F10x_FWLib\inc -I..\CORE -I..\HARDWARE\KEY -I..\HARDWARE\LCD -I..\HARDWARE\RTC -I..\HARDWARE\RTC -I..\HARDWARE\WKUP -I..\HARDWARE\ADC -I..\HARDWARE\DAC -I..\HARDWARE\DMA -I..\HARDWARE\IIC -I..\HARDWARE\24CXX -I..\HARDWARE\SPI -I..\HARDWARE\FLASH -I..\HARDWARE -I..\HARDWARE\A7139 -I..\HARDWARE\TIMER -I..\STM32F10x_FWLib\inc -I..\HARDWARE\interrupt -I..\trsdata -I..\Schdule -I..\hardware\Flash-I "E:\Program Files (x86)\Keil\ARM\RV31\INC"-I "E:\Program Files (x86)\Keil\ARM\CMSIS\Include"-I "E:\Program Files (x86)\Keil\ARM\Inc\ST\STM32F10x"-DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER-o ..\obj\upload.o --omf_browse ..\obj\upload.crf --depend ..\obj\upload.d)
+F (..\Schdule\upload.c)(0x565D1CA9)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork -I..\HARDWARE\LED -I..\SYSTEM\delay -I..\SYSTEM\sys -I..\SYSTEM\usart -I..\USER -I..\STM32F10x_FWLib\inc -I..\CORE -I..\HARDWARE\KEY -I..\HARDWARE\LCD -I..\HARDWARE\RTC -I..\HARDWARE\RTC -I..\HARDWARE\WKUP -I..\HARDWARE\ADC -I..\HARDWARE\DAC -I..\HARDWARE\DMA -I..\HARDWARE\IIC -I..\HARDWARE\24CXX -I..\HARDWARE\SPI -I..\HARDWARE\FLASH -I..\HARDWARE -I..\HARDWARE\A7139 -I..\HARDWARE\TIMER -I..\STM32F10x_FWLib\inc -I..\HARDWARE\interrupt -I..\trsdata -I..\Schdule -I..\hardware\Flash-I d:\Keil\ARM\RV31\INC-I d:\Keil\ARM\CMSIS\Include-I d:\Keil\ARM\Inc\ST\STM32F10x-DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER-o ..\obj\upload.o --omf_browse ..\obj\upload.crf --depend ..\obj\upload.d)
 I (..\HARDWARE\common.h)(0x5646C36E)
 I (..\HARDWARE\LED\led.h)(0x562CDC0F)
 I (..\SYSTEM\sys\sys.h)(0x554858B6)
 I (..\USER\stm32f10x.h)(0x554858B6)
 I (..\CORE\core_cm3.h)(0x554858B5)
-I (E:\Program Files (x86)\Keil\ARM\ARMCC\include\stdint.h)(0x51C7C554)
+I (d:\Keil\ARM\ARMCC\include\stdint.h)(0x51C7C554)
 I (..\USER\system_stm32f10x.h)(0x554858B6)
 I (..\USER\stm32f10x_conf.h)(0x554858B6)
 I (..\STM32F10x_FWLib\inc\stm32f10x_fsmc.h)(0x554858B5)
@@ -711,7 +711,7 @@ I (..\STM32F10x_FWLib\inc\misc.h)(0x554858B5)
 I (..\SYSTEM\delay\delay.h)(0x554858B6)
 I (..\HARDWARE\KEY\key.h)(0x554858B5)
 I (..\SYSTEM\usart\usart.h)(0x5631CF2F)
-I (E:\Program Files (x86)\Keil\ARM\ARMCC\include\stdio.h)(0x51C7C554)
+I (d:\Keil\ARM\ARMCC\include\stdio.h)(0x51C7C554)
 I (..\HARDWARE\SPI\spi.h)(0x554ACA1C)
 I (..\HARDWARE\A7139\A7139.h)(0x5631CEA7)
 I (..\HARDWARE\TIMER\timer.h)(0x5639781F)
@@ -725,5 +725,5 @@ I (..\Schdule\device.h)(0x5646C36E)
 I (..\Schdule\tdma.h)(0x5646C36E)
 I (..\HARDWARE\FLASH\flash.h)(0x555577D0)
 I (..\Schdule\upload.h)(0x564ABC75)
-I (..\Schdule\configure.h)(0x565EE20C)
+I (..\Schdule\configure.h)(0x567930CA)
 F (..\Schdule\upload.h)(0x564ABC75)()

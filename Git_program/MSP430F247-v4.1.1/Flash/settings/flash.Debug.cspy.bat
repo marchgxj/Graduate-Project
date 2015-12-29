@@ -25,7 +25,7 @@ if not "%1" == "" goto debugFile
 
 @echo on 
 
-"E:\Program Files (x86)\IAR Systems\Embedded Workbench MSP430 7.2\common\bin\cspybat" -f "F:\Graduate\Git_program\MSP430F247-v4.1\Flash\settings\flash.Debug.general.xcl" --backend -f "F:\Graduate\Git_program\MSP430F247-v4.1\Flash\settings\flash.Debug.driver.xcl" 
+"D:\IAR Systems\MSP430\Embedded Workbench 7.2\common\bin\cspybat" -f "F:\Graduate\Git_program\MSP430F247-v4.1.1\Flash\settings\flash.Debug.general.xcl" --backend -f "F:\Graduate\Git_program\MSP430F247-v4.1.1\Flash\settings\flash.Debug.driver.xcl" 
 
 @echo off 
 goto end 
@@ -34,7 +34,7 @@ goto end
 
 @echo on 
 
-"E:\Program Files (x86)\IAR Systems\Embedded Workbench MSP430 7.2\common\bin\cspybat" -f "F:\Graduate\Git_program\MSP430F247-v4.1\Flash\settings\flash.Debug.general.xcl" "--debug_file=%1" --backend -f "F:\Graduate\Git_program\MSP430F247-v4.1\Flash\settings\flash.Debug.driver.xcl" 
+"D:\IAR Systems\MSP430\Embedded Workbench 7.2\common\bin\cspybat" -f "F:\Graduate\Git_program\MSP430F247-v4.1.1\Flash\settings\flash.Debug.general.xcl" "--debug_file=%1" --backend -f "F:\Graduate\Git_program\MSP430F247-v4.1.1\Flash\settings\flash.Debug.driver.xcl" 
 
 @echo off 
 :end

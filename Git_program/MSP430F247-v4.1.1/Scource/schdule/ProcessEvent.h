@@ -36,6 +36,7 @@
 #define    EVENT_MCUSLEEP_ENABLE          27
 #define    EVENT_CMD_HANDLER              28
 #define    EVENT_LINK_SEND                29
+#define    EVENT_5983_RESET               30
 
 
 extern void Init_TQ(void);

@@ -4,7 +4,7 @@
 ..\obj\beacon.o: ..\SYSTEM\sys\sys.h
 ..\obj\beacon.o: ..\USER\stm32f10x.h
 ..\obj\beacon.o: ..\CORE\core_cm3.h
-..\obj\beacon.o: E:\Program Files (x86)\Keil\ARM\ARMCC\bin\..\include\stdint.h
+..\obj\beacon.o: d:\Keil\ARM\ARMCC\bin\..\include\stdint.h
 ..\obj\beacon.o: ..\USER\system_stm32f10x.h
 ..\obj\beacon.o: ..\USER\stm32f10x_conf.h
 ..\obj\beacon.o: ..\STM32F10x_FWLib\inc\stm32f10x_fsmc.h
@@ -18,7 +18,7 @@
 ..\obj\beacon.o: ..\SYSTEM\delay\delay.h
 ..\obj\beacon.o: ..\HARDWARE\KEY\key.h
 ..\obj\beacon.o: ..\SYSTEM\usart\usart.h
-..\obj\beacon.o: E:\Program Files (x86)\Keil\ARM\ARMCC\bin\..\include\stdio.h
+..\obj\beacon.o: d:\Keil\ARM\ARMCC\bin\..\include\stdio.h
 ..\obj\beacon.o: ..\HARDWARE\SPI\spi.h
 ..\obj\beacon.o: ..\HARDWARE\A7139\A7139.h
 ..\obj\beacon.o: ..\HARDWARE\common.h

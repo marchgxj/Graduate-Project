@@ -2,7 +2,7 @@
 ..\obj\sys.o: ..\SYSTEM\sys\sys.h
 ..\obj\sys.o: ..\USER\stm32f10x.h
 ..\obj\sys.o: ..\CORE\core_cm3.h
-..\obj\sys.o: E:\Program Files (x86)\Keil\ARM\ARMCC\bin\..\include\stdint.h
+..\obj\sys.o: d:\Keil\ARM\ARMCC\bin\..\include\stdint.h
 ..\obj\sys.o: ..\USER\system_stm32f10x.h
 ..\obj\sys.o: ..\USER\stm32f10x_conf.h
 ..\obj\sys.o: ..\STM32F10x_FWLib\inc\stm32f10x_fsmc.h
@@ -18,7 +18,7 @@
 ..\obj\sys.o: ..\SYSTEM\delay\delay.h
 ..\obj\sys.o: ..\HARDWARE\KEY\key.h
 ..\obj\sys.o: ..\SYSTEM\usart\usart.h
-..\obj\sys.o: E:\Program Files (x86)\Keil\ARM\ARMCC\bin\..\include\stdio.h
+..\obj\sys.o: d:\Keil\ARM\ARMCC\bin\..\include\stdio.h
 ..\obj\sys.o: ..\HARDWARE\SPI\spi.h
 ..\obj\sys.o: ..\HARDWARE\A7139\A7139.h
 ..\obj\sys.o: ..\HARDWARE\common.h

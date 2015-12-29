@@ -4,7 +4,7 @@
 ..\obj\tdma.o: ..\SYSTEM\sys\sys.h
 ..\obj\tdma.o: ..\USER\stm32f10x.h
 ..\obj\tdma.o: ..\CORE\core_cm3.h
-..\obj\tdma.o: E:\Program Files (x86)\Keil\ARM\ARMCC\bin\..\include\stdint.h
+..\obj\tdma.o: d:\Keil\ARM\ARMCC\bin\..\include\stdint.h
 ..\obj\tdma.o: ..\USER\system_stm32f10x.h
 ..\obj\tdma.o: ..\USER\stm32f10x_conf.h
 ..\obj\tdma.o: ..\STM32F10x_FWLib\inc\stm32f10x_fsmc.h
@@ -18,7 +18,7 @@
 ..\obj\tdma.o: ..\SYSTEM\delay\delay.h
 ..\obj\tdma.o: ..\HARDWARE\KEY\key.h
 ..\obj\tdma.o: ..\SYSTEM\usart\usart.h
-..\obj\tdma.o: E:\Program Files (x86)\Keil\ARM\ARMCC\bin\..\include\stdio.h
+..\obj\tdma.o: d:\Keil\ARM\ARMCC\bin\..\include\stdio.h
 ..\obj\tdma.o: ..\HARDWARE\SPI\spi.h
 ..\obj\tdma.o: ..\HARDWARE\A7139\A7139.h
 ..\obj\tdma.o: ..\HARDWARE\common.h

@@ -358,7 +358,7 @@ void Multi_Read_HMC(uint16* XValue,uint16* YValue,uint16* ZValue)
     {
         *XValue = 0;
     }
-    if(yvalue!=-4096)
+    if(zvalue!=-4096)
     {
         *YValue = zvalue + 2048;
     }
@@ -366,7 +366,7 @@ void Multi_Read_HMC(uint16* XValue,uint16* YValue,uint16* ZValue)
     {
         *YValue = 0;
     }
-    if(zvalue!=-4096)
+    if(yvalue!=-4096)
     {
         *ZValue = yvalue + 2048;
     }
@@ -375,11 +375,6 @@ void Multi_Read_HMC(uint16* XValue,uint16* YValue,uint16* ZValue)
         *ZValue = 0;
     }
 }
-
-
-
-
-
 
 
 void Init_HMC(uint8* buffer)
@@ -420,7 +415,7 @@ void Init_5983()
 #endif
     IRD_HIGH;
     //delay_ms(10000);
-    delay_ms(1000);
+    delay_ms(100);
     Init_HMC(buffer);
     if((buffer[0]!=HMC_Config[0])||(buffer[1]!=HMC_Config[1])||buffer[2]!=HMC_Config[2])
     {

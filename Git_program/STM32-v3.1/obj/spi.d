@@ -3,7 +3,7 @@
 ..\obj\spi.o: ..\SYSTEM\sys\sys.h
 ..\obj\spi.o: ..\USER\stm32f10x.h
 ..\obj\spi.o: ..\CORE\core_cm3.h
-..\obj\spi.o: E:\Program Files (x86)\Keil\ARM\ARMCC\bin\..\include\stdint.h
+..\obj\spi.o: d:\Keil\ARM\ARMCC\bin\..\include\stdint.h
 ..\obj\spi.o: ..\USER\system_stm32f10x.h
 ..\obj\spi.o: ..\USER\stm32f10x_conf.h
 ..\obj\spi.o: ..\STM32F10x_FWLib\inc\stm32f10x_fsmc.h
@@ -19,7 +19,7 @@
 ..\obj\spi.o: ..\SYSTEM\delay\delay.h
 ..\obj\spi.o: ..\HARDWARE\KEY\key.h
 ..\obj\spi.o: ..\SYSTEM\usart\usart.h
-..\obj\spi.o: E:\Program Files (x86)\Keil\ARM\ARMCC\bin\..\include\stdio.h
+..\obj\spi.o: d:\Keil\ARM\ARMCC\bin\..\include\stdio.h
 ..\obj\spi.o: ..\HARDWARE\A7139\A7139.h
 ..\obj\spi.o: ..\HARDWARE\common.h
 ..\obj\spi.o: ..\HARDWARE\TIMER\timer.h
