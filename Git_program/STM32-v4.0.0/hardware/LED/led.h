@@ -3,32 +3,32 @@
 #define __LED_H	 
 #include "sys.h"
 
-#define LED0_ON() PDout(0)=0
-#define LED1_ON() PDout(1)=0
-#define LED2_ON() PDout(2)=0
-#define LED3_ON() PDout(3)=0
-#define LED4_ON() PDout(4)=0
-#define LED5_ON() PDout(5)=0
-#define LED6_ON() PDout(6)=0
-#define LED0_OFF() PDout(0)=1
-#define LED1_OFF() PDout(1)=1
-#define LED2_OFF() PDout(2)=1
-#define LED3_OFF() PDout(3)=1
-#define LED4_OFF() PDout(4)=1
-#define LED5_OFF() PDout(5)=1
-#define LED6_OFF() PDout(6)=1
-#define LED0_REV() PDout(0)^=1
-#define LED1_REV() PDout(1)^=1
-#define LED2_REV() PDout(2)^=1
-#define LED3_REV() PDout(3)^=1
-#define LED4_REV() PDout(4)^=1
-#define LED5_REV() PDout(5)^=1
-#define LED6_REV() PDout(6)^=1
+#define LED0_ON() PAout(0)=0
+#define LED1_ON() PAout(1)=0
+#define LED2_ON() PAout(2)=0
+#define LED3_ON() PAout(3)=0
+#define LED4_ON() PAout(4)=0
+#define LED5_ON() PAout(5)=0
+#define LED6_ON() PAout(6)=0
+#define LED7_ON() PAout(7)=0
 
-#define TIME1_LOW  PCout(2) = 0
-#define TIME1_HIGH PCout(2) = 1
-#define TIME2_LOW  PCout(3) = 0
-#define TIME2_HIGH PCout(3) = 1
+#define LED0_OFF() PAout(0)=1
+#define LED1_OFF() PAout(1)=1
+#define LED2_OFF() PAout(2)=1
+#define LED3_OFF() PAout(3)=1
+#define LED4_OFF() PAout(4)=1
+#define LED5_OFF() PAout(5)=1
+#define LED6_OFF() PAout(6)=1
+#define LED7_OFF() PAout(7)=1
+
+#define LED0_REV() PAout(0)^=1
+#define LED1_REV() PAout(1)^=1
+#define LED2_REV() PAout(2)^=1
+#define LED3_REV() PAout(3)^=1
+#define LED4_REV() PAout(4)^=1
+#define LED5_REV() PAout(5)^=1
+#define LED6_REV() PAout(6)^=1
+#define LED7_REV() PAout(7)^=1
 void LED_Init(void);//≥ı ºªØ
 	 				    
 #endif

@@ -791,6 +791,9 @@ void NoCarCalibration()
         xmiddle = xsum >> 2;
         ymiddle = ysum >> 2;
         zmiddle = zsum >> 2;
+        MagneticUnit.XMiddle = (uint16)(xmiddle);
+        MagneticUnit.YMiddle = (uint16)(ymiddle);
+        MagneticUnit.ZMiddle = (uint16)(zmiddle);
     }
     else
     {
@@ -804,9 +807,9 @@ void NoCarCalibration()
         GMI_ADY = GMI_ADY/count1;
     }
     
-    xdrift = (int)(xmiddle - MagneticUnit.XMiddleMF);
-    ydrift = (int)(ymiddle - MagneticUnit.YMiddleMF);
-    zdrift = (int)(zmiddle - MagneticUnit.ZMiddleMF);
+//    xdrift = (int)(xmiddle - MagneticUnit.XMiddleMF);
+//    ydrift = (int)(ymiddle - MagneticUnit.YMiddleMF);
+//    zdrift = (int)(zmiddle - MagneticUnit.ZMiddleMF);
 
 //    if(abs(xdrift) < 5)
 //    {
@@ -861,34 +864,34 @@ void NoCarCalibration()
 //        Int_Threshold = INT_THRESHOLD + 5;
 //    }
 
-    MagneticUnit.XMiddle = (uint16)(MagneticUnit.XMiddle + xdrift);
-    MagneticUnit.YMiddle = (uint16)(MagneticUnit.YMiddle + ydrift);
-    MagneticUnit.ZMiddle = (uint16)(MagneticUnit.ZMiddle + zdrift);
+//    MagneticUnit.XMiddle = (uint16)(MagneticUnit.XMiddle + xdrift);
+//    MagneticUnit.YMiddle = (uint16)(MagneticUnit.YMiddle + ydrift);
+//    MagneticUnit.ZMiddle = (uint16)(MagneticUnit.ZMiddle + zdrift);
     
-    if(abs(GMI_ADX - MagneticUnit.GMI_XMiddleM)<100)
-    {
-        MagneticUnit.GMI_XMiddle = GMI_ADX;
-    }
-    else if(abs(GMI_ADX - MagneticUnit.GMI_XMiddleM)<200)
-    {
-        MagneticUnit.GMI_XMiddle = (MagneticUnit.GMI_XMiddleM + GMI_ADX)>>1;
-    }
-    else if(abs(GMI_ADX - MagneticUnit.GMI_XMiddleM)<300)
-    {
-        MagneticUnit.GMI_XMiddle = (MagneticUnit.GMI_XMiddleM << 1 + GMI_ADX)/3;
-    }
-    if(abs(GMI_ADY - MagneticUnit.GMI_YMiddleM)<100)
-    {
-        MagneticUnit.GMI_YMiddle = GMI_ADY;
-    }
-    else if(abs(GMI_ADY - MagneticUnit.GMI_YMiddleM)<150)
-    {
-        MagneticUnit.GMI_YMiddle = (MagneticUnit.GMI_YMiddleM + GMI_ADY)>>1;
-    }
-    else if(abs(GMI_ADY - MagneticUnit.GMI_YMiddleM)<200)
-    {
-        MagneticUnit.GMI_YMiddle = (MagneticUnit.GMI_YMiddleM << 1 + GMI_ADY)/3;
-    }
+//    if(abs(GMI_ADX - MagneticUnit.GMI_XMiddleM)<100)
+//    {
+//        MagneticUnit.GMI_XMiddle = GMI_ADX;
+//    }
+//    else if(abs(GMI_ADX - MagneticUnit.GMI_XMiddleM)<200)
+//    {
+//        MagneticUnit.GMI_XMiddle = (MagneticUnit.GMI_XMiddleM + GMI_ADX)>>1;
+//    }
+//    else if(abs(GMI_ADX - MagneticUnit.GMI_XMiddleM)<300)
+//    {
+//        MagneticUnit.GMI_XMiddle = (MagneticUnit.GMI_XMiddleM << 1 + GMI_ADX)/3;
+//    }
+//    if(abs(GMI_ADY - MagneticUnit.GMI_YMiddleM)<100)
+//    {
+//        MagneticUnit.GMI_YMiddle = GMI_ADY;
+//    }
+//    else if(abs(GMI_ADY - MagneticUnit.GMI_YMiddleM)<150)
+//    {
+//        MagneticUnit.GMI_YMiddle = (MagneticUnit.GMI_YMiddleM + GMI_ADY)>>1;
+//    }
+//    else if(abs(GMI_ADY - MagneticUnit.GMI_YMiddleM)<200)
+//    {
+//        MagneticUnit.GMI_YMiddle = (MagneticUnit.GMI_YMiddleM << 1 + GMI_ADY)/3;
+//    }
     
     MagneticUnit.Ext_Middle = abs(MagneticUnit.XMiddle-MagneticUnit.YMiddle);
     

@@ -19,13 +19,13 @@ extern void SPIx_WriteWord(u16 wrd);
 extern u16 SPIx_ReadWord(void);
 extern u8 SPIx_ReadByte(void);
 extern void GO_Init(void);
-#define SCK PAout(5)
-#define SCS PAout(4)
-#define MOSI PAout(6)
-#define MOSI_DATA GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_6)
-#define GIO2		  GPIO_ReadInputDataBit(GPIOB,GPIO_Pin_6)
-#define GIO1		  GPIO_ReadInputDataBit(GPIOC,GPIO_Pin_1)
-//#define GIO2		  PBout(5)
+#define SCS PBout(5)
+#define SCK PBout(6)
+#define MOSI PBout(7)
+#define MOSI_DATA GPIO_ReadInputDataBit(GPIOB,GPIO_Pin_7)
+////#define GIO2		  GPIO_ReadInputDataBit(GPIOB,GPIO_Pin_10)
+#define GIO1		  GPIO_ReadInputDataBit(GPIOB,GPIO_Pin_8)
+////#define GIO2		  PBout(5)
 
 		 
 #endif

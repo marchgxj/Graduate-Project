@@ -19,10 +19,11 @@ void Interrupt_Init(void)
 		NVIC_InitTypeDef NVIC_InitStructure;
 
   	RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO,ENABLE);							//使能复用功能时钟
+    EXTI_ClearITPendingBit(EXTI_Line9);
 
 		//GPIOA.0 中断线以及中断初始化配置 上升沿触发 PA0  WK_UP
-		GPIO_EXTILineConfig(GPIO_PortSourceGPIOB,GPIO_PinSource6); 
-		EXTI_InitStructure.EXTI_Line=EXTI_Line6;
+		GPIO_EXTILineConfig(GPIO_PortSourceGPIOB,GPIO_PinSource9); 
+		EXTI_InitStructure.EXTI_Line=EXTI_Line9;
 		EXTI_InitStructure.EXTI_Mode = EXTI_Mode_Interrupt;	
   	EXTI_InitStructure.EXTI_Trigger = EXTI_Trigger_Rising;
 		EXTI_InitStructure.EXTI_LineCmd = ENABLE;
@@ -132,7 +133,7 @@ void TIM4_IRQHandler(void)   //100us
 uint8 rssisee = 0;
 void EXTI9_5_IRQHandler(void)
 {
-    EXTI->PR |= EXTI_Line6;
+    EXTI->PR |= EXTI_Line9;
 		
     A7139_ReadFIFO(DataRecvBuffer,MAX_PACK_LENGTH);
 		
@@ -189,6 +190,6 @@ void EnableInterrupt()
 {
 		TIM_ClearITPendingBit(TIM3, TIM_IT_Update);
 		USART_ClearFlag(USART1 , USART_FLAG_RXNE);
-		EXTI->PR |= EXTI_Line6;
+		EXTI->PR |= EXTI_Line9;
 		__enable_irq(); 
 }
