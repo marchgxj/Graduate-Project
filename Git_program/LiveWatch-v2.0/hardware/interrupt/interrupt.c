@@ -142,6 +142,8 @@ void EXTI9_5_IRQHandler(void)
 		Usart1_PutChar(DataRecv[43]);
 		Usart1_PutChar(DataRecv[44]);
 		Usart1_PutChar(DataRecv[45]);
+		Usart1_PutChar(DataRecv[46]);
+		Usart1_PutChar(DataRecv[47]);
 		LED1_REV();
    
 }

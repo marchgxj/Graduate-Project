@@ -91,4 +91,6 @@ extern void RXMode(void);
 extern void SendPack(u8 *buf);
 extern u8 A7139_SetDataRate(u8 datRate);
 extern void A7139_Reset(void);
+extern void A7139_SetFreq(float rfFreq);
+extern u8 A7139_Cal(void);
 #endif

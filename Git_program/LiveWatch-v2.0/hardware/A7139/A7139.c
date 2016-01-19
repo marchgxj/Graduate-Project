@@ -110,7 +110,7 @@ void Err_State(void)
 			delay_ms(1000);
 		}
 }
-static u8 A7139_Cal(void)
+u8 A7139_Cal(void)
 {
 	u8  fbcf;	//IF Filter
 	u8  vbcf;	//VCO Current

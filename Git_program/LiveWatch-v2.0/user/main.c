@@ -6,6 +6,12 @@ int main(void)
 	  uint8 test[64],i;
 		DisableInterrupt();
 		sys_init();
+		A7139_SetPackLen(MAX_PACK_LENGTH);
+    delay_us(1);
+		A7139_SetFreq(477.001f);
+    delay_ms(10);
+    A7139_Cal();                    
+    delay_ms(10);
 		EnableInterrupt();
 	  for(;;)
 		{
