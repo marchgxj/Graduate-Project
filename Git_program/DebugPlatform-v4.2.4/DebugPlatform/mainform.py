@@ -882,8 +882,12 @@ class Application(ttk.Notebook):
             settings["data"]= self.identifydataToAxis(self.algorithm_dirpath,self.filenames)[0]
             settings["display"] = dot_check.get()
             settings["source"] = [sourcex.get(),sourcey.get(),sourcez.get()]
-            algorithm_object = algorithm.Algotithm(settings,self)
-            self.root.status.setstatus("开始运行%s算法",algorithm_method_combobox.get().decode("GB2312").encode("UTF-8"))
+            self.algorithm_object = algorithm.Algotithm(settings,self)
+            self.root.status.setstatus(
+                "开始运行%s算法",
+                algorithm_method_combobox.get().decode("GB2312").encode("UTF-8")
+            )
+            self.updateAlgorithmlabel()
 
 
         def _draw():
@@ -939,8 +943,8 @@ class Application(ttk.Notebook):
         algorithm_method_combobox = ttk.Combobox(settings_frame)
         algorithm_method_combobox.grid(row=1,column=1,sticky=tk.W)
         # algorithm_method.bind("<<ComboboxSelected>>", self.IsOpen)
-        algorithm_method_combobox['value'] = ["切线坐标"]
-        algorithm_method_combobox.set("切线坐标")
+        algorithm_method_combobox['value'] = ["切线坐标","直径","周长","紧致度"]
+        algorithm_method_combobox.set("紧致度")
 
 
         datapathbutton = ttk.Button(settings_frame, text="选择数据文件", command=_opendata)
@@ -1022,102 +1026,79 @@ class Application(ttk.Notebook):
         draw3dbutton = ttk.Button(analysis_frame, text="绘制图像", command=_draw)
         draw3dbutton.grid(row=3,column=3)
 
-        #变量显示
+        #Lavel init
+
         variable_show_frame = tk.LabelFrame(self.tab8, text="变量显示")
         variable_show_frame.grid(row=0,column=0,rowspan=2,columnspan=10, sticky=tk.S+tk.N+tk.E+tk.W)
         for i in range(10):
             variable_show_frame.columnconfigure(i, weight=1)
         rowandcloumn = 0
         self.v00Label = tk.StringVar()
-        tk.Label(variable_show_frame, textvariable=self.v00Label).grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
+        self.afterLabel = tk.Label(variable_show_frame, textvariable=self.v00Label).grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
         rowandcloumn += 1
         self.v00String = tk.StringVar()
         tk.Label(variable_show_frame,
                  text="0", textvariable=self.v00String,
-                 width=4
                  ).grid(
-            row=rowandcloumn / 10,
-            column=rowandcloumn % 10
+            row=rowandcloumn / 2,
+            column=rowandcloumn % 2,
+            columnspan=9
         )
         rowandcloumn += 1
-        self.v00String.set(0)
-        self.v00Label.set("Label00:")
+        self.v00String.set("")
+        self.v00Label.set("Diameter:")
 
-        self.v01Label = tk.StringVar()
-        tk.Label(variable_show_frame, textvariable=self.v01Label).grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
-        rowandcloumn += 1
-        self.v01String = tk.StringVar()
-        tk.Label(variable_show_frame,
-                 text="0", textvariable=self.v01String,
-                 width=4
-                 ).grid(
-            row=rowandcloumn / 10,
-            column=rowandcloumn % 10
-        )
-        rowandcloumn += 1
-        self.v01String.set(0)
-        self.v01Label.set("Label01:")
-
-        self.v02Label = tk.StringVar()
-        tk.Label(variable_show_frame, textvariable=self.v02Label).grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
-        rowandcloumn += 1
-        self.v02String = tk.StringVar()
-        tk.Label(variable_show_frame,
-                 text="0", textvariable=self.v02String,
-                 width=4
-                 ).grid(
-            row=rowandcloumn / 10,
-            column=rowandcloumn % 10
-        )
-        rowandcloumn += 1
-        self.v02String.set(0)
-        self.v02Label.set("Label02:")
-
-        self.v03Label = tk.StringVar()
-        tk.Label(variable_show_frame, textvariable=self.v03Label).grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
-        rowandcloumn += 1
-        self.v03String = tk.StringVar()
-        tk.Label(variable_show_frame,
-                 text="0", textvariable=self.v03String,
-                 width=4
-                 ).grid(
-            row=rowandcloumn / 10,
-            column=rowandcloumn % 10
-        )
-        rowandcloumn += 1
-        self.v03String.set(0)
-        self.v03Label.set("Label03:")
-
-        self.v04Label = tk.StringVar()
-        tk.Label(variable_show_frame, textvariable=self.v04Label).grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
-        rowandcloumn += 1
-        self.v04String = tk.StringVar()
-        tk.Label(variable_show_frame,
-                 text="0", textvariable=self.v04String,
-                 width=4
-                 ).grid(
-            row=rowandcloumn / 10,
-            column=rowandcloumn % 10
-        )
-        rowandcloumn += 1
-        self.v04String.set(0)
-        self.v04Label.set("Label04:")
 
         self.v10Label = tk.StringVar()
-        tk.Label(variable_show_frame, textvariable=self.v10Label).grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
+        self.afterLabel = tk.Label(
+            variable_show_frame,
+            textvariable=self.v10Label
+        ).grid(
+            row=rowandcloumn / 2,
+            column=rowandcloumn % 2
+        )
         rowandcloumn += 1
         self.v10String = tk.StringVar()
         tk.Label(variable_show_frame,
                  text="0", textvariable=self.v10String,
-                 width=4
                  ).grid(
-            row=rowandcloumn / 10,
-            column=rowandcloumn % 10
+            row=rowandcloumn / 2,
+            column=rowandcloumn % 2,
+            columnspan=9
         )
         rowandcloumn += 1
-        self.v10String.set(0)
-        self.v10Label.set("Label10:")
+        self.v10String.set("")
+        self.v10Label.set("Perimeter:")
+
+        self.v20Label = tk.StringVar()
+
+        self.afterLabel = tk.Label(
+            variable_show_frame,
+            textvariable=self.v20Label
+        )
+        self.afterLabel.grid(
+            row=rowandcloumn / 2,
+            column=rowandcloumn % 2
+        )
+        rowandcloumn += 1
+        self.v20String = tk.StringVar()
+        tk.Label(variable_show_frame,
+                 text="0", textvariable=self.v20String,
+                 ).grid(
+            row=rowandcloumn / 2,
+            column=rowandcloumn % 2,
+            columnspan=9
+        )
+        rowandcloumn += 1
+        self.v20String.set("")
+        self.v20Label.set("Compatness:")
         #Lavel init end
+
+    def updateAlgorithmlabel(self):
+        self.v00String.set(self.algorithm_object.diameter)
+        self.v10String.set(self.algorithm_object.perimeter)
+        self.v20String.set(self.algorithm_object.compatness)
+        self.afterLabel.after(500, self.updateAlgorithmlabel)
 
 
     def Identify(self):
@@ -1407,6 +1388,17 @@ class Application(ttk.Notebook):
         rowandcloumn += 1
         self.YValue_ParkingString.set(0)
 
+
+
+        self.InfraredString = tk.StringVar()
+        tk.Label(readgroup, text="Infrared:").grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
+        rowandcloumn += 1
+        self.InfraredLabel = tk.Label(readgroup, text="0", textvariable=self.InfraredString, width=4)
+        self.InfraredLabel.grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
+        rowandcloumn += 1
+        self.InfraredString.set(0)
+
+
         # self.datatext = tk.Text(readgroup)
         # self.datatext.grid(row=0, column=0, sticky=tk.N + tk.S + tk.E + tk.W)
 
@@ -1494,10 +1486,10 @@ class Application(ttk.Notebook):
             self.updatelabel()
             if self.identifythread.thread_stop == False:
                 self.identifythread.thread_stop = True
-                self.dataRPbutton.configure(background="red", text="显示图像")
+                self.dataRPbutton.configure(background="red", text="显示2D图像")
             else:
                 self.identifythread.thread_stop = False
-                self.dataRPbutton.configure(background="green", text="显示图像")
+                self.dataRPbutton.configure(background="green", text="显示2D图像")
                 self.scope = matplot.Scope(thread=self.menu.uartform.identifythread)
                 self.scope.start()
         else:
@@ -1519,7 +1511,8 @@ class Application(ttk.Notebook):
             if self.identifyuartopen == 0:
                 tkmes.showerror("错误！", "串口没有打开！\n请手动载入数据或打开串口！")
                 return
-            if isinstance(self.XValue[0],str):
+
+            if isinstance(self.menu.uartform.identifythread.value[0],int):
                 self.identifythread = self.menu.uartform.identifythread
                 self.updatelabel()
                 if self.identifythread.thread_stop == False:
@@ -1797,6 +1790,7 @@ class Application(ttk.Notebook):
         self.ZMiddleString.set(self.menu.uartform.identifythread.value[23])
         self.XValue_ParkingString.set(self.menu.uartform.identifythread.value[24])
         self.YValue_ParkingString.set(self.menu.uartform.identifythread.value[25])
+        self.InfraredString.set(self.menu.uartform.identifythread.value[26])
 
         if (abs(self.menu.uartform.identifythread.value[0] - self.menu.uartform.identifythread.value[7]) > 100 and (
                 self.menu.uartform.identifythread.value[2]) < 60):

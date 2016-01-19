@@ -18,8 +18,8 @@ class myThread(threading.Thread):
         self.carstatus = 0
         self.port = port
         self.baud = baud
-        self.VALUE_LENGTH = 46
-        self.VALUE_NUM = 26
+        self.VALUE_LENGTH = 48
+        self.VALUE_NUM = 27
         self.value = [0 for n in range(self.VALUE_NUM)]
 
         self.readenable = 0
@@ -106,6 +106,7 @@ class myThread(threading.Thread):
                             self.value[23] = (ord(buf[42]) << 8 | ord(buf[43]))
                             self.value[24] = (ord(buf[44]))
                             self.value[25] = (ord(buf[45]))
+                            self.value[26] = (ord(buf[46]) << 8 | ord(buf[47]))
 
                             for i in range(self.VALUE_NUM):
                                 self.file.write(str(self.value[i]) + " ")
