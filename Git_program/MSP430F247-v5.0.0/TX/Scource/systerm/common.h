@@ -32,8 +32,9 @@
 #include "flash.h"
 #include "detect.h"
 #include "HMC5983.h"
-
-
+#include "filter.h"
+#include "infrared.h"
+#include "math.h"
 
 
 

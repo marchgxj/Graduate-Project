@@ -45,91 +45,6 @@ uint8 HMC_Changed = 0;
 uint16 Ext_Threshold = 0;
 uint16 Int_Threshold = 0;
 uint16 Var_Threshold = 0;
-unsigned int sqrt_16(unsigned long M)
-{
-    uint16 result;
-    uint16 i;
-    unsigned long tmp, ttp;   
-    if (M == 0)               
-        return 0;
-    
-    result = 0;
-    
-    tmp = (M >> 30);          
-    M <<= 2;
-    if (tmp > 1)             
-    {
-        result ++;                 
-        tmp -= result;
-    }
-    
-    for (i=15; i>0; i--)     
-    {
-        result <<= 1;              
-        
-        tmp <<= 2;
-        tmp += (M >> 30);     
-        
-        ttp = result;
-        ttp = (ttp<<1)+1;
-        
-        M <<= 2;
-        if (tmp >= ttp)       
-        {
-            tmp -= ttp;
-            result ++;
-        }
-    }
-    return result;
-}
-
-uint16 getAverage(uint16 *data,uint8 length)
-{
-    uint8 i = 0;
-    uint32 count = 0;
-    for(i=0;i<length;i++)
-    {
-        count += *data++;
-    }
-    return (uint16)(count / length);
-}
-
-uint16 getVariance(uint16 *data,uint8 length)
-{
-    uint16 average = 0;
-    uint32 sum = 0;
-    uint8 i = 0;
-    average = getAverage(data,length);
-    for(i=0;i<length;i++)
-    {
-        sum += (*data-average)*(*data-average);
-        data++;
-    }
-    return (uint16)(sum / length);
-}
-void CollectData()
-{
-    
-    
-}
-
-void bubbledata(DataStruct *a,uint16 n) 
-{ 
-    uint16 i,j;
-    DataStruct temp;
-    for(i=0;i<n-1;i++) 
-    {
-        for(j=i+1;j<n;j++) 
-            if(a[i].value<a[j].value) 
-            { 
-                temp=a[i];
-                a[i]=a[j]; 
-                a[j]=temp; 
-            }
-        
-    }
-    
-}
 
 
 
@@ -372,7 +287,7 @@ void ReCal()
         MagneticUnit.GMI_XMiddleM = MagneticUnit.GMI_XMiddle;
         MagneticUnit.GMI_YMiddleM = MagneticUnit.GMI_YMiddle;
         MagneticUnit.Int_Middle = MagneticUnit.Intensity;
-        MagneticUnit.Ext_Middle = abs(MagneticUnit.XMiddle-MagneticUnit.YMiddle);
+        MagneticUnit.Ext_Middle = abs(MagneticUnit.ZMiddle-MagneticUnit.YMiddle);
         ReCal_Count = 20;
         MagneticUnit.GMI_XValue = 0;
         MagneticUnit.GMI_YValue = 0;
@@ -481,7 +396,9 @@ void IdentifyCar()
         
     }
     //SampleChannel(&MagneticUnit.GMI_XValue,&MagneticUnit.GMI_YValue);
+    
     Multi_Read_HMC(&MagneticUnit.XValue,&MagneticUnit.YValue,&MagneticUnit.ZValue);
+    MagneticUnit.infrared = getInfrared();
     ReCal();
     GetSlop(MagneticUnit.XValue,MagneticUnit.YValue,MagneticUnit.ZValue);
     //Filter(MagneticUnit.XValue,MagneticUnit.YValue);
@@ -713,7 +630,7 @@ uint8 CarCalibration()
             MagneticUnit.XMiddle = xave;
             MagneticUnit.YMiddle = yave;
             MagneticUnit.ZMiddle = zave;
-            MagneticUnit.Ext_Middle = abs(MagneticUnit.XMiddle-MagneticUnit.YMiddle);
+            MagneticUnit.Ext_Middle = abs(MagneticUnit.ZMiddle-MagneticUnit.YMiddle);
             MagneticUnit.Int_Middle = sqrt_16((((uint32)MagneticUnit.XMiddle*(uint32)MagneticUnit.XMiddle)+((uint32)MagneticUnit.YMiddle*(uint32)MagneticUnit.YMiddle))+((uint32)MagneticUnit.ZMiddle*(uint32)MagneticUnit.ZMiddle));
             return 1;
         }
@@ -893,7 +810,7 @@ void NoCarCalibration()
 //        MagneticUnit.GMI_YMiddle = (MagneticUnit.GMI_YMiddleM << 1 + GMI_ADY)/3;
 //    }
     
-    MagneticUnit.Ext_Middle = abs(MagneticUnit.XMiddle-MagneticUnit.YMiddle);
+    MagneticUnit.Ext_Middle = abs(MagneticUnit.ZMiddle-MagneticUnit.YMiddle);
     
     
     
@@ -1008,7 +925,7 @@ void CmdCalibration()
     MagneticUnit.GMI_XMiddle = GMI_ADX;
     MagneticUnit.GMI_YMiddle = GMI_ADY;
 
-    MagneticUnit.Ext_Middle = abs(MagneticUnit.XMiddle-MagneticUnit.YMiddle);
+    MagneticUnit.Ext_Middle = abs(MagneticUnit.ZMiddle-MagneticUnit.YMiddle);
     MagneticUnit.XMiddleM = MagneticUnit.XMiddle;
     MagneticUnit.YMiddleM = MagneticUnit.YMiddle;
     MagneticUnit.ZMiddleM = MagneticUnit.ZMiddle;
@@ -1035,18 +952,18 @@ void CmdCalibration()
 void GetVariance()
 {
     uint32 VarianceX,VarianceY,VarianceZ;
-    VarianceX = (uint32)abs(MagneticUnit.XValue - MagneticUnit.XMiddle)*(uint32)abs(MagneticUnit.XValue - MagneticUnit.XMiddle);
-    VarianceY = (uint32)abs(MagneticUnit.YValue - MagneticUnit.YMiddle)*(uint32)abs(MagneticUnit.YValue - MagneticUnit.YMiddle);
+    //VarianceX = (uint32)abs(MagneticUnit.XValue - MagneticUnit.XMiddle)*(uint32)abs(MagneticUnit.XValue - MagneticUnit.XMiddle);
+    //VarianceY = (uint32)abs(MagneticUnit.YValue - MagneticUnit.YMiddle)*(uint32)abs(MagneticUnit.YValue - MagneticUnit.YMiddle);
     VarianceZ = (uint32)abs(MagneticUnit.ZValue - MagneticUnit.ZMiddle)*(uint32)abs(MagneticUnit.ZValue - MagneticUnit.ZMiddle);
     //    VarianceAve = (VarianceX + VarianceY)>>1;
     //MagneticUnit.Variance = abs(sqrt_16(VarianceY+VarianceX));
-    MagneticUnit.Variance = abs(sqrt_16(VarianceY));
+    MagneticUnit.Variance = abs(sqrt_16(VarianceZ));
 }
 
 void GetExtremum()
 {
     uint16 minus = 0;
-    minus = abs(MagneticUnit.XValue - MagneticUnit.YValue);
+    minus = abs(MagneticUnit.ZValue - MagneticUnit.YValue);
     MagneticUnit.Extremum = abs(minus - MagneticUnit.Ext_Middle);
 }
 

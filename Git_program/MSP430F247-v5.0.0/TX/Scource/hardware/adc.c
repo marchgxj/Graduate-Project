@@ -125,6 +125,11 @@ void AD_cal()
     halLedSetAll();
     delay_ms(2000);
     
+    for(i=0;i<INFRA_LENGTH;i++)
+    {
+        infraredData[i] = sampleInfrared();
+    }
+    
     ADX = 0;
     ADY = 0;
     ADZ = 0;
@@ -156,7 +161,7 @@ void AD_cal()
     MagneticUnit.ZMiddleM = MagneticUnit.ZMiddle;
     MagneticUnit.GMI_XMiddleM = MagneticUnit.GMI_XMiddle;
     MagneticUnit.GMI_YMiddleM = MagneticUnit.GMI_YMiddle;
-    MagneticUnit.Ext_Middle = abs(MagneticUnit.XMiddle-MagneticUnit.YMiddle);
+    MagneticUnit.Ext_Middle = abs(MagneticUnit.ZMiddle-MagneticUnit.YMiddle);
     
     intensity = sqrt_16((((uint32)MagneticUnit.XMiddle*(uint32)MagneticUnit.XMiddle)+((uint32)MagneticUnit.YMiddle*(uint32)MagneticUnit.YMiddle)+((uint32)MagneticUnit.ZMiddle*(uint32)MagneticUnit.ZMiddle)));
     MagneticUnit.Int_Middle = intensity;
@@ -197,3 +202,15 @@ void AD_cal()
     delay_ms(50);
 }
 
+uint16 sampleInfrared()
+{
+    uint16 value = 0;
+    ADC12CTL0 &= ~ (ENC+ADC12SC);
+    ADC12MCTL0 = INCH_1;
+    ADC12CTL0 |= ENC + ADC12SC;
+    while (ADC12CTL1 & ADC12BUSY!=0);                         //Wait if ADC10 core is active   
+    value=ADC12MEM0;
+    ADC12CTL0 &= ~ (ENC+ADC12SC);
+    
+    return value;
+}

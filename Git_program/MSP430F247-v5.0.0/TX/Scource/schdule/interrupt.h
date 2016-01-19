@@ -1,6 +1,7 @@
 #ifndef _INTERRUPT_h_
 #define _INTERRUPT_h_
 #include "common.h"
+#include "detect.h"
 
 #define   EN_TIMER1    {TBCCTL0 = CCIE;}
 #define   DIS_TIMER1   TBCCTL0 &= ~CCIE
@@ -17,7 +18,7 @@ extern uint16 Keep_Alive_Count;
 extern uint16 Keep_Alive_Detect;
 extern uint8  ADCal_Flag;
 extern uint16 Direction_Count;
-extern uint8 DataSendDraw[46];
+extern uint8 DataSendDraw[TEST_LENGTH];
 
 
 #endif

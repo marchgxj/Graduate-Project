@@ -29,9 +29,10 @@
 #define INT_THRESHOLD  60
 
 
-#define TEST_LENGTH 46
+#define TEST_LENGTH   48
 #define FILTER_LENGTH 20
-#define SLOP_LENGTH 3
+#define SLOP_LENGTH   3
+#define INFRA_LENGTH  5
 
 #define LOWPOWER_THRESHOLD_HIGH 600
 #define LOWPOWER_THRESHOLD_LOW  500
@@ -86,6 +87,7 @@ typedef struct
     int XAve_Slop;
     int YAve_Slop;
     int ZAve_Slop;
+    uint16 infrared;
     
 }MagneticStruct;
 extern MagneticStruct MagneticUnit;
@@ -103,11 +105,11 @@ extern void NoCarCalibration();
 extern void GetVariance();
 extern void GetExtremum();
 extern uint8 MultiState(uint16 value,uint16 threshold);
-extern unsigned int sqrt_16(unsigned long M);
 extern void GetIntensity();
 extern uint8 CarCalibration();
 extern void TotalJudge();
 extern void CmdCalibration();
+
 
 extern FilterStruct FilterData[FILTER_LENGTH];
 extern uint16 Collect_Period;
@@ -121,4 +123,5 @@ extern uint16 Ext_Threshold;
 extern uint16 Int_Threshold;
 extern uint16 Var_Threshold;
 extern uint8 Quick_CollectM;
+extern uint16 infraredData[INFRA_LENGTH];
 #endif 

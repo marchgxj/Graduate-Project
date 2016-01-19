@@ -376,26 +376,21 @@ void Multi_Read_HMC(uint16* XValue,uint16* YValue,uint16* ZValue)
     }
     if(zvalue!=-4096)
     {
-        *YValue = zvalue + 2048;
-    }
-    else
-    {
-        *YValue = 0;
-    }
-    if(yvalue!=-4096)
-    {
-        *ZValue = yvalue + 2048;
+        *ZValue = zvalue + 2048;
     }
     else
     {
         *ZValue = 0;
     }
+    if(yvalue!=-4096)
+    {
+        *YValue = yvalue + 2048;
+    }
+    else
+    {
+        *YValue = 0;
+    }
 }
-
-
-
-
-
 
 
 void Init_HMC(uint8* buffer)

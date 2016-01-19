@@ -102,6 +102,7 @@ void TestSend()
     23:42¡¢43£ºMagneticUnit.ZMiddle
     24:44:XValue_Parking
     25:45:YValue_Parking
+    26:46¡¢47:Infrared
     **********************************************/
     DataSendDraw[0] = MagneticUnit.XValue>>8;
     DataSendDraw[1] = MagneticUnit.XValue;
@@ -149,6 +150,8 @@ void TestSend()
     DataSendDraw[43] = MagneticUnit.ZMiddle;
     DataSendDraw[44] = XValue_Parking;
     DataSendDraw[45] = YValue_Parking;
+    DataSendDraw[46] = MagneticUnit.infrared>>8;
+    DataSendDraw[47] = MagneticUnit.infrared;
     
     A7139_WriteFIFO(DataSendDraw,TEST_LENGTH);
     delay_us(1);
