@@ -54,10 +54,8 @@ void SendBeacon(u8* buf)
 				return;
     }
 		
-		TIME2_HIGH;
 	  SendPack(buf);
 		LED1_REV();
 		RXMode();
-		TIME2_LOW;
 
 }

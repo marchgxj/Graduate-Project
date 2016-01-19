@@ -95,11 +95,10 @@ void DataHandler(u8* buf)
 				}
 				//PostUploadNode(bufnode);
 #endif
-				TIME2_HIGH;
+
 		}
 				CreateDataACK(src_cluster_id,src_cluster_innernum,rejoin,RootDevice.endpoint_device[inner_num].pyh_address);
 				__NOP();__NOP();__NOP();__NOP();__NOP();__NOP();__NOP();__NOP();__NOP();__NOP();
-				TIME1_HIGH;
 				SendPack(DataAckBuf);
 				RXMode();
 #if QOS_TEST == 1
@@ -132,8 +131,6 @@ void DataHandler(u8* buf)
 				Usart1_PutChar(acklost_count);
 				Usart1_PutChar(0x7E);
 #endif
-				TIME1_LOW;
-				TIME2_LOW;
 }
 
 void KeepAliveCheck(void)
