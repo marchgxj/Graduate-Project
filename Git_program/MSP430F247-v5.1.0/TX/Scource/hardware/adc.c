@@ -143,6 +143,16 @@ void AD_cal()
     MagneticUnit.XMiddleMF = MagneticUnit.XMiddle;
     MagneticUnit.YMiddleMF = MagneticUnit.YMiddle;
     MagneticUnit.ZMiddleMF = MagneticUnit.ZMiddle;
+    MagneticUnit.XValue_Stable = MagneticUnit.XMiddle;
+    MagneticUnit.YValue_Stable = MagneticUnit.YMiddle;
+    MagneticUnit.ZValue_Stable = MagneticUnit.ZMiddle;
+    for(i=0;i<MIDDLE_QUENE_LENGTH;i++)
+    {
+        x_middle_quene[i] = MagneticUnit.XMiddle;
+        y_middle_quene[i] = MagneticUnit.YMiddle;
+        z_middle_quene[i] = MagneticUnit.ZMiddle;
+    }
+    
     MagneticUnit.GMI_XMiddle = GMIADX>>4;
     MagneticUnit.GMI_YMiddle = GMIADY>>4;
     MagneticUnit.XMiddleM = MagneticUnit.XMiddle;
@@ -162,9 +172,9 @@ void AD_cal()
     Var_Threshold = VAR_THRESHOLD;
     Dis_Threshold = DIS_THRESHOLD;
     
-    storage_x[0] = MagneticUnit.XMiddle;
-    storage_y[0] = MagneticUnit.YMiddle;
-    storage_z[0] = MagneticUnit.ZMiddle;
+    //storage_x[0] = MagneticUnit.XMiddle;
+    //storage_y[0] = MagneticUnit.YMiddle;
+    //storage_z[0] = MagneticUnit.ZMiddle;
     
     for(int i=0;i<FILTER_LENGTH;i++)
     {

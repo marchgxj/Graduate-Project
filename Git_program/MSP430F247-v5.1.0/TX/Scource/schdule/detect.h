@@ -24,17 +24,17 @@
 
 #define CAL_PERIOD  6000          //10分钟校准一次
 
-#define VAR_THRESHOLD  50             //方差判断阈值
+#define VAR_THRESHOLD  150             //方差判断阈值
 #define EXT_THRESHOLD  40               //两轴差值判断阈值
 #define INT_THRESHOLD  60
-#define COM_THRESHOLD  1000
+#define COM_THRESHOLD  1500
 #define DIS_THRESHOLD  30
 
 #define TEST_LENGTH             56
 #define FILTER_LENGTH           20
 #define SLOP_LENGTH             3
 #define INFRA_LENGTH            5
-#define STORAGE_LENGTH          400
+#define MIDDLE_QUENE_LENGTH     5
 #define MAX_QUICK_COLLECT_TIME  6000  //5mins 在快采模式的最长时间 单位：50ms
 #define HMC5983_RESET_PERIOD    12000 //10mins 5983复位周期 单位：50ms
 
@@ -57,14 +57,17 @@ typedef struct
     uint16 XMiddle;
     uint16 XMiddleM;
     uint16 XMiddleMF;
+    uint16 XValue_Stable;
     uint16 YValue;
     uint16 YMiddle;
     uint16 YMiddleM;
     uint16 YMiddleMF;
+    uint16 YValue_Stable;
     uint16 ZValue;
     uint16 ZMiddle;
     uint16 ZMiddleM;
     uint16 ZMiddleMF;
+    uint16 ZValue_Stable;
     
     uint16 GMI_XValue;
     uint16 GMI_XMiddle;
@@ -132,9 +135,9 @@ extern uint16 Var_Threshold;
 extern uint16 Dis_Threshold;
 extern uint8 Quick_CollectM;
 extern uint16 infraredData[INFRA_LENGTH];
-extern uint16 storage_x[STORAGE_LENGTH];
-extern uint16 storage_y[STORAGE_LENGTH];
-extern uint16 storage_z[STORAGE_LENGTH];
 extern uint16 storage_count_send;
-extern uint8 storage_finish_flag;
+extern uint16 x_middle_quene[MIDDLE_QUENE_LENGTH];
+extern uint16 y_middle_quene[MIDDLE_QUENE_LENGTH];
+extern uint16 z_middle_quene[MIDDLE_QUENE_LENGTH];
+extern uint8 middle_quene_count;
 #endif 

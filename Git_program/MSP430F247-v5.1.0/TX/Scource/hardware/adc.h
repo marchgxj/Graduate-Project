@@ -8,10 +8,4 @@ extern int16 SampleVoltage(Uint16* Value,Uint16* Temp);
 extern void AD_Init();
 extern uint16 sampleInfrared();
 
-
-
-
-
-
-
 #endif
