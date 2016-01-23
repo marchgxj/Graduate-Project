@@ -1,0 +1,155 @@
+[Stack]
+FillEnabled=0
+OverflowWarningsEnabled=1
+WarningThreshold=90
+SpWarningsEnabled=1
+WarnLogOnly=1
+UseTrigger=1
+TriggerName=main
+LimitSize=0
+ByteLimit=50
+[InterruptLog]
+LogEnabled=0
+GraphEnabled=0
+ShowTimeLog=1
+SumEnabled=0
+ShowTimeSum=1
+SumSortOrder=0
+[DataLog]
+LogEnabled=0
+GraphEnabled=0
+ShowTimeLog=1
+SumEnabled=0
+ShowTimeSum=1
+[Breakpoints2]
+Count=0
+[Interrupts]
+Enabled=1
+[MemoryMap]
+Enabled=0
+Base=0
+UseAuto=0
+TypeViolation=1
+UnspecRange=1
+ActionState=1
+[Trace1]
+Enabled=0
+ShowSource=1
+[Simulator]
+Freq=1000000
+[EEM State Storage]
+Buffer=BAAAAAAAAAAAAAAAAAAAAAAA
+[EEM Sequencer]
+Buffer=AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+[EEM Cycle Counter 0]
+Counter0=AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+[EEM Cycle Counter 1]
+Counter1=AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+[DebugChecksum]
+Checksum=844409484
+[CallStack]
+ShowArgs=0
+[Disassembly]
+MixedMode=1
+[struct_types]
+Fmt0=EndPointDeviceStruct-backup_channel	3	0
+Fmt1=EndPointDeviceStruct-channel	3	0
+Fmt2=EndPointDeviceStruct-cluster_id	3	0
+Fmt3=EndPointDeviceStruct-cluster_innernum	3	0
+Fmt4=EndPointDeviceStruct-connected	3	0
+Fmt5=EndPointDeviceStruct-csma_length	3	0
+Fmt6=EndPointDeviceStruct-data_ack	3	0
+Fmt7=EndPointDeviceStruct-des_cluster_id	3	0
+Fmt8=EndPointDeviceStruct-des_cluster_innernum	3	0
+Fmt9=EndPointDeviceStruct-device_type	3	0
+Fmt10=EndPointDeviceStruct-free_node	3	0
+Fmt11=EndPointDeviceStruct-power	3	0
+Fmt12=EndPointDeviceStruct-pyh_address	3	0
+Fmt13=EndPointDeviceStruct-state	4	0
+Fmt14=EndPointDeviceStruct-time_stamp	3	0
+[array_types]
+Fmt0=uint8 [12]	4	0
+Fmt1=uint8 [16]	4	0
+Fmt2=uint8 [38]	4	0
+Fmt3=uint8 [6]	4	0
+[watch_formats]
+Fmt0={W}1:CSMA_BackOff_Count	3	0
+Fmt1={W}1:Car_Flag	3	0
+Fmt2={W}1:Car_Status	3	0
+Fmt3={W}1:Data_Change_Flag	3	0
+Fmt4={W}1:Receive_Timeout	3	0
+Fmt5={W}1:cca_value	3	0
+Fmt6={W}1:rejoin_flag	3	0
+Fmt7={W}1:valid	4	0
+[Log file]
+LoggingEnabled=_ 0
+LogFile=_ ""
+Category=_ 0
+[TermIOLog]
+LoggingEnabled=_ 0
+LogFile=_ ""
+[Breakpoints]
+Bp0=_ "STD_CODE" "{E:\Program Files (x86)\IAR Systems\Embedded Workbench MSP430 7.2}.101.2" 0 0 0 0 "" 0 ""
+Bp1=_ "STD_CODE" "{E:\Program Files (x86)\IAR Systems\Embedded Workbench MSP430 7.2}.714.1" 0 0 0 0 "" 0 ""
+Bp2=_ "STD_CODE" "{E:\Program Files (x86)\IAR Systems\Embedded Workbench MSP430 7.2}.714.1" 0 0 0 0 "" 0 ""
+Bp3=_ "STD_CODE" "{E:\Program Files (x86)\IAR Systems\Embedded Workbench MSP430 7.2}.714.1" 0 0 0 0 "" 0 ""
+Bp4=_ "STD_CODE" "{E:\Program Files (x86)\IAR Systems\Embedded Workbench MSP430 7.2}.714.1" 0 0 0 0 "" 0 ""
+Bp5=_ "STD_CODE" "{E:\Program Files (x86)\IAR Systems\Embedded Workbench MSP430 7.2}.714.1" 0 0 0 0 "" 0 ""
+Bp6=_ "STD_CODE" "{E:\Program Files (x86)\IAR Systems\Embedded Workbench MSP430 7.2}.23.5" 0 0 0 0 "" 0 ""
+Bp7=_ "STD_CODE" "{E:\Program Files (x86)\IAR Systems\Embedded Workbench MSP430 7.2}.46.17" 0 0 0 0 "" 0 ""
+Bp8=_ "STD_CODE" "{E:\Program Files (x86)\IAR Systems\Embedded Workbench MSP430 7.2}.1.1" 0 0 0 0 "" 0 ""
+Bp9=_ "STD_CODE" "{E:\Program Files (x86)\IAR Systems\Embedded Workbench MSP430 7.2}.434.13" 0 0 0 0 "" 0 ""
+Bp10=_ "STD_CODE" "{E:\Program Files (x86)\IAR Systems\Embedded Workbench MSP430 7.2}.801.1" 0 0 0 0 "" 0 ""
+Bp11=_ "STD_CODE" "{E:\Program Files (x86)\IAR Systems\Embedded Workbench MSP430 7.2}.799.2" 0 0 0 0 "" 0 ""
+Bp12=_ "STD_CODE" "{E:\Program Files (x86)\IAR Systems\Embedded Workbench MSP430 7.2}.245.5" 0 0 0 0 "" 0 ""
+Bp13=_ "STD_CODE" "{D:\Program Files (x86)\IAR Systems\Embedded Workbench 7.2}.330.5" 0 0 0 0 "" 0 ""
+Bp14=_ "STD_CODE" "{$PROJ_DIR$\..\Scource\schdule\detect.c}.349.9" 0 0 0 0 "" 0 ""
+Bp15=_ "STD_CODE" "{E:\Program Files (x86)\IAR Systems\Embedded Workbench MSP430 7.2}.121.9" 0 0 0 0 "" 0 ""
+Bp16=_ "STD_CODE" "{E:\Program Files (x86)\IAR Systems\Embedded Workbench MSP430 7.2}.342.1" 0 0 0 0 "" 0 ""
+Bp17=_ "STD_CODE" "{E:\Program Files (x86)\IAR Systems\Embedded Workbench MSP430 7.2}.342.1" 0 0 0 0 "" 0 ""
+Bp18=_ "STD_CODE" "{E:\Program Files (x86)\IAR Systems\Embedded Workbench MSP430 7.2}.121.9" 0 0 0 0 "" 0 ""
+Bp19=_ "STD_CODE" "{E:\Program Files (x86)\IAR Systems\Embedded Workbench MSP430 7.2}.342.1" 0 0 0 0 "" 0 ""
+Bp20=_ "STD_CODE" "{E:\Program Files (x86)\IAR Systems\Embedded Workbench MSP430 7.2}.121.9" 0 0 0 0 "" 0 ""
+Bp21=_ "STD_CODE" "{E:\Program Files (x86)\IAR Systems\Embedded Workbench MSP430 7.2}.121.9" 0 0 0 0 "" 0 ""
+Bp22=_ "STD_CODE" "{E:\Program Files (x86)\IAR Systems\Embedded Workbench MSP430 7.2}.342.1" 0 0 0 0 "" 0 ""
+Bp23=_ "STD_CODE" "{$PROJ_DIR$\..\Scource\schdule\detect.c}.985.5" 0 0 0 0 "" 0 ""
+Bp24=_ "STD_CODE" "{E:\Program Files (x86)\IAR Systems\Embedded Workbench MSP430 7.2}.242.5" 0 0 0 0 "" 0 ""
+Bp25=_ "STD_CODE" "{E:\Program Files (x86)\IAR Systems\Embedded Workbench MSP430 7.2}.240.5" 0 0 0 0 "" 0 ""
+Bp26=_ "STD_CODE" "{E:\Program Files (x86)\IAR Systems\Embedded Workbench MSP430 7.2}.776.5" 0 0 0 0 "" 0 ""
+Bp27=_ "STD_CODE" "{E:\Program Files (x86)\IAR Systems\Embedded Workbench MSP430 7.2}.776.5" 0 0 0 0 "" 0 ""
+Bp28=_ "STD_CODE" "{E:\Program Files (x86)\IAR Systems\Embedded Workbench MSP430 7.2}.86.13" 0 0 0 0 "" 0 ""
+Bp29=_ "STD_CODE" "{E:\Program Files (x86)\IAR Systems\Embedded Workbench MSP430 7.2}.213.17" 0 0 0 0 "" 0 ""
+Bp30=_ "STD_CODE" "{E:\Program Files (x86)\IAR Systems\Embedded Workbench MSP430 7.2}.228.17" 0 0 0 0 "" 0 ""
+Bp31=_ "STD_CODE" "{E:\Program Files (x86)\IAR Systems\Embedded Workbench MSP430 7.2}.34.9" 0 0 0 0 "" 0 ""
+Bp32=_ "STD_CODE" "{E:\Program Files (x86)\IAR Systems\Embedded Workbench MSP430 7.2}.442.1" 0 0 0 0 "" 0 ""
+Bp33=_ "STD_CODE" "{$PROJ_DIR$\..\Scource\hardware\adc.c}.64.5" 0 0 0 0 "" 0 ""
+Count=34
+[FET]
+Clock mode=46
+Extended Clock mode=1
+Secure Password=
+Extended Clock Control Enable=1
+Advanced Extended Clock Control=0
+Emulation mode=0
+Free running=0
+Shutting Down=3
+[Memory Dump]
+Start address=
+Lenghth=
+Address info=0
+Format=0
+Dump registers=0
+PC=0
+SP=0
+SR=0
+all registers=0
+File name=
+[Aliases]
+A0=_ "E:\Graduate-Project-master\Graduate-Project-master\Git_program\MSP430\Net\main.c" ""
+A1=_ "E:\Graduate-Project-master\Graduate-Project-master\Git_program\MSP430\Scource\hardware\A7139.c" ""
+A2=_ "E:\Graduate-Project-master\Graduate-Project-master\Git_program\MSP430\Scource\hardware\spi.c" ""
+A3=_ "E:\Graduate-Project-master\Graduate-Project-master\Git_program\MSP430\Scource\schdule\interrupt.c" ""
+A4=_ "E:\Graduate-Project-master\Graduate-Project-master\Git_program\MSP430\Scource\schdule\mac.c" ""
+A5=_ "F:\Graduate\wan\Graduate-Project-master-new\Git_program\MSP430\Net\main.c" "F:\Graduate\Git_program\MSP430F247-v2.0\Net\main.c"
+Count=6
+SuppressDialog=0
