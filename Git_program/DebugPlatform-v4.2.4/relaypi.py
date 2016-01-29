@@ -11,6 +11,45 @@ __author__ = 'Changxiaodong'
 
 
 class Relay:
+    def sendCommand(self, add, cmd):
+        '''
+        Parameter：add:address of node
+                   cmd:command num
+
+        Function：
+                              向节点发送控制信息
+        Autor:xiaoxiami 2015.12.26
+        Others：控制信息可以由上位机输入，或从服务器上获取
+        '''
+        cmd_address = (chr(int(add)-20))
+        cmd_cmd = (chr(int(cmd)))
+        self.uart.write("\xAA")
+        self.uart.write(cmd_address)
+        self.uart.write(cmd_cmd)
+        self.uart.write("\xBB")
+        ack = self.uart.read(1)
+        if (ack != ""):
+            if (ord(ack) == 0xAA):  # 收ack
+                return 1
+            else:
+                return 0
+
+    def sendCommandfromServer(self, feedback):
+        '''
+        Parameter：
+
+        Function：
+                              从服务器获取控制命令，发送给中继
+        Autor:xiaoxiami 2015.12.26
+        Others：
+        '''
+        for key, value in feedback.items():
+            if key != "Status":
+                add = int(str(key).split("-")[-1])
+                for i in range(10):
+                    if self.sendCommand(add, value):
+                        break
+
     def run(self):
         '''
         Parameter：
@@ -71,11 +110,10 @@ class Relay:
                         self.notedata = []
                         data["data"] = ""
                         for i in range(length):
-
                             try:
                                 num = ord(self.uart.read(1)) << 8 | ord(self.uart.read(1))
                                 status = ord(self.uart.read(1))
-                                num
+                                num += 20
                             except serial.SerialException:
                                 pass
                             self.notedata.append(num)  # 偶数位为地址
@@ -97,19 +135,14 @@ class Relay:
                         #self.upload_databuf.append(urllib.urlencode(data))
                         post_data = urllib.urlencode(data)
                         data["data"] = ""
-                        start = time.clock()
                         try:
                             '''上传全部数据'''
-                            response = urllib2.urlopen("http://123.57.37.66:8080/sensor/post/status", post_data, timeout=1)
-                            end = time.clock()
-                            print "time:" + str(end - start)
-                            serverresponse = response.read()
-                            serverresponsedic = eval(serverresponse)
-                            print serverresponsedic["err_msg"]
+                            response = urllib2.urlopen("http://www.xiaoxiami.space/info/post/", post_data, timeout=1)
+                            feedback = eval(response.read())
+                            print feedback
+                            self.sendCommandfromServer(feedback)
                         except:
                             pass
-
-
 
                     elif ordbuf == 0x7F:
                         debug_count += 1

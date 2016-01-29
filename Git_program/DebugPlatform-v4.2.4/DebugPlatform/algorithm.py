@@ -13,6 +13,7 @@ class Algotithm():
         self.diameter = []
         self.perimeter = []
         self.compatness = []
+        self.angle = []
         # self.parent.root.status.setdata(settings["period"])
 
         if not os.path.exists("../Data/Draw/"):
@@ -61,6 +62,14 @@ class Algotithm():
     def getdataFromSource(self, filedata, source):
         x = []
         y = []
+        z = []
+
+        if source == "all":
+            for data in filedata:
+                x.append(data[0])
+                y.append(data[1])
+                z.append(data[2])
+            return x, y, z
 
         if source[0] == "1" and source[1] == "1":
             for data in filedata:
@@ -129,8 +138,8 @@ class Algotithm():
         Autor:xiaoxiami 2016.1.16
         Others：
         '''
-        if not self.sourceCheck(source):
-            return 0
+        if not self.sourceCheck(source) or not filedata:
+            return 1
         x, y = self.getdataFromSource(filedata, source)
         diameter = 1
 
@@ -138,9 +147,13 @@ class Algotithm():
         # start caculate
         startx = x[0]
         starty = y[0]
+        max_x = 0
+        max_y = 0
         for i in range(len(x)):
-            diameter = max(diameter, (math.sqrt(((startx - x[i]) ** 2) + ((starty - y[i]) ** 2))))
-        return diameter
+            max_x = max(max_x, abs(x[i]-startx))
+            max_y = max(max_y, abs(y[i]-starty))
+            #diameter = max(diameter, (math.sqrt(((startx - x[i]) ** 2) + ((starty - y[i]) ** 2))))
+        return max_x+max_y
 
     def getPerimeter(self, filedata, source):
         '''
@@ -157,9 +170,9 @@ class Algotithm():
         perimeter = 0
 
         # start caculate
-        for i in range(len(x)-1):
-            perimeterbuf = math.sqrt((x[i]-x[i+1])**2 + (y[i]-y[i+1])**2)
-            if (perimeterbuf > 15):         #距离大于15才认为是有效周长，避免原地抖动对周长的增加
+        for i in range(len(x) - 1):
+            perimeterbuf = math.sqrt((x[i] - x[i + 1]) ** 2 + (y[i] - y[i + 1]) ** 2)
+            if (perimeterbuf > 20):  # 距离大于15才认为是有效周长，避免原地抖动对周长的增加
                 perimeter += perimeterbuf
         return perimeter
 
@@ -175,12 +188,167 @@ class Algotithm():
         '''
         if not self.sourceCheck(source):
             return 0
-
         # start caculate
-        compatness = self.getPerimeter(filedata, source)**2 / self.getMaxDiameter(filedata, source)
+        perimeter = self.getPerimeter(filedata, source)
+        diameter = self.getMaxDiameter(filedata, source)
+        compatness = perimeter ** 2 / diameter
+        print perimeter,diameter,compatness
         return compatness
 
+    def getAngle(self, filedata, source):
+        '''
+        Parameter：filedata:三个坐标轴数据
+                   source：坐标轴选择
+        Function：
+                   计算图像与XOY平面夹角
+        Autor:xiaoxiami 2016.1.20
+        Others：
+        '''
 
+        if len(filedata) == 0:
+            return 0
+
+        x, y, z = self.getdataFromSource(filedata, "all")
+
+        # start caculate
+        prex = x[0]
+        prey = y[0]
+        prez = z[0]
+
+        postion_a = [prex, prey, prez]
+        postion_b = []
+        postion_c = []
+        angle = []
+
+        count = 1
+        times = 0
+
+        for i in range(len(x)):
+            if math.sqrt(pow(x[i] - prex, 2) + pow(y[i] - prey, 2) + pow(z[i] - prez, 2)) > 100:
+                prex = x[i]
+                prey = y[i]
+                prez = z[i]
+                if count % 3 == 1:
+                    postion_b = [prex, prey, prez]
+                elif count % 3 == 2:
+                    postion_c = [prex, prey, prez]
+                    a = postion_c[0] - postion_b[0]
+                    b = postion_c[1] - postion_b[1]
+                    m = postion_c[2] - postion_b[2]
+                    c = postion_c[0] - postion_a[0]
+                    d = postion_c[1] - postion_a[1]
+                    n = postion_c[2] - postion_a[2]
+
+                    if not (a * d == b * c or a * n == m * c):
+                        line_a = [int(a), int(b), int(m)]
+                        line_b = [int(c), int(d), int(n)]
+
+                        nomal_vector = self.getNomalVector(line_a, line_b)
+                        anglebuf = math.acos(nomal_vector[0] / self.getVectorNorm(nomal_vector)) * 180 / 3.1415
+                        # if anglebuf > 90:
+                        #     anglebuf -= 90
+                        # 法向量与[1,0,0]
+                        angle.append(anglebuf)
+                elif count % 3 == 0:
+                    postion_a = [prex, prey, prez]
+                count += 1
+        print angle
+        print self.classsificationAngle(angle)
+        print "\n"
+
+        return 0
+
+    def classsificateAngle(self, angle):
+        '''
+        Parameter：angle:包含角度的数组
+
+        Function：
+                   从0-90度每个区间的数量
+        Autor:xiaoxiami 2016.1.20
+        Others：
+        '''
+        if not angle:
+            return 0
+        ave = 0
+        count = [0 for i in range(20)]
+        for a in angle:
+            ave += a
+            count[int(a / 10)] += 1
+        return count, ave / len(angle)
+
+    def getVectorNorm(self, vector):
+        '''
+        Parameter：vector:三维向量
+
+        Function：
+                   获取向量的模
+        Autor:xiaoxiami 2016.1.20
+        Others：
+        '''
+        return math.sqrt(pow(vector[0], 2) + pow(vector[1], 2) + pow(vector[2], 2))
+
+    def getEuclideanMetric(self, data1, data2):
+        '''
+        Parameter：data1:点1[x,y,z]
+                   data2:点2[x,y,z]
+
+        Function：
+                   两个点的欧式距离
+        Autor:xiaoxiami 2016.1.21
+        Others：
+        '''
+        return int(math.sqrt(pow(data1[0]-data2[0], 2) + pow(data1[1]-data2[1], 2) + pow(data1[2]-data2[2], 2)))
+
+    def getNomalVector(self, vector1, vector2):
+        '''
+        Parameter：vector1:平面上的一个向量
+                   vector2：平面上的一个向量
+        Function：
+                   获取平面法向量
+        Autor:xiaoxiami 2016.1.20
+        Others：
+        '''
+        x = float((vector1[2] * vector2[1] - vector1[1] * vector2[2])) / \
+            float((vector1[1] * vector2[0] - vector1[0] * vector2[1]))
+        y = float((vector1[2] * vector2[0] - vector1[0] * vector2[2])) / \
+            float((vector1[0] * vector2[2] - vector1[2] * vector2[0]))
+        z = 1
+        return [x, y, z]
+
+    def simulateGetData(self, filedata):
+        if not filedata:
+            return 0
+        middle = [filedata[0][0], filedata[0][1], filedata[0][2]]
+        # middle = [2578, 1728, 1813]
+        finaldata = []
+        start_flag = 0
+        end_sum = 0
+        end_count = 0
+
+        for i in range(1,len(filedata)):
+            if start_flag == 0:
+                if self.getEuclideanMetric(filedata[i-1], filedata[i]) > 20:
+                    start_flag = 1
+                    print "start"
+            if start_flag == 1:
+                end_distance = self.getEuclideanMetric(filedata[i-1],filedata[i])
+                if end_distance > 20:
+                    finaldata.append(filedata[i])
+
+                if end_distance < 15:
+                    end_sum += end_distance
+                    end_count += 1
+                else:
+                    end_count = 0
+                    end_sum = 0
+                if end_count > 50 and (end_sum/end_count) < 15:
+                    start_flag = 0
+                    print "stop"
+        print len(finaldata), len(filedata)
+        print self.getCompatness(finaldata, self.settings["source"]),self.getCompatness(filedata, self.settings["source"])
+
+    def cfModel(self, variance, extremum, distance, compatness):
+        pass
 
     def run(self):
         data_process_success = 0
@@ -193,6 +361,10 @@ class Algotithm():
                 self.perimeter.append(int(self.getPerimeter(filedata, self.settings["source"])))
             if self.settings["method"] == 3:
                 self.compatness.append(int(self.getCompatness(filedata, self.settings["source"])))
+            if self.settings["method"] == 4:
+                self.angle.append(int(self.getAngle(filedata, self.settings["source"])))
+            if self.settings["method"] == 5:
+                self.simulateGetData(filedata)
 
         if data_process_success:
             if "dot_animate" in self.settings["display"]:

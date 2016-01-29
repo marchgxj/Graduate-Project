@@ -8,6 +8,8 @@ import os
 import tkMessageBox as tkmes
 import tkFont
 import time
+import linecache
+from collections import deque
 
 
 import tkFileDialog
@@ -361,6 +363,7 @@ class Application(ttk.Notebook):
         self.tab7 = ttk.Frame(self)
         self.tab8 = ttk.Frame(self)
 
+
         self.add(self.tab1, text="停车状态")
         self.add(self.tab2, text="网络拓扑")
         self.add(self.tab3, text="网络抓包")
@@ -369,6 +372,7 @@ class Application(ttk.Notebook):
         self.add(self.tab6, text="链路测试")
         self.add(self.tab7, text="温度测试")
         self.add(self.tab8, text="算法测试")
+
         self.topline = []
         self.bottomline = []
         self.carnum = 0
@@ -943,8 +947,8 @@ class Application(ttk.Notebook):
         algorithm_method_combobox = ttk.Combobox(settings_frame)
         algorithm_method_combobox.grid(row=1,column=1,sticky=tk.W)
         # algorithm_method.bind("<<ComboboxSelected>>", self.IsOpen)
-        algorithm_method_combobox['value'] = ["切线坐标","直径","周长","紧致度"]
-        algorithm_method_combobox.set("紧致度")
+        algorithm_method_combobox['value'] = ["切线坐标","直径","周长","紧致度","平面角", "模拟图像截取"]
+        algorithm_method_combobox.set("模拟图像截取")
 
 
         datapathbutton = ttk.Button(settings_frame, text="选择数据文件", command=_opendata)
@@ -1143,25 +1147,285 @@ class Application(ttk.Notebook):
         self.datascalelabel = ttk.Label(self.tab4, text="5")
         self.datascalelabel.grid(row=1, column=2, sticky=tk.E)
 
-        receivegroup = tk.LabelFrame(self.tab4, text="识别结果")
+        receivegroup = tk.LabelFrame(self.tab4, text="历史数据")
         receivegroup.grid(row=0, column=0, columnspan=3, sticky=tk.N + tk.S + tk.E + tk.W)
 
-        receivegroup.rowconfigure(0, weight=1)
-        receivegroup.columnconfigure(0, weight=1)
-
         self.datacavas = tk.Canvas(receivegroup)
-        self.datacavas.grid(row=0, column=0, columnspan=2, sticky=tk.N + tk.S + tk.E + tk.W)
+        # self.datacavas.grid(row=0, column=0, columnspan=2, sticky=tk.N + tk.S + tk.E + tk.W)
         self.cancassbx = tk.Scrollbar(self.datacavas, orient=tk.HORIZONTAL)
-        self.cancassbx.pack(side=tk.BOTTOM, fill=tk.X)
+        # self.cancassbx.pack(side=tk.BOTTOM, fill=tk.X)
         self.cancassbx.config(command=self.datacavas.xview)
         self.datacavas.config(xscrollcommand=self.cancassbx.set)
 
-        # cancassby = tk.Scrollbar(self.datacavas)
-        # cancassby.pack(side=tk.RIGHT, fill=tk.Y)
-        # cancassby.config(command=self.datacavas.yview)
-        # self.datacavas.config(yscrollcommand=cancassby.set)
+        #历史数据控制界面绘制
+        self.endtimeentry_string = tk.StringVar()
+        self.starttimeentry_string = tk.StringVar()
+        history_file_path = []
+        self.history_queue = deque()
+        self.history_last_queue = deque()
+        self.live_data = []
+        self.history_dirpath=""
+        self.history_start = 0
+        self.history_frame_count = 0
+        self.history_update_interval = 50
+        class Data():
+            self.value=[]
+            def set(self, data):
+                self.value = data
+        thread = Data()
 
-        readgroup = tk.LabelFrame(self.tab4, text="数据读取")
+        def _open_history_data():
+            history_file_path = []
+            datapath = tkFileDialog.askopenfilenames(initialdir='../Data/Identify',filetypes=[("text file", "*.txt")])
+            timestr = []
+            if datapath:
+                self.history_dirpath=""
+                for i in str(datapath[0]).split("/")[:-1]:
+                    self.history_dirpath += i+"/"
+                for filename in datapath:
+                    buf = str(filename).split("/")[-1]
+                    historyinputtext.insert(tk.END,buf.encode("UTF-8")+";\n")
+                    history_file_path.append(self.history_dirpath + buf.encode("GB2312"))
+                    timestr.append(linecache.getlines(self.history_dirpath + buf.encode("GB2312"))[0].split("|")[1])
+                    timestr.append(linecache.getlines(self.history_dirpath + buf.encode("GB2312"))[-1].split("|")[1])
+            if not timestr:
+                return
+            timestr.sort()
+            self.endtimeentry_string.set(time.strftime('%H:%M:%S  %Y-%m-%d',time.localtime(float(timestr[-1]))))
+            self.starttimeentry_string.set((time.strftime('%H:%M:%S  %Y-%m-%d',time.localtime(float(timestr[0])))))
+
+        def _process_data():
+            self.filenames = str(historyinputtext.get(0.0,tk.END).decode("GB2312")).replace("\n","").split(";")[:-1]
+            if not self.filenames:
+                tkmes.showerror("错误！","没有选择数据文件！")
+                return
+            try:
+                starttime = time.mktime(time.strptime(self.starttimeentry_string.get(),'%H:%M:%S  %Y-%m-%d'))
+                endtime = time.mktime(time.strptime(self.endtimeentry_string.get(),'%H:%M:%S  %Y-%m-%d'))
+            except:
+                tkmes.showerror("错误！","时间格式错误！")
+                return
+            if starttime>endtime:
+                tkmes.showerror("错误！","结束时间不能在开始时间之前！")
+                return
+            self.history_queue.clear()
+            self.filenames = str(historyinputtext.get(0.0,tk.END).decode("GB2312")).replace("\n","").split(";")[:-1]
+            for filename in self.filenames:
+                with open(self.history_dirpath + filename) as file:
+                    for line in file:
+                        current_time = float(line.split("|")[1])
+                        if current_time > starttime and current_time < endtime:
+                            self.history_queue.append(line)
+            tkmes.showinfo("完成","数据读取完成!")
+
+        def _continue_run():
+            if not self.history_queue:
+                tkmes.showinfo("提示","没有读取到数据")
+                return
+            self.history_frame_count = 0
+            self.history_start = 1
+            self.history_update_interval = int(self.history_periodString.get())
+            _periodupdatelabel()
+            if self.history_radiovalue.get() == '1':
+                matplot.Scope3D(thread).start()
+
+        def _stop():
+            self.history_start = 0
+
+        def _updatelabel(frame_data):
+            self.XValueString.set(frame_data[0])
+            self.YValueString.set(frame_data[1])
+            self.VarianceString.set(frame_data[2])
+            self.Ext_MiddleString.set(frame_data[3])
+            self.ExtremumString.set(frame_data[4])
+            self.VarStateString.set(frame_data[5])
+            self.ExtStateString.set(frame_data[6])
+            self.XMiddleString.set(frame_data[7])
+            self.YMiddleString.set(frame_data[8])
+            self.IntensityeString.set(frame_data[9])
+            self.Int_MiddleString.set(frame_data[10])
+            self.IntensityMinusString.set(
+                abs(int(frame_data[9]) - int(frame_data[10])))
+            self.IntStateString.set(frame_data[11])
+            self.ResultString.set(frame_data[12])
+            self.XAve_SlopString.set(ctypes.c_int16(int(frame_data[13])).value)
+            self.YAve_SlopString.set(ctypes.c_int16(int(frame_data[14])).value)
+            self.ZAve_SlopString.set(ctypes.c_int16(int(frame_data[15])).value)
+            self.ZValueString.set(frame_data[16])
+            self.GMI_XvalueString.set(frame_data[17])
+            self.GMI_YvalueString.set(frame_data[18])
+            self.GMI_XvalueMiddleString.set(frame_data[19])
+            self.GMI_YvalueMiddleString.set(frame_data[20])
+            self.VoltageString.set(frame_data[21])
+            self.TemperatureString.set(frame_data[22])
+            self.ZMiddleString.set(frame_data[23])
+            self.XValue_ParkingString.set(frame_data[24])
+            self.YValue_ParkingString.set(frame_data[25])
+            self.InfraredString.set(frame_data[26])
+            try:
+                self.DistanceString.set(frame_data[27])
+                self.CompatnessString.set(frame_data[28])
+                self.StorageDataLengthString.set(frame_data[29])
+            except:
+                pass
+
+            if (abs(int(frame_data[0]) - int(frame_data[7])) > 100 and (
+                    frame_data[2]) < 60):
+                self.Side_ParkingString.set(1)
+            else:
+                self.Side_ParkingString.set(0)
+
+        def _last_frame(event=0):
+            if not self.history_last_queue:
+                tkmes.showinfo("提示","已经到第一帧")
+                return
+            frame_data = str(self.history_last_queue.pop())
+            self.history_queue.appendleft(frame_data)
+            frame_data = frame_data.split("|")[2].split(" ")[:-1]
+            self.history_frame_count -= 1
+            self.history_framecount.set(self.history_frame_count)
+            _updatelabel(frame_data)
+
+        def _next_frame(event=0):
+            if not self.history_queue:
+                tkmes.showinfo("提示","已经到第最后一帧")
+                return
+            frame_data = str(self.history_queue.popleft())
+            self.history_last_queue.append(frame_data)
+            frame_data = frame_data.split("|")[2].split(" ")[:-1]
+            self.history_frame_count += 1
+            self.history_framecount.set(self.history_frame_count)
+            _updatelabel(frame_data)
+
+        def _periodupdatelabel():
+            if self.history_start == 0:
+                return
+            if not self.history_queue:
+                return
+            frame_data = str(self.history_queue.popleft())
+            frame_data = frame_data.split("|")[2].split(" ")[:-1]
+            self.history_frame_count += 1
+            self.history_framecount.set(self.history_frame_count)
+            intdata = []
+            for d in frame_data:
+                intdata.append(int(d))
+            thread.set(intdata)
+            _updatelabel(frame_data)
+
+            self.XValueLabel.after(self.history_update_interval, _periodupdatelabel)
+
+        for i in range(10):
+            receivegroup.rowconfigure(i, weight=1)
+        for i in range(4):
+            receivegroup.columnconfigure(i, weight=1)
+
+
+        historyinputtext = tk.Text(receivegroup)
+        historyinputtext.grid(row=0, column=0,columnspan=10)
+        rowandcloumn = 4
+        tk.Label(receivegroup, text="开始时间:").grid(row=rowandcloumn / 4, column=rowandcloumn % 4)
+
+        rowandcloumn += 1
+
+        tk.Entry(receivegroup, textvariable=self.starttimeentry_string).grid(row=rowandcloumn / 4, column=rowandcloumn % 4)
+
+        rowandcloumn += 1
+        ttk.Button(
+            receivegroup,
+            text="选择数据文件",
+            command=_open_history_data
+        ).grid(row=rowandcloumn / 4, column=rowandcloumn % 4)
+
+        rowandcloumn += 1
+        ttk.Button(
+            receivegroup,
+            text="读取数据",
+            command=_process_data
+        ).grid(row=rowandcloumn / 4, column=rowandcloumn % 4)
+
+        rowandcloumn += 1
+        tk.Label(receivegroup, text="结束时间:").grid(row=rowandcloumn / 4, column=rowandcloumn % 4)
+
+
+        rowandcloumn += 1
+        tk.Entry(receivegroup, textvariable=self.endtimeentry_string).grid(row=rowandcloumn / 4, column=rowandcloumn % 4)
+
+        rowandcloumn += 1
+        ttk.Button(
+            receivegroup,
+            text="上一帧",
+            command=_last_frame
+        ).grid(row=rowandcloumn / 4, column=rowandcloumn % 4)
+
+        rowandcloumn += 1
+        ttk.Button(
+            receivegroup,
+            text="下一帧",
+            command=_next_frame
+        ).grid(row=rowandcloumn / 4, column=rowandcloumn % 4)
+
+        rowandcloumn += 1
+        self.history_periodString = tk.StringVar()
+        tk.Label(receivegroup, text="周期(ms)：").grid(row=rowandcloumn / 4, column=rowandcloumn % 4)
+        periodspinbox = tk.Spinbox(receivegroup,from_=50,to=1000,increment=100, textvariable=self.history_periodString)
+        rowandcloumn += 1
+        periodspinbox.grid(row=rowandcloumn / 4, column=rowandcloumn % 4)
+        self.history_periodString.set("50")
+
+
+
+        rowandcloumn += 1
+        ttk.Button(
+            receivegroup,
+            text="连续运行",
+            command=_continue_run
+        ).grid(row=rowandcloumn / 4, column=rowandcloumn % 4)
+
+        rowandcloumn += 1
+        ttk.Button(
+            receivegroup,
+            text="停止运行",
+            command=_stop
+        ).grid(row=rowandcloumn / 4, column=rowandcloumn % 4)
+
+        rowandcloumn += 1
+        self.history_radiovalue = tk.StringVar()
+        self.history_radiovalue.set(1)
+        tk.Radiobutton(
+            receivegroup,
+            variable=self.history_radiovalue,
+            value=1,
+            text="3D图像"
+        ).grid(row=rowandcloumn / 4, column=rowandcloumn % 4)
+        rowandcloumn += 1
+        tk.Radiobutton(
+            receivegroup,
+            variable=self.history_radiovalue,
+            value=2,
+            text="2D图像"
+        ).grid(row=rowandcloumn / 4, column=rowandcloumn % 4)
+        rowandcloumn += 1
+        tk.Radiobutton(
+            receivegroup,
+            variable=self.history_radiovalue,
+            value=3,
+            text="不绘图"
+        ).grid(row=rowandcloumn / 4, column=rowandcloumn % 4)
+
+        rowandcloumn += 1
+        rowandcloumn += 1
+        tk.Label(receivegroup, text="当前帧数：").grid(row=rowandcloumn / 4, column=rowandcloumn % 4)
+        rowandcloumn += 1
+        self.history_framecount = tk.StringVar()
+        tk.Label(
+            receivegroup,
+            text="",
+            textvariable=self.history_framecount
+        ).grid(row=rowandcloumn / 4, column=rowandcloumn % 4)
+        self.history_framecount.set("0")
+
+
+        readgroup = tk.LabelFrame(self.tab4, text="变量显示")
         readgroup.grid(row=0, column=3, columnspan=3, sticky=tk.N + tk.S + tk.E + tk.W)
 
         for i in range(10):
@@ -1188,6 +1452,14 @@ class Application(ttk.Notebook):
         rowandcloumn += 1
         self.XMiddleString.set(0)
 
+        self.GMI_XvalueString = tk.StringVar()
+        tk.Label(readgroup, text="XValue_Stable:").grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
+        rowandcloumn += 1
+        self.GMI_XValueLabel = tk.Label(readgroup, text="0", textvariable=self.GMI_XvalueString, width=4)
+        self.GMI_XValueLabel.grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
+        rowandcloumn += 1
+        self.GMI_XvalueString.set(0)
+
         self.YValueString = tk.StringVar()
         tk.Label(readgroup, text="YValue:").grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
         rowandcloumn += 1
@@ -1203,6 +1475,14 @@ class Application(ttk.Notebook):
         self.AD_middle_valueYLabel.grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
         rowandcloumn += 1
         self.YMiddleString.set(0)
+
+        self.GMI_YvalueString = tk.StringVar()
+        tk.Label(readgroup, text="YValue_Stable:").grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
+        rowandcloumn += 1
+        self.GMI_YValueLabel = tk.Label(readgroup, text="0", textvariable=self.GMI_YvalueString, width=4)
+        self.GMI_YValueLabel.grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
+        rowandcloumn += 1
+        self.GMI_YvalueString.set(0)
 
         self.ZValueString = tk.StringVar()
         tk.Label(readgroup, text="ZValue:").grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
@@ -1220,6 +1500,14 @@ class Application(ttk.Notebook):
         rowandcloumn += 1
         self.ZMiddleString.set(0)
 
+        self.GMI_XvalueMiddleString = tk.StringVar()
+        tk.Label(readgroup, text="ZValue_Stable:").grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
+        rowandcloumn += 1
+        self.GMI_XValueMiddleLabel = tk.Label(readgroup, text="0", textvariable=self.GMI_XvalueMiddleString, width=4)
+        self.GMI_XValueMiddleLabel.grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
+        rowandcloumn += 1
+        self.GMI_XvalueMiddleString.set(0)
+
         self.VarianceString = tk.StringVar()
         tk.Label(readgroup, text="Variance:").grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
         rowandcloumn += 1
@@ -1228,13 +1516,7 @@ class Application(ttk.Notebook):
         rowandcloumn += 1
         self.VarianceString.set(0)
 
-        self.VarStateString = tk.StringVar()
-        tk.Label(readgroup, text="VarState:").grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
-        rowandcloumn += 1
-        self.VarStateLabel = tk.Label(readgroup, text="0", textvariable=self.VarStateString, width=4)
-        self.VarStateLabel.grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
-        rowandcloumn += 1
-        self.VarStateString.set(0)
+
 
         self.ExtremumString = tk.StringVar()
         tk.Label(readgroup, text="Extremum:").grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
@@ -1252,14 +1534,6 @@ class Application(ttk.Notebook):
         rowandcloumn += 1
         self.Ext_MiddleString.set(0)
 
-        self.ExtStateString = tk.StringVar()
-        tk.Label(readgroup, text="ExtState:").grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
-        rowandcloumn += 1
-        self.ExtStateLabel = tk.Label(readgroup, text="0", textvariable=self.ExtStateString, width=4)
-        self.ExtStateLabel.grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
-        rowandcloumn += 1
-        self.ExtStateString.set(0)
-
         self.IntensityeString = tk.StringVar()
         tk.Label(readgroup, text="Intensity:").grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
         rowandcloumn += 1
@@ -1275,6 +1549,22 @@ class Application(ttk.Notebook):
         self.IntensityMiddleLabel.grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
         rowandcloumn += 1
         self.Int_MiddleString.set(0)
+
+        self.VarStateString = tk.StringVar()
+        tk.Label(readgroup, text="VarState:").grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
+        rowandcloumn += 1
+        self.VarStateLabel = tk.Label(readgroup, text="0", textvariable=self.VarStateString, width=4)
+        self.VarStateLabel.grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
+        rowandcloumn += 1
+        self.VarStateString.set(0)
+
+        self.ExtStateString = tk.StringVar()
+        tk.Label(readgroup, text="ExtState:").grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
+        rowandcloumn += 1
+        self.ExtStateLabel = tk.Label(readgroup, text="0", textvariable=self.ExtStateString, width=4)
+        self.ExtStateLabel.grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
+        rowandcloumn += 1
+        self.ExtStateString.set(0)
 
         self.IntStateString = tk.StringVar()
         tk.Label(readgroup, text="IntState:").grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
@@ -1316,6 +1606,14 @@ class Application(ttk.Notebook):
         rowandcloumn += 1
         self.YAve_SlopString.set(0)
 
+        self.ZAve_SlopString = tk.StringVar()
+        tk.Label(readgroup, text="ZAve_Slop:").grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
+        rowandcloumn += 1
+        self.ZAve_SlopLabel = tk.Label(readgroup, text="0", textvariable=self.ZAve_SlopString, width=4)
+        self.ZAve_SlopLabel.grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
+        rowandcloumn += 1
+        self.ZAve_SlopString.set(0)
+
         self.Side_ParkingString = tk.StringVar()
         tk.Label(readgroup, text="Side_Parking:").grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
         rowandcloumn += 1
@@ -1324,37 +1622,7 @@ class Application(ttk.Notebook):
         rowandcloumn += 1
         self.Side_ParkingString.set(0)
 
-        self.GMI_XvalueString = tk.StringVar()
-        tk.Label(readgroup, text="GMI_Xvalue:").grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
-        rowandcloumn += 1
-        self.GMI_XValueLabel = tk.Label(readgroup, text="0", textvariable=self.GMI_XvalueString, width=4)
-        self.GMI_XValueLabel.grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
-        rowandcloumn += 1
-        self.GMI_XvalueString.set(0)
 
-        self.GMI_XvalueMiddleString = tk.StringVar()
-        tk.Label(readgroup, text="GMI_XvalueM:").grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
-        rowandcloumn += 1
-        self.GMI_XValueMiddleLabel = tk.Label(readgroup, text="0", textvariable=self.GMI_XvalueMiddleString, width=4)
-        self.GMI_XValueMiddleLabel.grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
-        rowandcloumn += 1
-        self.GMI_XvalueMiddleString.set(0)
-
-        self.GMI_YvalueString = tk.StringVar()
-        tk.Label(readgroup, text="GMI_Yvalue:").grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
-        rowandcloumn += 1
-        self.GMI_YValueLabel = tk.Label(readgroup, text="0", textvariable=self.GMI_YvalueString, width=4)
-        self.GMI_YValueLabel.grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
-        rowandcloumn += 1
-        self.GMI_YvalueString.set(0)
-
-        self.GMI_YvalueMiddleString = tk.StringVar()
-        tk.Label(readgroup, text="GMI_YvalueM:").grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
-        rowandcloumn += 1
-        self.GMI_YValueMiddleLabel = tk.Label(readgroup, text="0", textvariable=self.GMI_YvalueMiddleString, width=4)
-        self.GMI_YValueMiddleLabel.grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
-        rowandcloumn += 1
-        self.GMI_YvalueMiddleString.set(0)
 
         self.VoltageString = tk.StringVar()
         tk.Label(readgroup, text="Voltage:").grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
@@ -1398,6 +1666,42 @@ class Application(ttk.Notebook):
         rowandcloumn += 1
         self.InfraredString.set(0)
 
+        self.DistanceString = tk.StringVar()
+        tk.Label(readgroup, text="Diameter:").grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
+        rowandcloumn += 1
+        self.DistanceLabel = tk.Label(readgroup, text="0", textvariable=self.DistanceString, width=4)
+        self.DistanceLabel.grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
+        rowandcloumn += 1
+        self.DistanceString.set(0)
+
+        self.GMI_YvalueMiddleString = tk.StringVar()
+        tk.Label(readgroup, text="Perimeter:").grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
+        rowandcloumn += 1
+        self.GMI_YValueMiddleLabel = tk.Label(readgroup, text="0", textvariable=self.GMI_YvalueMiddleString, width=4)
+        self.GMI_YValueMiddleLabel.grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
+        rowandcloumn += 1
+        self.GMI_YvalueMiddleString.set(0)
+
+        self.CompatnessString = tk.StringVar()
+        tk.Label(readgroup, text="Compatness:").grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
+        rowandcloumn += 1
+        self.CompatnessLabel = tk.Label(readgroup, text="0", textvariable=self.CompatnessString, width=20)
+        self.CompatnessLabel.grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
+        rowandcloumn += 1
+        self.CompatnessString.set(0)
+
+        rowandcloumn += 1
+        rowandcloumn += 1
+
+
+        self.StorageDataLengthString = tk.StringVar()
+        tk.Label(readgroup, text="StorageDataLength:").grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
+        rowandcloumn += 1
+        self.StorageDataLengthLabel = tk.Label(readgroup, text="0", textvariable=self.StorageDataLengthString, width=4)
+        self.StorageDataLengthLabel.grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
+        rowandcloumn += 1
+        self.StorageDataLengthString.set(0)
+
 
         # self.datatext = tk.Text(readgroup)
         # self.datatext.grid(row=0, column=0, sticky=tk.N + tk.S + tk.E + tk.W)
@@ -1422,20 +1726,7 @@ class Application(ttk.Notebook):
         Autor:xiaoxiami 2015.5.29
         Others：
         '''
-        for v in self.canvasidentifyline:
-            self.datacavas.delete(v)
-        self.canvasidentifyline = []
-        for v in self.canvasline:
-            self.datacavas.delete(v)
-        self.canvasline = []
-        for v in self.canvasoval:
-            self.datacavas.delete(v)
-        self.canvasoval = []
-        for v in self.admiddleline:
-            self.datacavas.delete(v)
-        self.admiddleline = []
-        self.datacavas.config(scrollregion=(0, 0, 0, 512))
-        self.datapath = ""
+        pass
 
     def confirm(self):
         '''
@@ -1653,80 +1944,6 @@ class Application(ttk.Notebook):
             self.XAve_Slop.append(v[13])
             self.YAve_Slop.append(v[14])
 
-        # 删除遗留图像
-        for v in self.canvasidentifyline:
-            self.datacavas.delete(v)
-        self.canvasidentifyline = []
-        for v in self.canvasline:
-            self.datacavas.delete(v)
-        self.canvasline = []
-        for v in self.canvasoval:
-            self.datacavas.delete(v)
-        self.canvasoval = []
-        for v in self.admiddleline:
-            self.datacavas.delete(v)
-        self.admiddleline = []
-
-        x = 0
-        ym = 0
-        try:
-            offset = int(self.datascale.get())
-        except:
-            print "offset error"
-        self.datacavas.config(scrollregion=(0, 0, len(self.ExtState) * offset, 512))
-        for v in self.ExtState:
-            if (int(v) == 1):
-                y = 512 - (int(2) * 30 + 10)
-            elif (int(v) == 2):
-                y = 512 - (int(1) * 30 + 10)
-            else:
-                y = 512 - (int(v) * 30 + 10)
-            self.canvasline.append(self.datacavas.create_line(x, ym, x + offset, y, fill="blue"))
-            x += offset
-            ym = y
-        x = 0
-        ym = 0
-        for v in self.VarState:
-            if (int(v) == 1):
-                y = 512 - (int(2) * 30 + 110)
-            elif (int(v) == 2):
-                y = 512 - (int(1) * 30 + 110)
-            else:
-                y = 512 - (int(v) * 30 + 110)
-            self.canvasline.append(self.datacavas.create_line(x, ym, x + offset, y, fill="red"))
-            x += offset
-            ym = y
-        x = 0
-        ym = 0
-        for v in self.IntState:
-            if (int(v) == 1):
-                y = 512 - (int(2) * 30 + 210)
-            elif (int(v) == 2):
-                y = 512 - (int(1) * 30 + 210)
-            else:
-                y = 512 - (int(v) * 30 + 210)
-            self.canvasline.append(self.datacavas.create_line(x, ym, x + offset, y, fill="#FF9900"))
-            x += offset
-            ym = y
-        x = 0
-        ym = 0
-        for v in self.Result:
-            if (int(v) == 1):
-                y = 512 - (int(2) * 30 + 310)
-            elif (int(v) == 2):
-                y = 512 - (int(1) * 30 + 310)
-            else:
-                y = 512 - (int(v) * 30 + 310)
-            self.canvasline.append(self.datacavas.create_line(x, ym, x + offset, y, fill="#8B0A50"))
-            x += offset
-            ym = y
-
-        self.datacavas.bind("<Button-1>", self.Showdetaildata)
-        self.datacavas.bind("<B1-Motion>", self.Showdetaildata)
-        self.datacavas.bind("<KeyPress>", self.keyxlim)
-
-        self.datacavas.focus_set()
-
     def keyxlim(self, event):
 
         if (event.keysym == "Right"):
@@ -1769,6 +1986,8 @@ class Application(ttk.Notebook):
         self.VarianceString.set(self.menu.uartform.identifythread.value[2])
         self.Ext_MiddleString.set(self.menu.uartform.identifythread.value[3])
         self.ExtremumString.set(self.menu.uartform.identifythread.value[4])
+        self.VarStateString.set(self.menu.uartform.identifythread.value[5])
+        self.ExtStateString.set(self.menu.uartform.identifythread.value[6])
         self.XMiddleString.set(self.menu.uartform.identifythread.value[7])
         self.YMiddleString.set(self.menu.uartform.identifythread.value[8])
         self.IntensityeString.set(self.menu.uartform.identifythread.value[9])
@@ -1779,7 +1998,7 @@ class Application(ttk.Notebook):
         self.ResultString.set(self.menu.uartform.identifythread.value[12])
         self.XAve_SlopString.set(ctypes.c_int16(self.menu.uartform.identifythread.value[13]).value)
         self.YAve_SlopString.set(ctypes.c_int16(self.menu.uartform.identifythread.value[14]).value)
-
+        self.ZAve_SlopString.set(ctypes.c_int16(self.menu.uartform.identifythread.value[15]).value)
         self.ZValueString.set(self.menu.uartform.identifythread.value[16])
         self.GMI_XvalueString.set(self.menu.uartform.identifythread.value[17])
         self.GMI_YvalueString.set(self.menu.uartform.identifythread.value[18])
@@ -1791,6 +2010,9 @@ class Application(ttk.Notebook):
         self.XValue_ParkingString.set(self.menu.uartform.identifythread.value[24])
         self.YValue_ParkingString.set(self.menu.uartform.identifythread.value[25])
         self.InfraredString.set(self.menu.uartform.identifythread.value[26])
+        self.DistanceString.set(self.menu.uartform.identifythread.value[27])
+        self.CompatnessString.set(self.menu.uartform.identifythread.value[28])
+        self.StorageDataLengthString.set(self.menu.uartform.identifythread.value[29])
 
         if (abs(self.menu.uartform.identifythread.value[0] - self.menu.uartform.identifythread.value[7]) > 100 and (
                 self.menu.uartform.identifythread.value[2]) < 60):
@@ -1824,10 +2046,7 @@ class Application(ttk.Notebook):
             x1 = event + int(self.cancassbx.get()[0] * len(self.ExtState) * self.offset)
         self.xlim = x1 / self.offset
         if (x1 >= 0 and x1 <= len(self.ExtState) * self.offset):
-            for v in self.cavasverticalline:
-                self.datacavas.delete(v)
-            self.cavasverticalline = []
-            self.cavasverticalline.append(self.datacavas.create_line(x1, 0, x1, 512, fill="purple"))
+
             self.statusbar.setdata("%s", "Count:" + str(x1 / self.offset))
             # self.statusbar.setdata("%s","方差:" + str(self.VarState[x1 / self.offset]) + ",极值:" + str(self.ExtState[x1 / self.offset]))
 

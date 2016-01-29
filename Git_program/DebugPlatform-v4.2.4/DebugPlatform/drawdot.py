@@ -62,7 +62,6 @@ class DrawDot():
                     y.append(float(v))
                 self.dynamicline_data.append([x,y])
 
-
     def drawAnimate(self):
         self.getData()
         fig, self.ax = plt.subplots()
