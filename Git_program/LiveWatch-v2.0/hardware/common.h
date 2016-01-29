@@ -9,7 +9,7 @@
 #define    ACK_DIS    0
 
 #define    BEACON_TYPE    1
-#define    MAX_PACK_LENGTH    48
+#define    MAX_PACK_LENGTH    56
 
 #include "led.h"
 #include "delay.h"

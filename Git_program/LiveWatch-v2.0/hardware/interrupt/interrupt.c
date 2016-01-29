@@ -86,6 +86,7 @@ uint8 rssisee = 0;
 void EXTI9_5_IRQHandler(void)
 {
 		uint8 rssi = 0;  
+		uint8 i = 0;
 		EXTI->PR |= EXTI_Line9;
 	
     //	  LED2_OFF();
@@ -96,54 +97,10 @@ void EXTI9_5_IRQHandler(void)
     delay_us(1);
 		time_out = 0;
 		Usart1_PutChar(0x7D);
-		Usart1_PutChar(DataRecv[0]);
-		Usart1_PutChar(DataRecv[1]);
-		Usart1_PutChar(DataRecv[2]);
-		Usart1_PutChar(DataRecv[3]);
-		Usart1_PutChar(DataRecv[4]);
-		Usart1_PutChar(DataRecv[5]);
-		Usart1_PutChar(DataRecv[6]);
-		Usart1_PutChar(DataRecv[7]);
-		Usart1_PutChar(DataRecv[8]);
-		Usart1_PutChar(DataRecv[9]);
-		Usart1_PutChar(DataRecv[10]);
-		Usart1_PutChar(DataRecv[11]);
-		Usart1_PutChar(DataRecv[12]);
-		Usart1_PutChar(DataRecv[13]);
-		Usart1_PutChar(DataRecv[14]);
-		Usart1_PutChar(DataRecv[15]);
-		Usart1_PutChar(DataRecv[16]);
-		Usart1_PutChar(DataRecv[17]);
-		Usart1_PutChar(DataRecv[18]);
-		Usart1_PutChar(DataRecv[19]);
-		Usart1_PutChar(DataRecv[20]);
-		Usart1_PutChar(DataRecv[21]);
-		Usart1_PutChar(DataRecv[22]);
-		Usart1_PutChar(DataRecv[23]);
-		Usart1_PutChar(DataRecv[24]);
-		Usart1_PutChar(DataRecv[25]);
-		Usart1_PutChar(DataRecv[26]);
-		Usart1_PutChar(DataRecv[27]);
-		Usart1_PutChar(DataRecv[28]);
-		Usart1_PutChar(DataRecv[29]);
-		Usart1_PutChar(DataRecv[30]);
-		Usart1_PutChar(DataRecv[31]);
-		Usart1_PutChar(DataRecv[32]);
-		Usart1_PutChar(DataRecv[33]);
-		Usart1_PutChar(DataRecv[34]);
-		Usart1_PutChar(DataRecv[35]);
-		Usart1_PutChar(DataRecv[36]);
-		Usart1_PutChar(DataRecv[37]);
-		Usart1_PutChar(DataRecv[38]);
-		Usart1_PutChar(DataRecv[39]);
-		Usart1_PutChar(DataRecv[40]);
-		Usart1_PutChar(DataRecv[41]);
-		Usart1_PutChar(DataRecv[42]);
-		Usart1_PutChar(DataRecv[43]);
-		Usart1_PutChar(DataRecv[44]);
-		Usart1_PutChar(DataRecv[45]);
-		Usart1_PutChar(DataRecv[46]);
-		Usart1_PutChar(DataRecv[47]);
+	  for(i=0;i<MAX_PACK_LENGTH;i++)
+		{
+				Usart1_PutChar(DataRecv[i]);
+		}
 		LED1_REV();
    
 }

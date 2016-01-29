@@ -4,7 +4,7 @@
 ..\obj\join.o: ..\SYSTEM\sys\sys.h
 ..\obj\join.o: ..\USER\stm32f10x.h
 ..\obj\join.o: ..\CORE\core_cm3.h
-..\obj\join.o: E:\Program Files (x86)\Keil\ARM\ARMCC\bin\..\include\stdint.h
+..\obj\join.o: d:\Keil\ARM\ARMCC\bin\..\include\stdint.h
 ..\obj\join.o: ..\USER\system_stm32f10x.h
 ..\obj\join.o: ..\USER\stm32f10x_conf.h
 ..\obj\join.o: ..\STM32F10x_FWLib\inc\stm32f10x_fsmc.h
@@ -18,7 +18,7 @@
 ..\obj\join.o: ..\SYSTEM\delay\delay.h
 ..\obj\join.o: ..\HARDWARE\KEY\key.h
 ..\obj\join.o: ..\SYSTEM\usart\usart.h
-..\obj\join.o: E:\Program Files (x86)\Keil\ARM\ARMCC\bin\..\include\stdio.h
+..\obj\join.o: d:\Keil\ARM\ARMCC\bin\..\include\stdio.h
 ..\obj\join.o: ..\HARDWARE\SPI\spi.h
 ..\obj\join.o: ..\HARDWARE\A7139\A7139.h
 ..\obj\join.o: ..\HARDWARE\common.h

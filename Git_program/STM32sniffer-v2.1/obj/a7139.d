@@ -4,7 +4,7 @@
 ..\obj\a7139.o: ..\SYSTEM\sys\sys.h
 ..\obj\a7139.o: ..\USER\stm32f10x.h
 ..\obj\a7139.o: ..\CORE\core_cm3.h
-..\obj\a7139.o: E:\Program Files (x86)\Keil\ARM\ARMCC\bin\..\include\stdint.h
+..\obj\a7139.o: d:\Keil\ARM\ARMCC\bin\..\include\stdint.h
 ..\obj\a7139.o: ..\USER\system_stm32f10x.h
 ..\obj\a7139.o: ..\USER\stm32f10x_conf.h
 ..\obj\a7139.o: ..\STM32F10x_FWLib\inc\stm32f10x_fsmc.h
@@ -18,7 +18,7 @@
 ..\obj\a7139.o: ..\SYSTEM\delay\delay.h
 ..\obj\a7139.o: ..\HARDWARE\KEY\key.h
 ..\obj\a7139.o: ..\SYSTEM\usart\usart.h
-..\obj\a7139.o: E:\Program Files (x86)\Keil\ARM\ARMCC\bin\..\include\stdio.h
+..\obj\a7139.o: d:\Keil\ARM\ARMCC\bin\..\include\stdio.h
 ..\obj\a7139.o: ..\HARDWARE\SPI\spi.h
 ..\obj\a7139.o: ..\HARDWARE\A7139\A7139.h
 ..\obj\a7139.o: ..\HARDWARE\common.h

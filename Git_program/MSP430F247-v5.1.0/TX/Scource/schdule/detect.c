@@ -773,14 +773,15 @@ void saveMiddle()
                               x_middle_quene[i],
                               y_middle_quene[i],
                               z_middle_quene[i]
-                                  )>25)
+                                  )<25)
         {
-            save_flag = 1;
-            break;
+            //save_flag = 1;
+            //break;
+            return;
         }
 
     }
-    if(save_flag)
+    //if(save_flag)
     {
         x_middle_quene[middle_quene_count] = MagneticUnit.XMiddle;
         y_middle_quene[middle_quene_count] = MagneticUnit.YMiddle;
@@ -788,7 +789,7 @@ void saveMiddle()
         middle_quene_count++;
         if(middle_quene_count==MIDDLE_QUENE_LENGTH)
         {
-            middle_quene_count = 0;
+            middle_quene_count = 1;
         }
     }
 }
