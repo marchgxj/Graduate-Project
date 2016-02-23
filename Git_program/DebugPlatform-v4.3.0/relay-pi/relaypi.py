@@ -11,6 +11,9 @@ __author__ = 'Changxiaodong'
 
 
 class Relay:
+    def __init__(self):
+        self.OFFSET = 0
+
     def sendCommand(self, add, cmd):
         '''
         Parameter：add:address of node
@@ -21,8 +24,9 @@ class Relay:
         Autor:xiaoxiami 2015.12.26
         Others：控制信息可以由上位机输入，或从服务器上获取
         '''
-        cmd_address = (chr(int(add)-20))
+        cmd_address = (chr(int(add) - self.OFFSET))
         cmd_cmd = (chr(int(cmd)))
+
         self.uart.write("\xAA")
         self.uart.write(cmd_address)
         self.uart.write(cmd_cmd)
@@ -43,6 +47,7 @@ class Relay:
         Autor:xiaoxiami 2015.12.26
         Others：
         '''
+
         for key, value in feedback.items():
             if key != "Status":
                 add = int(str(key).split("-")[-1])
@@ -60,23 +65,26 @@ class Relay:
         Others：时间长会出错。可以修改，当数据与当前界面显示数据发生变化时在更新界面
         '''
         self.uart = serial.Serial()
+        import os
+        if not os.path.exists("./Log/"):
+                os.makedirs('./Log/')
         if platform.system() == "Linux":
             self.port = "/dev/ttyAMA0"
             filepath = "./Log/" + time.strftime('%Y-%m-%d_%H-%M-%S', time.localtime(time.time())) + '.txt'
         else:
-            self.port = "COM3"
-            filepath = ".\Log\\" + time.strftime('%Y-%m-%d_%H-%M-%S', time.localtime(time.time())) + '.txt'
+            self.port = "COM5"
+            filepath = "./Log/" + time.strftime('%Y-%m-%d_%H-%M-%S', time.localtime(time.time())) + '.txt'
         self.uart.port = self.port
         self.uart.baudrate = 115200
         self.uart.open()
 
-
         self.file = open(filepath, "a+")
-        self.file.write("Program Start at:" + time.strftime('%Y-%m-%d  %H:%M:%S',time.localtime(time.time())) + "\n")
+        self.file.write("Program Start at:" + time.strftime('%Y-%m-%d  %H:%M:%S', time.localtime(time.time())) + "\n")
         self.file.close()
         print "running"
 
         self.notedata = []
+        data_dic = {}
         count = 0
         data = {}
         debug_count = 0
@@ -86,7 +94,7 @@ class Relay:
         self.upload_databuf = deque()
         self.netUploadThread = threading.Thread(target=self.dataUpload)
         self.netUploadThread.setDaemon(True)
-        #self.netUploadThread.start()
+        # self.netUploadThread.start()
 
         while (1):
             try:
@@ -106,19 +114,37 @@ class Relay:
                             length = ord(self.uart.read(1))  # 读出这一包要发的节点个数
                         except serial.SerialException:
                             pass
-                        print length
+                        # print length
                         self.notedata = []
                         data["data"] = ""
                         for i in range(length):
                             try:
                                 num = ord(self.uart.read(1)) << 8 | ord(self.uart.read(1))
                                 status = ord(self.uart.read(1))
-                                num += 20
+                                # num += 20
                             except serial.SerialException:
                                 pass
                             self.notedata.append(num)  # 偶数位为地址
                             self.notedata.append(status)  # 奇数位为数据
-                            data["data"] = data["data"] + "0086-110108-00022105-" + str(num).zfill(4) + "|"\
+
+                            key = num
+                            if key in data_dic:
+                                if status != data_dic[key]:
+                                    with open(filepath,"a+") as file:
+                                        file.write(
+                                            str(key) +
+                                            time.strftime(
+                                                ' : %Y-%m-%d  %H:%M:%S',
+                                                time.localtime(time.time())
+                                            ) + " : " +
+                                            str(status) + "\n"
+                                        )
+                                    data_dic[key] = status
+                            else:
+                                data_dic[key] = status
+
+
+                            data["data"] = data["data"] + "0086-110108-00022105-" + str(num).zfill(4) + "|" \
                                            + str(status) + ','
 
                         if len(self.notedata) == length * 2:
@@ -131,8 +157,8 @@ class Relay:
                                 pass
                         uploaddatacut = data["data"]
                         data["data"] = uploaddatacut[:-1]
-                        print data["data"]
-                        #self.upload_databuf.append(urllib.urlencode(data))
+                        # print data["data"]
+                        # self.upload_databuf.append(urllib.urlencode(data))
                         post_data = urllib.urlencode(data)
                         data["data"] = ""
                         try:

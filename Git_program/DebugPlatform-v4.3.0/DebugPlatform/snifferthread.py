@@ -279,8 +279,9 @@ class myThread (threading.Thread):
                                         localtime = time.strftime('%H:%M:%S', time.localtime(time.time())) + "::" +(format % (datetime.datetime.now().microsecond/1000))  #str('%3f' % datetime.datetime.now().microsecond/1000)
                                         self.dataintextbuf=localtime+"--"+self.dataintext+"\n"+self.dataintextbuf
 #                                         print str(self.count)+"--"+self.dataintext
-                                        self.file.write(self.dataintext+"\n")
-                                        self.file.write('RX:%s Count:%s\n' % (self.data,self.count))
+                                        with open(self.filename, 'w') as file:
+                                            file.write(self.dataintext+"\n")
+                                            file.write('RX:%s Count:%s\n' % (self.data,self.count))
                                         if self.count % 2000 == 0:
                                             self.showdata.appFrame.cleartext()
                                     else:
