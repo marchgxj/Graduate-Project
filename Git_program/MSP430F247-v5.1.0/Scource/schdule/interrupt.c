@@ -1,3 +1,12 @@
+//******************
+// FileName: interrupt.c
+//
+// Description:
+//  interrupt function
+//
+// Author: 2016/1/19, by xiaoximi
+//
+
 #include "common.h"
 int   Receive_Timeout = 0;            //接收超时重启
 uint32  Frame_Time = 0;                 //超帧内计时
@@ -9,6 +18,9 @@ uint8 Send_Error_Flag = 0;
 uint16 Send_Error_Count = 0;
 uint8 Start_Sleep_Flag = 0;
 uint16 Reset5983_Count = 0;
+uint16  reset_HMC5983_count = 0;
+uint16  in_quick_collect_count = 0;
+uint8 force_quit_quick_collect = 0;
 void Interrupt_Init(void)
 {
     P1DIR &=~ pinGIO2.pin_bm;
@@ -40,7 +52,7 @@ __interrupt void port1_ISR(void)
         delay_us(2);
         EndPointDevice.state = CMD_RX;
         
-        if(PackValid())
+        if(PackValid(DataRecvBuffer))
         {
             pack_type = Unpack(DataRecvBuffer);
             switch (pack_type)
@@ -50,10 +62,10 @@ __interrupt void port1_ISR(void)
                 BeaconComing_Count = 0;
                 EN_TIMER1;
                 //TBCCTL0 = CCIE;
-                PostTask(EVENT_BEACON_HANDLER);
+                PostTask(DataRecvBuffer,EVENT_BEACON_HANDLER);
                 break;
               case JOINREQUESTACK_TYPE:
-                PostTask(EVENT_JOINREQUESTACK_HANDLER);
+                PostTask(DataRecvBuffer,EVENT_JOINREQUESTACK_HANDLER);
                 break;
             }
             halLedSet(1);
@@ -74,16 +86,16 @@ __interrupt void Timer_A (void)
     TBCCTL0 &= ~CCIFG;
 
     Frame_Time++;
-    if(EndPointDevice.power == 0)
-    {
-        if(Frame_Time==BEFOR_BEACON_WAKE)//在接收beacon前使能中断
-        {
-            PostTask(EVENT_WAKE_A7139);
-            halLedSet(3);
-            Int_Enable_Flag = 1;
-            EN_INT;
-        }
-    }
+//    if(EndPointDevice.power == 0)
+//    {
+//        if(Frame_Time==BEFOR_BEACON_WAKE)//在接收beacon前使能中断
+//        {
+//            PostTask(EVENT_WAKE_A7139);
+//            halLedSet(3);
+//            Int_Enable_Flag = 1;
+//            EN_INT;
+//        }
+//    }
 }
 uint8 DataSendDraw[TEST_LENGTH];
 uint16 cal_count = 0;
@@ -135,8 +147,11 @@ void TestSend()
     DataSendDraw[13] = MagneticUnit.XMiddle;
     DataSendDraw[14] = MagneticUnit.YMiddle>>8;
     DataSendDraw[15] = MagneticUnit.YMiddle;
-    DataSendDraw[16] = MagneticUnit.Intensity>>8;
-    DataSendDraw[17] = MagneticUnit.Intensity;
+    DataSendDraw[16] = MagneticUnit.distance>>8;
+    DataSendDraw[17] = MagneticUnit.distance;
+//    DataSendDraw[16] = MagneticUnit.Intensity>>8;
+//    DataSendDraw[17] = MagneticUnit.Intensity;
+    MagneticUnit.Int_Middle = 5000;
     DataSendDraw[18] = MagneticUnit.Int_Middle>>8;
     DataSendDraw[19] = MagneticUnit.Int_Middle;
     DataSendDraw[20] = MagneticUnit.IntState;
@@ -149,14 +164,14 @@ void TestSend()
     DataSendDraw[27] = MagneticUnit.ZAve_Slop;
     DataSendDraw[28] = MagneticUnit.ZValue>>8;
     DataSendDraw[29] = MagneticUnit.ZValue;
-    DataSendDraw[30] = MagneticUnit.GMI_XValue>>8;
-    DataSendDraw[31] = MagneticUnit.GMI_XValue;
-    DataSendDraw[32] = MagneticUnit.GMI_YValue>>8;
-    DataSendDraw[33] = MagneticUnit.GMI_YValue;
-    DataSendDraw[34] = MagneticUnit.GMI_XMiddle>>8;
-    DataSendDraw[35] = MagneticUnit.GMI_XMiddle;
-    DataSendDraw[36] = MagneticUnit.GMI_YMiddle>>8;
-    DataSendDraw[37] = MagneticUnit.GMI_YMiddle;
+    DataSendDraw[30] = MagneticUnit.XValue_Stable>>8;
+    DataSendDraw[31] = MagneticUnit.XValue_Stable;
+    DataSendDraw[32] = MagneticUnit.YValue_Stable>>8;
+    DataSendDraw[33] = MagneticUnit.YValue_Stable;
+    DataSendDraw[34] = MagneticUnit.ZValue_Stable>>8;
+    DataSendDraw[35] = MagneticUnit.ZValue_Stable;
+    DataSendDraw[36] = perimeterbuf>>8;
+    DataSendDraw[37] = perimeterbuf;
     DataSendDraw[38] = EndPointDevice.vlotage>>8;
     DataSendDraw[39] = EndPointDevice.vlotage;
     DataSendDraw[40] = EndPointDevice.temperature>>8;
@@ -165,6 +180,16 @@ void TestSend()
     DataSendDraw[43] = MagneticUnit.ZMiddle;
     DataSendDraw[44] = XValue_Parking;
     DataSendDraw[45] = YValue_Parking;
+    DataSendDraw[46] = MagneticUnit.infrared>>8;
+    DataSendDraw[47] = MagneticUnit.infrared;
+    DataSendDraw[48] = diameterbuf>>8;
+    DataSendDraw[49] = diameterbuf;
+    DataSendDraw[50] = MagneticUnit.compatness>>24;
+    DataSendDraw[51] = MagneticUnit.compatness>>16;
+    DataSendDraw[52] = MagneticUnit.compatness>>8;
+    DataSendDraw[53] = MagneticUnit.compatness;
+    DataSendDraw[54] = storage_count_send>>8;
+    DataSendDraw[55] = storage_count_send;
     
     A7139_WriteFIFO(DataSendDraw,TEST_LENGTH);
     delay_us(1);
@@ -178,7 +203,6 @@ void TestSend()
 #pragma vector=TIMERA0_VECTOR
 __interrupt void Timer_A0(void)
 {
-    uint8 buffer[6];
     TA0CCTL0 &= ~CCIFG;
 //    halLedToggle(2);
 //    return ;
@@ -187,6 +211,7 @@ __interrupt void Timer_A0(void)
     {
         Exit_Sleep = 0;
         Start_Sleep_Flag = 0;
+        halLedSet(4);
         LPM3_EXIT;
     }
     if(Start_Sleep_Flag == 1)
@@ -194,7 +219,7 @@ __interrupt void Timer_A0(void)
         if(isEmpty()==1)
         {
             Start_Sleep_Flag = 0;
-            PostTask(EVENT_MCUSLEEP_ENABLE);
+            PostTask(NULL,EVENT_MCUSLEEP_ENABLE);
         }
     }
 #endif
@@ -211,9 +236,10 @@ __interrupt void Timer_A0(void)
             if(Int_Enable_Count > 200)
             {
                 Int_Enable_Count = 0;
+                halLedSet(4);
                 LPM3_EXIT;
                 ReJoinFlag = 1;
-                PostTask(EVENT_A7139_RESET);
+                PostTask(NULL,EVENT_A7139_RESET);
             }
         }
         else
@@ -226,9 +252,10 @@ __interrupt void Timer_A0(void)
             if(Send_Error_Count > 200)
             {
                 Send_Error_Count = 0;
+                halLedSet(4);
                 LPM3_EXIT;
                 ReJoinFlag = 1;
-                PostTask(EVENT_A7139_RESET);
+                PostTask(NULL,EVENT_A7139_RESET);
             }
         }
         else
@@ -240,33 +267,13 @@ __interrupt void Timer_A0(void)
     //测试低功耗时候使用
     else if(EndPointDevice.power == 1)                  
     {
-        //PostTask(EVENT_IDENTIFY_CAR);
-//        BeaconComing_Count++;
-//        if(BeaconComing_Count>=BEACON_PERIOD/50)
-//        {
-//            BeaconComing_Count = 0;
-//        }
-//        if(Data_Send_Waiting_Flag == 1)
-//        {
-//            if(BeaconComing_Count >= (BEACON_PERIOD/50)-5)
-//            {
-//                Data_Send_Waiting_Flag = 0;
-//                A7139_Deep_Wake();
-//                halLedSet(3);
-//                Int_Enable_Flag = 1;
-//                EN_INT;
-//            }
-//            
-//        }
         Reset5983_Count++;
         if(Reset5983_Count == 1200)
         {
             Reset5983_Count = 0;
-            PostTask(EVENT_5983_RESET);
+            PostTask(NULL,EVENT_5983_RESET);
         
         }
-        
-        
         Keep_Alive_Count++;
 #if NET_TEST == 1 || QOS_TEST == 1 || TEMP_TEST != 0
         if(Keep_Alive_Count > 40)
@@ -281,7 +288,7 @@ __interrupt void Timer_A0(void)
             DataPacket.ab_slot_num++;
 #endif
             
-            PostTask(EVENT_KEEPALIVE_SEND);
+            PostTask(NULL,EVENT_KEEPALIVE_SEND);
         }
         /****************复位*******************/
         if(Int_Enable_Flag == 1)
@@ -291,10 +298,11 @@ __interrupt void Timer_A0(void)
             {
                 Int_Enable_Count = 0;
                 __disable_interrupt();
+                halLedSet(4);
                 LPM3_EXIT;
                 ReJoinFlag = 1;
                 Init_TQ();
-                PostTask(EVENT_A7139_RESET);
+                PostTask(NULL,EVENT_A7139_RESET);
                 
             }
         }
@@ -309,11 +317,11 @@ __interrupt void Timer_A0(void)
             {
                 Send_Error_Count = 0;
                 __disable_interrupt();
+                halLedSet(4);
                 LPM3_EXIT;
                 ReJoinFlag = 1;
                 Init_TQ();
-                PostTask(EVENT_A7139_RESET);
-
+                PostTask(NULL,EVENT_A7139_RESET);
             }
         }
         else
@@ -326,6 +334,17 @@ __interrupt void Timer_A0(void)
         Collect_Period++;
         if(Quick_Collect==0)
         {
+            in_quick_collect_count = 0;
+            if(force_quit_quick_collect != 0)
+            {
+                force_quit_quick_collect++;
+                if(force_quit_quick_collect > 5)
+                {
+                    force_quit_quick_collect = 0;
+                }
+            }
+            
+            
             if(Collect_Period>20)
             {
                 Collect_Period = 0;
@@ -337,9 +356,17 @@ __interrupt void Timer_A0(void)
         {
             //PostTask(EVENT_IDENTIFY_CAR);
             IdentifyCar();
-            if(Collect_Period > 200)
+            in_quick_collect_count++;
+            if(in_quick_collect_count>1200)
+            {
+                in_quick_collect_count = 0;
+                force_quit_quick_collect = 1;
+                Collect_Period = 301;
+            }
+            if(Collect_Period > 300)
             {
                 Collect_Period = 0;
+                Quick_CollectM = Quick_Collect;
                 Quick_Collect = 0;
             }
         }
@@ -348,5 +375,11 @@ __interrupt void Timer_A0(void)
 //            OpenGMI_Count++;
 //        }
         
+    }
+    reset_HMC5983_count++;
+    if(reset_HMC5983_count == HMC5983_RESET_PERIOD) 
+    {
+        reset_HMC5983_count = 0;
+        Init_5983();
     }
 }

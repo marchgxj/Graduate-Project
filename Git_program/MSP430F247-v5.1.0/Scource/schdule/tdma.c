@@ -8,8 +8,12 @@ uint8 Int_Enable_Flag = 0;
 uint16 BeaconComing_Count = 0;
 uint8 Data_Send_Waiting_Flag = 0;
 uint8 Switch_Axis = 0;
+uint8 watch1 = 0;
+uint8 watch2 = 0;
+uint8 ack_buf[MAX_PACK_LENGTH];
 uint8 RecvDataACK()
 {
+    
     send_time = 0;
     while(GIO2==0)
     {
@@ -18,7 +22,7 @@ uint8 RecvDataACK()
         if(send_time>DATAACK_TIMEOUT)             //60为DataACK接收超时，在收到ACK时不会进入if内
         {
             resend_count++;
-            EndPointDevice.data_ack = 0;
+            EndPointDevice.data_ack = 1;
             RXMode();
 
             return EndPointDevice.data_ack;
@@ -27,13 +31,16 @@ uint8 RecvDataACK()
             
     }
     
-    A7139_ReadFIFO(DataRecvBuffer,MAX_PACK_LENGTH);
+    A7139_ReadFIFO(ack_buf,MAX_PACK_LENGTH);
     RXMode();
-    if(PackValid()&&(Unpack(DataRecvBuffer) == DATAACK_TYPE)) //如果收到正确的ACK
+    watch1 = PackValid(ack_buf);
+    watch2 = Unpack(ack_buf);
+    
+    if(watch1&&(watch2 == DATAACK_TYPE)) //如果收到正确的ACK
     {
-        DataACKHandler();
+        DataACKHandler(ack_buf);
     }
-    else                                                        //否则进入CSMA阶段
+    else
     {
         EndPointDevice.data_ack = 0;
     }
@@ -130,10 +137,10 @@ void CreatSendData()
 
 
 }
-
+uint8 ack_flag = 0;
 void DataSend(void)
 {
-    uint8 ack_flag = 0;
+    
     uint32 a,b,c;             //防止第一个节点为负
     uint32 before_slot_wake = WAKE_TIME;
     uint32 timeout = 0;
@@ -203,13 +210,14 @@ void DataSend(void)
         DataAck_Lost++;
         if(DataAck_Lost>5)
         {
-            PostTask(EVENT_A7139_RESET);
+            PostTask(NULL,EVENT_A7139_RESET);
             DataAck_Lost = 0;
         }
-        PostTask(EVENT_CSMA_RESEND);
+        PostTask(NULL,EVENT_CSMA_RESEND);
         EndPointDevice.data_ack = 0;
         halLedSet(3);
         Int_Enable_Flag = 1;
+        RXMode();
         EN_INT; 
     }
 #endif
@@ -218,26 +226,26 @@ void DataSend(void)
 }
 
 uint8 rejoin_flag = 0;
-void DataACKHandler()
+void DataACKHandler(uint8 data[])
 {
-    if(Unpack(DataRecvBuffer)!=DATAACK_TYPE)
+    if(Unpack(data)!=DATAACK_TYPE)
     {
         return;
     }
-    EndPointDevice.time_stamp = DataRecvBuffer[6]<<8|DataRecvBuffer[7];
+    EndPointDevice.time_stamp = data[6]<<8|data[7];
     EndPointDevice.data_ack = 1;
-    EndPointDevice.cmd = DataRecvBuffer[8];
+    EndPointDevice.cmd = data[8];
 #if QOS_TEST == 0
     DataPacket.ab_slot_num++;
 #endif
-    rejoin_flag = DataRecvBuffer[1]&0x01;
+    rejoin_flag = data[1]&0x01;
     if(rejoin_flag == 1)
     {
-        PostTask(EVENT_REJOIN_HANDLER);
+        PostTask(NULL,EVENT_REJOIN_HANDLER);
     }
     if(EndPointDevice.cmd!=0)
     {
-        PostTask(EVENT_CMD_HANDLER);
+        PostTask(NULL,EVENT_CMD_HANDLER);
         Start_Sleep_Flag = 0;
         return;
     }
@@ -255,7 +263,7 @@ void DataACKHandler()
 void CSMADataResend()
 {
     SendByCSMA(DataSendBuffer,MAX_PACK_LENGTH);
-    A7139_Sleep();
+    //A7139_Sleep();
     TIME2_HIGH;
 }
 

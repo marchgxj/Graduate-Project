@@ -53,7 +53,7 @@ typedef struct{
 extern EndPointDeviceStruct EndPointDevice;
 extern uint8 Unpack(uint8 *type);
 extern void BeaconHandler(uint8 beacon[]);
-extern uint8 PackValid(void);
+extern uint8 PackValid(uint8 data[]);
 extern uint8 SendByCSMA(u8 *buff,uint8 length);
 extern uint8 GetCheck(uint8* buf);
 

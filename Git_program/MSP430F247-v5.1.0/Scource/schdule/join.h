@@ -66,7 +66,7 @@ extern uint8 RejoinChannel;
 extern uint8 Scan_Channel(uint8 startch,uint8 endch);
 extern uint8 SortChannel(uint8 startch,uint8 endch);
 extern void CreatJoinRequest();
-extern void JoinRequestACKHandler();
+extern void JoinRequestACKHandler(uint8 data[]);
 extern void SendJoinRequest();
 extern void ChannelSelection(uint8 start,uint8 end);
 extern void ReJoinHandler();

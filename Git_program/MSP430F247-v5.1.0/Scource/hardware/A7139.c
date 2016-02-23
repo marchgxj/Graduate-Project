@@ -656,7 +656,7 @@ void A7139_WOR_rece_init(uint8 status)
 void A7139_WOR_send_init(uint8 status)
 {	
     A7139_StrobeCmd(CMD_STBY);		//进入空闲
-    Delay_us(10); 
+    delay_us(10); 
     if(status)
     {
         A7139_SetPackLen(2);
@@ -682,16 +682,16 @@ void rf_wor_send(uint8 *buf,uint8 bufSize)
     wor_data[1] = buf[12]+buf[13]+buf[14]+buf[15];
     A7139_WOR_send_init(1);
     A7139_StrobeCmd(CMD_STBY);		//进入空闲
-    Delay_us(10);
+    delay_us(10);
     A7139_WriteFIFO(wor_data,2); 	//将数据写入A7139缓冲区
-    Delay_us(10);
+    delay_us(10);
     for(j=0;j<=RF_SEND_WOR_TIMES;j++)
     {
         A7139_StrobeCmd(CMD_TX); 		//开发发送数据
         i =0; 
         while(!GIO1_IN())
         {
-            Delay_us(10);
+            delay_us(10);
             if(i++ >= 2000)
                 break;
         }
@@ -704,7 +704,7 @@ void rf_wor_send(uint8 *buf,uint8 bufSize)
                 CLR_WDT();				//50ms后超时退出，避免模块异常后在这死循环
                 break;
             }
-            Delay_us(10); 
+            delay_us(10); 
         }
         CLR_WDT();	
     } 
@@ -773,7 +773,6 @@ void A7139_WakeToRecv(void)
 void A7139_Deep_Wake(void)
 {
 #if (SLEEP_EN)
-    halLedSet(4);
     __disable_interrupt();
     A7139_StrobeCmd(CMD_STBY);
     delay_ms(10);
@@ -787,7 +786,6 @@ void A7139_Deep_Wake(void)
     delay_ms(10);
     RXMode();
     delay_ms(10);
-    halLedClear(4);
     TA0CCTL0 &= ~CCIFG;
     __enable_interrupt();
 

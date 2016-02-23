@@ -8,6 +8,14 @@
 #define    VAR_THRESHOLD       50             //方差判断阈值
 #define    EXT_THRESHOLD       40               //两轴差值判断阈值
 #define    INT_THRESHOLD       60
+#define    DIS_THRESHOLD       30
+#define    COM_THRESHOLD       1500
+
+#define   LOWPOWER_THRESHOLD_HIGH   600
+#define   LOWPOWER_THRESHOLD_LOW    500
+#define   TEMP_THRESHOLD_HIGH       3500
+#define   TEMP_THRESHOLD_LOW        1000
+
 //---------------Working Mode Config-------------------
 #define    QOS_TEST            0
 #define    NET_TEST            0
@@ -29,7 +37,7 @@
 #define    BACKOFF_PERIOD      SLOT_LENGTH/BACKOFF_DIV
 #define    WAKE_TIME           4000    //SLEEP唤醒需要2ms
 
-#define    DATAACK_TIMEOUT     3000      //ack接收超时，决定是否进入csma重发阶段
+#define    DATAACK_TIMEOUT     1000      //ack接收超时，决定是否进入csma重发阶段
 
 #define    CCA                 200     //载波监测阈值
 #define    CSMA_BACKOFF_TIME   8

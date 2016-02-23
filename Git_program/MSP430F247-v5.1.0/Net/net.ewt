@@ -12,6 +12,11 @@
       <name>C-STAT</name>
       <archiveVersion>1</archiveVersion>
       <data>
+        <version>1</version>
+        <cstatargs>
+          <useExtraArgs>0</useExtraArgs>
+          <extraArgs></extraArgs>
+        </cstatargs>
         <cstatsettings>
           <package checked="true" name="STDCHECKS">
             <group checked="true" name="ARR">
@@ -983,6 +988,11 @@
       <name>C-STAT</name>
       <archiveVersion>1</archiveVersion>
       <data>
+        <version>1</version>
+        <cstatargs>
+          <useExtraArgs>0</useExtraArgs>
+          <extraArgs></extraArgs>
+        </cstatargs>
         <cstatsettings>
           <package checked="true" name="STDCHECKS">
             <group checked="true" name="ARR">
@@ -1945,6 +1955,39 @@
     </settings>
   </configuration>
   <group>
+    <name>algorithm</name>
+    <file>
+      <name>$PROJ_DIR$\..\Scource\algorithm\bayes.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\Scource\algorithm\bayes.h</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\Scource\algorithm\CFmodels.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\Scource\algorithm\CFmodels.h</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\Scource\algorithm\criteria.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\Scource\algorithm\criteria.h</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\Scource\algorithm\filter.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\Scource\algorithm\filter.h</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\Scource\algorithm\math.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\Scource\algorithm\math.h</name>
+    </file>
+  </group>
+  <group>
     <name>hardware</name>
     <file>
       <name>$PROJ_DIR$\..\Scource\hardware\A7139.c</name>
@@ -1975,6 +2018,12 @@
     </file>
     <file>
       <name>$PROJ_DIR$\..\Scource\hardware\HMC5983.h</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\Scource\hardware\infrared.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\Scource\hardware\infrared.h</name>
     </file>
     <file>
       <name>$PROJ_DIR$\..\Scource\hardware\led.c</name>

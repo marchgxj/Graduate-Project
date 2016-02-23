@@ -42,13 +42,12 @@ uint16 test1,test2;
 #if NET_TEST == 1 || QOS_TEST==1
     ChannelSelection(CHANNEL_5,CHANNEL_6);
 #else
-    ChannelSelection(CHANNEL_5,CHANNEL_6);
+    ChannelSelection(CHANNEL_3,CHANNEL_4);
 #endif
 ReJoin:
     EndPointDevice.pyh_address = GetPhyAddress();
     EndPointDevice.device_type = DEVICE;
     ChannelSelectionOnce(RejoinChannel,RejoinChannel+1);
-    halLedClear(4);
     TA0CCTL0 &= ~CCIFG;
     TBCCTL0 &= ~CCIFG;
     EN_INT;
@@ -61,7 +60,6 @@ ReJoin:
         {
             ReJoinHandler();
             ReJoinFlag = 0;
-            halLedSet(4);
             __disable_interrupt();
             halLedFlow();
             goto ReJoin;

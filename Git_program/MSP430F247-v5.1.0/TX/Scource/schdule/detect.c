@@ -468,9 +468,6 @@ void GetVoltage()
     }
 }
 
-
-
-
 uint8 compatnessStable()
 {
     if(compatness_memory == MagneticUnit.compatness)
@@ -569,7 +566,8 @@ void IdentifyCar()
     halLedClear(2);
 
 }
-uint8 Side_Parking = 0;
+
+
 void TotalJudge()
 {
     if((MagneticUnit.ExtState==CAR)||(MagneticUnit.IntState==CAR)||(MagneticUnit.VarState==CAR))

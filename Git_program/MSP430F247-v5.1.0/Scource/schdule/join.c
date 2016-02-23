@@ -190,21 +190,21 @@ void CreatJoinRequestACKOK()
     DataSendBuffer[11] = 0;           
 }
 
-void JoinRequestACKHandler()
+void JoinRequestACKHandler(uint8 data[])
 {
     uint8 accept = 0;
     uint8 ackok = 0;
     uint8 type = 0;
-    type = Unpack(DataRecvBuffer);
+    type = Unpack(data);
     if(type!=JOINREQUESTACK_TYPE)
     {
         return;
     }
-    accept = DataRecvBuffer[1]&0x01;
-    ackok = (DataRecvBuffer[1]&0x02)>>1;
+    accept = data[1]&0x01;
+    ackok = (data[1]&0x02)>>1;
     
-    EndPointDevice.cluster_id = DataRecvBuffer[6];
-    EndPointDevice.cluster_innernum = DataRecvBuffer[7];
+    EndPointDevice.cluster_id = data[6];
+    EndPointDevice.cluster_innernum = data[7];
     //EndPointDevice.cluster_innernum = 2;
     EndPointDevice.connected = 1;
     halLedClearAll();
@@ -258,7 +258,6 @@ void ChannelSelectionOnce(uint8 start,uint8 end)
 }
 void ReJoinHandler()
 {
-    halLedSet(4);
     __disable_interrupt();
     A7139_Init(470.001f);
     Init_TQ();
@@ -282,16 +281,6 @@ void ReJoinHandler()
     MagneticUnit.Variance = 0;
     MagneticUnit.Extremum = 0;
     MagneticUnit.Intensity = 0;
-    VState1_Count = 0;
-    VState2_Count = 0;
-    VState3_Count = 0;
-    EState1_Count = 0;
-    EState2_Count = 0;
-    EState3_Count = 0;
-    IState1_Count = 0;
-    IState2_Count = 0;
-    IState3_Count = 0;
-    CarCaliFlag = 0;
     DataPacket.ab_slot_num = 0;
     Send_Error_Flag = 0;
     Send_Error_Count = 0;

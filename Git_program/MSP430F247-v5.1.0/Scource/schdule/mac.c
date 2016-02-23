@@ -113,7 +113,7 @@ void BeaconHandler(uint8 beacon[])
     //EndPointDevice.power = 0;
     if(EndPointDevice.connected == 0)                   //未连接，发送加入请求
     {
-        PostTask(EVENT_JOINREQUEST_SEND);
+        PostTask(NULL,EVENT_JOINREQUEST_SEND);
     }
     else                                                //已连接，执行TDMA过程
     {
@@ -122,26 +122,26 @@ void BeaconHandler(uint8 beacon[])
             A7139_Sleep(); 
         }
 
-        PostTask(EVENT_DATA_SEND);
+        PostTask(NULL,EVENT_DATA_SEND);
     }
     TIME2_LOW;
     
 }
 uint8 valid = 0;
-uint8 PackValid(void)
+uint8 PackValid(uint8 data[])
 {
     uint16 phy_address = 0;
-    if(DataRecvBuffer[0]==0)
+    if(data[0]==0)
     {
         return 0;
     }
-    phy_address = DataRecvBuffer[2]<<8|DataRecvBuffer[3];
-    if((DataRecvBuffer[2]==EndPointDevice.cluster_id&&DataRecvBuffer[3]==EndPointDevice.cluster_innernum)||
-       (DataRecvBuffer[2]==BROADCAST&&DataRecvBuffer[3]==BROADCAST)||
+    phy_address = data[2]<<8|data[3];
+    if((data[2]==EndPointDevice.cluster_id&&data[3]==EndPointDevice.cluster_innernum)||
+       (data[2]==BROADCAST&&data[3]==BROADCAST)||
        (phy_address==EndPointDevice.pyh_address)||
-       (DataRecvBuffer[2]==EndPointDevice.cluster_id && DataRecvBuffer[3]==BROADCAST))
+       (data[2]==EndPointDevice.cluster_id && data[3]==BROADCAST))
     {
-        if(GetCheck(DataRecvBuffer)==DataRecvBuffer[11])
+        if(GetCheck(data)==data[11])
         {
             return 1;
         }

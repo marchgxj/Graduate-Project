@@ -24,7 +24,7 @@ extern uint16 BeaconComing_Count;
 extern uint8 Data_Send_Waiting_Flag;
 
 extern void DataSend(void);
-extern void DataACKHandler();
+extern void DataACKHandler(uint8 data[]);
 extern void CSMADataResend();
 extern void KeepAliveSend();
 #endif

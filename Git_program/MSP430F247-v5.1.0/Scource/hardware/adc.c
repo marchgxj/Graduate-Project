@@ -29,7 +29,6 @@ void AD_Init()
 ********************************************/
 int16 SampleChannel(Uint16* SampleValueX,Uint16* SampleValueY)	//进行采样通道电源等的设置
 {     
-    uint16 buf = 0;
 #if (GMI_EN == 0 && TEMP_TEST != 2)
     *SampleValueX =0;
     *SampleValueY =0;
@@ -95,6 +94,11 @@ void AD_cal()
     halLedSetAll();
     delay_ms(2000);
     
+    /*for(i=0;i<INFRA_LENGTH;i++)
+    {
+        infraredData[i] = sampleInfrared();
+    }*/
+    
     ADX = 0;
     ADY = 0;
     ADZ = 0;
@@ -118,6 +122,16 @@ void AD_cal()
     MagneticUnit.XMiddleMF = MagneticUnit.XMiddle;
     MagneticUnit.YMiddleMF = MagneticUnit.YMiddle;
     MagneticUnit.ZMiddleMF = MagneticUnit.ZMiddle;
+    MagneticUnit.XValue_Stable = MagneticUnit.XMiddle;
+    MagneticUnit.YValue_Stable = MagneticUnit.YMiddle;
+    MagneticUnit.ZValue_Stable = MagneticUnit.ZMiddle;
+    for(i=0;i<MIDDLE_QUENE_LENGTH;i++)
+    {
+        x_middle_quene[i] = MagneticUnit.XMiddle;
+        y_middle_quene[i] = MagneticUnit.YMiddle;
+        z_middle_quene[i] = MagneticUnit.ZMiddle;
+    }
+    
     MagneticUnit.GMI_XMiddle = GMIADX>>4;
     MagneticUnit.GMI_YMiddle = GMIADY>>4;
     MagneticUnit.XMiddleM = MagneticUnit.XMiddle;
@@ -125,7 +139,7 @@ void AD_cal()
     MagneticUnit.ZMiddleM = MagneticUnit.ZMiddle;
     MagneticUnit.GMI_XMiddleM = MagneticUnit.GMI_XMiddle;
     MagneticUnit.GMI_YMiddleM = MagneticUnit.GMI_YMiddle;
-    MagneticUnit.Ext_Middle = abs(MagneticUnit.XMiddle-MagneticUnit.YMiddle);
+    MagneticUnit.Ext_Middle = abs(MagneticUnit.ZMiddle-MagneticUnit.YMiddle);
     
     intensity = sqrt_16((((uint32)MagneticUnit.XMiddle*(uint32)MagneticUnit.XMiddle)+((uint32)MagneticUnit.YMiddle*(uint32)MagneticUnit.YMiddle)+((uint32)MagneticUnit.ZMiddle*(uint32)MagneticUnit.ZMiddle)));
     MagneticUnit.Int_Middle = intensity;
@@ -135,6 +149,7 @@ void AD_cal()
     Ext_Threshold = EXT_THRESHOLD;
     Int_Threshold = INT_THRESHOLD;
     Var_Threshold = VAR_THRESHOLD;
+    Dis_Threshold = DIS_THRESHOLD;
     
     
     for(int i=0;i<FILTER_LENGTH;i++)
@@ -166,3 +181,15 @@ void AD_cal()
     delay_ms(50);
 }
 
+uint16 sampleInfrared()
+{
+    uint16 value = 0;
+    ADC12CTL0 &= ~ (ENC+ADC12SC);
+    ADC12MCTL0 = INCH_1;
+    ADC12CTL0 |= ENC + ADC12SC;
+    while (ADC12CTL1 & ADC12BUSY!=0);                         //Wait if ADC10 core is active   
+    value=ADC12MEM0;
+    ADC12CTL0 &= ~ (ENC+ADC12SC);
+    
+    return value;
+}

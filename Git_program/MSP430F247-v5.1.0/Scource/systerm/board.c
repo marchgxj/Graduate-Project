@@ -38,6 +38,4 @@ void halBoardInit(void)
     Init_TQ();
     Init_5983();
     AD_cal(); 
-    
-    
 }

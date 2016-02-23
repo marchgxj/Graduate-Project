@@ -256,12 +256,13 @@ void Single_Write_HMC(unsigned char REG_Addr, unsigned char REG_data)
 
 void Single_Read_HMC(uint16* XValue,uint16* YValue,uint16* ZValue)
 {
-    int i;
     int xvalue = 0;
     int yvalue = 0;
     int zvalue = 0;
     uint8 buffer[6];
-
+    uint8 i = 0;
+    Single_Write_HMC(0x02,0x01);
+    delay_ms(15);
     HMC_Start();
     HMC_SendByte(0x3c);  //slave Address
     HMC_SendByte(0x03);	
@@ -277,14 +278,20 @@ void Single_Read_HMC(uint16* XValue,uint16* YValue,uint16* ZValue)
             HMC_SendACK(0);	
     }
     HMC_Stop();
-    Single_Write_HMC(0x02,0x01);
-    
+//    HMC_SendByte(0x3c);  //slave Address
+//    HMC_SendByte(0x03);
+//    HMC_Start();
+//    HMC_SendByte(0x3c+1);  //slave Address
+////    HMC_SendByte(REG_Addr);
+//    data = HMC_ReceiveByte();
+//    HMC_SendACK(1);
+//    HMC_Stop();
     xvalue = (buffer[0]<<8)|buffer[1];
     zvalue = (buffer[2]<<8)|buffer[3];
     yvalue = (buffer[4]<<8)|buffer[5];
-    if(zvalue!=-4096)
+    if(xvalue!=-4096)
     {
-        *XValue = zvalue + 2048;
+        *XValue = xvalue + 2048;
     }
     else
     {
@@ -298,9 +305,9 @@ void Single_Read_HMC(uint16* XValue,uint16* YValue,uint16* ZValue)
     {
         *YValue = 0;
     }
-    if(xvalue!=-4096)
+    if(zvalue!=-4096)
     {
-        *ZValue = xvalue + 2048;
+        *ZValue = zvalue + 2048;
     }
     else
     {
@@ -310,9 +317,27 @@ void Single_Read_HMC(uint16* XValue,uint16* YValue,uint16* ZValue)
     
 }
 
+void ResetHMC(uint8 dir)
+{
+    
+    Single_Write_HMC(0x00,0x71);
+    Single_Write_HMC(0x01,0xA0);
+    Single_Write_HMC(0x02,0x00);
+    delay_ms(100);
+    Single_Write_HMC(0x00,0x72);
+    Single_Write_HMC(0x01,0xA0);
+    Single_Write_HMC(0x02,0x00);
+    delay_ms(100);
+    Single_Write_HMC(0x00,HMC_Config[0]);
+    Single_Write_HMC(0x01,HMC_Config[1]);
+    Single_Write_HMC(0x02,HMC_Config[2]);
+    
+    
+}
     
 void Multi_Read_HMC(uint16* XValue,uint16* YValue,uint16* ZValue)
 {
+    
     int i;
     int xvalue = 0;
     int yvalue = 0;
@@ -360,19 +385,19 @@ void Multi_Read_HMC(uint16* XValue,uint16* YValue,uint16* ZValue)
     }
     if(zvalue!=-4096)
     {
-        *YValue = zvalue + 2048;
-    }
-    else
-    {
-        *YValue = 0;
-    }
-    if(yvalue!=-4096)
-    {
-        *ZValue = yvalue + 2048;
+        *ZValue = zvalue + 2048;
     }
     else
     {
         *ZValue = 0;
+    }
+    if(yvalue!=-4096)
+    {
+        *YValue = yvalue + 2048;
+    }
+    else
+    {
+        *YValue = 0;
     }
 }
 
