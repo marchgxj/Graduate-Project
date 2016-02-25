@@ -19,7 +19,12 @@ uint8 RecvDataACK()
     {
         delay_100us();
         send_time++;
+#if WIRELESS_TEST
+        if(send_time>10000)
+#else
         if(send_time>DATAACK_TIMEOUT)             //60为DataACK接收超时，在收到ACK时不会进入if内
+#endif
+        
         {
             resend_count++;
             EndPointDevice.data_ack = 1;
@@ -38,6 +43,15 @@ uint8 RecvDataACK()
     
     if(watch1&&(watch2 == DATAACK_TYPE)) //如果收到正确的ACK
     {
+#if WIRELESS_TEST
+        if(EndPointDevice.connected)
+        {
+            halLedClearAll();
+            __disable_interrupt();
+            while(1);
+        }
+        
+#endif
         DataACKHandler(ack_buf);
     }
     else

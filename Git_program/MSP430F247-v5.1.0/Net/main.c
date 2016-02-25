@@ -42,7 +42,7 @@ uint16 test1,test2;
 #if NET_TEST == 1 || QOS_TEST==1
     ChannelSelection(CHANNEL_5,CHANNEL_6);
 #else
-    ChannelSelection(CHANNEL_3,CHANNEL_4);
+    ChannelSelection(CHANNEL_9,CHANNEL_10);
 #endif
 ReJoin:
     EndPointDevice.pyh_address = GetPhyAddress();

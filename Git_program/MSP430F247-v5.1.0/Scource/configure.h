@@ -24,6 +24,7 @@
 #define    GMI_EN              0
 #define    SLEEP_EN            1 
 #define    LED_EN              1
+#define    WIRELESS_TEST       1
 //------------------Net Work Config--------------------
 /****************更改beacon周期需要重新调的参数*************/
 #define    BEACON_PERIOD       10000   //单位  100us

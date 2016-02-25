@@ -37,5 +37,7 @@ void halBoardInit(void)
     Interrupt_Init();
     Init_TQ();
     Init_5983();
+#if WIRELESS_TEST == 0
     AD_cal(); 
+#endif
 }
