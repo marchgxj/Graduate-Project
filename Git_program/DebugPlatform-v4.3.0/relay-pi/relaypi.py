@@ -74,13 +74,12 @@ class Relay:
         else:
             self.port = "COM5"
             filepath = "./Log/" + time.strftime('%Y-%m-%d_%H-%M-%S', time.localtime(time.time())) + '.txt'
+        logpath = "./Log/log.txt"
         self.uart.port = self.port
         self.uart.baudrate = 115200
         self.uart.open()
-
-        self.file = open(filepath, "a+")
-        self.file.write("Program Start at:" + time.strftime('%Y-%m-%d  %H:%M:%S', time.localtime(time.time())) + "\n")
-        self.file.close()
+        with open(logpath, "a+") as file:
+            file.write("Program Start at:" + time.strftime('%Y-%m-%d  %H:%M:%S', time.localtime(time.time())) + "\n")
         print "running"
 
         self.notedata = []
@@ -126,6 +125,7 @@ class Relay:
                                 pass
                             self.notedata.append(num)  # 偶数位为地址
                             self.notedata.append(status)  # 奇数位为数据
+                            print self.notedata
 
                             key = num
                             if key in data_dic:
@@ -161,8 +161,9 @@ class Relay:
                         # self.upload_databuf.append(urllib.urlencode(data))
                         post_data = urllib.urlencode(data)
                         data["data"] = ""
+                        '''上传全部数据'''
                         try:
-                            '''上传全部数据'''
+
                             response = urllib2.urlopen("http://www.xiaoxiami.space/info/post/", post_data, timeout=1)
                             feedback = eval(response.read())
                             print feedback
@@ -174,8 +175,8 @@ class Relay:
                         debug_count += 1
                         err_msg = self.uart.readline()
                         err_msg = err_msg[:-1]
-                        self.file = open(filepath, "a+")
-                        self.file.write(time.strftime('%Y-%m-%d  %H:%M:%S',
+                        with open(logpath, "a+") as file:
+                            file.write(time.strftime('%Y-%m-%d  %H:%M:%S',
                                                       time.localtime(time.time())) + ":  " + err_msg + "," + str(
                             debug_count) + "\n")
 

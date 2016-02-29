@@ -44,8 +44,13 @@ class myThread(threading.Thread):
         self.filename = "../Log/" + time.strftime('%Y-%m-%d_%H-%M-%S', time.localtime(time.time())) + '.txt'
         self.logfile = open(self.filename, "a+")
         self.logfile.write(
-            "Program Start at:" + time.strftime('%Y-%m-%d  %H:%M:%S', time.localtime(time.time())) + "\n")
+            "Program Start at:" + time.strftime('%Y-%m-%d  %H:%M:%S', time.localtime(time.time())) + "\n"
+        )
         self.logfile.close()
+        self.logfile = "../Log/log.txt"
+
+
+
         self.netdatabuf = ''
         self.upload_databuf = deque()
         self.netuploadthread = threading.Thread(target=self.dataUpload)
@@ -114,16 +119,16 @@ class myThread(threading.Thread):
                     self.statusbar.status.setdata("地址超出范围！")
                 else:
                     if self.sendCommand(self.cmdaddress, self.cmd):
-                        self.statusbar.status.setdata('%s',
+                        self.statusbar.status.setstatus('%s',
                                                       "发送命令：" + str(self.cmdaddress) + "," + str(self.cmd)
                                                       )
                         self.cmdaddress = "0"
                     else:
                         self.Control_Resend += 1
-                        self.statusbar.status.setdata('%s', "重试：" + str(self.Control_Resend))
+                        self.statusbar.status.setstatus('%s', "重试：" + str(self.Control_Resend))
                         if (self.Control_Resend == 20):
                             self.Control_Resend = 0
-                            self.statusbar.status.setdata("发送失败！")
+                            self.statusbar.status.setstatus("发送失败！")
                             self.cmdaddress = "0"
                             time.sleep(0.05)
 
@@ -217,12 +222,12 @@ class myThread(threading.Thread):
                                 self.uart.write("o")
                             else:
                                 print "uart data error"
-                                try:
-                                    self.uart.read(self.uart.inWaiting())  # 清空串口缓冲区内容
-                                except serial.SerialException, err:
-                                    self.statusbar.status.setdata("串口被拔出,插入后请重新打开")
-                                    print err
-                                    break
+                                # try:
+                                #     self.uart.read(self.uart.inWaiting())  # 清空串口缓冲区内容
+                                # except serial.SerialException, err:
+                                #     self.statusbar.status.setdata("串口被拔出,插入后请重新打开")
+                                #     print err
+                                #     break
 
                             uploaddatacut = data["data"]
                             data["data"] = uploaddatacut[:-1]
@@ -237,36 +242,27 @@ class myThread(threading.Thread):
                             post_data = urllib.urlencode(data)
                             data["data"] = ""
                             start = time.clock()
-                            try:
-                                '''上传全部数据'''
-                                # response = urllib2.urlopen("http://123.57.37.66:8080/sensor/post/status", post_data,
-                                #                            timeout=1)
-                                # serverresponse = response.read()
-                                # serverresponsedic = eval(serverresponse)
-                                # end = time.clock()
-                                # self.statusbar.status.setstatus('网络延时:%s' + "  " + serverresponsedic["err_msg"],
-                                #                                 str(end - start))
+                            # try:
+                            #     '''上传全部数据'''
+                            #     response = urllib2.urlopen("http://www.xiaoxiami.space/info/post/", post_data)
+                            #     end = time.clock()
+                            #     feedback = eval(response.read())
+                            #     self.statusbar.status.setstatus(
+                            #         '网络延时:%s' + "  " + feedback["Status"],
+                            #         str(end - start))
+                            #     self.sendCommandfromServer(feedback)
+                            # except:
+                            #     self.statusbar.status.setstatus('%s', "网络连接超时，请检查网络或关闭数据上传下载功能")
+                        elif (ordbuf) == 0x7F:
+                            debug_count += 1
+                            err_msg = self.uart.readline()
+                            err_msg = err_msg[:-1]
+                            self.statusbar.status.setstatus('Debug Msg:  %s   %s', err_msg, debug_count)
+                            with open(self.logfile,'a+') as file:
+                                file.write(time.strftime('%Y-%m-%d  %H:%M:%S', time.localtime(time.time())) + ":  " + \
+                                               err_msg + "," + \
+                                               str(debug_count) + "\n")
 
-
-                                response = urllib2.urlopen("http://www.xiaoxiami.space/info/post/", post_data)
-                                end = time.clock()
-                                feedback = eval(response.read())
-                                self.statusbar.status.setstatus(
-                                    '网络延时:%s' + "  " + feedback["Status"],
-                                    str(end - start))
-                                self.sendCommandfromServer(feedback)
-                            except:
-                                self.statusbar.status.setstatus('%s', "网络连接超时，请检查网络或关闭数据上传下载功能")
-                    elif (ordbuf) == 0x7F:
-                        debug_count += 1
-                        err_msg = self.uart.readline()
-                        err_msg = err_msg[:-1]
-                        self.statusbar.status.setdata('Debug Msg:  %s   %s', err_msg, debug_count)
-                        self.logfile = open(self.filename, "a+")
-                        self.logfile.write(time.strftime('%Y-%m-%d  %H:%M:%S', time.localtime(time.time())) + ":  " + \
-                                           err_msg + "," + \
-                                           str(debug_count) + "\n")
-                        self.logfile.close()
             # Send Control Command from UI
             if self.showdata.appFrame.tab == 4:
                 self.sendCommandfromUI()

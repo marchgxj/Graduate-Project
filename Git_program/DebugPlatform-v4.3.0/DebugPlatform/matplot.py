@@ -10,7 +10,7 @@ import Tkinter as Tk
 class Scope:
     def __init__(self, thread):
         self.fig = plt.figure(figsize=(12, 6), dpi=100)
-        self.sensorax = self.fig.add_subplot(3, 2, 1, xlim=(0, 10), ylim=(0, 4096))
+        self.sensorax = self.fig.add_subplot(3, 2, 1, xlim=(0, 10), ylim=(0, 20000))
         self.Varianceax = self.fig.add_subplot(3, 2, 3, xlim=(0, 10), ylim=(0, 3000))
         self.Extremumax = self.fig.add_subplot(3, 2, 4, xlim=(0, 10), ylim=(0, 1000))
         self.Stateax = self.fig.add_subplot(3, 2, 2, xlim=(0, 10), ylim=(0, 12))

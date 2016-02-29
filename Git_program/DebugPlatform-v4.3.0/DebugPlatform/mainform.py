@@ -1140,11 +1140,11 @@ class Application(ttk.Notebook):
         self.newtextbutton = tk.Button(self.tab4, command=self.newtext, text="新文件")
         self.newtextbutton.grid(row=1, column=4)
 
-        self.datascale = ttk.Scale(self.tab4, orient=tk.HORIZONTAL, from_=1, to=10, command=self.Zoomcallback)
+        self.datascale = ttk.Scale(self.tab4, orient=tk.HORIZONTAL, from_=1, to=50, command=self.Zoomcallback)
         self.datascale.grid(row=1, column=2, sticky=tk.W)
-        self.datascalevalue = 5
+        self.datascalevalue = 1
         self.datascale.set(self.datascalevalue)
-        self.datascalelabel = ttk.Label(self.tab4, text="5")
+        self.datascalelabel = ttk.Label(self.tab4, text="1")
         self.datascalelabel.grid(row=1, column=2, sticky=tk.E)
 
         receivegroup = tk.LabelFrame(self.tab4, text="历史数据")
@@ -1217,12 +1217,15 @@ class Application(ttk.Notebook):
                         if current_time > starttime and current_time < endtime:
                             self.history_queue.append(line)
             tkmes.showinfo("完成","数据读取完成!")
+            self.history_framecount.set(0)
+            self.history_frame_count = 0
+
 
         def _continue_run():
             if not self.history_queue:
                 tkmes.showinfo("提示","没有读取到数据")
                 return
-            self.history_frame_count = 0
+            self.history_frame_count = int(self.history_framecount.get())
             self.history_start = 1
             self.history_update_interval = int(self.history_periodString.get())
             _periodupdatelabel()
@@ -1276,22 +1279,24 @@ class Application(ttk.Notebook):
                 self.Side_ParkingString.set(0)
 
         def _last_frame(event=0):
-            if not self.history_last_queue:
+            if self.history_frame_count == 1:
                 tkmes.showinfo("提示","已经到第一帧")
                 return
-            frame_data = str(self.history_last_queue.pop())
-            self.history_queue.appendleft(frame_data)
+            # frame_data = str(self.history_last_queue.pop())
+            frame_data = self.history_queue[self.history_frame_count]
+            # self.history_queue.appendleft(frame_data)
             frame_data = frame_data.split("|")[2].split(" ")[:-1]
             self.history_frame_count -= 1
             self.history_framecount.set(self.history_frame_count)
             _updatelabel(frame_data)
 
         def _next_frame(event=0):
-            if not self.history_queue:
+            if self.history_frame_count == len(self.history_queue):
                 tkmes.showinfo("提示","已经到第最后一帧")
                 return
-            frame_data = str(self.history_queue.popleft())
-            self.history_last_queue.append(frame_data)
+            # frame_data = str(self.history_queue.popleft())
+            frame_data = self.history_queue[self.history_frame_count]
+            # self.history_last_queue.append(frame_data)
             frame_data = frame_data.split("|")[2].split(" ")[:-1]
             self.history_frame_count += 1
             self.history_framecount.set(self.history_frame_count)
@@ -1302,7 +1307,7 @@ class Application(ttk.Notebook):
                 return
             if not self.history_queue:
                 return
-            frame_data = str(self.history_queue.popleft())
+            frame_data = self.history_queue[self.history_frame_count]
             frame_data = frame_data.split("|")[2].split(" ")[:-1]
             self.history_frame_count += 1
             self.history_framecount.set(self.history_frame_count)
@@ -2036,7 +2041,6 @@ class Application(ttk.Notebook):
         self.statusbar = self.root.status
         self.offset = int(self.datascale.get())
 
-
         try:
             # self.DrawOldData.datascalelabel.config(text=str(x1 / self.offset))
             x1 = event.x + int(self.cancassbx.get()[0] * len(self.ExtState) * self.offset)
@@ -2045,11 +2049,10 @@ class Application(ttk.Notebook):
         except:
             x1 = event + int(self.cancassbx.get()[0] * len(self.ExtState) * self.offset)
         self.xlim = x1 / self.offset
-        if (x1 >= 0 and x1 <= len(self.ExtState) * self.offset):
+        if (x1 >= 0 and x1 < len(self.XValue) * self.offset):
 
             self.statusbar.setdata("%s", "Count:" + str(x1 / self.offset))
             # self.statusbar.setdata("%s","方差:" + str(self.VarState[x1 / self.offset]) + ",极值:" + str(self.ExtState[x1 / self.offset]))
-
             self.XValueString.set(self.XValue[x1 / self.offset])
             self.YValueString.set(self.YValue[x1 / self.offset])
             self.ZValueString.set(self.ZValue[x1 / self.offset])

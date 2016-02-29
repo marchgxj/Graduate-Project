@@ -16,8 +16,8 @@ class Scope:
         self.root = Tk.Tk()
         self.root.wm_title("2D Image")
         self.fig = plt.figure(figsize=(12, 6), dpi=100)
-        self.sensorax = self.fig.add_subplot(3, 2, 1, xlim=(0, 10), ylim=(0, 4096))
-        self.Varianceax = self.fig.add_subplot(3, 2, 3, xlim=(0, 10), ylim=(0, 3000))
+        self.sensorax = self.fig.add_subplot(3, 2, 1, xlim=(0, 10), ylim=(1000, 3500))
+        self.Varianceax = self.fig.add_subplot(3, 2, 3, xlim=(0, 10), ylim=(0, 30000))
         self.Extremumax = self.fig.add_subplot(3, 2, 4, xlim=(0, 10), ylim=(0, 1000))
         self.Stateax = self.fig.add_subplot(3, 2, 2, xlim=(0, 10), ylim=(0, 12))
         self.Intensityax = self.fig.add_subplot(3, 2, 5, xlim=(0, 10), ylim=(0, 4000))
@@ -91,6 +91,7 @@ class Scope:
                 self.ResultLinedata.append(11)
             else:
                 self.ResultLinedata.append(9)
+        self.total_length = len(self.XValueLinedata)
 
     def init(self):
         for i in range(len(self.XValueLinedata)):
@@ -113,8 +114,9 @@ class Scope:
 
     def update(self, i):
         self.xlim = self.therad.xlim
-        xlim_l = self.xlim - (self.therad.datascalevalue * -20 + 220)
-        xlim_r = self.xlim + (self.therad.datascalevalue * -20 + 220)
+
+        xlim_l = self.xlim - (self.total_length/self.therad.datascalevalue)
+        xlim_r = self.xlim + (self.total_length/self.therad.datascalevalue)
 
         self.sensorax.set_xlim(xlim_l,xlim_r )
         self.Varianceax.set_xlim(xlim_l, xlim_r)
@@ -151,12 +153,11 @@ class Scope:
             self.root.quit()     # stops mainloop
             self.root.destroy()  # this is necessary on Windows to prevent
                             # Fatal Python Error: PyEval_RestoreThread: NULL tstate
-
-        self.datascale = ttk.Scale(self.root, orient=Tk.HORIZONTAL, from_=1, to=len(self.XValueLinedata)*self.therad.datascalevalue,command=self.scaleCallback)
+        self.datascale = ttk.Scale(self.root, orient=Tk.HORIZONTAL, from_=1, to=len(self.XValueLinedata),command=self.scaleCallback)
         self.datascale.pack(fil=Tk.X)
-        self.datascalevalue = 5
+        self.datascalevalue = 1
         self.datascale.set(self.datascalevalue/self.therad.datascalevalue)
-        self.datascalelabel = ttk.Label(self.root, text="5")
+        self.datascalelabel = ttk.Label(self.root, text="1")
         self.datascalelabel.pack()
 
         button = Tk.Button(master=self.root, text='Quit', command=_quit)
