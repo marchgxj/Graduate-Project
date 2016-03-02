@@ -9,12 +9,14 @@
 #define    EXT_THRESHOLD       40               //两轴差值判断阈值
 #define    INT_THRESHOLD       60
 #define    DIS_THRESHOLD       30
-#define    COM_THRESHOLD       1500
+#define    COM_THRESHOLD       1000
 
 #define   LOWPOWER_THRESHOLD_HIGH   600
 #define   LOWPOWER_THRESHOLD_LOW    500
 #define   TEMP_THRESHOLD_HIGH       3500
 #define   TEMP_THRESHOLD_LOW        1000
+
+#define   SEND_DATA_FREQ       470.001f
 
 //---------------Working Mode Config-------------------
 #define    QOS_TEST            0
@@ -24,7 +26,7 @@
 #define    GMI_EN              0
 #define    SLEEP_EN            1 
 #define    LED_EN              1
-#define    WIRELESS_TEST       1
+#define    WIRELESS_TEST       0
 //------------------Net Work Config--------------------
 /****************更改beacon周期需要重新调的参数*************/
 #define    BEACON_PERIOD       10000   //单位  100us

@@ -192,16 +192,16 @@ void CreatJoinRequestACKOK()
 
 void JoinRequestACKHandler(uint8 data[])
 {
-    uint8 accept = 0;
-    uint8 ackok = 0;
+//    uint8 accept = 0;
+//    uint8 ackok = 0;
     uint8 type = 0;
     type = Unpack(data);
     if(type!=JOINREQUESTACK_TYPE)
     {
         return;
     }
-    accept = data[1]&0x01;
-    ackok = (data[1]&0x02)>>1;
+//    accept = data[1]&0x01;
+//    ackok = (data[1]&0x02)>>1;
     
     EndPointDevice.cluster_id = data[6];
     EndPointDevice.cluster_innernum = data[7];

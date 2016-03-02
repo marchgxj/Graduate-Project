@@ -8,7 +8,7 @@
 //
 
 #include "common.h"
-//z轴绝对值
+
 uint16 diameterbuf = 0;
 uint16 max_x = 0;
 uint16 max_y = 0;
@@ -49,52 +49,13 @@ uint16 getEuclideanMetric(uint16 x1,uint16 y1,uint16 z1,uint16 x2,uint16 y2,uint
                  
 }
 
-//最大直径
-//uint16 getMaxDiameter(uint16 *x,uint16 *y,uint8 length)
-//{
-//    uint16 startx = 0;
-//    uint16 starty = 0;
-//    uint16 finaldiameter = 0;
-//    if(length<2)
-//        return 0;
-//    startx = x[0];
-//    starty = y[0];
-//    for(int i=0;i<length-1;i++)
-//    {
-//        finaldiameter = MAX(finaldiameter,
-//                            (sqrt_16(pow(startx - x[i],2) + pow(starty - y[i],2))));
-//    }
-//    
-//    return finaldiameter;
-//}
-
 uint16 getMaxDiameter(uint16 x1,uint16 y1,uint16 x2,uint16 y2)
 {
     max_x = MAX(max_x,abs(x1 - x2));
     max_y = MAX(max_y,abs(y1 - y2));
-//    diameterbuf = MAX(diameterbuf,
-//               (sqrt_16(pow(x1 - x2,2) + pow(y1 - y2,2))));
     diameterbuf = max_x + max_y;
     return diameterbuf;
 }
-
-//周长
-//uint16 getPerimeter(uint16 *x,uint16 *y,uint8 length)
-//{
-//    uint16 finalperimeter = 0;
-//    uint16 perimeterbuf = 0;
-//    if(length<2)
-//        return 0;
-//    for(int i=0;i<length-1;i++)
-//    {
-//        perimeterbuf = sqrt_16(pow(x[i]-x[i+1],2)+pow(y[i]-y[i+1],2));
-//        if (perimeterbuf > 15)
-//        {
-//            finalperimeter += perimeterbuf;
-//        }
-//    }
-//    return finalperimeter;
-//}
 
 uint16 getPerimeter(uint16 x1,uint16 y1,uint16 x2,uint16 y2)
 {
@@ -108,28 +69,13 @@ uint16 getPerimeter(uint16 x1,uint16 y1,uint16 x2,uint16 y2)
     return perimeterbuf;
 
 }
-    
-//uint32 getCompatness(uint16 *x,uint16 *y,uint8 length)
-//{
-//    uint16 perimeter = 0;
-//    uint16 diameter = 0;
-//    uint32 pow2 = 0;
-//    if(length<2)
-//        return 0;
-//    perimeter = getPerimeter(x,y,length);
-//    diameter = getMaxDiameter(x,y,length)+1;
-//    pow2 = pow(perimeter,2);
-//    
-//    return pow2/diameter;
-//    //return pow(getPerimeter(x,y,length),2) / getMaxDiameter(x,y,length);
-//}
 
 uint32 getCompatness(uint16 x1,uint16 y1,uint16 x2,uint16 y2)
 {
+    
     uint16 perimeter = 0;
     uint16 diameter = 0;
-    uint32 pow2 = 0;
-    
+    uint32 pow2 = 0; 
     perimeter = getPerimeter(x1,y1,x1,y2);
     diameter = getMaxDiameter(MagneticUnit.YMiddle,MagneticUnit.ZMiddle,x2,y2)+1;
     pow2 = pow(perimeter<<1,2);

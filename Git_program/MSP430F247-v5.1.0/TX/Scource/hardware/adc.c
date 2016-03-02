@@ -106,9 +106,9 @@ int16 SampleVoltage(Uint16* Value,Uint16* Temp)
 void AD_cal()
 {
     int i=0;
-    uint16 ADX,ADY,ADZ,GMIADX,GMIADY;
+    uint16 ADX,ADY,ADZ;
     uint16 ADvalueX=0,ADvalueY=0,ADvalueZ = 0;
-    uint16 GMI_ADvalueX=0,GMI_ADvalueY=0;
+    
     uint32 intensity = 0;
     
     halLedSetAll();
@@ -126,14 +126,11 @@ void AD_cal()
     {
         if(i>=10)
         {
-            SampleChannel(&GMI_ADvalueX,&GMI_ADvalueY);
             Multi_Read_HMC(&ADvalueX,&ADvalueY,&ADvalueZ);
             //Single_Read_HMC(&ADvalueX,&ADvalueY,&ADvalueZ);
             ADX += ADvalueX;
             ADY += ADvalueY;
             ADZ += ADvalueZ;
-            GMIADX += GMI_ADvalueX;
-            GMIADY += GMI_ADvalueY;
             delay_ms(50);
         }
     }
@@ -153,13 +150,7 @@ void AD_cal()
         z_middle_quene[i] = MagneticUnit.ZMiddle;
     }
     
-    MagneticUnit.GMI_XMiddle = GMIADX>>4;
-    MagneticUnit.GMI_YMiddle = GMIADY>>4;
-    MagneticUnit.XMiddleM = MagneticUnit.XMiddle;
-    MagneticUnit.YMiddleM = MagneticUnit.YMiddle;
-    MagneticUnit.ZMiddleM = MagneticUnit.ZMiddle;
-    MagneticUnit.GMI_XMiddleM = MagneticUnit.GMI_XMiddle;
-    MagneticUnit.GMI_YMiddleM = MagneticUnit.GMI_YMiddle;
+    
     MagneticUnit.Ext_Middle = abs(MagneticUnit.ZMiddle-MagneticUnit.YMiddle);
     
     intensity = sqrt_16((((uint32)MagneticUnit.XMiddle*(uint32)MagneticUnit.XMiddle)+((uint32)MagneticUnit.YMiddle*(uint32)MagneticUnit.YMiddle)+((uint32)MagneticUnit.ZMiddle*(uint32)MagneticUnit.ZMiddle)));

@@ -98,7 +98,10 @@ __interrupt void Timer_A (void)
 //    }
 }
 uint8 DataSendDraw[TEST_LENGTH];
-uint16 cal_count = 0;
+//00:x_middle_quene[0] 01：x_middle_quene[1] 02：x_middle_quene[2]
+//10:y_middle_quene[0] 01：y_middle_quene[1] 02：y_middle_quene[2]
+//20:z_middle_quene[0] 01：Z_middle_quene[1] 02：z_middle_quene[2]
+uint8 switch_middle = 0; 
 void TestSend()
 {
     //数据包格式：
@@ -112,24 +115,27 @@ void TestSend()
     6:11：极值识别停车状态
     7:12、13：MagneticUnit.XMiddle
     8:14、15：MagneticUnit.YMiddle
-    9:16、17：MagneticUnit.Intensity
-    10:18、19：NMagneticUnit.IntensityMiddle
+    9:16、17：MagneticUnit.distance
+    10:18、19：xyz_middle_quene
     11:20:MagneticUnit.Int_State
     12:21:EndpointDeviece.parking
-    13:22、23:XAve_Slpo
-    14:24、25:YAve_Slop
-    
-    15:26、27:ZAve_Slop
-    16:28、29:Z轴AD
-    17:30、31:X轴AD GMI
-    18:32、33:Y轴AD GMI
-    19:34、35:XMiddle GMI
-    20:36、37:YMiddle GMI
+    13:22、23: XAve_Slpo
+    14:24、25: YAve_Slop
+    15:26、27: ZAve_Slop
+    16:28、29: Z轴AD
+    17:30、31: MagneticUnit.XValue_Stable
+    18:32、33: MagneticUnit.YValue_Stable
+    19:34、35: MagneticUnit.ZValue_Stable
+    20:36、37: perimeterbuf
     21:38、39：EndPointDevice.vlotage
     22:40、41：EndPointDevice.temperature
     23:42、43：MagneticUnit.ZMiddle
-    24:44:XValue_Parking
-    25:45:YValue_Parking
+    24:44:switch_middle
+    25:45:reverse_flag
+    26:46、47:MagneticUnit.parked_distance
+    27:48、49:diameterbuf
+    28:50、51、52、53:Compatness
+    29:54、55:Storage_data_length
     **********************************************/
     DataSendDraw[0] = MagneticUnit.XValue>>8;
     DataSendDraw[1] = MagneticUnit.XValue;
@@ -149,19 +155,29 @@ void TestSend()
     DataSendDraw[15] = MagneticUnit.YMiddle;
     DataSendDraw[16] = MagneticUnit.distance>>8;
     DataSendDraw[17] = MagneticUnit.distance;
-//    DataSendDraw[16] = MagneticUnit.Intensity>>8;
-//    DataSendDraw[17] = MagneticUnit.Intensity;
-    MagneticUnit.Int_Middle = 5000;
-    DataSendDraw[18] = MagneticUnit.Int_Middle>>8;
-    DataSendDraw[19] = MagneticUnit.Int_Middle;
+    if(switch_middle/10==0)
+    {
+        DataSendDraw[18] = x_middle_quene[switch_middle%10]>>8;
+        DataSendDraw[19] = x_middle_quene[switch_middle%10];
+    }
+    else if(switch_middle/10==1)
+    {
+        DataSendDraw[18] = y_middle_quene[switch_middle%10]>>8;
+        DataSendDraw[19] = y_middle_quene[switch_middle%10];
+    }
+    else if(switch_middle/10==2)
+    {
+        DataSendDraw[18] = z_middle_quene[switch_middle%10]>>8;
+        DataSendDraw[19] = z_middle_quene[switch_middle%10];
+    }
     DataSendDraw[20] = MagneticUnit.IntState;
     DataSendDraw[21] = EndPointDevice.parking_state;
-    DataSendDraw[22] = MagneticUnit.XAve_Slop>>8;
-    DataSendDraw[23] = MagneticUnit.XAve_Slop;
-    DataSendDraw[24] = MagneticUnit.YAve_Slop>>8;
-    DataSendDraw[25] = MagneticUnit.YAve_Slop;
-    DataSendDraw[26] = MagneticUnit.ZAve_Slop>>8;
-    DataSendDraw[27] = MagneticUnit.ZAve_Slop;
+    //DataSendDraw[22] = MagneticUnit.XAve_Slop>>8;
+    //DataSendDraw[23] = MagneticUnit.XAve_Slop;
+    //DataSendDraw[24] = MagneticUnit.YAve_Slop>>8;
+    //DataSendDraw[25] = MagneticUnit.YAve_Slop;
+    //DataSendDraw[26] = MagneticUnit.ZAve_Slop>>8;
+    //DataSendDraw[27] = MagneticUnit.ZAve_Slop;
     DataSendDraw[28] = MagneticUnit.ZValue>>8;
     DataSendDraw[29] = MagneticUnit.ZValue;
     DataSendDraw[30] = MagneticUnit.XValue_Stable>>8;
@@ -178,18 +194,18 @@ void TestSend()
     DataSendDraw[41] = EndPointDevice.temperature;
     DataSendDraw[42] = MagneticUnit.ZMiddle>>8;
     DataSendDraw[43] = MagneticUnit.ZMiddle;
-    DataSendDraw[44] = XValue_Parking;
-    DataSendDraw[45] = YValue_Parking;
-    DataSendDraw[46] = MagneticUnit.infrared>>8;
-    DataSendDraw[47] = MagneticUnit.infrared;
+    DataSendDraw[44] = switch_middle;
+    DataSendDraw[45] = reverse_flag;
+    DataSendDraw[46] = MagneticUnit.parked_distance>>8;
+    DataSendDraw[47] = MagneticUnit.parked_distance;
     DataSendDraw[48] = diameterbuf>>8;
     DataSendDraw[49] = diameterbuf;
     DataSendDraw[50] = MagneticUnit.compatness>>24;
     DataSendDraw[51] = MagneticUnit.compatness>>16;
     DataSendDraw[52] = MagneticUnit.compatness>>8;
     DataSendDraw[53] = MagneticUnit.compatness;
-    DataSendDraw[54] = storage_count_send>>8;
-    DataSendDraw[55] = storage_count_send;
+    //DataSendDraw[54] = storage_count_send>>8;
+    //DataSendDraw[55] = storage_count_send;
     
     A7139_WriteFIFO(DataSendDraw,TEST_LENGTH);
     delay_us(1);
@@ -198,6 +214,23 @@ void TestSend()
     
     while(GIO1)
     {}
+    if(switch_middle%10 == MIDDLE_QUENE_LENGTH-1)
+    {
+        switch_middle -= MIDDLE_QUENE_LENGTH-1;
+        if(switch_middle < 20)
+        {
+            switch_middle += 10;
+        }
+        else
+        {
+            switch_middle = 0;
+        }
+    }
+    else if(switch_middle%10 < MIDDLE_QUENE_LENGTH-1)
+    {
+        switch_middle++;
+    }
+    
 }
 //0.1s
 #pragma vector=TIMERA0_VECTOR
@@ -350,14 +383,27 @@ __interrupt void Timer_A0(void)
                 Collect_Period = 0;
                 IdentifyCar();
                 //PostTask(EVENT_IDENTIFY_CAR);
+                if(EndPointDevice.parking_state == CAR)
+                {
+                    parking_time++;
+                    if(parking_time > 1000)
+                    {
+                        parking_time = 1000;
+                    }
+                }
+                else
+                {
+                    parking_time = 0;
+                }
             }
         }
         else
         {
+			parking_time = 0;
             //PostTask(EVENT_IDENTIFY_CAR);
             IdentifyCar();
             in_quick_collect_count++;
-            if(in_quick_collect_count>1200)
+            if(in_quick_collect_count>MAX_QUICK_COLLECT_TIME)
             {
                 in_quick_collect_count = 0;
                 force_quit_quick_collect = 1;
@@ -370,10 +416,7 @@ __interrupt void Timer_A0(void)
                 Quick_Collect = 0;
             }
         }
-//        if(HMC_Changed == 1)
-//        {
-//            OpenGMI_Count++;
-//        }
+
         
     }
     reset_HMC5983_count++;

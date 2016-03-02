@@ -27,15 +27,15 @@
 #define VAR_THRESHOLD  150             //方差判断阈值
 #define EXT_THRESHOLD  40               //两轴差值判断阈值
 #define INT_THRESHOLD  60
-#define COM_THRESHOLD  1500
+#define COM_THRESHOLD  1000
 #define DIS_THRESHOLD  30
 
 #define TEST_LENGTH             56
 #define FILTER_LENGTH           20
 #define SLOP_LENGTH             3
 #define INFRA_LENGTH            5
-#define MIDDLE_QUENE_LENGTH     5
-#define MAX_QUICK_COLLECT_TIME  6000  //5mins 在快采模式的最长时间 单位：50ms
+#define MIDDLE_QUENE_LENGTH     3
+#define MAX_QUICK_COLLECT_TIME  2000  //5mins 在快采模式的最长时间 单位：50ms
 #define HMC5983_RESET_PERIOD    12000 //10mins 5983复位周期 单位：50ms
 
 
@@ -55,26 +55,16 @@ typedef struct
 {
     uint16 XValue;
     uint16 XMiddle;
-    uint16 XMiddleM;
     uint16 XMiddleMF;
     uint16 XValue_Stable;
     uint16 YValue;
     uint16 YMiddle;
-    uint16 YMiddleM;
     uint16 YMiddleMF;
     uint16 YValue_Stable;
     uint16 ZValue;
     uint16 ZMiddle;
-    uint16 ZMiddleM;
     uint16 ZMiddleMF;
     uint16 ZValue_Stable;
-    
-    uint16 GMI_XValue;
-    uint16 GMI_XMiddle;
-    uint16 GMI_XMiddleM;
-    uint16 GMI_YValue;
-    uint16 GMI_YMiddle;
-    uint16 GMI_YMiddleM;
     
     uint16 Intensity;
     uint16 IntensityF;
@@ -97,6 +87,7 @@ typedef struct
     int ZAve_Slop;
     uint16 infrared;
     uint16 distance;
+    uint16 parked_distance;
     uint32 compatness;
     
 }MagneticStruct;
@@ -116,17 +107,16 @@ extern void IdentifyCar();
 extern void NoCarCalibration();
 extern uint8 MultiState(uint16 value,uint16 threshold);
 
-extern uint8 CarCalibration();
+extern uint8 vsEnvironment();
 extern void TotalJudge();
 extern void CmdCalibration();
+extern void leaveIdentify();
 
 
 extern FilterStruct FilterData[FILTER_LENGTH];
 extern uint16 Collect_Period;
 extern FilterStruct SlopData[SLOP_LENGTH];
 extern uint8 Quick_Collect;
-extern uint8 HMC_Changed;
-extern uint16 OpenGMI_Count;
 extern uint8 XValue_Parking;
 extern uint8 YValue_Parking;
 extern uint16 Ext_Threshold;
@@ -140,4 +130,6 @@ extern uint16 x_middle_quene[MIDDLE_QUENE_LENGTH];
 extern uint16 y_middle_quene[MIDDLE_QUENE_LENGTH];
 extern uint16 z_middle_quene[MIDDLE_QUENE_LENGTH];
 extern uint8 middle_quene_count;
+extern uint16 parking_time;
+extern uint8 reverse_flag; 
 #endif 

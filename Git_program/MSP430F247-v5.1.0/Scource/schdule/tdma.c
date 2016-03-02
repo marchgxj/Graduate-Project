@@ -14,6 +14,10 @@ uint8 ack_buf[MAX_PACK_LENGTH];
 uint8 RecvDataACK()
 {
     
+    for(uint8 i=0;i<MAX_PACK_LENGTH;i++)
+    {
+        ack_buf[i] = 0;
+    }
     send_time = 0;
     while(GIO2==0)
     {
@@ -27,7 +31,7 @@ uint8 RecvDataACK()
         
         {
             resend_count++;
-            EndPointDevice.data_ack = 1;
+            EndPointDevice.data_ack = 0;
             RXMode();
 
             return EndPointDevice.data_ack;
@@ -40,7 +44,6 @@ uint8 RecvDataACK()
     RXMode();
     watch1 = PackValid(ack_buf);
     watch2 = Unpack(ack_buf);
-    
     if(watch1&&(watch2 == DATAACK_TYPE)) //如果收到正确的ACK
     {
 #if WIRELESS_TEST
@@ -68,6 +71,7 @@ void CreatSendData()
     DataPacket.pack_length = DATA_PACK_LENGTH;
     DataPacket.pack_type = DATA_TYPE;
     DataPacket.ack_en = ACK_EN;
+    DataPacket.mode = Quick_Collect & 0x01;
     DataPacket.des_cluster_id = EndPointDevice.des_cluster_id;
     DataPacket.des_cluster_innernum = EndPointDevice.des_cluster_innernum;
     DataPacket.src_cluster_id = EndPointDevice.cluster_id;
@@ -170,6 +174,7 @@ void DataSend(void)
     DIS_INT;
     TIME1_HIGH;
     
+    
     while(Frame_Time<=before_slot_wake)
     {
         if(timeout>(uint32)WHILE_TIMEOUT)
@@ -182,6 +187,7 @@ void DataSend(void)
         timeout++;
         delay_100us();
     }
+    __disable_interrupt();
     halLedClear(3);
     TIME2_HIGH;
     EndPointDevice.data_ack = 0;
@@ -194,7 +200,7 @@ void DataSend(void)
     SendPack();
     RXMode();
     TIME1_LOW;
-
+    
     ack_flag = RecvDataACK();
     if(ack_flag == 1)
     {      
@@ -236,6 +242,7 @@ void DataSend(void)
     }
 #endif
     TIME1_LOW;
+    __enable_interrupt();
 
 }
 

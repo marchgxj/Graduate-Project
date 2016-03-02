@@ -5,7 +5,6 @@ uint16 ADvalueX,ADvalueY,ADvalueZ;
 uint16 test1,test2;
  int main(void)
 {	    
-    uint8 i=0;
     __disable_interrupt();
     
     halBoardInit();
@@ -13,7 +12,7 @@ uint16 test1,test2;
     EndPointDevice.pyh_address = GetPhyAddress();
     EndPointDevice.device_type = DEVICE;
     
-    //    传感器测试
+//    传感器测试
 //    A7139_SetPackLen(TEST_LENGTH);
 //    delay_us(1);
 //    A7139_SetFreq(475.001f);
@@ -42,7 +41,7 @@ uint16 test1,test2;
 #if NET_TEST == 1 || QOS_TEST==1
     ChannelSelection(CHANNEL_5,CHANNEL_6);
 #else
-    ChannelSelection(CHANNEL_9,CHANNEL_10);
+    ChannelSelection(CHANNEL_2,CHANNEL_3);
 #endif
 ReJoin:
     EndPointDevice.pyh_address = GetPhyAddress();
