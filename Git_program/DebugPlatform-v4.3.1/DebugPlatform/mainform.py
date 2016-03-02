@@ -32,7 +32,7 @@ class MainRoot(tk.Tk):
         # initialize menu
         self.rootmenu = MenuBar(self)
         self.config(menu=self.rootmenu)
-        self.title("小虾米 v4.2.1")
+        self.title("小虾米 v4.3.1")
 
         # 居中显示
         curWidth = self.winfo_screenwidth()  # get current width
@@ -1262,9 +1262,9 @@ class Application(ttk.Notebook):
             self.VoltageString.set(frame_data[21])
             self.TemperatureString.set(frame_data[22])
             self.ZMiddleString.set(frame_data[23])
-            self.XValue_ParkingString.set(frame_data[24])
-            self.YValue_ParkingString.set(frame_data[25])
-            self.InfraredString.set(frame_data[26])
+            self.switch_middleString.set(frame_data[24])
+            self.reverse_flagString.set(frame_data[25])
+            self.parked_distanceString.set(frame_data[26])
             try:
                 self.DistanceString.set(frame_data[27])
                 self.CompatnessString.set(frame_data[28])
@@ -1540,7 +1540,7 @@ class Application(ttk.Notebook):
         self.Ext_MiddleString.set(0)
 
         self.IntensityeString = tk.StringVar()
-        tk.Label(readgroup, text="Intensity:").grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
+        tk.Label(readgroup, text="Distance:").grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
         rowandcloumn += 1
         self.IntensityLabel = tk.Label(readgroup, text="0", textvariable=self.IntensityeString, width=4)
         self.IntensityLabel.grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
@@ -1587,13 +1587,45 @@ class Application(ttk.Notebook):
         rowandcloumn += 1
         self.ResultString.set(0)
 
-        self.IntensityMinusString = tk.StringVar()
-        tk.Label(readgroup, text="IntensityMinus:").grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
+        self.TemperatureString = tk.StringVar()
+        tk.Label(readgroup, text="Temperature:").grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
         rowandcloumn += 1
-        self.IntensityMinus = tk.Label(readgroup, text="0", textvariable=self.IntensityMinusString, width=4)
-        self.IntensityMinus.grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
+        tk.Label(readgroup, text="0", textvariable=self.TemperatureString, width=4)\
+            .grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
         rowandcloumn += 1
-        self.IntensityMinusString.set(0)
+        self.TemperatureString.set(0)
+
+        self.switch_middleString = tk.StringVar()
+        tk.Label(readgroup, text="switch_middle:").grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
+        rowandcloumn += 1
+        tk.Label(readgroup, text="0", textvariable=self.switch_middleString, width=4)\
+            .grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
+        rowandcloumn += 1
+        self.switch_middleString.set(0)
+
+        self.x_middle_quene0String = tk.StringVar()
+        tk.Label(readgroup, text="x_middle[0]:").grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
+        rowandcloumn += 1
+        tk.Label(readgroup, text="0", textvariable=self.x_middle_quene0String, width=4)\
+            .grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
+        rowandcloumn += 1
+        self.x_middle_quene0String.set(0)
+
+        self.y_middle_quene0String = tk.StringVar()
+        tk.Label(readgroup, text="y_middle[0]:").grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
+        rowandcloumn += 1
+        tk.Label(readgroup, text="0", textvariable=self.y_middle_quene0String, width=4)\
+            .grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
+        rowandcloumn += 1
+        self.y_middle_quene0String.set(0)
+
+        self.z_middle_quene0String = tk.StringVar()
+        tk.Label(readgroup, text="z_middle[0]:").grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
+        rowandcloumn += 1
+        tk.Label(readgroup, text="0", textvariable=self.z_middle_quene0String, width=4)\
+            .grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
+        rowandcloumn += 1
+        self.z_middle_quene0String.set(0)
 
         self.XAve_SlopString = tk.StringVar()
         tk.Label(readgroup, text="XAve_Slop:").grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
@@ -1611,6 +1643,30 @@ class Application(ttk.Notebook):
         rowandcloumn += 1
         self.YAve_SlopString.set(0)
 
+        self.x_middle_quene1String = tk.StringVar()
+        tk.Label(readgroup, text="x_middle[1]:").grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
+        rowandcloumn += 1
+        tk.Label(readgroup, text="0", textvariable=self.x_middle_quene1String, width=4)\
+            .grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
+        rowandcloumn += 1
+        self.x_middle_quene1String.set(0)
+
+        self.y_middle_quene1String = tk.StringVar()
+        tk.Label(readgroup, text="y_middle[1]:").grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
+        rowandcloumn += 1
+        tk.Label(readgroup, text="0", textvariable=self.y_middle_quene1String, width=4)\
+            .grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
+        rowandcloumn += 1
+        self.y_middle_quene1String.set(0)
+
+        self.z_middle_quene1String = tk.StringVar()
+        tk.Label(readgroup, text="z_middle[1]:").grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
+        rowandcloumn += 1
+        tk.Label(readgroup, text="0", textvariable=self.z_middle_quene1String, width=4)\
+            .grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
+        rowandcloumn += 1
+        self.z_middle_quene1String.set(0)
+
         self.ZAve_SlopString = tk.StringVar()
         tk.Label(readgroup, text="ZAve_Slop:").grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
         rowandcloumn += 1
@@ -1627,6 +1683,30 @@ class Application(ttk.Notebook):
         rowandcloumn += 1
         self.Side_ParkingString.set(0)
 
+        self.x_middle_quene2String = tk.StringVar()
+        tk.Label(readgroup, text="x_middle[2]:").grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
+        rowandcloumn += 1
+        tk.Label(readgroup, text="0", textvariable=self.x_middle_quene2String, width=4)\
+            .grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
+        rowandcloumn += 1
+        self.x_middle_quene2String.set(0)
+
+        self.y_middle_quene2String = tk.StringVar()
+        tk.Label(readgroup, text="y_middle[2]:").grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
+        rowandcloumn += 1
+        tk.Label(readgroup, text="0", textvariable=self.y_middle_quene2String, width=4)\
+            .grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
+        rowandcloumn += 1
+        self.y_middle_quene2String.set(0)
+
+        self.z_middle_quene2String = tk.StringVar()
+        tk.Label(readgroup, text="z_middle[2]:").grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
+        rowandcloumn += 1
+        tk.Label(readgroup, text="0", textvariable=self.z_middle_quene2String, width=4)\
+            .grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
+        rowandcloumn += 1
+        self.z_middle_quene2String.set(0)
+
 
 
         self.VoltageString = tk.StringVar()
@@ -1637,39 +1717,23 @@ class Application(ttk.Notebook):
         rowandcloumn += 1
         self.VoltageString.set(0)
 
-        self.TemperatureString = tk.StringVar()
-        tk.Label(readgroup, text="Temperature:").grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
+        self.reverse_flagString = tk.StringVar()
+        tk.Label(readgroup, text="reverse_flag:").grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
         rowandcloumn += 1
-        self.TemperatureLabel = tk.Label(readgroup, text="0", textvariable=self.TemperatureString, width=4)
-        self.TemperatureLabel.grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
-        rowandcloumn += 1
-        self.TemperatureString.set(0)
-
-        self.XValue_ParkingString = tk.StringVar()
-        tk.Label(readgroup, text="XValue_Parking:").grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
-        rowandcloumn += 1
-        self.XValue_ParkingLabel = tk.Label(readgroup, text="0", textvariable=self.XValue_ParkingString, width=4)
-        self.XValue_ParkingLabel.grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
-        rowandcloumn += 1
-        self.XValue_ParkingString.set(0)
-
-        self.YValue_ParkingString = tk.StringVar()
-        tk.Label(readgroup, text="YValue_Parking:").grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
-        rowandcloumn += 1
-        self.YValue_ParkingLabel = tk.Label(readgroup, text="0", textvariable=self.YValue_ParkingString, width=4)
+        self.YValue_ParkingLabel = tk.Label(readgroup, text="0", textvariable=self.reverse_flagString, width=4)
         self.YValue_ParkingLabel.grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
         rowandcloumn += 1
-        self.YValue_ParkingString.set(0)
+        self.reverse_flagString.set(0)
 
 
 
-        self.InfraredString = tk.StringVar()
-        tk.Label(readgroup, text="Infrared:").grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
+        self.parked_distanceString = tk.StringVar()
+        tk.Label(readgroup, text="parked_distance:").grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
         rowandcloumn += 1
-        self.InfraredLabel = tk.Label(readgroup, text="0", textvariable=self.InfraredString, width=4)
+        self.InfraredLabel = tk.Label(readgroup, text="0", textvariable=self.parked_distanceString, width=4)
         self.InfraredLabel.grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
         rowandcloumn += 1
-        self.InfraredString.set(0)
+        self.parked_distanceString.set(0)
 
         self.DistanceString = tk.StringVar()
         tk.Label(readgroup, text="Diameter:").grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
@@ -1690,20 +1754,18 @@ class Application(ttk.Notebook):
         self.CompatnessString = tk.StringVar()
         tk.Label(readgroup, text="Compatness:").grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
         rowandcloumn += 1
-        self.CompatnessLabel = tk.Label(readgroup, text="0", textvariable=self.CompatnessString, width=20)
+        self.CompatnessLabel = tk.Label(readgroup, text="0", textvariable=self.CompatnessString, width=10)
         self.CompatnessLabel.grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
         rowandcloumn += 1
         self.CompatnessString.set(0)
 
-        rowandcloumn += 1
-        rowandcloumn += 1
 
 
         self.StorageDataLengthString = tk.StringVar()
-        tk.Label(readgroup, text="StorageDataLength:").grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
+        # tk.Label(readgroup, text="StorageDataLength:").grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
         rowandcloumn += 1
         self.StorageDataLengthLabel = tk.Label(readgroup, text="0", textvariable=self.StorageDataLengthString, width=4)
-        self.StorageDataLengthLabel.grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
+        # self.StorageDataLengthLabel.grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
         rowandcloumn += 1
         self.StorageDataLengthString.set(0)
 
@@ -1996,9 +2058,7 @@ class Application(ttk.Notebook):
         self.XMiddleString.set(self.menu.uartform.identifythread.value[7])
         self.YMiddleString.set(self.menu.uartform.identifythread.value[8])
         self.IntensityeString.set(self.menu.uartform.identifythread.value[9])
-        self.Int_MiddleString.set(self.menu.uartform.identifythread.value[10])
-        self.IntensityMinusString.set(
-            abs(self.menu.uartform.identifythread.value[9] - self.menu.uartform.identifythread.value[10]))
+        middle_value = int(self.menu.uartform.identifythread.value[10])
         self.IntStateString.set(self.menu.uartform.identifythread.value[11])
         self.ResultString.set(self.menu.uartform.identifythread.value[12])
         self.XAve_SlopString.set(ctypes.c_int16(self.menu.uartform.identifythread.value[13]).value)
@@ -2012,9 +2072,28 @@ class Application(ttk.Notebook):
         self.VoltageString.set(self.menu.uartform.identifythread.value[21])
         self.TemperatureString.set(self.menu.uartform.identifythread.value[22])
         self.ZMiddleString.set(self.menu.uartform.identifythread.value[23])
-        self.XValue_ParkingString.set(self.menu.uartform.identifythread.value[24])
-        self.YValue_ParkingString.set(self.menu.uartform.identifythread.value[25])
-        self.InfraredString.set(self.menu.uartform.identifythread.value[26])
+        switch_middle = self.menu.uartform.identifythread.value[24]
+        self.switch_middleString.set(switch_middle)
+        if switch_middle == 0:
+            self.x_middle_quene0String.set(middle_value)
+        elif switch_middle == 1:
+            self.x_middle_quene1String.set(middle_value)
+        elif switch_middle == 2:
+            self.x_middle_quene2String.set(middle_value)
+        elif switch_middle == 10:
+            self.y_middle_quene0String.set(middle_value)
+        elif switch_middle == 11:
+            self.y_middle_quene1String.set(middle_value)
+        elif switch_middle == 12:
+            self.y_middle_quene2String.set(middle_value)
+        elif switch_middle == 20:
+            self.z_middle_quene0String.set(middle_value)
+        elif switch_middle == 21:
+            self.z_middle_quene1String.set(middle_value)
+        elif switch_middle == 22:
+            self.z_middle_quene2String.set(middle_value)
+        self.reverse_flagString.set(self.menu.uartform.identifythread.value[25])
+        self.parked_distanceString.set(self.menu.uartform.identifythread.value[26])
         self.DistanceString.set(self.menu.uartform.identifythread.value[27])
         self.CompatnessString.set(self.menu.uartform.identifythread.value[28])
         self.StorageDataLengthString.set(self.menu.uartform.identifythread.value[29])
@@ -2186,7 +2265,7 @@ class Application(ttk.Notebook):
         cmdbutton1 = tk.Button(self.tab5, text="数据回传", command=lambda: cmdtext(1), font=buttonfont)
         cmdbutton2 = tk.Button(self.tab5, text="未停车", command=lambda: cmdtext(2), font=buttonfont)
         cmdbutton3 = tk.Button(self.tab5, text="已停车", command=lambda: cmdtext(3), font=buttonfont)
-        cmdbutton4 = tk.Button(self.tab5, text="通信质量", command=lambda: cmdtext(4), font=buttonfont)
+        cmdbutton4 = tk.Button(self.tab5, text="重启", command=lambda: cmdtext(4), font=buttonfont)
         cmdbutton1.grid(row=1, column=0)
         cmdbutton2.grid(row=1, column=1)
         cmdbutton3.grid(row=1, column=2)

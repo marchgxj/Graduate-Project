@@ -10,11 +10,11 @@ import Tkinter as Tk
 class Scope:
     def __init__(self, thread):
         self.fig = plt.figure(figsize=(12, 6), dpi=100)
-        self.sensorax = self.fig.add_subplot(3, 2, 1, xlim=(0, 10), ylim=(0, 20000))
+        self.sensorax = self.fig.add_subplot(3, 2, 1, xlim=(0, 10), ylim=(0, 4096))
         self.Varianceax = self.fig.add_subplot(3, 2, 3, xlim=(0, 10), ylim=(0, 3000))
         self.Extremumax = self.fig.add_subplot(3, 2, 4, xlim=(0, 10), ylim=(0, 1000))
         self.Stateax = self.fig.add_subplot(3, 2, 2, xlim=(0, 10), ylim=(0, 12))
-        self.Intensityax = self.fig.add_subplot(3, 2, 5, xlim=(0, 10), ylim=(0, 4000))
+        self.Intensityax = self.fig.add_subplot(3, 2, 5, xlim=(0, 10), ylim=(0, 1000))
         self.GMIsensorax = self.fig.add_subplot(3, 2, 6, xlim=(0, 10), ylim=(0, 4096))
 
         self.thread = thread
@@ -103,7 +103,6 @@ class Scope:
             else:
                 self.ExtStateLinedata.append(3)
             self.IntensityLinedata.append(self.thread.value[9])
-            self.IntensityMiddleLinedata.append(self.thread.value[10])
             IntState = int(self.thread.value[11])
             if (IntState == 2):
                 self.IntStateLinedata.append(7)
@@ -111,7 +110,7 @@ class Scope:
                 self.IntStateLinedata.append(8)
             else:
                 self.IntStateLinedata.append(6)
-            Result = self.thread.value[12];
+            Result = self.thread.value[12]
             if (Result == 1):
                 self.ResultLinedata.append(11)
             else:
@@ -129,10 +128,10 @@ class Scope:
         self.ExtStateLine.set_data(self.xdata, self.ExtStateLinedata)
         self.VarStateLine.set_data(self.xdata, self.VarStateLinedata)
         self.IntensityLine.set_data(self.xdata, self.IntensityLinedata)
-        self.IntensityMiddleLine.set_data(self.xdata, self.IntensityMiddleLinedata)
+
         self.IntStateLine.set_data(self.xdata, self.IntStateLinedata)
         self.ResultLine.set_data(self.xdata, self.ResultLinedata)
-        return self.XValueLine, self.YValueLine, self.ZValueLine,self.GMI_XValueLine,self.GMI_YValueLine,self.VarValueLine, self.ExtValueLine, self.VarStateLine, self.ExtStateLine, self.IntensityLine, self.IntensityMiddleLine, self.IntStateLine,self.ResultLine
+        return self.XValueLine, self.YValueLine, self.ZValueLine,self.GMI_XValueLine,self.GMI_YValueLine,self.VarValueLine, self.ExtValueLine, self.VarStateLine, self.ExtStateLine, self.IntensityLine, self.IntStateLine,self.ResultLine
 
     def start(self):
         ani = animation.FuncAnimation(self.fig, self.update, init_func=self.init, frames=50, interval=200)

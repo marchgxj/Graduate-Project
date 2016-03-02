@@ -143,6 +143,7 @@ class myThread (threading.Thread):
         Others：
         '''
         return "Data: 应答:" + str((self.data[1]&0x02)>>1)+\
+            "模式:"+str(self.data[1]&0x01)+\
             "  目的簇ID:"+str(self.data[2])+\
             "  目的编号:"+str(self.data[3])+\
             "  源簇ID:" + str(self.data[4])+\
@@ -152,7 +153,6 @@ class myThread (threading.Thread):
             '  校验:'+str(self.data[9])+\
             '  ACK丢失数量:'+str(self.data[10]<<8|self.data[11])
 
-            
     def DataACK(self):
         '''
         Parameter：

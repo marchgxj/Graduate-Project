@@ -92,6 +92,7 @@ class myThread(threading.Thread):
         '''
         cmd_address = (chr(int(add)))
         cmd_cmd = (chr(int(cmd)))
+
         self.uart.write("\xAA")
         self.uart.write(cmd_address)
         self.uart.write(cmd_cmd)
