@@ -94,11 +94,7 @@ void AD_cal()
     halLedSetAll();
     delay_ms(2000);
     
-    /*for(i=0;i<INFRA_LENGTH;i++)
-    {
-        infraredData[i] = sampleInfrared();
-    }*/
-    
+   
     ADX = 0;
     ADY = 0;
     ADZ = 0;
@@ -119,9 +115,6 @@ void AD_cal()
     MagneticUnit.XMiddle = ADX>>4;
     MagneticUnit.YMiddle = ADY>>4;
     MagneticUnit.ZMiddle = ADZ>>4;
-    MagneticUnit.XMiddleMF = MagneticUnit.XMiddle;
-    MagneticUnit.YMiddleMF = MagneticUnit.YMiddle;
-    MagneticUnit.ZMiddleMF = MagneticUnit.ZMiddle;
     MagneticUnit.XValue_Stable = MagneticUnit.XMiddle;
     MagneticUnit.YValue_Stable = MagneticUnit.YMiddle;
     MagneticUnit.ZValue_Stable = MagneticUnit.ZMiddle;

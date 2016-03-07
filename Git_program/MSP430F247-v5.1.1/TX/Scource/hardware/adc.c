@@ -106,19 +106,15 @@ int16 SampleVoltage(Uint16* Value,Uint16* Temp)
 void AD_cal()
 {
     int i=0;
-    uint16 ADX,ADY,ADZ;
+    uint16 ADX,ADY,ADZ,GMIADX,GMIADY;
     uint16 ADvalueX=0,ADvalueY=0,ADvalueZ = 0;
-    
+    uint16 GMI_ADvalueX=0,GMI_ADvalueY=0;
     uint32 intensity = 0;
     
     halLedSetAll();
     delay_ms(2000);
     
-    for(i=0;i<INFRA_LENGTH;i++)
-    {
-        infraredData[i] = sampleInfrared();
-    }
-    
+   
     ADX = 0;
     ADY = 0;
     ADZ = 0;
@@ -126,20 +122,19 @@ void AD_cal()
     {
         if(i>=10)
         {
+            SampleChannel(&GMI_ADvalueX,&GMI_ADvalueY);
             Multi_Read_HMC(&ADvalueX,&ADvalueY,&ADvalueZ);
-            //Single_Read_HMC(&ADvalueX,&ADvalueY,&ADvalueZ);
             ADX += ADvalueX;
             ADY += ADvalueY;
             ADZ += ADvalueZ;
+            GMIADX += GMI_ADvalueX;
+            GMIADY += GMI_ADvalueY;
             delay_ms(50);
         }
     }
     MagneticUnit.XMiddle = ADX>>4;
     MagneticUnit.YMiddle = ADY>>4;
     MagneticUnit.ZMiddle = ADZ>>4;
-    MagneticUnit.XMiddleMF = MagneticUnit.XMiddle;
-    MagneticUnit.YMiddleMF = MagneticUnit.YMiddle;
-    MagneticUnit.ZMiddleMF = MagneticUnit.ZMiddle;
     MagneticUnit.XValue_Stable = MagneticUnit.XMiddle;
     MagneticUnit.YValue_Stable = MagneticUnit.YMiddle;
     MagneticUnit.ZValue_Stable = MagneticUnit.ZMiddle;
@@ -163,9 +158,6 @@ void AD_cal()
     Var_Threshold = VAR_THRESHOLD;
     Dis_Threshold = DIS_THRESHOLD;
     
-    //storage_x[0] = MagneticUnit.XMiddle;
-    //storage_y[0] = MagneticUnit.YMiddle;
-    //storage_z[0] = MagneticUnit.ZMiddle;
     
     for(int i=0;i<FILTER_LENGTH;i++)
     {

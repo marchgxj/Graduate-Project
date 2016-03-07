@@ -21,8 +21,9 @@ uint8 IState3_Count = 0;
 MagneticStruct MagneticUnit;
 FilterStruct FilterData[FILTER_LENGTH];
 uint8 Filter_Count = 0;
-uint16 CarStableCount = 0;
-uint16 NoCarStableCount = 0;
+uint16 CarStableCount = 0;         //involve of the car detection
+uint8  parking_stable_count = 0;   //just for calibration when vacant
+uint16 no_car_stable_count = 0;
 uint16 ExtChangeCount = 0;
 uint16 VarChangeCount = 0;
 uint16 IntChangeCount = 0;
@@ -43,7 +44,7 @@ uint16 Int_Threshold = 0;
 uint16 Var_Threshold = 0;
 uint16 Dis_Threshold = 0;
 uint8 Exit_Sleep = 0;
-uint8 On_Test= 0;                       //∑¢ÀÕ≤‚ ‘ ˝æ›
+uint8 On_Test= 0;                       //if be set 1, is sending data to another node
 
 uint32 compatness_memory = 0;
 uint16 compatness_stable_count = 0;
@@ -59,7 +60,8 @@ uint16 parking_time = 0;
 
 //0: detection results is final result
 //1: oppsite of detection results is final result
-uint8 reverse_flag = 0; 
+uint8 parking_stable_flag = 0; 
+uint16 update_middle_times = 0;
 
 void VarianceMultiState(uint16 state1,uint16 state2,uint16 state3)
 {
@@ -403,14 +405,15 @@ void GetSlop(uint16 xvalue,uint16 yvalue,uint16 zvalue)
     }
 }
 
-void quickCalibrate()
+uint8 quickCalibrate(uint8 force)
 {
 // FunctionName: quickCalibrate
 //{
-// Parameter:none
+// Parameter:force 1:force to calibrate don't cate variance
+//                 0:perform calibrate when variance is stable
 //
-// Return:none
-//
+// Return: 1:environment is stable, performs a calibrate.
+//         0:environment is not stable, do nothing
 // Description:
 //  update middle value and reset state machine
 //
@@ -447,7 +450,7 @@ void quickCalibrate()
     xvariance = getVariance(ADX,4);
     yvariance = getVariance(ADY,4);
     zvariance = getVariance(ADZ,4);
-    if((xvariance<5)&&(yvariance<5)&&(zvariance<15))
+    if((xvariance<5)&&(yvariance<5)&&(zvariance<15)|| force)
     {
         MagneticUnit.XMiddle = xave;
         MagneticUnit.YMiddle = yave;
@@ -463,7 +466,9 @@ void quickCalibrate()
         MagneticUnit.CarExtremum = 0;
         MagneticUnit.CarIntensity = 0;
         MagneticUnit.CarVariance = 0;
+        return 1;
     }
+    return 0;
 }
 
 uint8 ReCal()
@@ -504,9 +509,7 @@ uint8 ReCal()
         MagneticUnit.XValue_Stable = MagneticUnit.XMiddle;
         MagneticUnit.YValue_Stable = MagneticUnit.YMiddle;
         MagneticUnit.ZValue_Stable = MagneticUnit.ZMiddle;
-        MagneticUnit.XMiddleMF = MagneticUnit.XMiddle;
-        MagneticUnit.YMiddleMF = MagneticUnit.YMiddle;
-        MagneticUnit.ZMiddleMF = MagneticUnit.ZMiddle;
+        
         MagneticUnit.Int_Middle = MagneticUnit.Intensity;
         MagneticUnit.Ext_Middle = abs(MagneticUnit.ZMiddle-MagneticUnit.YMiddle);
         ReCal_Count = 20;
@@ -586,6 +589,78 @@ uint8 compactnessStable()
     return 0;
 }
 
+uint8 leaveRecognition()
+{
+    // FunctionName: leaveRecognition
+    //{
+    // Parameter:none
+    //
+    // Return:bool 1:car is leaving 0:nothing leaving
+    //
+    // Description:
+    //  --
+    //
+    // Created: 2016/3/7
+    //
+    // Author:xiaoximi
+    //}
+
+    uint32 distance = 0;
+    
+    for(uint8 i=0;i<MIDDLE_QUENE_LENGTH;i++)
+    {
+        distance = getEuclideanMetric(
+           MagneticUnit.XValue_Stable,
+           MagneticUnit.YValue_Stable,
+           MagneticUnit.ZValue_Stable,
+           x_middle_quene[i],
+           y_middle_quene[i],
+           z_middle_quene[i]
+               );
+        //compare the distance with parked distance
+        if(distance < (MagneticUnit.parked_distance)/2)
+        {
+            return 1;
+        }
+        //compare the distance with the distance at the time just parked
+        if(abs(MagneticUnit.ZValue_Stable - z_middle_quene[i])
+           < MagneticUnit.Z_parked_distance/3)
+        {
+            return 1;
+        }
+    }
+    //compare with environment value and raise threshold
+    if(vsEnvironment(REVERSE_ENV_THRESHOLD))
+    {
+        return 1;
+    }
+    return 0;
+}
+
+void parkingCalibrate()
+{
+// FunctionName: parkingCalibrate
+//{
+// Parameter:none
+//
+// Return:none
+//
+// Description:
+//  calibrate magnetic value when parked
+//
+// Created: 2016/3/7
+//
+// Author:xiaoximi
+//}
+    
+    if(parking_stable_flag)
+    {
+        MagneticUnit.XValue_parked_stable = MagneticUnit.XValue;
+        MagneticUnit.YValue_parked_stable = MagneticUnit.YValue;
+        MagneticUnit.ZValue_parked_stable = MagneticUnit.ZValue;
+    }
+}
+
 void IdentifyCar()
 {
     // FunctionName: IdentifyCar
@@ -608,7 +683,7 @@ void IdentifyCar()
     zvalue_memory = MagneticUnit.ZValue;
     Multi_Read_HMC(&MagneticUnit.XValue,&MagneticUnit.YValue,&MagneticUnit.ZValue);
     //MagneticUnit.infrared = getInfrared();
-    
+
     
     if(ReCal())
     {
@@ -682,15 +757,8 @@ void IdentifyCar()
         //IntensityMultiState(1,1,1);
         DistanceMultiState(1,1,1);
     }
-    leaveIdentify();
+    parkingStableSet();
     TotalJudge();
-    if(reverse_flag == 1)
-    {
-        if(EndPointDevice.parking_state == NOCAR)
-        {
-            EndPointDevice.parking_state = CAR;
-        }
-    }
     //GetVoltage();
     
     if(On_Test == 0)
@@ -727,7 +795,7 @@ void TotalJudge()
     //
     // Author:xiaoximi
     //}
-    uint32 distance = 0;
+    
 
     if((MagneticUnit.ExtState==CAR)||
        (MagneticUnit.IntState==CAR)||
@@ -741,29 +809,9 @@ void TotalJudge()
         {
             if(CarStableCount>60)
             {
-                if(vsEnvironment()==0)
+                if(vsEnvironment(NORMAL_ENV_THRESHOLD)==0)
                 {
                     EndPointDevice.parking_state = CAR;
-                    if(reverse_flag == 1)
-                    {
-                        for(uint8 i=0;i<MIDDLE_QUENE_LENGTH;i++)
-                        {
-                            distance += getEuclideanMetric(
-                               MagneticUnit.XValue_Stable,
-                               MagneticUnit.YValue_Stable,
-                               MagneticUnit.ZValue_Stable,
-                               x_middle_quene[i],
-                               y_middle_quene[i],
-                               z_middle_quene[i]
-                                   );
-                        }
-                        if(distance/MIDDLE_QUENE_LENGTH < (MagneticUnit.parked_distance)*2/3)
-                        {
-                            reverse_flag = 0;
-                            parking_time = 0;
-                            quickCalibrate();
-                        }
-                    }
                 }
             }  
         }
@@ -771,7 +819,7 @@ void TotalJudge()
         {
             if(CarStableCount>1)
             {
-                if(vsEnvironment()==0)
+                if(vsEnvironment(NORMAL_ENV_THRESHOLD)==0)
                 {
                     EndPointDevice.parking_state = CAR;
                 }
@@ -779,7 +827,12 @@ void TotalJudge()
             if(CarStableCount>20)
             {
                 CarStableCount = 2;
-                vsEnvironment();
+                vsEnvironment(NORMAL_ENV_THRESHOLD);
+            }
+            parking_stable_count++;
+            if(parking_stable_count > 200)
+            {
+                parking_stable_count = 200;
             }
         }
     }
@@ -794,48 +847,57 @@ void TotalJudge()
     {
         if(Quick_Collect==1)
         {
-            if(NoCarStableCount>30)
+            if(no_car_stable_count>30)
             {
                 EndPointDevice.parking_state = NOCAR;
+                parking_stable_flag = 0;
             }
         }
         else
         {
-            if(NoCarStableCount>1)
+            if(no_car_stable_count>1)
             {
-                if(reverse_flag == 1)
-                {
-                    EndPointDevice.parking_state = CAR;
-                }
-                else
-                {
-                    EndPointDevice.parking_state = NOCAR;
-                }
+                EndPointDevice.parking_state = NOCAR;
+                parking_stable_flag = 0;
             }
         }
-        if(NoCarStableCount<65534)
+        if(no_car_stable_count<65534)
         {
-            NoCarStableCount++;
+            no_car_stable_count++;
         }
     }
     else
     {
-        NoCarStableCount = 0;
+        no_car_stable_count = 0;
     }
     if(Quick_CollectM != Quick_Collect)
     {
-        NoCarStableCount = 0;
+        no_car_stable_count = 0;
     }
     Quick_CollectM = Quick_Collect;
     
-    if((Quick_Collect == 0)&&(NoCarStableCount >10)&&(On_Test == 0))
+    if((Quick_Collect == 0)&&(no_car_stable_count >10)&&(On_Test == 0))
     {
-        NoCarStableCount = 0;
+        no_car_stable_count = 0;
         NoCarCalibration();
+    }
+    if((Quick_Collect == 0)&&(parking_stable_count >10)&&(On_Test == 0))
+    {
+        parking_stable_count = 0;
+        parkingCalibrate();
+    }
+    //judge whether car is leaving but faile to recognition.
+    if(parking_stable_flag == 1)
+    {
+        if(leaveRecognition())
+        {
+            quickCalibrate(1);
+            parking_stable_flag = 0;
+        }
     }
 }
   
-uint8 vsEnvironment()
+uint8 vsEnvironment(uint8 threshold)
 {
 // FunctionName: vsEnvironment
 //{
@@ -843,7 +905,6 @@ uint8 vsEnvironment()
 //
 // Return:0:different with environment value
 //        1£∫close to the environment value
-//        2£∫close to the first environment value
 //
 // Description:
 // determine the stability of magneitc filed, if stable and eaqual to environment value
@@ -866,13 +927,21 @@ uint8 vsEnvironment()
     uint16 xave = 0;
     uint16 yave = 0;
     uint16 zave = 0;
+    uint8 collect_times = 0;  //only equal to either 1 or 4
     if(EndPointDevice.parking_state == NOCAR)
     {
         return 0;
     }
     else
     {
-        for(i=0;i<4;i++)
+        if(Quick_Collect == 1)
+        {
+            //collect once if in quick collect mode, 
+            //in case of time out of 50ms timer interrupt
+            collect_times = 1;  
+            
+        }
+        for(i=0;i<collect_times;i++)
         {
             Multi_Read_HMC(&ADvalueX,&ADvalueY,&ADvalueZ);
             ADX[i] = ADvalueX;
@@ -882,19 +951,23 @@ uint8 vsEnvironment()
             yave += ADvalueY;
             zave += ADvalueZ;
         }
-        xave = xave >> 2;
-        yave = yave >> 2;
-        zave = zave >> 2;
-        xvariance = getVariance(ADX,4);
-        yvariance = getVariance(ADY,4);
-        zvariance = getVariance(ADZ,4);
+        if(collect_times!=1)
+        {
+            xave = xave >> 2;
+            yave = yave >> 2;
+            zave = zave >> 2;
+        }
+        
+        xvariance = getVariance(ADX,collect_times);
+        yvariance = getVariance(ADY,collect_times);
+        zvariance = getVariance(ADZ,collect_times);
         if((xvariance<5)&&(yvariance<5)&&(zvariance<15))
         {
-            for(i=0;i<4;i++)
+            for(i=0;i<MIDDLE_QUENE_LENGTH;i++)
             {
-                if((abs(xave - x_middle_quene[i])<30)&&
-                   (abs(yave - y_middle_quene[i])<30)&&
-                       (abs(zave - z_middle_quene[i])<30))
+                if((abs(xave - x_middle_quene[i])<threshold)&&
+                   (abs(yave - y_middle_quene[i])<threshold)&&
+                   (abs(zave - z_middle_quene[i])<threshold))
                 {
                     MagneticUnit.XMiddle = xave;
                     MagneticUnit.YMiddle = yave;
@@ -907,21 +980,14 @@ uint8 vsEnvironment()
                         (((uint32)MagneticUnit.XMiddle*(uint32)MagneticUnit.XMiddle)+
                         ((uint32)MagneticUnit.YMiddle*(uint32)MagneticUnit.YMiddle))+
                         ((uint32)MagneticUnit.ZMiddle*(uint32)MagneticUnit.ZMiddle));
-                    reverse_flag = 0;
+                    parking_stable_flag = 0;
                     return 1;
                 }
             }
         }
-        else
-        {
-            if((abs(xave - MagneticUnit.XMiddleMF)<30)&&(abs(yave - MagneticUnit.YMiddleMF)<30)&&(abs(zave - MagneticUnit.ZMiddleMF)<30))
-            {
-                return 2;
-            }
-        }
+        
         return 0;
     }
-    
 }
 
 void saveMiddle()
@@ -941,7 +1007,7 @@ void saveMiddle()
 // Author:xiaoximi
 //}
     uint8 i=0;
-    if(reverse_flag == 1)
+    if(parking_stable_flag == 1)
     {
         return;
     }
@@ -953,7 +1019,7 @@ void saveMiddle()
                               x_middle_quene[i],
                               y_middle_quene[i],
                               z_middle_quene[i]
-                                  )<25)
+                                  )<15)
         {
             return;
         }
@@ -965,10 +1031,16 @@ void saveMiddle()
         y_middle_quene[middle_quene_count] = MagneticUnit.YMiddle;
         z_middle_quene[middle_quene_count] = MagneticUnit.ZMiddle;
         middle_quene_count++;
+        if(update_middle_times > 65530)
+        {
+            update_middle_times = 0;
+        }
+        update_middle_times++;
         if(middle_quene_count==MIDDLE_QUENE_LENGTH)
         {
             middle_quene_count = 1;
         }
+        
     }
 }
 
@@ -987,103 +1059,71 @@ void NoCarCalibration()
 //
 // Author:xiaoximi
 //}
-    if(reverse_flag == 1)
+    if(parking_stable_flag == 1)
     {
         return;
     }
     
     __disable_interrupt();
     
-    quickCalibrate();
-    saveMiddle();
+    if(quickCalibrate(0))
+    {
+        saveMiddle();
+    }
+    else
+    {
+        no_car_stable_count = 11;
+    }
+    
     
     __enable_interrupt();
     
 }
 
-void leaveIdentify()
+void parkingStableSet()
 {
-    // FunctionName: leaveIdentify
+    // FunctionName: parkingStableSet
     //{
     // Parameter:none
     //
     // Return:none
     //
     // Description:
-    //  if state of parked car is stable,set reverse_flag to 1, 
-    //  and update middle value, so when vehicle is leaving, parking state
-    //  change from NOCAR to CAR.
+    //  if state of parked car is stable,set parking_stable_flag to 1, 
+    //  and write down the distance between parked and vacant
     //
     // Created: 2016/3/2
     //
     // Author:xiaoximi
     //}
-
-    uint16 ADX[4];
-    uint16 ADY[4];
-    uint16 ADZ[4];
-    uint16 ADvalueX=0;
-    uint16 ADvalueY=0;
-    uint16 ADvalueZ=0;
     uint8 i=0;
-    uint16 xvariance = 0;
-    uint16 yvariance = 0;
-    uint16 zvariance = 0;
-    uint16 xave = 0;
-    uint16 yave = 0;
-    uint16 zave = 0;
     uint32 distance = 0;
 
     if((EndPointDevice.parking_state == CAR)&&
-       (parking_time > 5)&&
-       (reverse_flag == 0)&&
+       (parking_time > 10)&&
+       (parking_stable_flag == 0)&&
        (Quick_Collect == 0))
     {
-        //update middle value
-        for(i=0;i<4;i++)
+        //parking_stable_flag  set
+        parking_stable_flag = 1;
+        MagneticUnit.XValue_parked_stable = MagneticUnit.XValue;
+        MagneticUnit.YValue_parked_stable = MagneticUnit.YValue;
+        MagneticUnit.ZValue_parked_stable = MagneticUnit.ZValue;
+        MagneticUnit.Z_parked_distance = 
+            abs(MagneticUnit.ZMiddle - MagneticUnit.ZValue);
+        for(i=0;i<MIDDLE_QUENE_LENGTH;i++)
         {
-            Multi_Read_HMC(&ADvalueX,&ADvalueY,&ADvalueZ);
-            ADX[i] = ADvalueX;
-            ADY[i] = ADvalueY;
-            ADZ[i] = ADvalueZ;
-            xave += ADvalueX;
-            yave += ADvalueY;
-            zave += ADvalueZ;
+            distance += getEuclideanMetric(
+                                           MagneticUnit.XValue_Stable,
+                                           MagneticUnit.YValue_Stable,
+                                           MagneticUnit.ZValue_Stable,
+                                           x_middle_quene[i],
+                                           y_middle_quene[i],
+                                           z_middle_quene[i]
+                                               );
         }
-        xave = xave >> 2;
-        yave = yave >> 2;
-        zave = zave >> 2;
-        xvariance = getVariance(ADX,4);
-        yvariance = getVariance(ADY,4);
-        zvariance = getVariance(ADZ,4);
-        if((xvariance<5)&&(yvariance<5)&&(zvariance<15))
-        {
-            MagneticUnit.XMiddle = xave;
-            MagneticUnit.YMiddle = yave;
-            MagneticUnit.ZMiddle = zave;
-            MagneticUnit.XValue_Stable = MagneticUnit.XMiddle;
-            MagneticUnit.YValue_Stable = MagneticUnit.YMiddle;
-            MagneticUnit.ZValue_Stable = MagneticUnit.ZMiddle;
-            MagneticUnit.Ext_Middle = abs(MagneticUnit.ZMiddle-MagneticUnit.YMiddle);
-            MagneticUnit.Int_Middle = sqrt_16(
-                (((uint32)MagneticUnit.XMiddle*(uint32)MagneticUnit.XMiddle)+
-                ((uint32)MagneticUnit.YMiddle*(uint32)MagneticUnit.YMiddle))+
-                ((uint32)MagneticUnit.ZMiddle*(uint32)MagneticUnit.ZMiddle));
-            //reverse flag set
-            reverse_flag = 1;
-            for(i=0;i<MIDDLE_QUENE_LENGTH;i++)
-            {
-                distance += getEuclideanMetric(
-                                               MagneticUnit.XValue_Stable,
-                                               MagneticUnit.YValue_Stable,
-                                               MagneticUnit.ZValue_Stable,
-                                               x_middle_quene[i],
-                                               y_middle_quene[i],
-                                               z_middle_quene[i]
-                                                   );
-            }
-            MagneticUnit.parked_distance = distance / MIDDLE_QUENE_LENGTH;
-        }
+        MagneticUnit.parked_distance = distance / MIDDLE_QUENE_LENGTH;
+        
     }
 }
  
@@ -1104,10 +1144,10 @@ void CmdCalibration()
 //}
 
     __disable_interrupt();
-    quickCalibrate();
+    quickCalibrate(0);
     saveMiddle();
     halLedClear(4);
-    reverse_flag = 0;
+    parking_stable_flag = 0;
     EndPointDevice.parking_state = NOCAR;
     TA0CCTL0 &= ~CCIFG;
     __enable_interrupt();
@@ -1147,6 +1187,12 @@ void CmdSendHandler()
     }
     On_Test = 0;
     TA0CCTL0 &= ~CCIFG;
+    //recovery original channel
+    A7139_Init(ChannelList[EndPointDevice.channel]);
+    A7139_SetPackLen(TEST_LENGTH);
+    delay_us(1);
+    RXMode();
+    delay_us(1);
     __enable_interrupt();
 }
 
@@ -1179,9 +1225,9 @@ void CmdHandler()
           REBOOT;
           break;
     }
-      
     halLedToggle(1);
 }
+
 
 
 

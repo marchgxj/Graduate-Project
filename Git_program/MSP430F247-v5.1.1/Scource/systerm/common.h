@@ -34,7 +34,6 @@
 #include "detect.h"
 #include "HMC5983.h"
 #include "filter.h"
-#include "infrared.h"
 #include "math.h"
 #include "CFmodels.h"
 #include "bayes.h"

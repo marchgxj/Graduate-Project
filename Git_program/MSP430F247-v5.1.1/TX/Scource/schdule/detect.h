@@ -2,16 +2,6 @@
 #define _DETECT_h_
 #include "common.h"
 
-#define COLLECT_EN   0          //是否开启数据采集
-#define COLLECT_PERIOD  500   //采集周期  单位：ms
-#define COLLECT_PERIOD_L  1    //低功耗模式，采集周期  单位：1s
-#define COLLECT_WIDTH   5       //采集个数
-#define SLOP_THRESHLOD  10      //斜率阈值
-
-#define OFFSET          3      //跳变检测距离
-#define THRESHOLD       100
-#define IDENTIFY_WIDTH  10
-
 //传感器监测状态
 #define NOCAR      0            //没有停车
 #define CAR        1            //停车
@@ -19,31 +9,34 @@
 #define CAR2NOCAR  3            //有车到无车中间状态
 #define COLLECTING 4            //采集数据中
 #define STABLE     5            //传感器稳定
-#define OFFLINE    253            //电量低
+#define OFFLINE    253            //离线
 #define LOWPOWER   252            //电量低
-
-#define CAL_PERIOD  6000          //10分钟校准一次
-
-#define VAR_THRESHOLD  150             //方差判断阈值
-#define EXT_THRESHOLD  40               //两轴差值判断阈值
-#define INT_THRESHOLD  60
-#define COM_THRESHOLD  1000
-#define DIS_THRESHOLD  30
+#define TEMPOVER   251            //温度异常
 
 #define TEST_LENGTH             56
 #define FILTER_LENGTH           20
 #define SLOP_LENGTH             3
-#define INFRA_LENGTH            5
-#define MIDDLE_QUENE_LENGTH     3
+#define MIDDLE_QUENE_LENGTH     5
 #define MAX_QUICK_COLLECT_TIME  2000  //5mins 在快采模式的最长时间 单位：50ms
 #define HMC5983_RESET_PERIOD    12000 //10mins 5983复位周期 单位：50ms
 
-
-#define LOWPOWER_THRESHOLD_HIGH 600
-#define LOWPOWER_THRESHOLD_LOW  500
+#define    VAR_THRESHOLD       50             //方差判断阈值
+#define    EXT_THRESHOLD       40               //两轴差值判断阈值
+#define    INT_THRESHOLD       60
+#define    DIS_THRESHOLD       30
+#define    COM_THRESHOLD       1000
 
 #define OPEN_GMI_COUNT   400  //多长时间后检测是否开启GMI  单位：50ms
 #define CLOSE_GMI_COUNT  1200  //  单位：50ms
+
+//控制命令
+#define CMD_SEND_TEST        1
+#define CMD_NOCAR            2
+#define CMD_CAR              3
+#define CMD_REBOOT           4
+
+#define NORMAL_ENV_THRESHOLD    20
+#define REVERSE_ENV_THRESHOLD   80
 
 typedef struct
 {
@@ -55,16 +48,17 @@ typedef struct
 {
     uint16 XValue;
     uint16 XMiddle;
-    uint16 XMiddleMF;
     uint16 XValue_Stable;
+    uint16 XValue_parked_stable;
     uint16 YValue;
     uint16 YMiddle;
-    uint16 YMiddleMF;
     uint16 YValue_Stable;
+    uint16 YValue_parked_stable;
     uint16 ZValue;
     uint16 ZMiddle;
-    uint16 ZMiddleMF;
     uint16 ZValue_Stable;
+    uint16 ZValue_parked_stable;
+    uint16 Z_parked_distance;
     
     uint16 Intensity;
     uint16 IntensityF;
@@ -107,29 +101,29 @@ extern void IdentifyCar();
 extern void NoCarCalibration();
 extern uint8 MultiState(uint16 value,uint16 threshold);
 
-extern uint8 vsEnvironment();
+extern uint8 vsEnvironment(uint8 threshold);
 extern void TotalJudge();
 extern void CmdCalibration();
-extern void leaveIdentify();
+extern void parkingStableSet();
+extern void CmdHandler();
 
 
 extern FilterStruct FilterData[FILTER_LENGTH];
 extern uint16 Collect_Period;
 extern FilterStruct SlopData[SLOP_LENGTH];
 extern uint8 Quick_Collect;
-extern uint8 XValue_Parking;
-extern uint8 YValue_Parking;
+extern uint8 Exit_Sleep;
 extern uint16 Ext_Threshold;
 extern uint16 Int_Threshold;
 extern uint16 Var_Threshold;
 extern uint16 Dis_Threshold;
 extern uint8 Quick_CollectM;
-extern uint16 infraredData[INFRA_LENGTH];
 extern uint16 storage_count_send;
 extern uint16 x_middle_quene[MIDDLE_QUENE_LENGTH];
 extern uint16 y_middle_quene[MIDDLE_QUENE_LENGTH];
 extern uint16 z_middle_quene[MIDDLE_QUENE_LENGTH];
 extern uint8 middle_quene_count;
 extern uint16 parking_time;
-extern uint8 reverse_flag; 
+extern uint8 parking_stable_flag; 
+extern uint16 update_middle_times;
 #endif 

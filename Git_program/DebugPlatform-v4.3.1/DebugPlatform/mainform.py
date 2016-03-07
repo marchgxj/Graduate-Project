@@ -1225,7 +1225,7 @@ class Application(ttk.Notebook):
             if not self.history_queue:
                 tkmes.showinfo("提示","没有读取到数据")
                 return
-            self.history_frame_count = int(self.history_framecount.get())
+            self.history_frame_count = int(self.history_framecount.get().split("/")[0])
             self.history_start = 1
             self.history_update_interval = int(self.history_periodString.get())
             _periodupdatelabel()
@@ -1246,48 +1246,61 @@ class Application(ttk.Notebook):
             self.XMiddleString.set(frame_data[7])
             self.YMiddleString.set(frame_data[8])
             self.IntensityeString.set(frame_data[9])
-            self.Int_MiddleString.set(frame_data[10])
-            self.IntensityMinusString.set(
-                abs(int(frame_data[9]) - int(frame_data[10])))
+            middle_value = int(frame_data[10])
             self.IntStateString.set(frame_data[11])
             self.ResultString.set(frame_data[12])
-            self.XAve_SlopString.set(ctypes.c_int16(int(frame_data[13])).value)
-            self.YAve_SlopString.set(ctypes.c_int16(int(frame_data[14])).value)
-            self.ZAve_SlopString.set(ctypes.c_int16(int(frame_data[15])).value)
+            self.update_middle_times_string.set(ctypes.c_int16(int(frame_data[13])).value)
+            self.XValue_parked_stable_string.set(ctypes.c_int16(int(frame_data[14])).value)
+            self.YValue_parked_stable_string.set(ctypes.c_int16(int(frame_data[15])).value)
             self.ZValueString.set(frame_data[16])
             self.GMI_XvalueString.set(frame_data[17])
             self.GMI_YvalueString.set(frame_data[18])
             self.GMI_XvalueMiddleString.set(frame_data[19])
             self.GMI_YvalueMiddleString.set(frame_data[20])
             self.VoltageString.set(frame_data[21])
-            self.TemperatureString.set(frame_data[22])
+            self.ZValue_parked_stable_string.set(frame_data[22])
             self.ZMiddleString.set(frame_data[23])
-            self.switch_middleString.set(frame_data[24])
+            switch_middle = int(frame_data[24])
+            self.switch_middleString.set(switch_middle)
+            if switch_middle == 0:
+                self.x_middle_quene0String.set(middle_value)
+            elif switch_middle == 1:
+                self.x_middle_quene1String.set(middle_value)
+            elif switch_middle == 2:
+                self.x_middle_quene2String.set(middle_value)
+            elif switch_middle == 10:
+                self.y_middle_quene0String.set(middle_value)
+            elif switch_middle == 11:
+                self.y_middle_quene1String.set(middle_value)
+            elif switch_middle == 12:
+                self.y_middle_quene2String.set(middle_value)
+            elif switch_middle == 20:
+                self.z_middle_quene0String.set(middle_value)
+            elif switch_middle == 21:
+                self.z_middle_quene1String.set(middle_value)
+            elif switch_middle == 22:
+                self.z_middle_quene2String.set(middle_value)
             self.reverse_flagString.set(frame_data[25])
             self.parked_distanceString.set(frame_data[26])
-            try:
-                self.DistanceString.set(frame_data[27])
-                self.CompatnessString.set(frame_data[28])
-                self.StorageDataLengthString.set(frame_data[29])
-            except:
-                pass
+            self.DistanceString.set(frame_data[27])
+            self.CompatnessString.set(frame_data[28])
+            self.parking_timeString.set(frame_data[29])
 
-            if (abs(int(frame_data[0]) - int(frame_data[7])) > 100 and (
-                    frame_data[2]) < 60):
-                self.Side_ParkingString.set(1)
-            else:
-                self.Side_ParkingString.set(0)
+
+
 
         def _last_frame(event=0):
             if self.history_frame_count == 1:
                 tkmes.showinfo("提示","已经到第一帧")
                 return
             # frame_data = str(self.history_last_queue.pop())
-            frame_data = self.history_queue[self.history_frame_count]
+            if(self.history_frame_count >= len(self.history_queue)):
+                self.history_frame_count = len(self.history_queue) - 1
             # self.history_queue.appendleft(frame_data)
+            frame_data = self.history_queue[self.history_frame_count]
             frame_data = frame_data.split("|")[2].split(" ")[:-1]
             self.history_frame_count -= 1
-            self.history_framecount.set(self.history_frame_count)
+            self.history_framecount.set(str(self.history_frame_count)+"/"+str(len(self.history_queue)))
             _updatelabel(frame_data)
 
         def _next_frame(event=0):
@@ -1299,7 +1312,7 @@ class Application(ttk.Notebook):
             # self.history_last_queue.append(frame_data)
             frame_data = frame_data.split("|")[2].split(" ")[:-1]
             self.history_frame_count += 1
-            self.history_framecount.set(self.history_frame_count)
+            self.history_framecount.set(str(self.history_frame_count)+"/"+str(len(self.history_queue)))
             _updatelabel(frame_data)
 
         def _periodupdatelabel():
@@ -1307,10 +1320,12 @@ class Application(ttk.Notebook):
                 return
             if not self.history_queue:
                 return
+            if self.history_frame_count >= len(self.history_queue):
+                return
             frame_data = self.history_queue[self.history_frame_count]
             frame_data = frame_data.split("|")[2].split(" ")[:-1]
             self.history_frame_count += 1
-            self.history_framecount.set(self.history_frame_count)
+            self.history_framecount.set(str(self.history_frame_count)+"/"+str(len(self.history_queue)))
             intdata = []
             for d in frame_data:
                 intdata.append(int(d))
@@ -1395,7 +1410,7 @@ class Application(ttk.Notebook):
 
         rowandcloumn += 1
         self.history_radiovalue = tk.StringVar()
-        self.history_radiovalue.set(1)
+        self.history_radiovalue.set(3)
         tk.Radiobutton(
             receivegroup,
             variable=self.history_radiovalue,
@@ -1587,13 +1602,13 @@ class Application(ttk.Notebook):
         rowandcloumn += 1
         self.ResultString.set(0)
 
-        self.TemperatureString = tk.StringVar()
-        tk.Label(readgroup, text="Temperature:").grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
+        self.ZValue_parked_stable_string = tk.StringVar()
+        tk.Label(readgroup, text="ZValue_parked_stable:").grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
         rowandcloumn += 1
-        tk.Label(readgroup, text="0", textvariable=self.TemperatureString, width=4)\
+        tk.Label(readgroup, text="0", textvariable=self.ZValue_parked_stable_string, width=4)\
             .grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
         rowandcloumn += 1
-        self.TemperatureString.set(0)
+        self.ZValue_parked_stable_string.set(0)
 
         self.switch_middleString = tk.StringVar()
         tk.Label(readgroup, text="switch_middle:").grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
@@ -1627,21 +1642,21 @@ class Application(ttk.Notebook):
         rowandcloumn += 1
         self.z_middle_quene0String.set(0)
 
-        self.XAve_SlopString = tk.StringVar()
-        tk.Label(readgroup, text="XAve_Slop:").grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
+        self.update_middle_times_string = tk.StringVar()
+        tk.Label(readgroup, text="update_middle_times:").grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
         rowandcloumn += 1
-        self.XAve_SlopLabel = tk.Label(readgroup, text="0", textvariable=self.XAve_SlopString, width=4)
+        self.XAve_SlopLabel = tk.Label(readgroup, text="0", textvariable=self.update_middle_times_string, width=4)
         self.XAve_SlopLabel.grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
         rowandcloumn += 1
-        self.XAve_SlopString.set(0)
+        self.update_middle_times_string.set(0)
 
-        self.YAve_SlopString = tk.StringVar()
-        tk.Label(readgroup, text="YAve_Slop:").grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
+        self.XValue_parked_stable_string = tk.StringVar()
+        tk.Label(readgroup, text="XValue_parked_stable:").grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
         rowandcloumn += 1
-        self.YAve_SlopLabel = tk.Label(readgroup, text="0", textvariable=self.YAve_SlopString, width=4)
+        self.YAve_SlopLabel = tk.Label(readgroup, text="0", textvariable=self.XValue_parked_stable_string, width=4)
         self.YAve_SlopLabel.grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
         rowandcloumn += 1
-        self.YAve_SlopString.set(0)
+        self.XValue_parked_stable_string.set(0)
 
         self.x_middle_quene1String = tk.StringVar()
         tk.Label(readgroup, text="x_middle[1]:").grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
@@ -1667,21 +1682,21 @@ class Application(ttk.Notebook):
         rowandcloumn += 1
         self.z_middle_quene1String.set(0)
 
-        self.ZAve_SlopString = tk.StringVar()
-        tk.Label(readgroup, text="ZAve_Slop:").grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
+        self.YValue_parked_stable_string = tk.StringVar()
+        tk.Label(readgroup, text="YValue_parked_stable:").grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
         rowandcloumn += 1
-        self.ZAve_SlopLabel = tk.Label(readgroup, text="0", textvariable=self.ZAve_SlopString, width=4)
+        self.ZAve_SlopLabel = tk.Label(readgroup, text="0", textvariable=self.YValue_parked_stable_string, width=4)
         self.ZAve_SlopLabel.grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
         rowandcloumn += 1
-        self.ZAve_SlopString.set(0)
+        self.YValue_parked_stable_string.set(0)
 
-        self.Side_ParkingString = tk.StringVar()
-        tk.Label(readgroup, text="Side_Parking:").grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
+        self.parking_timeString = tk.StringVar()
+        tk.Label(readgroup, text="ParkingTime:").grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
         rowandcloumn += 1
-        self.Side_ParkingLabel = tk.Label(readgroup, text="0", textvariable=self.Side_ParkingString, width=4)
-        self.Side_ParkingLabel.grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
+        tk.Label(readgroup, text="0", textvariable=self.parking_timeString, width=4)\
+            .grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
         rowandcloumn += 1
-        self.Side_ParkingString.set(0)
+        self.parking_timeString.set(0)
 
         self.x_middle_quene2String = tk.StringVar()
         tk.Label(readgroup, text="x_middle[2]:").grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
@@ -1725,7 +1740,29 @@ class Application(ttk.Notebook):
         rowandcloumn += 1
         self.reverse_flagString.set(0)
 
+        self.x_middle_quene3String = tk.StringVar()
+        tk.Label(readgroup, text="x_middle[3]:").grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
+        rowandcloumn += 1
+        tk.Label(readgroup, text="0", textvariable=self.x_middle_quene3String, width=4)\
+            .grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
+        rowandcloumn += 1
+        self.x_middle_quene3String.set(0)
 
+        self.y_middle_quene3String = tk.StringVar()
+        tk.Label(readgroup, text="y_middle[3]:").grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
+        rowandcloumn += 1
+        tk.Label(readgroup, text="0", textvariable=self.y_middle_quene3String, width=4)\
+            .grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
+        rowandcloumn += 1
+        self.y_middle_quene3String.set(0)
+
+        self.z_middle_quene3String = tk.StringVar()
+        tk.Label(readgroup, text="z_middle[3]:").grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
+        rowandcloumn += 1
+        tk.Label(readgroup, text="0", textvariable=self.z_middle_quene3String, width=4)\
+            .grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
+        rowandcloumn += 1
+        self.z_middle_quene3String.set(0)
 
         self.parked_distanceString = tk.StringVar()
         tk.Label(readgroup, text="parked_distance:").grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
@@ -1743,6 +1780,30 @@ class Application(ttk.Notebook):
         rowandcloumn += 1
         self.DistanceString.set(0)
 
+        self.x_middle_quene4String = tk.StringVar()
+        tk.Label(readgroup, text="x_middle[4]:").grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
+        rowandcloumn += 1
+        tk.Label(readgroup, text="0", textvariable=self.x_middle_quene4String, width=4)\
+            .grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
+        rowandcloumn += 1
+        self.x_middle_quene4String.set(0)
+
+        self.y_middle_quene4String = tk.StringVar()
+        tk.Label(readgroup, text="y_middle[3]:").grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
+        rowandcloumn += 1
+        tk.Label(readgroup, text="0", textvariable=self.y_middle_quene4String, width=4)\
+            .grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
+        rowandcloumn += 1
+        self.y_middle_quene4String.set(0)
+
+        self.z_middle_quene4String = tk.StringVar()
+        tk.Label(readgroup, text="z_middle[3]:").grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
+        rowandcloumn += 1
+        tk.Label(readgroup, text="0", textvariable=self.z_middle_quene4String, width=4)\
+            .grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
+        rowandcloumn += 1
+        self.z_middle_quene4String.set(0)
+
         self.GMI_YvalueMiddleString = tk.StringVar()
         tk.Label(readgroup, text="Perimeter:").grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
         rowandcloumn += 1
@@ -1758,17 +1819,6 @@ class Application(ttk.Notebook):
         self.CompatnessLabel.grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
         rowandcloumn += 1
         self.CompatnessString.set(0)
-
-
-
-        self.StorageDataLengthString = tk.StringVar()
-        # tk.Label(readgroup, text="StorageDataLength:").grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
-        rowandcloumn += 1
-        self.StorageDataLengthLabel = tk.Label(readgroup, text="0", textvariable=self.StorageDataLengthString, width=4)
-        # self.StorageDataLengthLabel.grid(row=rowandcloumn / 10, column=rowandcloumn % 10)
-        rowandcloumn += 1
-        self.StorageDataLengthString.set(0)
-
 
         # self.datatext = tk.Text(readgroup)
         # self.datatext.grid(row=0, column=0, sticky=tk.N + tk.S + tk.E + tk.W)
@@ -2061,16 +2111,16 @@ class Application(ttk.Notebook):
         middle_value = int(self.menu.uartform.identifythread.value[10])
         self.IntStateString.set(self.menu.uartform.identifythread.value[11])
         self.ResultString.set(self.menu.uartform.identifythread.value[12])
-        self.XAve_SlopString.set(ctypes.c_int16(self.menu.uartform.identifythread.value[13]).value)
-        self.YAve_SlopString.set(ctypes.c_int16(self.menu.uartform.identifythread.value[14]).value)
-        self.ZAve_SlopString.set(ctypes.c_int16(self.menu.uartform.identifythread.value[15]).value)
+        self.update_middle_times_string.set(self.menu.uartform.identifythread.value[13])
+        self.XValue_parked_stable_string.set(self.menu.uartform.identifythread.value[14])
+        self.YValue_parked_stable_string.set(self.menu.uartform.identifythread.value[15])
         self.ZValueString.set(self.menu.uartform.identifythread.value[16])
         self.GMI_XvalueString.set(self.menu.uartform.identifythread.value[17])
         self.GMI_YvalueString.set(self.menu.uartform.identifythread.value[18])
         self.GMI_XvalueMiddleString.set(self.menu.uartform.identifythread.value[19])
         self.GMI_YvalueMiddleString.set(self.menu.uartform.identifythread.value[20])
         self.VoltageString.set(self.menu.uartform.identifythread.value[21])
-        self.TemperatureString.set(self.menu.uartform.identifythread.value[22])
+        self.ZValue_parked_stable_string.set(self.menu.uartform.identifythread.value[22])
         self.ZMiddleString.set(self.menu.uartform.identifythread.value[23])
         switch_middle = self.menu.uartform.identifythread.value[24]
         self.switch_middleString.set(switch_middle)
@@ -2080,29 +2130,35 @@ class Application(ttk.Notebook):
             self.x_middle_quene1String.set(middle_value)
         elif switch_middle == 2:
             self.x_middle_quene2String.set(middle_value)
+        elif switch_middle == 3:
+            self.x_middle_quene3String.set(middle_value)
+        elif switch_middle == 4:
+            self.x_middle_quene4String.set(middle_value)
         elif switch_middle == 10:
             self.y_middle_quene0String.set(middle_value)
         elif switch_middle == 11:
             self.y_middle_quene1String.set(middle_value)
         elif switch_middle == 12:
             self.y_middle_quene2String.set(middle_value)
+        elif switch_middle == 13:
+            self.y_middle_quene3String.set(middle_value)
+        elif switch_middle == 14:
+            self.y_middle_quene4String.set(middle_value)
         elif switch_middle == 20:
             self.z_middle_quene0String.set(middle_value)
         elif switch_middle == 21:
             self.z_middle_quene1String.set(middle_value)
         elif switch_middle == 22:
             self.z_middle_quene2String.set(middle_value)
+        elif switch_middle == 23:
+            self.z_middle_quene3String.set(middle_value)
+        elif switch_middle == 24:
+            self.z_middle_quene4String.set(middle_value)
         self.reverse_flagString.set(self.menu.uartform.identifythread.value[25])
         self.parked_distanceString.set(self.menu.uartform.identifythread.value[26])
         self.DistanceString.set(self.menu.uartform.identifythread.value[27])
         self.CompatnessString.set(self.menu.uartform.identifythread.value[28])
-        self.StorageDataLengthString.set(self.menu.uartform.identifythread.value[29])
-
-        if (abs(self.menu.uartform.identifythread.value[0] - self.menu.uartform.identifythread.value[7]) > 100 and (
-                self.menu.uartform.identifythread.value[2]) < 60):
-            self.Side_ParkingString.set(1)
-        else:
-            self.Side_ParkingString.set(0)
+        self.parking_timeString.set(self.menu.uartform.identifythread.value[29])
 
         self.XValueLabel.after(50, self.updatelabel)
 
@@ -2151,13 +2207,9 @@ class Application(ttk.Notebook):
             self.ResultString.set(self.Result[x1 / self.offset])
             self.IntensityMinusString.set(
                 abs(int(self.Intensity[x1 / self.offset]) - int(self.IntensityMiddle[x1 / self.offset])))
-            self.XAve_SlopString.set(ctypes.c_int16(int(self.XAve_Slop[x1 / self.offset])))
-            self.YAve_SlopString.set(ctypes.c_int16(int(self.YAve_Slop[x1 / self.offset])))
-            if (abs(int(self.XValue[x1 / self.offset]) - int(self.AD_middle_valueX[x1 / self.offset])) > 100 and (
-                    int(self.VarianceM[x1 / self.offset])) < 60):
-                self.Side_ParkingString.set(1)
-                # else:
-                self.Side_ParkingString.set(0)
+            self.update_middle_times_string.set(ctypes.c_int16(int(self.XAve_Slop[x1 / self.offset])))
+            self.XValue_parked_stable_string.set(ctypes.c_int16(int(self.YAve_Slop[x1 / self.offset])))
+
 
 
                 # if(self.matplotoldopen == True):

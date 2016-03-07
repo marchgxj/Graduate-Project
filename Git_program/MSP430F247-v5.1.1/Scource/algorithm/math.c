@@ -102,6 +102,10 @@ uint16 getVariance(uint16 *data,uint8 length)
     uint16 average = 0;
     uint32 sum = 0;
     uint8 i = 0;
+    if(length == 1)
+    {
+        return 0;
+    }
     average = getAverage(data,length);
     for(i=0;i<length;i++)
     {

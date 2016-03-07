@@ -97,7 +97,7 @@ void TestSend()
     10:18、19：xyz_middle_quene
     11:20:MagneticUnit.Int_State
     12:21:EndpointDeviece.parking
-    13:22、23: XAve_Slpo
+    13:22、23: update_middle_times
     14:24、25: YAve_Slop
     15:26、27: ZAve_Slop
     16:28、29: Z轴AD
@@ -113,7 +113,7 @@ void TestSend()
     26:46、47:MagneticUnit.parked_distance
     27:48、49:diameterbuf
     28:50、51、52、53:Compatness
-    29:54、55:Storage_data_length
+    29:54、55:parking_time
     **********************************************/
     DataSendDraw[0] = MagneticUnit.XValue>>8;
     DataSendDraw[1] = MagneticUnit.XValue;
@@ -150,12 +150,12 @@ void TestSend()
     }
     DataSendDraw[20] = MagneticUnit.IntState;
     DataSendDraw[21] = EndPointDevice.parking_state;
-    //DataSendDraw[22] = MagneticUnit.XAve_Slop>>8;
-    //DataSendDraw[23] = MagneticUnit.XAve_Slop;
-    //DataSendDraw[24] = MagneticUnit.YAve_Slop>>8;
-    //DataSendDraw[25] = MagneticUnit.YAve_Slop;
-    //DataSendDraw[26] = MagneticUnit.ZAve_Slop>>8;
-    //DataSendDraw[27] = MagneticUnit.ZAve_Slop;
+    DataSendDraw[22] = update_middle_times>>8;
+    DataSendDraw[23] = update_middle_times;
+    DataSendDraw[24] = MagneticUnit.XValue_parked_stable>>8;
+    DataSendDraw[25] = MagneticUnit.XValue_parked_stable;
+    DataSendDraw[26] = MagneticUnit.YValue_parked_stable>>8;
+    DataSendDraw[27] = MagneticUnit.YValue_parked_stable;
     DataSendDraw[28] = MagneticUnit.ZValue>>8;
     DataSendDraw[29] = MagneticUnit.ZValue;
     DataSendDraw[30] = MagneticUnit.XValue_Stable>>8;
@@ -168,12 +168,12 @@ void TestSend()
     DataSendDraw[37] = perimeterbuf;
     DataSendDraw[38] = EndPointDevice.vlotage>>8;
     DataSendDraw[39] = EndPointDevice.vlotage;
-    DataSendDraw[40] = EndPointDevice.temperature>>8;
-    DataSendDraw[41] = EndPointDevice.temperature;
+    DataSendDraw[40] = MagneticUnit.ZValue_parked_stable>>8;
+    DataSendDraw[41] = MagneticUnit.ZValue_parked_stable;
     DataSendDraw[42] = MagneticUnit.ZMiddle>>8;
     DataSendDraw[43] = MagneticUnit.ZMiddle;
     DataSendDraw[44] = switch_middle;
-    DataSendDraw[45] = reverse_flag;
+    DataSendDraw[45] = parking_stable_flag;
     DataSendDraw[46] = MagneticUnit.parked_distance>>8;
     DataSendDraw[47] = MagneticUnit.parked_distance;
     DataSendDraw[48] = diameterbuf>>8;
@@ -182,8 +182,8 @@ void TestSend()
     DataSendDraw[51] = MagneticUnit.compatness>>16;
     DataSendDraw[52] = MagneticUnit.compatness>>8;
     DataSendDraw[53] = MagneticUnit.compatness;
-    //DataSendDraw[54] = storage_count_send>>8;
-    //DataSendDraw[55] = storage_count_send;
+    DataSendDraw[54] = parking_time>>8;
+    DataSendDraw[55] = parking_time;
     
     A7139_WriteFIFO(DataSendDraw,TEST_LENGTH);
     delay_us(1);
@@ -236,21 +236,22 @@ __interrupt void Timer_A0(void)
             IdentifyCar();
             TestSend();
             //PostTask(EVENT_IDENTIFY_CAR);
+            if(EndPointDevice.parking_state == CAR)
+            {
+                parking_time++;
+                if(parking_time > 1000)
+                {
+                    parking_time = 1000;
+                }
+            }
+            else
+            {
+                parking_time = 0;
+            }
         }
         
         //记录停车时间
-        if(EndPointDevice.parking_state == CAR)
-        {
-            parking_time++;
-            if(parking_time > 1000)
-            {
-                parking_time = 1000;
-            }
-        }
-        else
-        {
-            parking_time = 0;
-        }
+        
     }
     else
     {

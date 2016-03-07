@@ -16,8 +16,7 @@
 #define TEST_LENGTH             56
 #define FILTER_LENGTH           20
 #define SLOP_LENGTH             3
-#define INFRA_LENGTH            5
-#define MIDDLE_QUENE_LENGTH     3
+#define MIDDLE_QUENE_LENGTH     5
 #define MAX_QUICK_COLLECT_TIME  2000  //5mins 在快采模式的最长时间 单位：50ms
 #define HMC5983_RESET_PERIOD    12000 //10mins 5983复位周期 单位：50ms
 
@@ -32,6 +31,8 @@
 #define CMD_CAR              3
 #define CMD_REBOOT           4
 
+#define NORMAL_ENV_THRESHOLD    20
+#define REVERSE_ENV_THRESHOLD   80
 
 typedef struct
 {
@@ -43,16 +44,17 @@ typedef struct
 {
     uint16 XValue;
     uint16 XMiddle;
-    uint16 XMiddleMF;
     uint16 XValue_Stable;
+    uint16 XValue_parked_stable;
     uint16 YValue;
     uint16 YMiddle;
-    uint16 YMiddleMF;
     uint16 YValue_Stable;
+    uint16 YValue_parked_stable;
     uint16 ZValue;
     uint16 ZMiddle;
-    uint16 ZMiddleMF;
     uint16 ZValue_Stable;
+    uint16 ZValue_parked_stable;
+    uint16 Z_parked_distance;
     
     uint16 Intensity;
     uint16 IntensityF;
@@ -95,10 +97,10 @@ extern void IdentifyCar();
 extern void NoCarCalibration();
 extern uint8 MultiState(uint16 value,uint16 threshold);
 
-extern uint8 vsEnvironment();
+extern uint8 vsEnvironment(uint8 threshold);
 extern void TotalJudge();
 extern void CmdCalibration();
-extern void leaveIdentify();
+extern void parkingStableSet();
 extern void CmdHandler();
 
 
@@ -112,12 +114,12 @@ extern uint16 Int_Threshold;
 extern uint16 Var_Threshold;
 extern uint16 Dis_Threshold;
 extern uint8 Quick_CollectM;
-extern uint16 infraredData[INFRA_LENGTH];
 extern uint16 storage_count_send;
 extern uint16 x_middle_quene[MIDDLE_QUENE_LENGTH];
 extern uint16 y_middle_quene[MIDDLE_QUENE_LENGTH];
 extern uint16 z_middle_quene[MIDDLE_QUENE_LENGTH];
 extern uint8 middle_quene_count;
 extern uint16 parking_time;
-extern uint8 reverse_flag; 
+extern uint8 parking_stable_flag; 
+extern uint16 update_middle_times;
 #endif 
