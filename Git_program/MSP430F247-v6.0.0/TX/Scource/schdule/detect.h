@@ -19,13 +19,6 @@
 #define MIDDLE_QUENE_LENGTH     5
 #define MAX_QUICK_COLLECT_TIME  2000  //5mins 在快采模式的最长时间 单位：50ms
 
-#define    VAR_THRESHOLD       50             //方差判断阈值
-#define    EXT_THRESHOLD       40               //两轴差值判断阈值
-#define    INT_THRESHOLD       60
-#define    DIS_THRESHOLD       30
-#define    COM_THRESHOLD       1500
-
-#define    COM_STABLE_COUNT    150
 //控制命令
 #define CMD_SEND_TEST        1
 #define CMD_NOCAR            2
@@ -126,4 +119,7 @@ extern uint16 update_middle_times;
 extern uint8 toggle_reason; 
 extern uint16 toggle_distance_test;
 extern uint32 compactness_latest;
+extern uint16 xcheck;
+extern uint16 ycheck;
+extern uint16 zcheck;
 #endif 

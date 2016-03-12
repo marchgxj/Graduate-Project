@@ -4,20 +4,21 @@
 
 //------------------System Config----------------------
 #define    LOWPOWER_THRESHOLD  600
-#define    VAR_THRESHOLD       50             //∑Ω≤Ó≈–∂œ„–÷µ
-#define    EXT_THRESHOLD       40               //¡Ω÷·≤Ó÷µ≈–∂œ„–÷µ
+#define    VAR_THRESHOLD       5000             //∑Ω≤Ó≈–∂œ„–÷µ
+#define    EXT_THRESHOLD       200               //¡Ω÷·≤Ó÷µ≈–∂œ„–÷µ
 #define    INT_THRESHOLD       60
-#define    DIS_THRESHOLD       30
-#define    COM_THRESHOLD       1200
+#define    DIS_THRESHOLD       1000
+#define    COM_THRESHOLD       5000
 
 #define   LOWPOWER_THRESHOLD_HIGH   600
 #define   LOWPOWER_THRESHOLD_LOW    500
 #define   TEMP_THRESHOLD_HIGH       3500
 #define   TEMP_THRESHOLD_LOW        1000
 
-#define    COM_STABLE_COUNT    150    //adjust the last time of compactness
-
+#define   COM_STABLE_COUNT    100    //adjust the last time of compactness
 #define   SEND_DATA_FREQ       470.001f
+#define   VALUE_BASIC         10000
+
 
 //---------------Working Mode Config-------------------
 #define    QOS_TEST            0

@@ -60,4 +60,5 @@ extern int DataReady(void);
 extern void Init_PNI(void);
 extern uint8 PNI_read_TMRC(void);
 extern void PNI_write_TMRC(uint8 TMRC);
+extern void getOffset();
 #endif

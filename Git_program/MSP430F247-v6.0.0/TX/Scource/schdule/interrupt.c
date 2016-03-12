@@ -180,10 +180,10 @@ void TestSend()
     DataSendDraw[47] = MagneticUnit.parked_distance;
     DataSendDraw[48] = diameterbuf>>8;
     DataSendDraw[49] = diameterbuf;
-    DataSendDraw[50] = compactness_latest>>24;
-    DataSendDraw[51] = compactness_latest>>16;
-    DataSendDraw[52] = compactness_latest>>8;
-    DataSendDraw[53] = compactness_latest;
+    DataSendDraw[50] = MagneticUnit.compatness>>24;
+    DataSendDraw[51] = MagneticUnit.compatness>>16;
+    DataSendDraw[52] = MagneticUnit.compatness>>8;
+    DataSendDraw[53] = MagneticUnit.compatness;
     DataSendDraw[54] = toggle_reason>>8;
     DataSendDraw[55] = toggle_reason;
     

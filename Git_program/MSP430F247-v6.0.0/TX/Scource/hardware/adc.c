@@ -131,6 +131,9 @@ void AD_cal()
     MagneticUnit.XValue_Stable = MagneticUnit.XMiddle;
     MagneticUnit.YValue_Stable = MagneticUnit.YMiddle;
     MagneticUnit.ZValue_Stable = MagneticUnit.ZMiddle;
+    xcheck = MagneticUnit.XMiddle;
+    ycheck = MagneticUnit.YMiddle;
+    zcheck = MagneticUnit.ZMiddle;
     for(i=0;i<MIDDLE_QUENE_LENGTH;i++)
     {
         x_middle_quene[i] = MagneticUnit.XMiddle;
@@ -139,7 +142,7 @@ void AD_cal()
     }
     
     
-    MagneticUnit.Ext_Middle = abs(MagneticUnit.ZMiddle-MagneticUnit.YMiddle);
+    MagneticUnit.Ext_Middle = abs(MagneticUnit.ZMiddle-MagneticUnit.XMiddle);
     
     intensity = sqrt_16((((uint32)MagneticUnit.XMiddle*(uint32)MagneticUnit.XMiddle)+((uint32)MagneticUnit.YMiddle*(uint32)MagneticUnit.YMiddle)+((uint32)MagneticUnit.ZMiddle*(uint32)MagneticUnit.ZMiddle)));
     MagneticUnit.Int_Middle = intensity;

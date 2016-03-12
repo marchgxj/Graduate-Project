@@ -14,6 +14,9 @@ uint16 ZValue = 0;
 uint8 err=0;
 uint8 circle_cfg[6];
 uint8 time=0;
+int32 xoffset = 0;
+int32 yoffset = 0;
+int32 zoffset = 0;
 
 const digioConfig pni_mosi_out   = {3, 6, BIT6, HAL_DIGIO_OUTPUT, 0};
 const digioConfig pni_miso_in   = {6, 6, BIT6, HAL_DIGIO_INPUT, 0};
@@ -105,7 +108,46 @@ void PNI_write_circle(uint16 circle_num)
   SCS_1;
   delay_us(1);
 }
-  //uint16 tmp[3];
+void getOffset()
+{
+    int32 value = 0;
+    
+    SCS_0;
+    delay_us(1);
+    SPI_read_write(0x00);
+    delay_us(1);
+    SPI_read_write(0x70);
+    delay_us(1);
+    SCS_1;
+    delay_us(1);
+    while ((DataReady() != 1))
+    {
+        time++;
+        delay_ms(10);
+        if(time>50)
+        {
+            break;
+        }
+    }
+    if(time>50)
+        err=1;
+    else
+        err=0;
+    SCS_0;
+    delay_us(1);
+    SPI_read_write(0xA4);
+    delay_us(1);
+    value = ((int8)SPI_read_write(0xFF))<<16 |SPI_read_write(0xFF)<<8|SPI_read_write(0xFF);
+    xoffset = VALUE_BASIC - value;
+    
+    value = ((int8)SPI_read_write(0xFF))<<16 |SPI_read_write(0xFF)<<8|SPI_read_write(0xFF);
+    yoffset = VALUE_BASIC - value;
+    
+    value = ((int8)SPI_read_write(0xFF))<<16 |SPI_read_write(0xFF)<<8|SPI_read_write(0xFF);
+    zoffset = VALUE_BASIC - value;
+    
+    SCS_1;
+}
 void PNI_read_data(uint16* Xn,uint16* Yn,uint16* Zn)
 {      
   int32 sensor;
@@ -148,7 +190,7 @@ void PNI_read_data(uint16* Xn,uint16* Yn,uint16* Zn)
   delay_us(1);
   // read register 0x24 data to mag_raw
   sensor = ((int8)SPI_read_write(0xFF))<<16 |SPI_read_write(0xFF)<<8|SPI_read_write(0xFF);
-  sensor += 8000;
+  sensor += xoffset;
   if(sensor<0)
   {
       sensor = 0;
@@ -160,7 +202,7 @@ void PNI_read_data(uint16* Xn,uint16* Yn,uint16* Zn)
   *Xn = (uint16)sensor;
   
   sensor = ((int8)SPI_read_write(0xFF))<<16 |SPI_read_write(0xFF)<<8|SPI_read_write(0xFF);
-  sensor += 8000;
+  sensor += yoffset;
   if(sensor<0)
   {
       sensor = 0;
@@ -172,6 +214,7 @@ void PNI_read_data(uint16* Xn,uint16* Yn,uint16* Zn)
   *Yn = (uint16)sensor;
   
   sensor = ((int8)SPI_read_write(0xFF))<<16 |SPI_read_write(0xFF)<<8|SPI_read_write(0xFF);
+  sensor += zoffset;
   if(sensor<0)
   {
       sensor = 0;

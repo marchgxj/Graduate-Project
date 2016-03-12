@@ -48,7 +48,7 @@ uint8 On_Test= 0;                       //if be set 1, is sending data to anothe
 
 uint32 compatness_memory = 0;
 uint16 compatness_stable_count = 0;
-uint16 yvalue_memory = 0;
+uint16 xvalue_memory = 0;
 uint16 zvalue_memory = 0;
 
 uint16 x_middle_quene[MIDDLE_QUENE_LENGTH];
@@ -73,6 +73,46 @@ uint8 toggle_reason = 0;
 uint16 toggle_distance_test = 0;
 uint32 compactness_latest = 0;
 uint8 quickcollect_trigger_count = 0;
+
+uint16 xcheck = 0;
+uint16 ycheck = 0;
+uint16 zcheck = 0;
+uint8 check_error = 0;
+
+uint8 dataCheck(uint16 x,uint16 y,uint16 z)
+{
+// FunctionName: dataCheck
+//{
+// Parameter:latest three axes value
+//
+// Return:0: error 1:no error 2:frequently error, need to check sensor
+//
+// Description:
+//  --
+//
+// Created: 2016/3/12
+//
+// Author:xiaoximi
+//}
+    
+    if((abs(x-xcheck)>5000)||(abs(y-ycheck>5000))||(abs(z-zcheck>5000)))
+    {
+        check_error++;
+        if(check_error>10)
+        {
+            return 2;
+        }
+        return 0;
+    }
+    else
+    {
+        check_error = 0;
+        xcheck = x;
+        ycheck = y;
+        zcheck = z;
+        return 1;
+    }
+}
 
 void VarianceMultiState(uint16 state1,uint16 state2,uint16 state3)
 {
@@ -519,7 +559,7 @@ uint8 quickCalibrate(uint8 force)
         MagneticUnit.XValue_Stable = MagneticUnit.XMiddle;
         MagneticUnit.YValue_Stable = MagneticUnit.YMiddle;
         MagneticUnit.ZValue_Stable = MagneticUnit.ZMiddle;
-        MagneticUnit.Ext_Middle = abs(MagneticUnit.ZMiddle-MagneticUnit.YMiddle);
+        MagneticUnit.Ext_Middle = abs(MagneticUnit.ZMiddle-MagneticUnit.XMiddle);
         MagneticUnit.Int_Middle = sqrt_16(
             (((uint32)MagneticUnit.XMiddle*(uint32)MagneticUnit.XMiddle)+
              ((uint32)MagneticUnit.YMiddle*(uint32)MagneticUnit.YMiddle))+
@@ -574,7 +614,7 @@ uint8 ReCal()
         MagneticUnit.ZValue_Stable = MagneticUnit.ZMiddle;
         
         MagneticUnit.Int_Middle = MagneticUnit.Intensity;
-        MagneticUnit.Ext_Middle = abs(MagneticUnit.ZMiddle-MagneticUnit.YMiddle);
+        MagneticUnit.Ext_Middle = abs(MagneticUnit.ZMiddle-MagneticUnit.XMiddle);
         ReCal_Count = 20;
         Quick_CollectM = Quick_Collect;
         Quick_Collect = 0;
@@ -744,21 +784,38 @@ void IdentifyCar()
     //
     // Author:xiaoximi
     //}
+    uint16 xvalue = 0;
+    uint16 yvalue = 0;
+    uint16 zvalue = 0;
+    uint8  data_check = 0;
     halLedSet(2);
 
-    yvalue_memory = MagneticUnit.YValue;
+    xvalue_memory = MagneticUnit.XValue;
     zvalue_memory = MagneticUnit.ZValue;
     //Multi_Read_HMC(&MagneticUnit.XValue,&MagneticUnit.YValue,&MagneticUnit.ZValue);
-    PNI_read_data(&MagneticUnit.XValue,&MagneticUnit.YValue,&MagneticUnit.ZValue);
+    //PNI_read_data(&MagneticUnit.XValue,&MagneticUnit.YValue,&MagneticUnit.ZValue);
+    PNI_read_data(&xvalue,&yvalue,&zvalue);
+    data_check = dataCheck(xvalue,yvalue,zvalue);
+    if(data_check)
+    {
+        MagneticUnit.XValue = xvalue;
+        MagneticUnit.YValue = yvalue;
+        MagneticUnit.ZValue = zvalue;
+    }
+    else if(data_check == 2)
+    {
+        //don't run detection part, send sensor error;
+    }
+    
     //MagneticUnit.infrared = getInfrared();
 
     
     if(ReCal())
     {
         MagneticUnit.compatness = getCompatness(
-                                                MagneticUnit.YValue,
+                                                MagneticUnit.XValue,
                                                 MagneticUnit.ZValue,
-                                                yvalue_memory ,
+                                                xvalue_memory ,
                                                 zvalue_memory
                                                     );
     }
@@ -804,7 +861,7 @@ void IdentifyCar()
     
     if(EndPointDevice.parking_state == NOCAR)
     {
-        if(((MagneticUnit.compatness > COM_THRESHOLD)&&(diameterbuf>100))
+        if(((MagneticUnit.compatness > COM_THRESHOLD)&&(diameterbuf>300))
            //may be there is a vehicle above the sensor, but it doesn't meet the last condition
            //||(abs(MagneticUnit.ZValue-MagneticUnit.ZMiddle)>300)
            )
@@ -1052,7 +1109,7 @@ uint8 vsEnvironment(uint8 threshold)
                     MagneticUnit.XValue_Stable = MagneticUnit.XMiddle;
                     MagneticUnit.YValue_Stable = MagneticUnit.YMiddle;
                     MagneticUnit.ZValue_Stable = MagneticUnit.ZMiddle;
-                    MagneticUnit.Ext_Middle = abs(MagneticUnit.ZMiddle-MagneticUnit.YMiddle);
+                    MagneticUnit.Ext_Middle = abs(MagneticUnit.ZMiddle-MagneticUnit.XMiddle);
                     MagneticUnit.Int_Middle = sqrt_16(
                         (((uint32)MagneticUnit.XMiddle*(uint32)MagneticUnit.XMiddle)+
                         ((uint32)MagneticUnit.YMiddle*(uint32)MagneticUnit.YMiddle))+
@@ -1062,7 +1119,6 @@ uint8 vsEnvironment(uint8 threshold)
                 }
             }
         }
-        
         return 0;
     }
 }

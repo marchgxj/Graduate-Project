@@ -4,6 +4,7 @@
 #define    MAX_PACK_LENGTH      12
 #define    MAX_DEVICE_NUM       254
 
+#include "../configure.h"
 #include "types.h"
 #include "A7139.h"
 #include "A7139_CONFIG.h"
@@ -38,5 +39,6 @@
 #include "bayes.h"
 #include "criteria.h"
 #include "PNI.h"
+
 
 #endif

@@ -38,5 +38,6 @@ void halBoardInit(void)
     Init_TQ();
     //Init_5983();
     Init_PNI();
+    getOffset();
     AD_cal(); 
 }
