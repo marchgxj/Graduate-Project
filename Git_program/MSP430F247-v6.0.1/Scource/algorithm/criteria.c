@@ -20,11 +20,11 @@ uint32 getAbsoluteValue()
           *(uint32)abs(MagneticUnit.ZValue_Stable - MagneticUnit.ZMiddle);
 }
 
-//y、z轴极值
+//x、z轴极值
 uint16 getExtremum()
 {
     uint16 minus = 0;
-    minus = abs(MagneticUnit.ZValue_Stable - MagneticUnit.YValue_Stable);
+    minus = abs(MagneticUnit.ZValue_Stable - MagneticUnit.XValue_Stable);
     return abs(minus - MagneticUnit.Ext_Middle);
 }
 
@@ -51,9 +51,16 @@ uint16 getEuclideanMetric(uint16 x1,uint16 y1,uint16 z1,uint16 x2,uint16 y2,uint
 
 uint16 getMaxDiameter(uint16 x1,uint16 y1,uint16 x2,uint16 y2)
 {
-    max_x = MAX(max_x,abs(x1 - x2));
-    max_y = MAX(max_y,abs(y1 - y2));
-    diameterbuf = max_x + max_y;
+    uint16 mx = 0;
+    uint16 my = 0;
+    mx = MAX(max_x,abs(x1 - x2));
+    my = MAX(max_y,abs(y1 - y2));
+    if((abs(mx-max_x)>700)||(abs(my-max_y)>500))
+    {
+        max_x = mx;
+        max_y = my;
+        diameterbuf = max_x + max_y;
+    }
     return diameterbuf;
 }
 
@@ -62,7 +69,7 @@ uint16 getPerimeter(uint16 x1,uint16 y1,uint16 x2,uint16 y2)
     uint16 perimeter = 0;
     
     perimeter = sqrt_16(pow(x1-x2,2)+pow(y1-y2,2));
-    if (perimeter > 15)
+    if (perimeter > 140)
     {
         perimeterbuf += perimeter;
     }

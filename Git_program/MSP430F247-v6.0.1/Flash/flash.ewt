@@ -1955,141 +1955,12 @@
     </settings>
   </configuration>
   <group>
-    <name>algorithm</name>
-    <file>
-      <name>$PROJ_DIR$\..\Scource\algorithm\bayes.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\Scource\algorithm\bayes.h</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\Scource\algorithm\CFmodels.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\Scource\algorithm\CFmodels.h</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\Scource\algorithm\criteria.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\Scource\algorithm\criteria.h</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\Scource\algorithm\filter.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\Scource\algorithm\filter.h</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\Scource\algorithm\math.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\Scource\algorithm\math.h</name>
-    </file>
-  </group>
-  <group>
-    <name>hardware</name>
-    <file>
-      <name>$PROJ_DIR$\..\Scource\hardware\A7139.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\Scource\hardware\A7139.h</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\Scource\hardware\A7139_CONFIG.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\Scource\hardware\A7139_CONFIG.h</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\Scource\hardware\adc.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\Scource\hardware\adc.h</name>
-    </file>
+    <name>driver</name>
     <file>
       <name>$PROJ_DIR$\..\Scource\hardware\digio.c</name>
     </file>
     <file>
       <name>$PROJ_DIR$\..\Scource\hardware\digio.h</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\Scource\hardware\HMC5983.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\Scource\hardware\HMC5983.h</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\Scource\hardware\led.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\Scource\hardware\led.h</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\Scource\hardware\spi.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\Scource\hardware\spi.h</name>
-    </file>
-  </group>
-  <group>
-    <name>schdule</name>
-    <file>
-      <name>$PROJ_DIR$\..\Scource\schdule\detect.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\Scource\schdule\detect.h</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\Scource\schdule\interrupt.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\Scource\schdule\interrupt.h</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\Scource\schdule\join.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\Scource\schdule\join.h</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\Scource\schdule\mac.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\Scource\schdule\mac.h</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\Scource\schdule\ProcessEvent.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\Scource\schdule\ProcessEvent.h</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\Scource\schdule\tdma.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\Scource\schdule\tdma.h</name>
-    </file>
-  </group>
-  <group>
-    <name>system</name>
-    <file>
-      <name>$PROJ_DIR$\..\Scource\systerm\board.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\Scource\systerm\board.h</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\Scource\systerm\common.h</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\Scource\systerm\defs.h</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\Scource\systerm\delay.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\Scource\systerm\delay.h</name>
     </file>
     <file>
       <name>$PROJ_DIR$\..\Scource\systerm\flash.c</name>
@@ -2098,37 +1969,16 @@
       <name>$PROJ_DIR$\..\Scource\systerm\flash.h</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\Scource\systerm\int.c</name>
+      <name>$PROJ_DIR$\..\Scource\hardware\led.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\Scource\systerm\int.h</name>
+      <name>$PROJ_DIR$\..\Scource\hardware\led.h</name>
     </file>
     <file>
       <name>$PROJ_DIR$\..\Scource\systerm\mcu.c</name>
     </file>
     <file>
       <name>$PROJ_DIR$\..\Scource\systerm\mcu.h</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\Scource\systerm\sys.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\Scource\systerm\sys.h</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\Scource\systerm\timer.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\Scource\systerm\timer.h</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\Scource\systerm\types.h</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\Scource\systerm\uart.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\Scource\systerm\uart.h</name>
     </file>
   </group>
   <file>

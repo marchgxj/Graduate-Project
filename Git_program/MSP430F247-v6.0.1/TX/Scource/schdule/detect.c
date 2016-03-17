@@ -443,7 +443,7 @@ uint8 GetSlop(uint16 xvalue,uint16 yvalue,uint16 zvalue)
     MagneticUnit.YAve_Slop = yslopbuf/SLOP_LENGTH;
     MagneticUnit.ZAve_Slop = zslopbuf/SLOP_LENGTH;
     
-    if((abs(MagneticUnit.XAve_Slop)>20)||(abs(MagneticUnit.YAve_Slop)>20)||(abs(MagneticUnit.ZAve_Slop)>20))
+    if((abs(MagneticUnit.XAve_Slop)>40)||(abs(MagneticUnit.YAve_Slop)>80)||(abs(MagneticUnit.ZAve_Slop)>60))
     {
         if(force_quit_quick_collect == 0)
         {
@@ -473,7 +473,7 @@ uint8 slopTrigger(uint16 xvalue,uint16 yvalue,uint16 zvalue)
 //
 // Author:xiaoximi
 //}
-#define JUDGE_TIMES  5
+#define JUDGE_TIMES  1
     
     uint16 valueX = 0;
     uint16 valueY = 0;
@@ -530,10 +530,9 @@ uint8 quickCalibrate(uint8 force)
     uint16 xvariance = 0;
     uint16 yvariance = 0;
     uint16 zvariance = 0;
-    uint16 xave = 0;
-    uint16 yave = 0;
-    uint16 zave = 0;
-    __disable_interrupt();
+    uint32 xave = 0;
+    uint32 yave = 0;
+    uint32 zave = 0;
     for(i=0;i<4;i++)
     {
         PNI_read_data(&ADvalueX,&ADvalueY,&ADvalueZ);
@@ -566,10 +565,8 @@ uint8 quickCalibrate(uint8 force)
         MagneticUnit.CarExtremum = 0;
         MagneticUnit.CarIntensity = 0;
         MagneticUnit.CarVariance = 0;
-        __enable_interrupt();
         return 1;
     }
-    __enable_interrupt();
     return 0;
 }
 
@@ -593,17 +590,16 @@ uint8 ReCal()
     
     if(ReCal_Count<3)
     {
-        //SampleChannel(&MagneticUnit.GMI_XValue,&MagneticUnit.GMI_YValue);
         ReCal_Count++;
+        return 0;
         XReCal+=MagneticUnit.XValue;
         YReCal+=MagneticUnit.YValue;
         ZReCal+=MagneticUnit.ZValue;
-        //GMI_XReCal+=MagneticUnit.GMI_XValue;
-       //GMI_YReCal+=MagneticUnit.GMI_YValue;
-        return 0;
     }
     else if(ReCal_Count==3)
     {
+        Quick_Collect = 0;
+        ReCal_Count++;
         return 1;
         MagneticUnit.XMiddle = XReCal/3;
         MagneticUnit.YMiddle = YReCal/3;
@@ -616,7 +612,7 @@ uint8 ReCal()
         MagneticUnit.Ext_Middle = abs(MagneticUnit.ZMiddle-MagneticUnit.XMiddle);
         ReCal_Count = 20;
         Quick_CollectM = Quick_Collect;
-        Quick_Collect = 0;
+        
         MagneticUnit.ExtState = 0;
         MagneticUnit.IntState = 0;
         MagneticUnit.VarState = 0;
@@ -704,7 +700,7 @@ uint8 leaveRecognition()
 
     uint32 distance = 0;
     
-    if(MagneticUnit.compatness < 600)
+    if(MagneticUnit.compatness < 1200)
     {
         return 0;
     }
@@ -1029,7 +1025,7 @@ void TotalJudge()
     }
 }
   
-uint8 vsEnvironment(uint8 threshold)
+uint8 vsEnvironment(uint16 threshold)
 {
 // FunctionName: vsEnvironment
 //{
@@ -1056,9 +1052,9 @@ uint8 vsEnvironment(uint8 threshold)
     uint16 xvariance = 0;
     uint16 yvariance = 0;
     uint16 zvariance = 0;
-    uint16 xave = 0;
-    uint16 yave = 0;
-    uint16 zave = 0;
+    uint32 xave = 0;
+    uint32 yave = 0;
+    uint32 zave = 0;
     uint8 collect_times = 0;  //only equal to either 1 or 4
     if(EndPointDevice.parking_state == NOCAR)
     {
@@ -1082,7 +1078,6 @@ uint8 vsEnvironment(uint8 threshold)
             xave += ADvalueX;
             yave += ADvalueY;
             zave += ADvalueZ;
-            delay_ms(45);
         }
         if(collect_times!=1)
         {
@@ -1151,31 +1146,33 @@ void saveMiddle()
                               x_middle_quene[i],
                               y_middle_quene[i],
                               z_middle_quene[i]
-                                  )<400) ||
-           (abs(MagneticUnit.ZMiddle-z_middle_quene[i])>1200)
+                                  )<200) ||
+           (abs(MagneticUnit.ZMiddle-z_middle_quene[i])>1000)
            )
         {
+            //if to close or z axis changed dramatically don't save middle value
             return;
         }
 
     }
-
+    
+    
+    x_middle_quene[middle_quene_count] = MagneticUnit.XMiddle;
+    y_middle_quene[middle_quene_count] = MagneticUnit.YMiddle;
+    z_middle_quene[middle_quene_count] = MagneticUnit.ZMiddle;
+    middle_quene_count++;
+    if(middle_quene_count==MIDDLE_QUENE_LENGTH)
     {
-        x_middle_quene[middle_quene_count] = MagneticUnit.XMiddle;
-        y_middle_quene[middle_quene_count] = MagneticUnit.YMiddle;
-        z_middle_quene[middle_quene_count] = MagneticUnit.ZMiddle;
-        middle_quene_count++;
-        if(update_middle_times > 65530)
-        {
-            update_middle_times = 0;
-        }
-        update_middle_times++;
-        if(middle_quene_count==MIDDLE_QUENE_LENGTH)
-        {
-            middle_quene_count = 1;
-        }
-        
+        middle_quene_count = 1;
     }
+    if(update_middle_times > 65530)
+    {
+        update_middle_times = 0;
+    }
+    update_middle_times++;
+    
+    
+    
 }
 
 void NoCarCalibration()

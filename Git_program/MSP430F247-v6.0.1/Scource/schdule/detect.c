@@ -44,11 +44,11 @@ uint16 Int_Threshold = 0;
 uint16 Var_Threshold = 0;
 uint16 Dis_Threshold = 0;
 uint8 Exit_Sleep = 0;
-uint8 On_Test= 0;                       //if set 1, node is sending data to another relay
+uint8 On_Test= 0;                       //if be set 1, is sending data to another node
 
 uint32 compatness_memory = 0;
 uint16 compatness_stable_count = 0;
-uint16 yvalue_memory = 0;
+uint16 xvalue_memory = 0;
 uint16 zvalue_memory = 0;
 
 uint16 x_middle_quene[MIDDLE_QUENE_LENGTH];
@@ -72,6 +72,49 @@ uint8 leave_recognition_count = 0;
 uint8 toggle_reason = 0; 
 uint16 toggle_distance_test = 0;
 uint32 compactness_latest = 0;
+uint16 diameterbuf_latest = 0;
+uint16 perimeterbuf_latest = 0;
+uint8 quickcollect_trigger_count = 0;
+
+uint16 xcheck = 0;
+uint16 ycheck = 0;
+uint16 zcheck = 0;
+uint8 check_error = 0;
+
+uint8 dataCheck(uint16 x,uint16 y,uint16 z)
+{
+// FunctionName: dataCheck
+//{
+// Parameter:latest three axes value
+//
+// Return:0: error 1:no error 2:frequently error, need to check sensor
+//
+// Description:
+//  --
+//
+// Created: 2016/3/12
+//
+// Author:xiaoximi
+//}
+    
+    if((abs(x-xcheck)>5000)||(abs(y-ycheck>5000))||(abs(z-zcheck>5000)))
+    {
+        check_error++;
+        if(check_error>10)
+        {
+            return 2;
+        }
+        return 0;
+    }
+    else
+    {
+        check_error = 0;
+        xcheck = x;
+        ycheck = y;
+        zcheck = z;
+        return 1;
+    }
+}
 
 void VarianceMultiState(uint16 state1,uint16 state2,uint16 state3)
 {
@@ -364,7 +407,7 @@ void Filter(uint16 xvalue,uint16 yvalue)
     
 }
 
-void GetSlop(uint16 xvalue,uint16 yvalue,uint16 zvalue)
+uint8 GetSlop(uint16 xvalue,uint16 yvalue,uint16 zvalue)
 {
     // FunctionName: GetSlop
     //{
@@ -402,16 +445,64 @@ void GetSlop(uint16 xvalue,uint16 yvalue,uint16 zvalue)
     MagneticUnit.YAve_Slop = yslopbuf/SLOP_LENGTH;
     MagneticUnit.ZAve_Slop = zslopbuf/SLOP_LENGTH;
     
-    if((abs(MagneticUnit.XAve_Slop)>5)||(abs(MagneticUnit.YAve_Slop)>5)||(abs(MagneticUnit.ZAve_Slop)>10))
+    if((abs(MagneticUnit.XAve_Slop)>40)||(abs(MagneticUnit.YAve_Slop)>80)||(abs(MagneticUnit.ZAve_Slop)>60))
     {
         if(force_quit_quick_collect == 0)
         {
             Quick_CollectM = Quick_Collect;
             Quick_Collect = 1;
             Collect_Period = 0;
+            return 1;
         }
         
-        
+    }
+    return 0;
+}
+
+uint8 slopTrigger(uint16 xvalue,uint16 yvalue,uint16 zvalue)
+{
+// FunctionName: slopTrigger
+//{
+// Parameter:megnetic value of axes x, y and z
+//
+// Return:1:slop is virbate 0:slop is stable
+//
+// Description:
+//  in normal mode, if trigger quick collect mode, 
+// collect and judge more times. in case of trigger frquently
+//
+// Created: 2016/3/11
+//
+// Author:xiaoximi
+//}
+#define JUDGE_TIMES  1
+    
+    uint16 valueX = 0;
+    uint16 valueY = 0;
+    uint16 valueZ = 0;
+    uint8 i = 0;
+    if(Quick_Collect)
+    {
+        return GetSlop(xvalue,yvalue,zvalue);
+    }
+    else
+    {
+        if(GetSlop(xvalue,yvalue,zvalue))
+        {
+            for(i=0;i<JUDGE_TIMES;i++)
+            {
+                PNI_read_data(&valueX,&valueY,&valueZ);
+                if(GetSlop(valueX,valueY,valueZ)==0)
+                {
+                    break;
+                }
+            }
+            if(i>JUDGE_TIMES-1)
+            {
+                return 1;
+            }
+        }
+        return 0;
     }
 }
 
@@ -441,12 +532,12 @@ uint8 quickCalibrate(uint8 force)
     uint16 xvariance = 0;
     uint16 yvariance = 0;
     uint16 zvariance = 0;
-    uint16 xave = 0;
-    uint16 yave = 0;
-    uint16 zave = 0;
+    uint32 xave = 0;
+    uint32 yave = 0;
+    uint32 zave = 0;
     for(i=0;i<4;i++)
     {
-        Multi_Read_HMC(&ADvalueX,&ADvalueY,&ADvalueZ);
+        PNI_read_data(&ADvalueX,&ADvalueY,&ADvalueZ);
         ADX[i] = ADvalueX;
         ADY[i] = ADvalueY;
         ADZ[i] = ADvalueZ;
@@ -460,7 +551,7 @@ uint8 quickCalibrate(uint8 force)
     xvariance = getVariance(ADX,4);
     yvariance = getVariance(ADY,4);
     zvariance = getVariance(ADZ,4);
-    if((xvariance<5)&&(yvariance<5)&&(zvariance<15)|| force)
+    if((xvariance<25)&&(yvariance<25)&&(zvariance<35)|| force)
     {
         MagneticUnit.XMiddle = xave;
         MagneticUnit.YMiddle = yave;
@@ -468,7 +559,7 @@ uint8 quickCalibrate(uint8 force)
         MagneticUnit.XValue_Stable = MagneticUnit.XMiddle;
         MagneticUnit.YValue_Stable = MagneticUnit.YMiddle;
         MagneticUnit.ZValue_Stable = MagneticUnit.ZMiddle;
-        MagneticUnit.Ext_Middle = abs(MagneticUnit.ZMiddle-MagneticUnit.YMiddle);
+        MagneticUnit.Ext_Middle = abs(MagneticUnit.ZMiddle-MagneticUnit.XMiddle);
         MagneticUnit.Int_Middle = sqrt_16(
             (((uint32)MagneticUnit.XMiddle*(uint32)MagneticUnit.XMiddle)+
              ((uint32)MagneticUnit.YMiddle*(uint32)MagneticUnit.YMiddle))+
@@ -499,20 +590,19 @@ uint8 ReCal()
     //}
 
     
-    
     if(ReCal_Count<3)
     {
-        //SampleChannel(&MagneticUnit.GMI_XValue,&MagneticUnit.GMI_YValue);
         ReCal_Count++;
+        return 0;
         XReCal+=MagneticUnit.XValue;
         YReCal+=MagneticUnit.YValue;
         ZReCal+=MagneticUnit.ZValue;
-        //GMI_XReCal+=MagneticUnit.GMI_XValue;
-       //GMI_YReCal+=MagneticUnit.GMI_YValue;
-        return 0;
     }
     else if(ReCal_Count==3)
     {
+        Quick_Collect = 0;
+        ReCal_Count++;
+        return 1;
         MagneticUnit.XMiddle = XReCal/3;
         MagneticUnit.YMiddle = YReCal/3;
         MagneticUnit.ZMiddle = ZReCal/3;
@@ -521,23 +611,13 @@ uint8 ReCal()
         MagneticUnit.ZValue_Stable = MagneticUnit.ZMiddle;
         
         MagneticUnit.Int_Middle = MagneticUnit.Intensity;
-        MagneticUnit.Ext_Middle = abs(MagneticUnit.ZMiddle-MagneticUnit.YMiddle);
+        MagneticUnit.Ext_Middle = abs(MagneticUnit.ZMiddle-MagneticUnit.XMiddle);
         ReCal_Count = 20;
         Quick_CollectM = Quick_Collect;
-        Quick_Collect = 0;
+        
         MagneticUnit.ExtState = 0;
         MagneticUnit.IntState = 0;
         MagneticUnit.VarState = 0;
-        halLedClearAll();
-        delay_ms(10);
-        halLedSetAll();
-        delay_ms(10);
-        halLedClearAll();
-        delay_ms(10);
-        halLedSetAll();
-        delay_ms(10);
-        halLedClearAll();
-        delay_ms(10);
     }
     return 1;
     
@@ -559,11 +639,11 @@ void GetVoltage()
     // Author:xiaoximi
     //}
 
-    SampleVoltage(&EndPointDevice.vlotage,&EndPointDevice.temperature);
-    if((EndPointDevice.vlotage<LOWPOWER_THRESHOLD_HIGH)&&((EndPointDevice.vlotage>LOWPOWER_THRESHOLD_LOW)))
-    {
-        EndPointDevice.parking_state = LOWPOWER;
-    }
+//    SampleVoltage(&EndPointDevice.vlotage,&EndPointDevice.temperature);
+//    if((EndPointDevice.vlotage<LOWPOWER_THRESHOLD_HIGH)&&((EndPointDevice.vlotage>LOWPOWER_THRESHOLD_LOW)))
+//    {
+//        EndPointDevice.parking_state = LOWPOWER;
+//    }
 }
 
 uint8 compactnessStable()
@@ -600,6 +680,8 @@ uint8 compactnessStable()
     if(MagneticUnit.compatness>0)
     {
         compactness_latest = MagneticUnit.compatness;
+        diameterbuf_latest = diameterbuf;
+        perimeterbuf_latest = perimeterbuf;
     }
     return 0;
 }
@@ -622,7 +704,7 @@ uint8 leaveRecognition()
 
     uint32 distance = 0;
     
-    if(MagneticUnit.compatness < 600)
+    if(MagneticUnit.compatness < 1200)
     {
         return 0;
     }
@@ -701,21 +783,40 @@ void IdentifyCar()
     //
     // Author:xiaoximi
     //}
-
+    uint16 xvalue = 0;
+    uint16 yvalue = 0;
+    uint16 zvalue = 0;
+    uint8  data_check = 0;
     halLedSet(2);
 
-    yvalue_memory = MagneticUnit.YValue;
+    xvalue_memory = MagneticUnit.XValue;
     zvalue_memory = MagneticUnit.ZValue;
-    Multi_Read_HMC(&MagneticUnit.XValue,&MagneticUnit.YValue,&MagneticUnit.ZValue);
+    //Multi_Read_HMC(&MagneticUnit.XValue,&MagneticUnit.YValue,&MagneticUnit.ZValue);
+    //PNI_read_data(&MagneticUnit.XValue,&MagneticUnit.YValue,&MagneticUnit.ZValue);
+    PNI_read_data(&xvalue,&yvalue,&zvalue);
+    data_check = dataCheck(xvalue,yvalue,zvalue);
+    if(data_check)
+    {
+        MagneticUnit.XValue = xvalue;
+        MagneticUnit.YValue = yvalue;
+        MagneticUnit.ZValue = zvalue;
+    }
+    else if(data_check == 2)
+    {
+        //don't run detection part, send sensor error;
+        EndPointDevice.parking_state = SENSOR_ERROR;
+        return;
+    }
+    
     //MagneticUnit.infrared = getInfrared();
 
     
     if(ReCal())
     {
         MagneticUnit.compatness = getCompatness(
-                                                MagneticUnit.YValue,
+                                                MagneticUnit.XValue,
                                                 MagneticUnit.ZValue,
-                                                yvalue_memory ,
+                                                xvalue_memory ,
                                                 zvalue_memory
                                                     );
     }
@@ -726,7 +827,18 @@ void IdentifyCar()
         max_x = 0;
         max_y = 0;
     }
-    GetSlop(MagneticUnit.XValue,MagneticUnit.YValue,MagneticUnit.ZValue);
+    
+    
+    if(slopTrigger(MagneticUnit.XValue,MagneticUnit.YValue,MagneticUnit.ZValue))
+    {
+        if(force_quit_quick_collect == 0)
+        {
+            Quick_CollectM = Quick_Collect;
+            Quick_Collect = 1;
+            Collect_Period = 0;
+        }
+    }
+    
     //Filter(MagneticUnit.XValue,MagneticUnit.YValue);
     MagneticUnit.Variance = getAbsoluteValue();
     MagneticUnit.Extremum = getExtremum();
@@ -750,9 +862,9 @@ void IdentifyCar()
     
     if(EndPointDevice.parking_state == NOCAR)
     {
-        if(((MagneticUnit.compatness > COM_THRESHOLD)&&(diameterbuf>100))||
-           //may be there is a vehicle above the sensor, but it doesn't meet the previous condition
-           (abs(MagneticUnit.ZValue-MagneticUnit.ZMiddle)>300)
+        if(((MagneticUnit.compatness > COM_THRESHOLD)&&(diameterbuf>1000))
+           //may be there is a vehicle above the sensor, but it doesn't meet the last condition
+           //||(abs(MagneticUnit.ZValue-MagneticUnit.ZMiddle)>300)
            )
         {
             MagneticUnit.XValue_Stable = MagneticUnit.XValue;
@@ -769,8 +881,7 @@ void IdentifyCar()
             MagneticUnit.ZValue_Stable = MagneticUnit.ZValue;
         }
     }
-    
-    
+
     if(Quick_Collect == 1)
     {
         VarianceMultiState(10,20,25);
@@ -837,7 +948,7 @@ void TotalJudge()
         {
             if(CarStableCount>60)
             {
-                if(vsEnvironment(NORMAL_ENV_THRESHOLD)==0)
+//                if(vsEnvironment(NORMAL_ENV_THRESHOLD)==0)
                 {
                     EndPointDevice.parking_state = CAR;
                 }
@@ -936,7 +1047,7 @@ void TotalJudge()
     }
 }
   
-uint8 vsEnvironment(uint8 threshold)
+uint8 vsEnvironment(uint16 threshold)
 {
 // FunctionName: vsEnvironment
 //{
@@ -963,9 +1074,9 @@ uint8 vsEnvironment(uint8 threshold)
     uint16 xvariance = 0;
     uint16 yvariance = 0;
     uint16 zvariance = 0;
-    uint16 xave = 0;
-    uint16 yave = 0;
-    uint16 zave = 0;
+    uint32 xave = 0;
+    uint32 yave = 0;
+    uint32 zave = 0;
     uint8 collect_times = 0;  //only equal to either 1 or 4
     if(EndPointDevice.parking_state == NOCAR)
     {
@@ -982,7 +1093,7 @@ uint8 vsEnvironment(uint8 threshold)
         }
         for(i=0;i<collect_times;i++)
         {
-            Multi_Read_HMC(&ADvalueX,&ADvalueY,&ADvalueZ);
+            PNI_read_data(&ADvalueX,&ADvalueY,&ADvalueZ);
             ADX[i] = ADvalueX;
             ADY[i] = ADvalueY;
             ADZ[i] = ADvalueZ;
@@ -1000,7 +1111,7 @@ uint8 vsEnvironment(uint8 threshold)
         xvariance = getVariance(ADX,collect_times);
         yvariance = getVariance(ADY,collect_times);
         zvariance = getVariance(ADZ,collect_times);
-        if((xvariance<5)&&(yvariance<5)&&(zvariance<15))
+        if((xvariance<25)&&(yvariance<25)&&(zvariance<35))
         {
             for(i=0;i<MIDDLE_QUENE_LENGTH;i++)
             {
@@ -1014,7 +1125,7 @@ uint8 vsEnvironment(uint8 threshold)
                     MagneticUnit.XValue_Stable = MagneticUnit.XMiddle;
                     MagneticUnit.YValue_Stable = MagneticUnit.YMiddle;
                     MagneticUnit.ZValue_Stable = MagneticUnit.ZMiddle;
-                    MagneticUnit.Ext_Middle = abs(MagneticUnit.ZMiddle-MagneticUnit.YMiddle);
+                    MagneticUnit.Ext_Middle = abs(MagneticUnit.ZMiddle-MagneticUnit.XMiddle);
                     MagneticUnit.Int_Middle = sqrt_16(
                         (((uint32)MagneticUnit.XMiddle*(uint32)MagneticUnit.XMiddle)+
                         ((uint32)MagneticUnit.YMiddle*(uint32)MagneticUnit.YMiddle))+
@@ -1024,7 +1135,6 @@ uint8 vsEnvironment(uint8 threshold)
                 }
             }
         }
-        
         return 0;
     }
 }
@@ -1058,31 +1168,33 @@ void saveMiddle()
                               x_middle_quene[i],
                               y_middle_quene[i],
                               z_middle_quene[i]
-                                  )<20) ||
-           (abs(MagneticUnit.ZMiddle-z_middle_quene[i])>200)
+                                  )<200) ||
+           (abs(MagneticUnit.ZMiddle-z_middle_quene[i])>1000)
            )
         {
+            //if to close or z axis changed dramatically don't save middle value
             return;
         }
 
     }
-
+    
+    
+    x_middle_quene[middle_quene_count] = MagneticUnit.XMiddle;
+    y_middle_quene[middle_quene_count] = MagneticUnit.YMiddle;
+    z_middle_quene[middle_quene_count] = MagneticUnit.ZMiddle;
+    middle_quene_count++;
+    if(middle_quene_count==MIDDLE_QUENE_LENGTH)
     {
-        x_middle_quene[middle_quene_count] = MagneticUnit.XMiddle;
-        y_middle_quene[middle_quene_count] = MagneticUnit.YMiddle;
-        z_middle_quene[middle_quene_count] = MagneticUnit.ZMiddle;
-        middle_quene_count++;
-        if(update_middle_times > 65530)
-        {
-            update_middle_times = 0;
-        }
-        update_middle_times++;
-        if(middle_quene_count==MIDDLE_QUENE_LENGTH)
-        {
-            middle_quene_count = 1;
-        }
-        
+        middle_quene_count = 1;
     }
+    if(update_middle_times > 65530)
+    {
+        update_middle_times = 0;
+    }
+    update_middle_times++;
+    
+    
+    
 }
 
 void NoCarCalibration()
@@ -1220,7 +1332,7 @@ void CmdSendHandler()
     A7139_SetPackLen(TEST_LENGTH);
     delay_us(1);
     
-    for(i=0;i<1200;i++)
+    for(i=0;i<600;i++)
     {
         IdentifyCar();
         TestSend();

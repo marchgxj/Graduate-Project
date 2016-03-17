@@ -112,7 +112,7 @@ void AD_cal()
     
     halLedSetAll();
     delay_ms(2000);
-    
+    getOffset();
    
     ADX = 0;
     ADY = 0;

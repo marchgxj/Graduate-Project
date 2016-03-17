@@ -1,7 +1,7 @@
 /***********************************************************************************
-    Filename: board.c
+Filename: board.c
 
-    Copyright 2007 Texas Instruments, Inc.
+Copyright 2007 Texas Instruments, Inc.
 ***********************************************************************************/
 #include "common.h"
 
@@ -28,7 +28,7 @@ void halBoardInit(void)
     delay_s(1);
     GPIO_Init();
     //halUartInit(0, 0); 
-   // sched_init();
+    // sched_init();
     //÷–∂œ≥ı ºªØ
     time_init();
     SPI3_Init();
@@ -36,7 +36,9 @@ void halBoardInit(void)
     AD_Init();
     Interrupt_Init();
     Init_TQ();
-    Init_5983();
+    //Init_5983();
+    Init_PNI();
+    getOffset();
 #if WIRELESS_TEST == 0
     AD_cal(); 
 #endif

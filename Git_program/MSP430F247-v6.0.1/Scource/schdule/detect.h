@@ -3,22 +3,22 @@
 #include "common.h"
 
 //传感器监测状态
-#define NOCAR      0            //没有停车
-#define CAR        1            //停车
-#define NOCAR2CAR  2            //无车到有车中间状态
-#define CAR2NOCAR  3            //有车到无车中间状态
-#define COLLECTING 4            //采集数据中
-#define STABLE     5            //传感器稳定
-#define OFFLINE    253            //离线
-#define LOWPOWER   252            //电量低
-#define TEMPOVER   251            //温度异常
+#define NOCAR          0            //没有停车
+#define CAR            1            //停车
+#define NOCAR2CAR      2            //无车到有车中间状态
+#define CAR2NOCAR      3            //有车到无车中间状态
+#define COLLECTING     4            //采集数据中
+#define STABLE         5            //传感器稳定
+#define OFFLINE        253            //离线
+#define LOWPOWER       252            //电量低
+#define TEMPOVER       251            //温度异常
+#define SENSOR_ERROR   250
 
 #define TEST_LENGTH             56
 #define FILTER_LENGTH           20
 #define SLOP_LENGTH             3
 #define MIDDLE_QUENE_LENGTH     5
 #define MAX_QUICK_COLLECT_TIME  2000  //5mins 在快采模式的最长时间 单位：50ms
-#define HMC5983_RESET_PERIOD    12000 //10mins 5983复位周期 单位：50ms
 
 
 
@@ -31,8 +31,8 @@
 #define CMD_CAR              3
 #define CMD_REBOOT           4
 
-#define NORMAL_ENV_THRESHOLD    20
-#define REVERSE_ENV_THRESHOLD   80
+#define NORMAL_ENV_THRESHOLD    300
+#define REVERSE_ENV_THRESHOLD   700
 
 typedef struct
 {
@@ -97,7 +97,7 @@ extern void IdentifyCar();
 extern void NoCarCalibration();
 extern uint8 MultiState(uint16 value,uint16 threshold);
 
-extern uint8 vsEnvironment(uint8 threshold);
+extern uint8 vsEnvironment(uint16 threshold);
 extern void TotalJudge();
 extern void CmdCalibration();
 extern void parkingStableSet();
@@ -125,4 +125,9 @@ extern uint16 update_middle_times;
 extern uint8 toggle_reason; 
 extern uint16 toggle_distance_test;
 extern uint32 compactness_latest;
+extern uint16 xcheck;
+extern uint16 ycheck;
+extern uint16 zcheck;
+extern uint16 diameterbuf_latest;
+extern uint16 perimeterbuf_latest;
 #endif 

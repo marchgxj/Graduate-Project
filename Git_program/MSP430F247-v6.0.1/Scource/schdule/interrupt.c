@@ -18,7 +18,6 @@ uint8 Send_Error_Flag = 0;
 uint16 Send_Error_Count = 0;
 uint8 Start_Sleep_Flag = 0;
 uint16 Reset5983_Count = 0;
-uint16  reset_HMC5983_count = 0;
 uint16  in_quick_collect_count = 0;
 uint8 force_quit_quick_collect = 0;
 void Interrupt_Init(void)
@@ -131,11 +130,11 @@ void TestSend()
     22:40¡¢41£ºZValue_parked_stable
     23:42¡¢43£ºMagneticUnit.ZMiddle
     24:44:switch_middle
-    25:45:parking_stable_flag
+    25:45:toggle_reason
     26:46¡¢47:MagneticUnit.parked_distance
     27:48¡¢49:diameterbuf
     28:50¡¢51¡¢52¡¢53:Compatness
-    29:54¡¢55:toggle_reason
+    29:54¡¢55:perimeterbuf
     **********************************************/
     DataSendDraw[0] = MagneticUnit.XValue>>8;
     DataSendDraw[1] = MagneticUnit.XValue;
@@ -197,17 +196,17 @@ void TestSend()
     DataSendDraw[42] = MagneticUnit.ZMiddle>>8;
     DataSendDraw[43] = MagneticUnit.ZMiddle;
     DataSendDraw[44] = switch_middle;
-    DataSendDraw[45] = parking_stable_flag;
+    DataSendDraw[45] = toggle_reason;
     DataSendDraw[46] = MagneticUnit.parked_distance>>8;
     DataSendDraw[47] = MagneticUnit.parked_distance;
-    DataSendDraw[48] = diameterbuf>>8;
-    DataSendDraw[49] = diameterbuf;
+    DataSendDraw[48] = diameterbuf_latest>>8;
+    DataSendDraw[49] = diameterbuf_latest;
     DataSendDraw[50] = compactness_latest>>24;
     DataSendDraw[51] = compactness_latest>>16;
     DataSendDraw[52] = compactness_latest>>8;
     DataSendDraw[53] = compactness_latest;
-    DataSendDraw[54] = toggle_reason>>8;
-    DataSendDraw[55] = toggle_reason;
+    DataSendDraw[54] = perimeterbuf_latest>>8;
+    DataSendDraw[55] = perimeterbuf_latest;
     
     A7139_WriteFIFO(DataSendDraw,TEST_LENGTH);
     delay_us(1);
@@ -421,10 +420,5 @@ __interrupt void Timer_A0(void)
 
         
     }
-    reset_HMC5983_count++;
-    if(reset_HMC5983_count == HMC5983_RESET_PERIOD) 
-    {
-        reset_HMC5983_count = 0;
-        Init_5983();
-    }
+    
 }

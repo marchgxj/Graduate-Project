@@ -55,7 +55,7 @@ uint16 getMaxDiameter(uint16 x1,uint16 y1,uint16 x2,uint16 y2)
     uint16 my = 0;
     mx = MAX(max_x,abs(x1 - x2));
     my = MAX(max_y,abs(y1 - y2));
-    if((abs(mx-max_x)>800)||(abs(my-max_y)>600))
+    if((abs(mx-max_x)>700)||(abs(my-max_y)>500))
     {
         max_x = mx;
         max_y = my;
@@ -69,7 +69,7 @@ uint16 getPerimeter(uint16 x1,uint16 y1,uint16 x2,uint16 y2)
     uint16 perimeter = 0;
     
     perimeter = sqrt_16(pow(x1-x2,2)+pow(y1-y2,2));
-    if (perimeter > 80)
+    if (perimeter > 140)
     {
         perimeterbuf += perimeter;
     }

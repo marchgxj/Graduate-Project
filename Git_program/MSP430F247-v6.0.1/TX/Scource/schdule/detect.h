@@ -25,8 +25,8 @@
 #define CMD_CAR              3
 #define CMD_REBOOT           4
 
-#define NORMAL_ENV_THRESHOLD    20
-#define REVERSE_ENV_THRESHOLD   50
+#define NORMAL_ENV_THRESHOLD    300
+#define REVERSE_ENV_THRESHOLD   700
 
 typedef struct
 {
@@ -91,7 +91,7 @@ extern void IdentifyCar();
 extern void NoCarCalibration();
 extern uint8 MultiState(uint16 value,uint16 threshold);
 
-extern uint8 vsEnvironment(uint8 threshold);
+extern uint8 vsEnvironment(uint16 threshold);
 extern void TotalJudge();
 extern void CmdCalibration();
 extern void parkingStableSet();

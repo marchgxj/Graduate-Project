@@ -35,9 +35,7 @@
 #include "HMC5983.h"
 #include "filter.h"
 #include "math.h"
-#include "CFmodels.h"
-#include "bayes.h"
 #include "criteria.h"
-
+#include "PNI.h"
 
 #endif

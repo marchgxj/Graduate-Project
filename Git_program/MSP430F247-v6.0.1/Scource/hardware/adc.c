@@ -83,9 +83,8 @@ __interrupt void ADC12_ISR(void)
 void AD_cal()
 {
     int i=0;
-    uint16 ADX,ADY,ADZ,GMIADX,GMIADY;
+    uint32 ADX,ADY,ADZ;
     uint16 ADvalueX=0,ADvalueY=0,ADvalueZ = 0;
-    uint16 GMI_ADvalueX=0,GMI_ADvalueY=0;
     uint32 intensity = 0;
 #if (NET_TEST==1 || QOS_TEST==1)
     return;
@@ -93,24 +92,18 @@ void AD_cal()
     
     halLedSetAll();
     delay_ms(2000);
-    
+    getOffset();
    
     ADX = 0;
     ADY = 0;
     ADZ = 0;
-    for(i=0;i<26;i++)
+    for(i=0;i<16;i++)
     {
-        if(i>=10)
-        {
-            SampleChannel(&GMI_ADvalueX,&GMI_ADvalueY);
-            Multi_Read_HMC(&ADvalueX,&ADvalueY,&ADvalueZ);
-            ADX += ADvalueX;
-            ADY += ADvalueY;
-            ADZ += ADvalueZ;
-            GMIADX += GMI_ADvalueX;
-            GMIADY += GMI_ADvalueY;
-            delay_ms(50);
-        }
+        PNI_read_data(&ADvalueX,&ADvalueY,&ADvalueZ);
+        ADX += ADvalueX;
+        ADY += ADvalueY;
+        ADZ += ADvalueZ;
+        delay_ms(50);
     }
     MagneticUnit.XMiddle = ADX>>4;
     MagneticUnit.YMiddle = ADY>>4;
@@ -118,6 +111,9 @@ void AD_cal()
     MagneticUnit.XValue_Stable = MagneticUnit.XMiddle;
     MagneticUnit.YValue_Stable = MagneticUnit.YMiddle;
     MagneticUnit.ZValue_Stable = MagneticUnit.ZMiddle;
+    xcheck = MagneticUnit.XMiddle;
+    ycheck = MagneticUnit.YMiddle;
+    zcheck = MagneticUnit.ZMiddle;
     for(i=0;i<MIDDLE_QUENE_LENGTH;i++)
     {
         x_middle_quene[i] = MagneticUnit.XMiddle;
@@ -126,7 +122,7 @@ void AD_cal()
     }
     
     
-    MagneticUnit.Ext_Middle = abs(MagneticUnit.ZMiddle-MagneticUnit.YMiddle);
+    MagneticUnit.Ext_Middle = abs(MagneticUnit.ZMiddle-MagneticUnit.XMiddle);
     
     intensity = sqrt_16((((uint32)MagneticUnit.XMiddle*(uint32)MagneticUnit.XMiddle)+((uint32)MagneticUnit.YMiddle*(uint32)MagneticUnit.YMiddle)+((uint32)MagneticUnit.ZMiddle*(uint32)MagneticUnit.ZMiddle)));
     MagneticUnit.Int_Middle = intensity;
@@ -148,13 +144,12 @@ void AD_cal()
     }
     for(int i=0;i<SLOP_LENGTH;i++)
     {
-        SampleChannel(&ADvalueX,&ADvalueY);
+        PNI_read_data(&ADvalueX,&ADvalueY,&ADvalueZ);
         SlopData[i].xvalue = ADvalueX;
         SlopData[i].yvalue = ADvalueY;
+        SlopData[i].zvalue = ADvalueZ;
         delay_ms(50);
     }
-  
-
     //NoCarCalibration();
     halLedClearAll();
     delay_ms(50);

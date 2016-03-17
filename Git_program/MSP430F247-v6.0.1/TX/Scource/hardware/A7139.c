@@ -83,7 +83,6 @@ void Err_State(void)
         {
             //REBOOT;
             A7139_init_err_count = 0;
-            ReJoinFlag = 1;
             break;
         }
     }
@@ -771,24 +770,23 @@ void A7139_WakeToRecv(void)
 void A7139_Deep_Wake(void)
 {
 #if (SLEEP_EN)
-    halLedSet(4);
-    __disable_interrupt();
-    A7139_StrobeCmd(CMD_STBY);
-    delay_ms(10);
-    A7139_StrobeCmd(CMD_STBY);
-    delay_ms(10);
-    A7139_Init(ChannelList[EndPointDevice.channel]);
-    delay_ms(10);
-    A7139_Init(ChannelList[EndPointDevice.channel]);
-    delay_ms(10);
-    RXMode();
-    delay_ms(10);
-    RXMode();
-    delay_ms(10);
-    halLedClear(4);
-    TA0CCTL0 &= ~CCIFG;
-    __enable_interrupt();
-
+//    halLedSet(4);
+//    __disable_interrupt();
+//    A7139_StrobeCmd(CMD_STBY);
+//    delay_ms(10);
+//    A7139_StrobeCmd(CMD_STBY);
+//    delay_ms(10);
+//    A7139_Init(ChannelList[EndPointDevice.channel]);
+//    delay_ms(10);
+//    A7139_Init(ChannelList[EndPointDevice.channel]);
+//    delay_ms(10);
+//    RXMode();
+//    delay_ms(10);
+//    RXMode();
+//    delay_ms(10);
+//    halLedClear(4);
+//    TA0CCTL0 &= ~CCIFG;
+//    __enable_interrupt();
 #endif   
 }
 void A7139_Reset()
