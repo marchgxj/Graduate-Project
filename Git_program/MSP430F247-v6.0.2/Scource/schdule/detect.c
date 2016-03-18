@@ -1017,12 +1017,14 @@ void TotalJudge()
     }
     Quick_CollectM = Quick_Collect;
     
-    if((Quick_Collect == 0)&&(no_car_stable_count >10)&&(On_Test == 0))
+    if((Quick_Collect == 0)&&(no_car_stable_count >60)&&(On_Test == 0)
+       &&(abs(MagneticUnit.XValue-x_middle_quene[0])<300)
+       &&(abs(MagneticUnit.ZValue-z_middle_quene[0])<600))
     {
         no_car_stable_count = 0;
         NoCarCalibration();
     }
-    if((Quick_Collect == 0)&&(parking_stable_count >10)&&(On_Test == 0))
+    if((Quick_Collect == 0)&&(parking_stable_count >60)&&(On_Test == 0))
     {
         parking_stable_count = 0;
         //parkingCalibrate();

@@ -19,10 +19,10 @@ int32 yoffset = 0;
 int32 zoffset = 0;
 
 const digioConfig pni_mosi_out   = {3, 6, BIT6, HAL_DIGIO_OUTPUT, 0};
-const digioConfig pni_miso_in   = {6, 6, BIT6, HAL_DIGIO_INPUT, 0};
-const digioConfig pni_sck_out   = {6, 5, BIT5, HAL_DIGIO_OUTPUT, 0};
+const digioConfig pni_miso_in   = {3, 5, BIT6, HAL_DIGIO_INPUT, 0};
+const digioConfig pni_sck_out   = {3, 4, BIT4, HAL_DIGIO_OUTPUT, 0};
 const digioConfig pni_scs_out   = {3, 7, BIT7, HAL_DIGIO_OUTPUT, 1};
-const digioConfig pni_drdy_in   = {6, 4, BIT4, HAL_DIGIO_INPUT, 0};
+const digioConfig pni_drdy_in   = {3, 3, BIT3, HAL_DIGIO_INPUT, 0};
 
 void PNI_GPIO_Init()
 {

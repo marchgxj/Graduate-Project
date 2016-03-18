@@ -14,14 +14,14 @@
 /******************* pin number **************************/
 #define SCS_1   (P3OUT |= BIT7)
 #define SCS_0   (P3OUT &= ~BIT7)
-#define SCK_1   (P6OUT |= BIT5)
-#define SCK_0   (P6OUT &= ~BIT5)
+#define SCK_1   (P3OUT |= BIT4)
+#define SCK_0   (P3OUT &= ~BIT4)
 #define MOSI_1  (P3OUT |= BIT6)
 #define MOSI_0  (P3OUT &= ~BIT6)
 #define CLEAR_1  (P5OUT |= BIT4)
 #define CLEAR_0  (P5OUT &= ~BIT4)
-#define read_MISO       ((P6IN & BIT6)>>6)
-#define DRDY_PIN        ((P6IN & BIT4)>>4)
+#define read_MISO       ((P3IN & BIT5)>>5)
+#define DRDY_PIN        ((P3IN & BIT3)>>3)
 
 /******************* configuration **************************/
 #define PNI_CIRCLR 400
