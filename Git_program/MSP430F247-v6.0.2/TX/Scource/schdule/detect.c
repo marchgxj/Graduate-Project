@@ -95,7 +95,7 @@ uint8 dataCheck(uint16 x,uint16 y,uint16 z)
 // Author:xiaoximi
 //}
     
-    if((abs(x-xcheck)>5000)||(abs(y-ycheck>5000))||(abs(z-zcheck>5000)))
+    if((abs(x-xcheck)>5000)||(abs(y-ycheck)>5000)||(abs(z-zcheck)>5000))
     {
         check_error++;
         if(check_error>10)
@@ -699,7 +699,7 @@ uint8 leaveRecognition()
     //}
 
     uint32 distance = 0;
-    
+    uint16 minus = 0;
     if(MagneticUnit.compatness < 1200)
     {
         return 0;
@@ -723,11 +723,17 @@ uint8 leaveRecognition()
             return 1;
         }
         //compare the distance with the distance at the time just parked
-        if(abs(MagneticUnit.ZValue_Stable - z_middle_quene[i])
-           < MagneticUnit.Z_parked_distance/3)
+        minus = abs(MagneticUnit.ZValue_Stable - z_middle_quene[i]);
+        if(minus < MagneticUnit.Z_parked_distance/3)
         {
             toggle_reason = 3;
-            toggle_distance_test = abs(MagneticUnit.ZValue_Stable - z_middle_quene[i]);
+            toggle_distance_test = minus;
+            return 1;
+        }
+        if(minus<50)
+        {
+            toggle_reason = 4;
+            toggle_distance_test = minus;
             return 1;
         }
     }
@@ -1010,10 +1016,10 @@ void TotalJudge()
     //judge whether car is leaving but faile to recognition.
     if(parking_stable_flag == 1)
     {
-        if(Quick_Collect==1&&leaveRecognition())
+        if(leaveRecognition())
         {
-            leave_recognition_count++;
-            if(leave_recognition_count>100)
+            //leave_recognition_count++;
+            //if(leave_recognition_count>100)
             {
                 leave_recognition_count = 0;
                 quickCalibrate(1);

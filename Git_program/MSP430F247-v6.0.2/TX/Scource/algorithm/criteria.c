@@ -69,7 +69,7 @@ uint16 getPerimeter(uint16 x1,uint16 y1,uint16 x2,uint16 y2)
     uint16 perimeter = 0;
     
     perimeter = sqrt_16(pow(x1-x2,2)+pow(y1-y2,2));
-    if (perimeter > 90)
+    if (perimeter > 70)
     {
         perimeterbuf += perimeter;
     }
