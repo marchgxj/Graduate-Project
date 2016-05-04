@@ -2370,14 +2370,16 @@ class Application(ttk.Notebook):
         cmdinput = tk.Entry(self.tab5, width=15)
         cmdinput.grid(row=0, column=2, sticky=tk.W)
         buttonfont = tkFont.Font(size=16, family="黑体")
-        cmdbutton1 = tk.Button(self.tab5, text="数据回传", command=lambda: cmdtext(1), font=buttonfont)
+        cmdbutton1 = tk.Button(self.tab5, text="测试数据", command=lambda: cmdtext(1), font=buttonfont)
         cmdbutton2 = tk.Button(self.tab5, text="未停车", command=lambda: cmdtext(2), font=buttonfont)
         cmdbutton3 = tk.Button(self.tab5, text="已停车", command=lambda: cmdtext(3), font=buttonfont)
         cmdbutton4 = tk.Button(self.tab5, text="重启", command=lambda: cmdtext(4), font=buttonfont)
+        cmdbutton5 = tk.Button(self.tab5, text="数据回传", command=lambda: cmdtext(5), font=buttonfont)
         cmdbutton1.grid(row=1, column=0)
         cmdbutton2.grid(row=1, column=1)
         cmdbutton3.grid(row=1, column=2)
         cmdbutton4.grid(row=1, column=3)
+        cmdbutton5.grid(row=1, column=4)
 
     def initTempLabel(self):
         '''
