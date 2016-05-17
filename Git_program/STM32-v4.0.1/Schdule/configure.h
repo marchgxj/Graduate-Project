@@ -1,7 +1,7 @@
 #ifndef _CONFIG_h_
 #define _CONFIG_h_
 #include "common.h"
-#define    CHANNEL           472.501f//490.001f:无线模块测试  //495.001f:太阳能中继测试
+#define    CHANNEL           500.001f//490.001f:无线模块测试
 #define    QOS_TEST          0
 #define    TEMP_TEST         0           //0:Disable 1:Enable
 #define    UPLOAD_DATA_EN    1

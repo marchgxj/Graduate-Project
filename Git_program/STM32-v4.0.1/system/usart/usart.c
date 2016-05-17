@@ -113,6 +113,7 @@ uint8 Usart_Data[4];
 void USART1_IRQHandler(void)
 {
 	uint8 buf;
+	uint8 Cmd_Address = 0;
 	if (USART_GetFlagStatus(USART1, USART_FLAG_ORE) != RESET) 
 	{
 			buf = USART_ReceiveData(USART1);	
@@ -147,12 +148,8 @@ void USART1_IRQHandler(void)
 					{
 							Usart_Count = 0;
 							Cmd_Address = Usart_Data[1];
-							Cmd_Command = Usart_Data[2];
+							Cmd_Command[Cmd_Address] = Usart_Data[2];
 							Usart1_PutChar(0xAA);
-						  if((uint8)Cmd_Command == 5)
-							{
-									PostTask(EmptyBuffer,EVENT_LINK_SEND);
-							}
 					}
 			}
 			

@@ -27,7 +27,6 @@ extern void KeepAliveCheck(void);
 
 extern uint16 Draw_DataX;
 extern uint16 Draw_DataY;
-extern uint16 Cmd_Address;
-extern uint8 Cmd_Command;
+extern uint8 Cmd_Command[MAX_NODE_NUM + 1];
 #endif
 

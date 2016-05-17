@@ -3,7 +3,7 @@
 <title>Static Call Graph - [..\OBJ\SPI.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image ..\OBJ\SPI.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5.03 [Build 76]: Last Updated: Wed Mar 02 17:42:49 2016
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5.03 [Build 76]: Last Updated: Thu May 05 10:17:21 2016
 <BR><P>
 <H3>Maximum Stack Usage =        208 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -845,16 +845,15 @@ Global Symbols
 <LI><a href="#[e9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SendBeacon
 </UL>
 
-<P><STRONG><a name="[32]"></a>USART1_IRQHandler</STRONG> (Thumb, 184 bytes, Stack size 8 bytes, usart.o(.text))
-<BR><BR>[Stack]<UL><LI>Max Depth = 160 + Unknown Stack Size
-<LI>Call Chain = USART1_IRQHandler &rArr; PostTask &rArr; DebugMsg &rArr; __2printf &rArr; _printf_char_file &rArr; _printf_char_common &rArr; __printf
+<P><STRONG><a name="[32]"></a>USART1_IRQHandler</STRONG> (Thumb, 164 bytes, Stack size 16 bytes, usart.o(.text))
+<BR><BR>[Stack]<UL><LI>Max Depth = 152 + Unknown Stack Size
+<LI>Call Chain = USART1_IRQHandler &rArr; DebugMsg &rArr; __2printf &rArr; _printf_char_file &rArr; _printf_char_common &rArr; __printf
 </UL>
 <BR>[Calls]<UL><LI><a href="#[c6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_ReceiveData
 <LI><a href="#[c7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_GetITStatus
 <LI><a href="#[be]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_GetFlagStatus
 <LI><a href="#[c3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Usart1_PutChar
 <LI><a href="#[b5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_ClearFlag
-<LI><a href="#[b0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PostTask
 <LI><a href="#[a8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DebugMsg
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> startup_stm32f10x_hd.o(RESET)
@@ -1694,8 +1693,7 @@ Global Symbols
 <LI><a href="#[e5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DisableInterrupt
 <LI><a href="#[a8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DebugMsg
 </UL>
-<BR>[Called By]<UL><LI><a href="#[32]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART1_IRQHandler
-<LI><a href="#[af]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PostBeacon
+<BR>[Called By]<UL><LI><a href="#[af]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PostBeacon
 <LI><a href="#[24]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;EXTI9_5_IRQHandler
 <LI><a href="#[2a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TIM3_IRQHandler
 </UL>
@@ -1800,7 +1798,7 @@ Global Symbols
 
 <P><STRONG><a name="[1cf]"></a>abs</STRONG> (Thumb, 14 bytes, Stack size 0 bytes, device.o(.text), UNUSED)
 
-<P><STRONG><a name="[f4]"></a>CreateDataACK</STRONG> (Thumb, 208 bytes, Stack size 24 bytes, tdma.o(.text))
+<P><STRONG><a name="[f4]"></a>CreateDataACK</STRONG> (Thumb, 202 bytes, Stack size 24 bytes, tdma.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 32<LI>Call Chain = CreateDataACK &rArr; GetCheck
 </UL>
 <BR>[Calls]<UL><LI><a href="#[e8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GetCheck

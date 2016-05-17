@@ -2,8 +2,8 @@
 DataACKPacketStruct DataACKPacket;
 uint16 Draw_DataX = 0;
 uint16 Draw_DataY = 0;
-uint16 Cmd_Address = 0;
-uint8 Cmd_Command = 0;
+
+uint8 Cmd_Command[MAX_NODE_NUM + 1];
 uint8 DataAckBuf[MAX_PACK_LENGTH];
 uint8 QosTestData[21];
 uint16 Qos_DataReceive_Count = 0;
@@ -20,11 +20,10 @@ void CreateDataACK(uint8 src_cluster_id,uint8 src_cluster_innernum,uint8 rejoin,
 	  DataACKPacket.src_cluster_id = RootDevice.cluster_id;
 	  DataACKPacket.src_cluster_innernum = RootDevice.cluster_innernum;
 	  DataACKPacket.time_stamp = Frame_Time;
-		if(Cmd_Address == phy_address)
+		if(Cmd_Command[phy_address]!=0)
 		{
-				DataACKPacket.cmd = Cmd_Command;
-				Cmd_Address = 0;
-				Cmd_Command = 0;
+				DataACKPacket.cmd = Cmd_Command[phy_address];
+				Cmd_Command[phy_address] = 0;
 		}
 	
 		DataAckBuf[0] = DataACKPacket.pack_length;
