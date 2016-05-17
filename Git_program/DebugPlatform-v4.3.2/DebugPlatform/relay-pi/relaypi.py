@@ -77,16 +77,15 @@ class Relay:
                 f.write(str(err) + "\n")
 
         def getPacketType():
-            if isPacketHead:
-                try:
-                    head_str = ord(self.uart.read(1))
-                except serial.SerialException, err:
-                    writeErrlog(self.logpath["err_log"], err)
-                    return False
-                if head_str == 0x7E:
-                    return DATA_PACKET
-                elif head_str == 0x7F:
-                    return DEBUG_PACKET
+            try:
+                head_str = ord(self.uart.read(1))
+            except serial.SerialException, err:
+                writeErrlog(self.logpath["err_log"], err)
+                return False
+            if head_str == 0x7E:
+                return DATA_PACKET
+            elif head_str == 0x7F:
+                return DEBUG_PACKET
             return 0
 
         def isPacketHead():
@@ -204,7 +203,9 @@ class Relay:
                 i = 0
                 for i in range(10):
                     print i
-                    if sendCommand(add, value):
+                    result = sendCommand(add, value)
+                    print result
+                    if result:
                         break
                 if i == 9:
                     print "send command fail"
