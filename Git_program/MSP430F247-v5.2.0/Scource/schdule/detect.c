@@ -95,8 +95,7 @@ uint8 dataCheck(uint16 x,uint16 y,uint16 z)
 //
 // Author:xiaoximi
 //}
-    return 1;
-    if((abs(x-xcheck)>1000)||(abs(y-ycheck>1000))||(abs(z-zcheck>1000)))
+    if((abs(x-xcheck)>1000)||(abs(y-ycheck)>1000)||(abs(z-zcheck)>1000))
     {
         check_error++;
         if(check_error>10)
@@ -1022,10 +1021,11 @@ void TotalJudge()
     //judge whether car is leaving but faile to recognition.
     if(parking_stable_flag == 1)
     {
-        if(Quick_Collect==1&&leaveRecognition())
+        //if(Quick_Collect==1&&leaveRecognition())
+        if(leaveRecognition())
         {
-            leave_recognition_count++;
-            if(leave_recognition_count>100)
+            //leave_recognition_count++;
+            //if(leave_recognition_count>10)
             {
                 leave_recognition_count = 0;
                 quickCalibrate(1);
@@ -1298,7 +1298,7 @@ void CmdCalibration()
     
 }
 
-void CmdSendHandler()
+void CmdSendHandler(uint16 time)
 {
     // FunctionName: CmdSendHandler
     //{
@@ -1323,7 +1323,7 @@ void CmdSendHandler()
     A7139_SetPackLen(TEST_LENGTH);
     delay_us(1);
     
-    for(i=0;i<600;i++)
+    for(i=0;i<time;i++)
     {
         IdentifyCar();
         TestSend();
@@ -1358,7 +1358,7 @@ void CmdHandler()
     switch(EndPointDevice.cmd)
     {
         case CMD_SEND_TEST:
-          CmdSendHandler();
+          CmdSendHandler(600);
           break;
         case CMD_NOCAR:
           CmdCalibration();
@@ -1368,6 +1368,9 @@ void CmdHandler()
         case CMD_REBOOT:
           REBOOT;
           break;
+        case CMD_DATA_ONCE:
+          CmdSendHandler(40);
+        break;
     }
     halLedToggle(1);
 }

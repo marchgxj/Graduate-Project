@@ -219,7 +219,7 @@ __interrupt void Timer_A0(void)
 {
     Collect_Period++;
     reset_HMC5983_count++;
-    
+    Quick_Collect = 1;
     if(Quick_Collect==0)
     {
         in_quick_collect_count = 0;

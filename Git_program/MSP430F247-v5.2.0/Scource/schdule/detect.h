@@ -31,6 +31,7 @@
 #define CMD_NOCAR            2
 #define CMD_CAR              3
 #define CMD_REBOOT           4
+#define CMD_DATA_ONCE        5
 
 #define NORMAL_ENV_THRESHOLD    20
 #define REVERSE_ENV_THRESHOLD   40

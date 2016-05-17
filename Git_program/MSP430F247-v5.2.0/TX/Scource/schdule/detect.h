@@ -26,7 +26,7 @@
 #define    DIS_THRESHOLD       30
 #define    COM_THRESHOLD       1500
 
-#define    COM_STABLE_COUNT    50
+#define    COM_STABLE_COUNT    150
 //¿ØÖÆÃüÁî
 #define CMD_SEND_TEST        1
 #define CMD_NOCAR            2

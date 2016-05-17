@@ -2,7 +2,7 @@
 #define	SlaveAddress   0x3C
 
 uint8 ack=0;
-uint8 const HMC_Config[3] = {0xFC,0x00,0x01};
+uint8 const HMC_Config[3] = {0xFC,0xE0,0x01};
 
 //void HMC_Start()
 //{

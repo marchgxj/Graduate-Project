@@ -94,7 +94,7 @@ uint8 dataCheck(uint16 x,uint16 y,uint16 z)
 // Author:xiaoximi
 //}
     
-    if((abs(x-xcheck)>1000)||(abs(y-ycheck>1000))||(abs(z-zcheck>1000)))
+    if((abs(x-xcheck)>1000)||(abs(y-ycheck)>1000)||(abs(z-zcheck)>1000))
     {
         check_error++;
         if(check_error>10)

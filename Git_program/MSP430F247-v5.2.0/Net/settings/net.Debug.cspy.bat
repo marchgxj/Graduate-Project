@@ -25,7 +25,7 @@ if not "%1" == "" goto debugFile
 
 @echo on 
 
-"D:\IAR Systems\MSP430\common\bin\cspybat" -f "F:\Graduate\Git_program\MSP430F247-v5.1.1\Net\settings\net.Debug.general.xcl" --backend -f "F:\Graduate\Git_program\MSP430F247-v5.1.1\Net\settings\net.Debug.driver.xcl" 
+"D:\IAR Systems\MSP430\common\bin\cspybat" -f "F:\Graduate\Git_program\MSP430F247-v5.2.0\Net\settings\net.Debug.general.xcl" --backend -f "F:\Graduate\Git_program\MSP430F247-v5.2.0\Net\settings\net.Debug.driver.xcl" 
 
 @echo off 
 goto end 
@@ -34,7 +34,7 @@ goto end
 
 @echo on 
 
-"D:\IAR Systems\MSP430\common\bin\cspybat" -f "F:\Graduate\Git_program\MSP430F247-v5.1.1\Net\settings\net.Debug.general.xcl" "--debug_file=%1" --backend -f "F:\Graduate\Git_program\MSP430F247-v5.1.1\Net\settings\net.Debug.driver.xcl" 
+"D:\IAR Systems\MSP430\common\bin\cspybat" -f "F:\Graduate\Git_program\MSP430F247-v5.2.0\Net\settings\net.Debug.general.xcl" "--debug_file=%1" --backend -f "F:\Graduate\Git_program\MSP430F247-v5.2.0\Net\settings\net.Debug.driver.xcl" 
 
 @echo off 
 :end
