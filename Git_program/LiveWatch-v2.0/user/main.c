@@ -8,7 +8,7 @@ int main(void)
 		sys_init();
 		A7139_SetPackLen(MAX_PACK_LENGTH);
     delay_us(1);
-		A7139_SetFreq(477.001f);
+		A7139_SetFreq(488.001f);
     delay_ms(10);
     A7139_Cal();                    
     delay_ms(10);
