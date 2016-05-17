@@ -6,102 +6,112 @@
   <configuration>
     <name>Debug</name>
     <outputs>
+      <file>$PROJ_DIR$\..\Scource\systerm\mcu.c</file>
       <file>$PROJ_DIR$\..\Scource\systerm\mcu.h</file>
-      <file>$PROJ_DIR$\main.c</file>
+      <file>$PROJ_DIR$\..\Scource\hardware\spi.h</file>
+      <file>$PROJ_DIR$\..\Scource\hardware\digio.h</file>
+      <file>$PROJ_DIR$\..\Scource\systerm\flash.c</file>
       <file>$PROJ_DIR$\..\Scource\systerm\flash.h</file>
       <file>$PROJ_DIR$\..\Scource\hardware\led.c</file>
       <file>$PROJ_DIR$\..\Scource\hardware\digio.c</file>
       <file>$PROJ_DIR$\..\Scource\hardware\led.h</file>
-      <file>$PROJ_DIR$\..\Scource\systerm\mcu.c</file>
-      <file>$PROJ_DIR$\..\Scource\systerm\flash.c</file>
-      <file>$PROJ_DIR$\..\Scource\hardware\digio.h</file>
-      <file>$TOOLKIT_DIR$\inc\dlib\c\ysizet.h</file>
-      <file>$TOOLKIT_DIR$\inc\msp430.h</file>
+      <file>$TOOLKIT_DIR$\lib\dlib\dl430fn.h</file>
+      <file>$PROJ_DIR$\Debug\Obj\digio.r43</file>
       <file>$TOOLKIT_DIR$\inc\intrinsics.h</file>
+      <file>$PROJ_DIR$\..\Scource\systerm\common.h</file>
+      <file>$PROJ_DIR$\..\Scource\schdule\mac.h</file>
+      <file>$PROJ_DIR$\Debug\Obj\led.r43</file>
+      <file>$PROJ_DIR$\..\Scource\configure.h</file>
+      <file>$PROJ_DIR$\..\Scource\hardware\A7139_CONFIG.h</file>
       <file>$TOOLKIT_DIR$\inc\dlib\c\xencoding_limits.h</file>
-      <file>$TOOLKIT_DIR$\inc\dlib\c\DLib_Threads.h</file>
       <file>$PROJ_DIR$\Debug\Obj\mcu.r43</file>
       <file>$PROJ_DIR$\..\Scource\systerm\sys.h</file>
-      <file>$TOOLKIT_DIR$\inc\dlib\c\ycheck.h</file>
-      <file>$TOOLKIT_DIR$\inc\in430.h</file>
-      <file>$PROJ_DIR$\..\Scource\hardware\A7139.h</file>
-      <file>$PROJ_DIR$\..\Scource\systerm\defs.h</file>
-      <file>$PROJ_DIR$\..\Scource\schdule\mac.h</file>
-      <file>$PROJ_DIR$\..\Scource\algorithm\criteria.h</file>
-      <file>$PROJ_DIR$\Debug\Obj\led.r43</file>
-      <file>$TOOLKIT_DIR$\lib\dlib\dl430fn.r43</file>
-      <file>$TOOLKIT_DIR$\inc\dlib\c\ystdio.h</file>
-      <file>$PROJ_DIR$\..\Scource\schdule\join.h</file>
-      <file>$PROJ_DIR$\..\Scource\systerm\delay.h</file>
-      <file>$PROJ_DIR$\Debug\Obj\led.pbi</file>
-      <file>$PROJ_DIR$\..\Scource\systerm\timer.h</file>
-      <file>$PROJ_DIR$\..\Scource\configure.h</file>
       <file>$PROJ_DIR$\..\Scource\algorithm\math.h</file>
-      <file>$PROJ_DIR$\Debug\Exe\flash.d43</file>
-      <file>$PROJ_DIR$\..\Scource\systerm\int.h</file>
-      <file>$TOOLKIT_DIR$\inc\dlib\c\string.h</file>
-      <file>$TOOLKIT_DIR$\inc\msp430f247.h</file>
-      <file>$PROJ_DIR$\..\Scource\hardware\A7139_CONFIG.h</file>
-      <file>$PROJ_DIR$\..\Scource\systerm\common.h</file>
-      <file>$PROJ_DIR$\..\Scource\schdule\detect.h</file>
-      <file>$PROJ_DIR$\..\Scource\hardware\spi.h</file>
-      <file>$PROJ_DIR$\..\Scource\systerm\types.h</file>
-      <file>$PROJ_DIR$\..\Scource\hardware\PNI.h</file>
-      <file>$TOOLKIT_DIR$\inc\dlib\c\DLib_Product.h</file>
-      <file>$PROJ_DIR$\Debug\Obj\digio.pbi</file>
-      <file>$TOOLKIT_DIR$\lib\dlib\dl430fn.h</file>
-      <file>$PROJ_DIR$\..\Scource\algorithm\filter.h</file>
-      <file>$PROJ_DIR$\Debug\Obj\flash.r43</file>
-      <file>$TOOLKIT_DIR$\inc\dlib\c\DLib_Defaults.h</file>
-      <file>$TOOLKIT_DIR$\inc\dlib\c\yvals.h</file>
-      <file>$PROJ_DIR$\..\Scource\schdule\ProcessEvent.h</file>
-      <file>$PROJ_DIR$\..\Scource\schdule\tdma.h</file>
-      <file>$PROJ_DIR$\..\Scource\systerm\board.h</file>
-      <file>$TOOLKIT_DIR$\inc\dlib\c\stdlib.h</file>
-      <file>$PROJ_DIR$\Debug\Obj\digio.r43</file>
-      <file>$PROJ_DIR$\Debug\Obj\mcu.pbi</file>
-      <file>$PROJ_DIR$\Debug\Obj\main.pbi</file>
-      <file>$PROJ_DIR$\Debug\Exe\flash.ulp</file>
-      <file>$TOOLKIT_DIR$\inc\dlib\c\stdio.h</file>
-      <file>$PROJ_DIR$\..\Scource\hardware\adc.h</file>
-      <file>$PROJ_DIR$\Debug\Obj\main.r43</file>
-      <file>$PROJ_DIR$\Debug\Obj\flash.pbi</file>
-      <file>$PROJ_DIR$\..\Scource\schdule\interrupt.h</file>
       <file>$PROJ_DIR$\..\Scource\systerm\uart.h</file>
+      <file>$PROJ_DIR$\..\Scource\schdule\tdma.h</file>
+      <file>$PROJ_DIR$\..\Scource\systerm\delay.h</file>
+      <file>$PROJ_DIR$\..\Scource\schdule\interrupt.h</file>
+      <file>$PROJ_DIR$\Debug\Obj\main.pbi</file>
+      <file>$PROJ_DIR$\Debug\Obj\flash.r43</file>
+      <file>$PROJ_DIR$\Debug\Obj\led.pbi</file>
+      <file>$PROJ_DIR$\..\Scource\systerm\board.h</file>
+      <file>$TOOLKIT_DIR$\inc\dlib\c\string.h</file>
+      <file>$TOOLKIT_DIR$\inc\dlib\c\DLib_Product.h</file>
+      <file>$TOOLKIT_DIR$\inc\dlib\c\yvals.h</file>
+      <file>$TOOLKIT_DIR$\inc\dlib\c\DLib_Defaults.h</file>
+      <file>$PROJ_DIR$\Debug\Exe\flash.ulp</file>
+      <file>$PROJ_DIR$\main.c</file>
+      <file>$PROJ_DIR$\..\Scource\algorithm\criteria.h</file>
+      <file>$PROJ_DIR$\..\Scource\systerm\int.h</file>
+      <file>$TOOLKIT_DIR$\inc\dlib\c\ystdio.h</file>
+      <file>$PROJ_DIR$\..\Scource\hardware\A7139.h</file>
+      <file>$PROJ_DIR$\..\Scource\schdule\join.h</file>
+      <file>$PROJ_DIR$\..\Scource\systerm\timer.h</file>
+      <file>$PROJ_DIR$\..\Scource\hardware\adc.h</file>
+      <file>$TOOLKIT_DIR$\inc\msp430.h</file>
+      <file>$TOOLKIT_DIR$\inc\msp430f247.h</file>
+      <file>$PROJ_DIR$\Debug\Exe\flash.d43</file>
+      <file>$TOOLKIT_DIR$\inc\dlib\c\stdlib.h</file>
+      <file>$TOOLKIT_DIR$\lib\dlib\dl430fn.r43</file>
+      <file>$PROJ_DIR$\Debug\Obj\digio.pbi</file>
+      <file>$TOOLKIT_DIR$\inc\dlib\c\stdio.h</file>
+      <file>$PROJ_DIR$\..\Scource\schdule\ProcessEvent.h</file>
+      <file>$PROJ_DIR$\Debug\Obj\mcu.pbi</file>
+      <file>$PROJ_DIR$\..\Scource\systerm\defs.h</file>
+      <file>$PROJ_DIR$\..\Scource\hardware\PNI.h</file>
+      <file>$PROJ_DIR$\Debug\Obj\flash.pbi</file>
+      <file>$TOOLKIT_DIR$\inc\in430.h</file>
+      <file>$PROJ_DIR$\..\Scource\schdule\detect.h</file>
+      <file>$PROJ_DIR$\..\Scource\systerm\types.h</file>
+      <file>$TOOLKIT_DIR$\inc\dlib\c\ysizet.h</file>
+      <file>$TOOLKIT_DIR$\inc\dlib\c\DLib_Threads.h</file>
+      <file>$PROJ_DIR$\..\Scource\algorithm\filter.h</file>
+      <file>$TOOLKIT_DIR$\inc\dlib\c\ycheck.h</file>
+      <file>$PROJ_DIR$\Debug\Obj\main.r43</file>
     </outputs>
     <file>
-      <name>[ROOT_NODE]</name>
-      <outputs>
-        <tool>
-          <name>ULP430</name>
-          <file> 55</file>
-        </tool>
-        <tool>
-          <name>XLINK</name>
-          <file> 31</file>
-        </tool>
-      </outputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\main.c</name>
+      <name>$PROJ_DIR$\..\Scource\systerm\mcu.c</name>
       <outputs>
         <tool>
           <name>BICOMP</name>
-          <file> 54</file>
+          <file> 50</file>
         </tool>
         <tool>
           <name>ICC430</name>
-          <file> 58</file>
+          <file> 18</file>
         </tool>
       </outputs>
       <inputs>
         <tool>
           <name>BICOMP</name>
-          <file> 17 56 41 8 15 30 16 39 5 57 49 36 10 35 32 38 61 48 20 37 40 47 29 18 50 19 26 0 28 25 60 33 51 2 44 21 34 11 9 12 43 24 46 13</file>
+          <file> 24 30 28 37 1 59 60 15 23 54 45 3 12 38 51 42 40 39 29 5 35 16 43 56 19 31 36 8 2 21 41 49 48 13 22 55 20 52 11 17 9 57 32 58</file>
         </tool>
         <tool>
           <name>ICC430</name>
-          <file> 36 29 39 18 35 50 8 10 34 17 11 19 32 26 5 38 15 0 28 61 57 25 48 60 37 56 16 47 46 43 41 12 13 9 24 33 20 51 49 2 44 30 21 40</file>
+          <file> 12 15 56 38 16 28 3 42 43 54 11 51 36 23 8 2 19 1 40 21 41 39 49 24 55 48 60 31 32 9 30 17 58 57 37 29 13 45 22 5 59 20 35 52</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\Scource\systerm\flash.c</name>
+      <outputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 53</file>
+        </tool>
+        <tool>
+          <name>ICC430</name>
+          <file> 26</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 13 30 36 37 21 52 56 60 16 2 49 55 12 3 8 19 41 48 22 20 42 54 31 15 38 28 51 23 1 40 39 24 29 45 5 59 35 43 11 17 9 57 32 58</file>
+        </tool>
+        <tool>
+          <name>ICC430</name>
+          <file> 12 15 56 38 16 28 3 42 43 54 11 51 36 23 8 2 19 1 40 21 41 39 49 24 55 48 60 31 32 9 30 17 58 57 37 29 13 45 22 5 59 20 35 52</file>
         </tool>
       </inputs>
     </file>
@@ -114,17 +124,17 @@
         </tool>
         <tool>
           <name>ICC430</name>
-          <file> 22</file>
+          <file> 14</file>
         </tool>
       </outputs>
       <inputs>
         <tool>
           <name>BICOMP</name>
-          <file> 29 41 17 10 26 51 39 16 50 0 60 44 11 18 19 28 25 33 2 21 36 37 47 35 8 32 5 38 15 61 57 48 56 20 49 30 40 34 9 12 43 24 46 13</file>
+          <file> 15 30 54 42 23 45 56 60 28 1 24 59 11 38 51 40 39 29 5 35 12 55 31 16 3 36 8 2 19 21 41 49 48 13 22 20 52 43 57 17 9 37 32 58</file>
         </tool>
         <tool>
           <name>ICC430</name>
-          <file> 5 39 36 29 18 35 50 8 10 34 17 11 19 32 26 38 15 0 28 61 57 25 48 60 37 56 16 47 46 43 41 12 13 9 24 33 20 51 49 2 44 30 21 40</file>
+          <file> 8 56 12 15 38 16 28 3 42 43 54 11 51 36 23 2 19 1 40 21 41 39 49 24 55 48 60 31 32 9 30 17 58 57 37 29 13 45 22 5 59 20 35 52</file>
         </tool>
       </inputs>
     </file>
@@ -133,67 +143,57 @@
       <outputs>
         <tool>
           <name>BICOMP</name>
-          <file> 42</file>
+          <file> 47</file>
         </tool>
         <tool>
           <name>ICC430</name>
-          <file> 52</file>
+          <file> 10</file>
         </tool>
       </outputs>
       <inputs>
         <tool>
           <name>BICOMP</name>
-          <file> 33 17 41 19 39 28 21 16 18 10 25 2 29 50 26 0 60 51 44 36 37 47 35 8 32 5 38 15 61 57 48 56 20 49 30 40 34 11 9 12 43 24 46 13</file>
+          <file> 29 54 30 51 56 40 35 60 38 42 39 5 15 28 23 1 24 45 59 12 55 31 16 3 36 8 2 19 21 41 49 48 13 22 20 52 43 11 57 17 9 37 32 58</file>
         </tool>
         <tool>
           <name>ICC430</name>
-          <file> 8 39 36 29 18 35 50 10 34 17 11 19 32 26 5 38 15 0 28 61 57 25 48 60 37 56 16 47 46 43 41 12 13 9 24 33 20 51 49 2 44 30 21 40</file>
+          <file> 3 56 12 15 38 16 28 42 43 54 11 51 36 23 8 2 19 1 40 21 41 39 49 24 55 48 60 31 32 9 30 17 58 57 37 29 13 45 22 5 59 20 35 52</file>
         </tool>
       </inputs>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\Scource\systerm\mcu.c</name>
+      <name>[ROOT_NODE]</name>
       <outputs>
         <tool>
-          <name>BICOMP</name>
-          <file> 53</file>
+          <name>XLINK</name>
+          <file> 44</file>
         </tool>
         <tool>
-          <name>ICC430</name>
-          <file> 14</file>
+          <name>ULP430</name>
+          <file> 33</file>
         </tool>
       </outputs>
-      <inputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 17 56 41 8 15 30 16 39 5 57 49 36 10 35 32 38 61 48 20 37 40 47 29 18 50 19 26 0 28 25 60 33 51 2 44 21 34 11 9 12 43 24 46 13</file>
-        </tool>
-        <tool>
-          <name>ICC430</name>
-          <file> 36 29 39 18 35 50 8 10 34 17 11 19 32 26 5 38 15 0 28 61 57 25 48 60 37 56 16 47 46 43 41 12 13 9 24 33 20 51 49 2 44 30 21 40</file>
-        </tool>
-      </inputs>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\Scource\systerm\flash.c</name>
+      <name>$PROJ_DIR$\main.c</name>
       <outputs>
         <tool>
           <name>BICOMP</name>
-          <file> 59</file>
+          <file> 25</file>
         </tool>
         <tool>
           <name>ICC430</name>
-          <file> 45</file>
+          <file> 61</file>
         </tool>
       </outputs>
       <inputs>
         <tool>
           <name>BICOMP</name>
-          <file> 20 41 32 24 61 40 39 16 35 38 48 37 36 8 5 15 57 56 49 30 10 17 47 29 18 50 19 26 0 28 25 60 33 51 2 44 21 34 11 12 43 9 46 13</file>
+          <file> 24 30 28 37 1 59 60 15 23 54 45 3 12 38 51 42 40 39 29 5 35 16 43 56 19 31 36 8 2 21 41 49 48 13 22 55 20 52 11 17 9 57 32 58</file>
         </tool>
         <tool>
           <name>ICC430</name>
-          <file> 36 29 39 18 35 50 8 10 34 17 11 19 32 26 5 38 15 0 28 61 57 25 48 60 37 56 16 47 46 43 41 12 13 9 24 33 20 51 49 2 44 30 21 40</file>
+          <file> 12 15 56 38 16 28 3 42 43 54 11 51 36 23 8 2 19 1 40 21 41 39 49 24 55 48 60 31 32 9 30 17 58 57 37 29 13 45 22 5 59 20 35 52</file>
         </tool>
       </inputs>
     </file>
@@ -202,7 +202,7 @@
       <inputs>
         <tool>
           <name>XLINK</name>
-          <file> 52 45 22 58 14 23</file>
+          <file> 10 26 14 61 18 46</file>
         </tool>
       </inputs>
     </file>

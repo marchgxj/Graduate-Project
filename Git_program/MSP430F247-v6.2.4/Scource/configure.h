@@ -4,9 +4,12 @@
 
 //------------------System Config----------------------
 #define    LOWPOWER_THRESHOLD         600
-#define    VAR_THRESHOLD              5000             //∑Ω≤Ó≈–∂œ„–÷µ
-#define    EXT_THRESHOLD              200               //¡Ω÷·≤Ó÷µ≈–∂œ„–÷µ
-#define    INT_THRESHOLD              60
+//26688
+#define    VAR_THRESHOLD              5000             //∑Ω≤Ó≈–∂œ„–÷µ           
+//1075
+#define    EXT_THRESHOLD              200               //¡Ω÷·≤Ó÷µ≈–∂œ„–÷µ    
+#define    INT_THRESHOLD              60      
+//9098
 #define    DIS_THRESHOLD              1000
 #define    COM_THRESHOLD              5000
 #define    ZAXIS_VARIANCE_THRESHOLD   10000
